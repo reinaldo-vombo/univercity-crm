@@ -1,0 +1,100 @@
+"use client"
+
+import * as z from "zod"
+import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+   Form,
+   FormControl,
+   FormDescription,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import Link from "next/link"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { adminSchema } from "@/lib/validation/admin"
+import { FLASH_MESSAGE } from "@/constants/flash-message"
+import SubmitBtn from "@/components/sheard/submit-btn"
+
+export default function AdminLogin() {
+   const router = useRouter();
+   const form = useForm<z.infer<typeof adminSchema>>({
+      resolver: zodResolver(adminSchema),
+      defaultValues: {
+         email: '',
+         password: ''
+      }
+   })
+   async function onSubmit(values: z.infer<typeof adminSchema>) {
+      const { email, password } = values;
+      console.log(email, password);
+
+      const userType = "admin";
+      const identifier = email;
+      try {
+         const res = await signIn("credentials", {
+            redirect: false,
+            user_type: userType,
+            identifier,
+            password,
+         });
+
+         if (res?.error) {
+            toast.error(`Login failed: ${res.error}`);
+            console.error(res.error);
+         } else if (res?.ok) {
+            toast.success(`${FLASH_MESSAGE.WELLCOME}`);
+            router.push("/");  // Redirect on successful login
+         } else {
+            toast.error(`${FLASH_MESSAGE.UNESPECTED_ERROR}`);
+         }
+      } catch (error) {
+         console.error("Form submission error", error);
+         toast.error("Failed to submit the form. Please try again.");
+      }
+   }
+
+   return (
+      <Form {...form}>
+         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+            <FormField
+               control={form.control}
+               name="email"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Email</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="Seu email"
+                           {...field} />
+                     </FormControl>
+                     <FormDescription>O seu email</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="password"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Password</FormLabel>
+                     <FormControl>
+                        <Input placeholder="Palavra-passe" {...field} />
+                     </FormControl>
+                     <FormDescription>Sua senha</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <SubmitBtn label="Entrar" loading={form.formState.isSubmitting} />
+            <Link href=''>Esqueceu a palavra-passe?</Link>
+         </form>
+      </Form>
+   )
+}

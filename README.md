@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 University CMS
 
-## Getting Started
+A content management system built with **Next.js**, **Prisma**, **NextAuth**, and **Tailwind CSS** to manage university data such as students, courses, grades, and more.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✅ Project Checklist
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ⚙️ Initial Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [x] Create Next.js project with TypeScript
+- [x] Setup Tailwind CSS
+- [x] Setup shadcn-ui
+- [x] Create `.env` with necessary secrets and DB connection
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+### 🔐 Authentication (NextAuth)
 
-To learn more about Next.js, take a look at the following resources:
+- [x] Install NextAuth
+- [x] Setup API route `/api/auth/[...nextauth].ts`
+- [x] Add providers (e.g., Credentials, Google)
+- [x] Create custom login page
+- [x] Create login for user
+- [ ] Create login for student
+- [ ] Create login for teacher
+- [ ] Create recover password
+- [ ] Protect routes using `getServerSession` or `useSession`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🌐 Axios Configuration
 
-## Deploy on Vercel
+- [x] Install Axios
+- [x] Create Axios instance with base URL
+- [x] Add token interceptor if using JWT/session
+- [ ] Handle API errors globally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🧩 Layouts & Structure
+
+- [ ] Create base layout component
+- [ ] Create base layout component
+- [x] Add `Header`, `Sidebar`, `Footer`
+- [ ] Responsive design with Tailwind
+- [ ] Add breadcrumb or page titles dynamically
+
+---
+
+### 🧑‍🎓 Student Module
+
+- [ ] Student model in Prisma
+- [ ] CRUD pages for students
+- [ ] View student profile and history
+- [ ] Associate students with courses
+
+---
+
+### 📚 Courses & Disciplines
+
+- [ ] Course model and seed data
+- [ ] Discipline model linked to courses
+- [ ] Create UI to manage disciplines
+
+---
+
+### 🧾 Grades & Attendance
+
+- [ ] Grade model with student/course relationship
+- [ ] Form to add/update grades
+- [ ] Record attendance and view reports
+
+---
+
+### 💳 Payment Management
+
+- [ ] Payment model in Prisma
+- [ ] Add payment entries with status
+- [ ] Filter/search payments
+- [ ] Export reports (CSV or PDF)
+
+---
+
+### ✉️ Email & Notifications
+
+- [ ] Setup Resend or Nodemailer
+- [ ] Send email on grade update or fee due
+- [ ] Create reusable email templates
+
+---
+
+### 📁 File Uploads (Optional)
+
+- [ ] Setup file upload (e.g., FilePond, Dropzone)
+- [ ] Store uploaded files securely
+- [ ] Link documents to student profiles
+
+---
+
+### 🧠 Admin Features
+
+- [ ] Role-based access control
+- [ ] Dashboard with stats (students, revenue, attendance)
+- [ ] Logs or recent activity tracker
+
+---
+
+### 🧪 Testing & Validation
+
+- [ ] Add form validation with Zod/Yup
+- [ ] Write unit tests for API routes and utilities
+- [ ] Basic UI testing with Playwright or Cypress
+
+---
+
+### 🚀 Deployment
+
+- [ ] Prepare for deployment (env, build)
+- [ ] Deploy to Vercel / Railway / Render
+- [ ] Seed production DB with safe dummy data
+
+---
+
+## 🗂 Folder Structure
+
+/app
+/components
+/lib
+/utils
+/public
