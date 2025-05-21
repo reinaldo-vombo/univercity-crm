@@ -40,11 +40,22 @@ A content management system built with **Next.js**, **Prisma**, **NextAuth**, an
 
 ### 🧩 Layouts & Structure
 
-- [ ] Create base layout component
+- [ ] Admin pages
+- [ ] Studente pages
+- [ ] Teacher pages
 - [ ] Create base layout component
 - [x] Add `Header`, `Sidebar`, `Footer`
 - [ ] Responsive design with Tailwind
 - [ ] Add breadcrumb or page titles dynamically
+
+---
+
+### ⚙️ Features & Fun
+
+- [] revalidatePath
+- [x] Create user
+- [x] Delete User
+- [] Assignd user to departament
 
 ---
 

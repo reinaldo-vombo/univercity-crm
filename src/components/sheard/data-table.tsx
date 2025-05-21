@@ -25,6 +25,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChevronDown, Download, Plus } from "lucide-react";
 import SheetModal from "./sheet-modal";
+import CreateUser from "../forms/admin/create-user";
 
 type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];
@@ -37,6 +38,7 @@ export function DataTable<TData, TValue>({
    data,
    filterColumn,
 }: DataTableProps<TData, TValue>) {
+
    const [sorting, setSorting] = React.useState<SortingState>([]);
    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -103,9 +105,9 @@ export function DataTable<TData, TValue>({
                   trigger={<Plus />}
                   title="Cria novo útilizador"
                >
-                  create user
+                  <CreateUser />
                </SheetModal>
-               <Button><Download /></Button>
+               <Button aria-label="export to csv"><Download /></Button>
             </div>
          </div>
 

@@ -47,3 +47,7 @@ export type DropdownMenuProps = {
     | 'ghost'
     | 'link';
 };
+export type TAlertProps = {
+  trigger: any;
+  onClose: () => void;
+};

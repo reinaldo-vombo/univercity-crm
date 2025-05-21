@@ -90,21 +90,11 @@ export const DUMMY_DATA = {
     },
     {
       id: '5',
-      label: 'Editor',
-      value: 'student',
+      label: 'Direitor',
+      value: 'department_head',
     },
     {
       id: '6',
-      label: 'Direitor',
-      value: 'department_head',
-    },
-    {
-      id: '7',
-      label: 'Direitor',
-      value: 'department_head',
-    },
-    {
-      id: '8',
       label: 'Funcionario',
       value: 'staff',
     },

@@ -3,16 +3,16 @@ import { Button } from "../ui/button"
 
 type TSubmitProps = {
    loading: boolean
-   label: 'Entrar' | 'Criar' | 'Publicar' | 'Atualisar' | 'Eliminar'
+   label: 'Entrar' | 'Registar' | 'Enviar' | 'Criar' | 'Publicar' | 'Atualisar' | 'Eliminar'
 
 }
 
-const SubmitBtn = ({ label, loading }: TSubmitProps) => {
+const SubmitBtn = ({ label, loading, }: TSubmitProps) => {
    return (
-      <Button type="submit" className="flex items-center justify-center gap-2">
+      <Button disabled={loading} type="submit" className="flex w-full items-center justify-center gap-2">
          {loading ? (
             <>
-               {label} <LoaderCircle className="animate-spin" />
+               {label}ando... <LoaderCircle className="animate-spin" />
             </>
          ) : (`${label}`)}
       </Button>

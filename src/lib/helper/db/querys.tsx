@@ -2,9 +2,12 @@ import api from "@/lib/helper/api/axios";
 import '@/lib/helper/api/axiosAuth';
 
 
-export const createUser = async (body: any) => {
-   const result = await api.post('/users/', body)
-   return result.data;
+export const addNewUser = async (body: any) => {
+   await api.post('/auth/register', body)
+}
+export const deleteUser = async (id: string) => {
+
+   await api.delete(`/users/${id}`)
 }
 
 export const getAllUser = async () => {

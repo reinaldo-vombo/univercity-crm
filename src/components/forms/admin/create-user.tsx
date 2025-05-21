@@ -17,9 +17,11 @@ import { userSchema } from "@/lib/validation/user"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import Selector from "@/components/sheard/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
-
+import { useTransition } from "react"
+import { FLASH_MESSAGE } from "@/constants/flash-message"
 
 const CreateUser = () => {
+
    const form = useForm<z.infer<typeof userSchema>>({
       resolver: zodResolver(userSchema),
       defaultValues: {
@@ -28,14 +30,38 @@ const CreateUser = () => {
          email: '',
       }
    })
+   const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof userSchema>) {
-      console.log(values);
-      toast.success('works')
+      const formData = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append(key, value);
+      });
+      startTransition(async () => {
+         try {
+            const response = await fetch("/api/auth/register", {
+               method: "POST",
+               body: formData,
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+               toast.error(FLASH_MESSAGE.USER_NOT_CREATED);
+               console.error(result.error);
+               return;
+            }
+            toast.success(FLASH_MESSAGE.USER_CREATED);
+            form.reset(); // Optional: reset form
+         } catch (err) {
+            toast.error("Network error. Please try again.");
+            console.error(err);
+         }
+      });
 
    }
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
             <FormField
                control={form.control}
                name="name"
@@ -68,7 +94,7 @@ const CreateUser = () => {
             />
             <FormField
                control={form.control}
-               name="email"
+               name="role"
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Cargo</FormLabel>
@@ -86,7 +112,7 @@ const CreateUser = () => {
             />
             <SubmitBtn
                label="Criar"
-               loading={form.formState.isSubmitting} />
+               loading={isPending} />
          </form>
       </Form>
    )
