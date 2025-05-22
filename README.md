@@ -34,7 +34,7 @@ A content management system built with **Next.js**, **Prisma**, **NextAuth**, an
 - [x] Install Axios
 - [x] Create Axios instance with base URL
 - [x] Add token interceptor if using JWT/session
-- [ ] Handle API errors globally
+- [x] Handle API errors globally
 
 ---
 
@@ -50,11 +50,15 @@ A content management system built with **Next.js**, **Prisma**, **NextAuth**, an
 
 ---
 
-### ⚙️ Features & Fun
+### ⚙️ Features & Function
 
 - [] revalidatePath
 - [x] Create user
 - [x] Delete User
+- [x] View User
+- [x] Create table
+- [x] Table filteres
+- [x] Create export button to export data as doc type /csv/excel
 - [] Assignd user to departament
 
 ---

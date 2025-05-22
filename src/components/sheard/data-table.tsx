@@ -23,21 +23,22 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronDown, Download, Plus } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import SheetModal from "./sheet-modal";
 import CreateUser from "../forms/admin/create-user";
+import { TableExport } from "./table-export";
 
 type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];
-   data: TData[];
+   data: object[];
    filterColumn?: keyof TData; // e.g., "email"
 };
 
-export function DataTable<TData, TValue>({
+export function DataTable<TValue>({
    columns,
    data,
    filterColumn,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<any, TValue>) {
 
    const [sorting, setSorting] = React.useState<SortingState>([]);
    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -107,7 +108,16 @@ export function DataTable<TData, TValue>({
                >
                   <CreateUser />
                </SheetModal>
-               <Button aria-label="export to csv"><Download /></Button>
+               <TableExport
+                  data={data}
+                  filename="users"
+                  headers={{
+                     id: "ID",
+                     name: "Full Name",
+                     email: "Email",
+                     role: "Role"
+                  }}
+               />
             </div>
          </div>
 

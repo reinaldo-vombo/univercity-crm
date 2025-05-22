@@ -6,22 +6,28 @@ import {
    BreadcrumbPage,
    BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+type TBaseRoutes = {
+   root: string
+   pageUrl: string
+   pageName: string
+   name: string
+}
 
 
-const Breadcrumb = () => {
+const Breadcrumb = ({ root, pageUrl, pageName, name }: TBaseRoutes) => {
    return (
       <BreadcrumbComponent>
          <BreadcrumbList>
             <BreadcrumbItem>
-               <BreadcrumbLink href="/">Home</BreadcrumbLink>
+               <BreadcrumbLink href={root}>Crm</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-               <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+               <BreadcrumbLink href={pageUrl}>{pageName}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-               <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+               <BreadcrumbPage>{name}</BreadcrumbPage>
             </BreadcrumbItem>
          </BreadcrumbList>
       </BreadcrumbComponent>

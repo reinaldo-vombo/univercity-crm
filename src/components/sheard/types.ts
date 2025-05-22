@@ -51,3 +51,8 @@ export type TAlertProps = {
   trigger: any;
   onClose: () => void;
 };
+export type TExportDocProps<T extends object> = {
+  data: T[];
+  filename?: string;
+  headers?: Partial<Record<keyof T, string>>;
+};

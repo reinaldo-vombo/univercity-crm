@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Inbox, User } from 'lucide-react';
+import { Book, Building, Home, Inbox, User } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
   STUDENTE: '/student/login',
@@ -26,8 +26,18 @@ export const DUMMY_DATA = {
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/users`,
-        label: 'Manage Users',
+        label: 'Útilizadores',
         icon: React.createElement(User),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/departments`,
+        label: 'Departamentos',
+        icon: React.createElement(Building),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/curses`,
+        label: 'Cursos',
+        icon: React.createElement(Book),
       },
     ],
     admin: [

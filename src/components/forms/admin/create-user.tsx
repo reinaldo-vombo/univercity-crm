@@ -51,7 +51,7 @@ const CreateUser = () => {
                return;
             }
             toast.success(FLASH_MESSAGE.USER_CREATED);
-            form.reset(); // Optional: reset form
+            form.reset();
          } catch (err) {
             toast.error("Network error. Please try again.");
             console.error(err);
@@ -105,7 +105,7 @@ const CreateUser = () => {
                            formField={field}
                            placeholder="Cargos" />
                      </FormControl>
-                     <FormDescription>O cargo do útilizador</FormDescription>
+                     <FormDescription>Ex: admin, editor...</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
