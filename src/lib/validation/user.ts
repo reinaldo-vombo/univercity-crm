@@ -13,3 +13,8 @@ export const userSchema = z.object({
     'department_head',
   ]),
 });
+export const updateSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  role: z.string().min(1, { message: 'Deve adicionar um cargo'}),
+});

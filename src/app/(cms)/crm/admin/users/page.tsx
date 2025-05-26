@@ -1,11 +1,14 @@
 
 import Breadcrumb from "@/components/sheard/breadcrumb";
-import { getAllUser } from "@/lib/helper/db/querys";
 import { StudentTable } from "./client-table";
 import { ROUTES } from "@/constants/mock-data";
+import { serverFetch } from "@/lib/helper/api/server-fetch";
+import { TUser } from "@/lib/types/global";
 
 export default async function UsersPages() {
-   const users = await getAllUser();
+   const users = await serverFetch<TUser[]>('/users', {
+      next: { tags: ['users'] }, // 🚀 tags for smart revalidation
+   });
    return (
       <section className="col-span-12">
          <Breadcrumb

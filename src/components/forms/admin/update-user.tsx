@@ -13,7 +13,7 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { userSchema } from "@/lib/validation/user"
+import { updateSchema } from "@/lib/validation/user"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import Selector from "@/components/sheard/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
@@ -21,18 +21,26 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { addNewUser } from "@/lib/actions/users"
 
-const CreateUser = () => {
-   const [isPending, startTransition] = useTransition();
-   const form = useForm<z.infer<typeof userSchema>>({
-      resolver: zodResolver(userSchema),
+type TProps = {
+   userInf: {
+      name: string,
+      email: string,
+      role: string
+   }
+}
+const UpdatedUser = ({ userInf }: TProps) => {
+   const { name, email, role } = userInf;
+   const form = useForm<z.infer<typeof updateSchema>>({
+      resolver: zodResolver(updateSchema),
       defaultValues: {
-         name: "",
-         role: "admin",
-         email: '',
+         name: name,
+         role: role,
+         email: email,
       }
    })
+   const [isPending, startTransition] = useTransition();
 
-   async function onSubmit(values: z.infer<typeof userSchema>) {
+   async function onSubmit(values: z.infer<typeof updateSchema>) {
       const formData = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
@@ -44,7 +52,7 @@ const CreateUser = () => {
                toast.error(result.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.USER_CREATED);
+            toast.success(FLASH_MESSAGE.USER_UPDATED);
             form.reset();
          } catch (err) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -64,6 +72,7 @@ const CreateUser = () => {
                      <FormLabel>Nome do útilizador</FormLabel>
                      <FormControl>
                         <Input
+                           disabled
                            placeholder="Nome"
                            {...field} />
                      </FormControl>
@@ -79,9 +88,9 @@ const CreateUser = () => {
                   <FormItem>
                      <FormLabel>Email</FormLabel>
                      <FormControl>
-                        <Input placeholder="Email" {...field} />
+                        <Input disabled placeholder="Email" {...field} />
                      </FormControl>
-                     <FormDescription>O email do útilizador</FormDescription>
+                     <FormDescription>Ex@gmail.com</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -105,11 +114,11 @@ const CreateUser = () => {
                )}
             />
             <SubmitBtn
-               label="Criar"
+               label="Atualisar"
                loading={isPending} />
          </form>
       </Form>
    )
 }
 
-export default CreateUser
+export default UpdatedUser

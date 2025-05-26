@@ -1,28 +1,80 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { validatedActionWithUser } from '../action-helper';
-import { addNewUser } from '../helper/db/querys';
-import { userSchema } from '../validation/user';
+import { revalidateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { serverFetch } from '../helper/api/server-fetch';
+import { ActionResult, ActionState, TUser } from '../types/global';
+import { validatedActionWithUser } from '../action-helper';
+import { updateSchema, userSchema } from '../validation/user';
 
-export const registerUser = validatedActionWithUser(
+export const addNewUser = validatedActionWithUser(
   userSchema,
-  async (data) => {
+  async (data): Promise<ActionResult<TUser>> => {
     try {
-      await addNewUser(data);
-      revalidatePath('/');
+      const user = await serverFetch<TUser>('/auth/register', {
+        method: 'POST',
+        body: data,
+      });
+
+      revalidateTag('users');
+
       return {
-        success: true,
-        message: FLASH_MESSAGE.USER_CREATED,
+        error: false,
+        data: user,
       };
-    } catch (error) {
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Something went wrong';
+
       return {
         error: true,
-        message: error,
+        message,
       };
     }
   }
 );
-export const updatedUser = async () => {};
-export const deleteUser = async () => {};
+export const updatedUser = validatedActionWithUser(
+  updateSchema,
+  async (data, _, user): Promise<ActionResult<TUser>> => {
+    try {
+      const result = await serverFetch<TUser>(`/users/${user.id}`, {
+        method: 'PUT',
+        body: data,
+      });
+
+      revalidateTag('users');
+
+      return {
+        error: false,
+        data: result,
+      };
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Something went wrong';
+
+      return {
+        error: true,
+        message,
+      };
+    }
+  }
+);
+export const deleteUser = async (id: string): Promise<ActionState<null>> => {
+  try {
+    await serverFetch<null>(`/users/${id}`, {
+      method: 'DELETE',
+    });
+
+    revalidateTag('users');
+    return {
+      error: false,
+      message: FLASH_MESSAGE.USER_DELETED,
+      data: null,
+    };
+  } catch (error) {
+    return {
+      error: true,
+      message: error as string,
+    };
+  }
+};

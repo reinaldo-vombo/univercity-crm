@@ -14,14 +14,18 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { adminSchema } from "@/lib/validation/admin"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import SubmitBtn from "@/components/sheard/submit-btn"
+import { Dispatch, SetStateAction } from "react"
 
-export default function AdminLogin() {
+type TProps = {
+   onChange: Dispatch<SetStateAction<boolean>>
+}
+
+export default function AdminLogin({ onChange }: TProps) {
    const router = useRouter();
    const form = useForm<z.infer<typeof adminSchema>>({
       resolver: zodResolver(adminSchema),
@@ -32,7 +36,6 @@ export default function AdminLogin() {
    })
    async function onSubmit(values: z.infer<typeof adminSchema>) {
       const { email, password } = values;
-      console.log(email, password);
 
       const userType = "admin";
       const identifier = email;
@@ -70,7 +73,7 @@ export default function AdminLogin() {
                      <FormLabel>Email</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Seu email"
+                           placeholder="exemplo@gmail.com"
                            {...field} />
                      </FormControl>
                      <FormDescription>O seu email</FormDescription>
@@ -83,9 +86,9 @@ export default function AdminLogin() {
                name="password"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Password</FormLabel>
+                     <FormLabel>Palavra-passe</FormLabel>
                      <FormControl>
-                        <Input placeholder="Palavra-passe" {...field} />
+                        <Input placeholder="*********" {...field} />
                      </FormControl>
                      <FormDescription>Sua senha</FormDescription>
                      <FormMessage />
@@ -93,7 +96,11 @@ export default function AdminLogin() {
                )}
             />
             <SubmitBtn label="Entrar" loading={form.formState.isSubmitting} />
-            <Link href=''>Esqueceu a palavra-passe?</Link>
+            <button
+               className="cursor-pointer text-center"
+               type="button"
+               aria-label="forgo password"
+               onClick={() => onChange(false)}>Esqueceu a palavra-passe?</button>
          </form>
       </Form>
    )

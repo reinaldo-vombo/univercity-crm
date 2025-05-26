@@ -1,6 +1,6 @@
 # 🎓 University CMS
 
-A content management system built with **Next.js**, **Prisma**, **NextAuth**, and **Tailwind CSS** to manage university data such as students, courses, grades, and more.
+A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**, and **Tailwind CSS** to manage university data such as students, courses, grades, and more.
 
 ---
 
@@ -20,46 +20,48 @@ A content management system built with **Next.js**, **Prisma**, **NextAuth**, an
 - [x] Install NextAuth
 - [x] Setup API route `/api/auth/[...nextauth].ts`
 - [x] Add providers (e.g., Credentials, Google)
+- [x] Set-up next-auth config
 - [x] Create custom login page
-- [x] Create login for user
+- [x] Create login for user/admin
 - [ ] Create login for student
 - [ ] Create login for teacher
-- [ ] Create recover password
-- [ ] Protect routes using `getServerSession` or `useSession`
+- [ ] Create recover password page
+- [ ] Protect routes using middlwere
 
 ---
 
-### 🌐 Axios Configuration
+### 🌐 Fetch Configuration
 
-- [x] Install Axios
-- [x] Create Axios instance with base URL
-- [x] Add token interceptor if using JWT/session
+- [x] Create global fetch with base URL
+- [x] Add token interceptor
 - [x] Handle API errors globally
 
 ---
 
 ### 🧩 Layouts & Structure
 
-- [ ] Admin pages
-- [ ] Studente pages
-- [ ] Teacher pages
-- [ ] Create base layout component
-- [x] Add `Header`, `Sidebar`, `Footer`
-- [ ] Responsive design with Tailwind
-- [ ] Add breadcrumb or page titles dynamically
+### Admin pages
+
+- [ ] Dashboard/root
+- [ ] All studente pages
+- [ ] All Teacher pages
+- [ ] All departemant pages
+- [ ] All curses pages
+- [ ] All building pages
+- [ ] All Payment pages
+- [x] All users pages
+- [ ] Events page
 
 ---
 
 ### ⚙️ Features & Function
 
-- [] revalidatePath
-- [x] Create user
-- [x] Delete User
-- [x] View User
-- [x] Create table
-- [x] Table filteres
+- [x] Server action
+- [x] Data revalidation
+- [x] Dark mode
+- [x] Reusible table-table
+- [x] Add data-table filteres
 - [x] Create export button to export data as doc type /csv/excel
-- [] Assignd user to departament
 
 ---
 
@@ -118,6 +120,12 @@ A content management system built with **Next.js**, **Prisma**, **NextAuth**, an
 - [ ] Role-based access control
 - [ ] Dashboard with stats (students, revenue, attendance)
 - [ ] Logs or recent activity tracker
+- [ ] Assignd user to departament
+- [x] Create user CRUD
+- [x] Create departement CRUD
+- [x] Create semester CRUD
+- [x] Create buildind CRUD
+- [x] Create events CRUD
 
 ---
 

@@ -6,8 +6,10 @@ import Avatar from "@/components/sheard/avatar"
 import SheetModal from "@/components/sheard/sheet-modal"
 import AlertModal from "@/components/sheard/alert-modal"
 import { toast } from "sonner"
-import axios from "axios"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
+import { deleteUser } from "@/lib/actions/users"
+import { User } from "@/lib/helper/auth/user"
+import UserDetails from "@/components/user/user-details"
 
 export type Users = {
    id: string
@@ -18,6 +20,7 @@ export type Users = {
 }
 
 export function UsersColumns(): ColumnDef<Users>[] {
+   const logUser = User()
    return [
       {
          accessorKey: "avatarUrl",
@@ -50,14 +53,12 @@ export function UsersColumns(): ColumnDef<Users>[] {
             const users = row.original
             const handleDelete = async (id: string) => {
                try {
-                  const res = await axios.delete(`/api/users/${id}`,);
-                  const result = await res.data;
-                  if (!res.data.success) {
-                     toast.error(result.error || "Failed to delete user.");
+                  const res = await deleteUser(id)
+                  if (res.error) {
+                     toast.error(res.message);
                      return;
                   }
                   toast.success(FLASH_MESSAGE.USER_DELETED);
-                  // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
                   console.error(err);
@@ -70,10 +71,17 @@ export function UsersColumns(): ColumnDef<Users>[] {
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
                      title="Detalhes do útilizador"
-                     description={`ID: ${users.id}`}>Detalhes do útilizador {users.name}</SheetModal>
-                  <AlertModal
-                     trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
-                     onClose={() => handleDelete(users.id)} />
+                     description={`ID: ${users.id}`}>
+                     <UserDetails
+                        email={users.email}
+                        name={users.name}
+                        role={users.role} />
+                  </SheetModal>
+                  {logUser?.id === users.id ? null : (
+                     <AlertModal
+                        trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
+                        onClose={() => handleDelete(users.id)} />
+                  )}
                </div>
             )
          },
