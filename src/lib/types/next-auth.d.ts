@@ -13,6 +13,7 @@ declare module 'next-auth' {
     number: number;
     role: string;
     accessToken: string;
+    expiresAt: number;
   }
 }
 

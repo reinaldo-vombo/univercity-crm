@@ -5,7 +5,7 @@ import Link from 'next/link'
 const links = [
    {
       href: ROUTES.ACCOUNT,
-      label: "Configurações da conta",
+      label: "Minha conta",
       icon: <User />
    },
    {

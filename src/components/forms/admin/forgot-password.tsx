@@ -46,10 +46,10 @@ export default function AdminForgotPassWord({ onChange }: TProps) {
                      <FormLabel>Email</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Seu email"
+                           placeholder="Ensira o seu email"
                            {...field} />
                      </FormControl>
-                     <FormDescription>O seu email</FormDescription>
+                     <FormDescription>Ex: awsome@gmail.com</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

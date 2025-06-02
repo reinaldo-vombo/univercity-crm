@@ -48,6 +48,9 @@ export default function AdminLogin({ onChange }: TProps) {
          });
 
          if (res?.error) {
+            if (res?.error === 'CredentialsSignin') {
+               toast.warning(FLASH_MESSAGE.WRONGE_CREDENTIALS)
+            }
             toast.error(`Login failed: ${res.error}`);
             console.error(res.error);
          } else if (res?.ok) {

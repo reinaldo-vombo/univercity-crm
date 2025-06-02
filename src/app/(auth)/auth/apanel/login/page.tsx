@@ -9,17 +9,28 @@ export default function AdminLoginPage() {
    const [isLogin, setIslogin] = useState(true)
    return (
       <Fragment>
-         <div className="col-span-12 lg:col-span-6 p-8 rounded-l-lg space-y-10 px-44">
-            <div className="flex items-center justify-center">
-               <h2 className="font-bold text-3xl">Admin</h2>
-            </div>
-            <AdminLogin onChange={setIslogin} />
+         <div className="col-span-12 relative lg:col-span-6 p-8 rounded-l-lg space-y-10">
+            <motion.div initial={false}
+               animate={{ x: isLogin ? "0%" : "-100%" }}
+               transition={{ duration: 0.75, ease: "easeInOut" }}
+               className="absolute inset-0 z-10 w-full px-44">
+               <div className="flex items-center justify-center">
+                  <h2 className="font-bold text-3xl">Admin</h2>
+               </div>
+               <AdminLogin onChange={setIslogin} />
+            </motion.div>
          </div>
-         <div className="col-span-12 lg:col-span-6 p-8 rounded-l-lg space-y-10 px-44">
-            <div className="flex items-center justify-center">
-               <h2 className="font-bold text-3xl">Esqueceu a sua senha</h2>
-            </div>
-            <AdminForgotPassWord onChange={setIslogin} />
+         <div className="col-span-12 relative lg:col-span-6 p-8 rounded-l-lg space-y-10 px-44">
+            <motion.div initial={false}
+               animate={{ x: isLogin ? "100%" : "0%" }}
+               transition={{ duration: 0.75, ease: "easeInOut" }}
+               className="absolute inset-0 z-10 w-full px-44">
+               <div className="flex items-center justify-center">
+                  <h2 className="font-bold text-3xl">Esqueceu a sua senha</h2>
+               </div>
+               <AdminForgotPassWord onChange={setIslogin} />
+
+            </motion.div>
          </div>
          <motion.div
             initial={false}

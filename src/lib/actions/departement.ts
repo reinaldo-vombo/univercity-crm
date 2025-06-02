@@ -47,13 +47,16 @@ export const addNewDepartemant = validatedActionWithUser(
 );
 export const updatedDepartemant = validatedActionWithUser(
   departmentSchema,
-  async (data, _, user): Promise<ActionResult<TDepartemant>> => {
+  async (data): Promise<ActionResult<TDepartemant>> => {
     try {
+      const { id, ...updateData } = data; // Remove `id` from request body
+
+      const departmentId = data.id;
       const departements = await serverFetch<TDepartemant>(
-        `/academic-department/${user.id}`,
+        `/academic-department/${departmentId}`,
         {
           method: 'PATCH',
-          body: data,
+          body: updateData,
         }
       );
 

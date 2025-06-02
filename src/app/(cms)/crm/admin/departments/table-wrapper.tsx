@@ -1,14 +1,24 @@
 // app/dashboard/admin/departments/table-wrapper.tsx
 
-import { serverFetch } from "@/lib/helper/api/server-fetch";
-import { TDepartemant } from "@/lib/types/global";
+
 import { DepartamentTable } from "./client-table";
+import { getAllAcademicFaculty, getAllDepartments, getAllUsers } from "@/lib/helper/db/querys";
 
 
 export async function DepartmentTableServer() {
-   const departements = await serverFetch<TDepartemant[]>('/academic-department', {
-      next: { tags: ['departement'] },
-   });
 
-   return <DepartamentTable data={departements} />;
+   const [departements, users, academicFaculty] = await Promise.all([
+      getAllDepartments(),
+      getAllUsers(),
+      getAllAcademicFaculty(),
+   ]);
+
+   const departmentsWithUserData = departements.map((dept) => {
+      const user = users.find((u) => u.id === dept.departmentHeadId);
+      return {
+         ...dept,
+         user, // attach full user object
+      };
+   });
+   return <DepartamentTable departements={departmentsWithUserData} users={users} academicFaculty={academicFaculty} />;
 }

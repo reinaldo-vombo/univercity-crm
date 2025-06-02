@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { DropdownMenuProps } from "./types"
 import { LogOut } from "lucide-react"
+import { signOut } from "next-auth/react"
 
 
 
@@ -32,7 +33,7 @@ export function DropdownMenu({ children, trigger, showLogOut = false, lable, var
             {showLogOut && (
                <>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex items-center">
+                  <DropdownMenuItem className="flex items-center" onClick={() => signOut()}>
                      <LogOut />
                      Sair
                   </DropdownMenuItem>

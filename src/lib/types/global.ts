@@ -31,6 +31,12 @@ export type TBuiding = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+export type TAcademicFaculty = {
+  id: string;
+  title: string;
+  createdAt: Date;
+  updatedAt: Date;
+}[];
 export type TSemester = {
   id: string;
   title: string;

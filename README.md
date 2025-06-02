@@ -25,8 +25,8 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Create login for user/admin
 - [ ] Create login for student
 - [ ] Create login for teacher
-- [ ] Create recover password page
-- [ ] Protect routes using middlwere
+- [x] Create recover password page
+- [x] Protect routes using middlwere
 
 ---
 
@@ -59,9 +59,13 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Server action
 - [x] Data revalidation
 - [x] Dark mode
+- [x] Assigne user to departament
 - [x] Reusible table-table
 - [x] Add data-table filteres
 - [x] Create export button to export data as doc type /csv/excel
+- [x] Users CRUD
+- [x] Departement CRUD
+- [ ] Update account info
 
 ---
 
@@ -109,7 +113,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 
 ### 📁 File Uploads (Optional)
 
-- [ ] Setup file upload (e.g., FilePond, Dropzone)
+- [x] Setup file upload (e.g., FilePond, Dropzone)
 - [ ] Store uploaded files securely
 - [ ] Link documents to student profiles
 

@@ -16,14 +16,21 @@ import SubmitBtn from "@/components/sheard/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { departmentSchema } from "@/lib/validation/departement"
-import { TUser } from "@/lib/types/global"
-import { addNewDepartemant } from "@/lib/actions/departement"
+import { TAcademicFaculty, TUser } from "@/lib/types/global"
+import { updatedDepartemant } from "@/lib/actions/departement"
 import Selector from "@/components/sheard/selector"
 type TPros = {
    users: TUser[]
-   academicFaculty: any
+   values: {
+      id: string;
+      title: string;
+      academicFacultyId: string;
+      departmentHeadId: string | null;
+   },
+   academicFaculty: TAcademicFaculty[]
 }
-const CreateDepartment = ({ users, academicFaculty }: TPros) => {
+const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
+
    const admins = users.map(user => ({
       id: user.id,
       label: user.name,
@@ -37,7 +44,10 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
    const form = useForm<z.infer<typeof departmentSchema>>({
       resolver: zodResolver(departmentSchema),
       defaultValues: {
-         title: "",
+         id: values.id,
+         title: values.title,
+         academicFacultyId: values.academicFacultyId,
+         departmentHeadId: values.departmentHeadId
       }
    })
    const [isPending, startTransition] = useTransition();
@@ -48,12 +58,12 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
       });
       startTransition(async () => {
          try {
-            const response = await addNewDepartemant(formData);
+            const response = await updatedDepartemant(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.DEPARTMENT_NOT_CREATED);
+               toast.warning(FLASH_MESSAGE.DEPARTMENT_NOT_UPDATED);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.DEPARTMENT_UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -87,8 +97,13 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Utilizadores</FormLabel>
-                     <FormControl>
-                        <Selector options={admins} placeholder="Selecione um admin" formField={field} />
+                     <FormControl className="w-full">
+                        <Selector
+                           options={admins}
+                           placeholder="Selecione um admin"
+                           formField={field}
+                           className="w-full"
+                        />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -100,9 +115,14 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
                name="academicFacultyId"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Utilizadores</FormLabel>
-                     <FormControl>
-                        <Selector options={academicFacultys} placeholder="Selecione um curso" formField={field} />
+                     <FormLabel>Facultys</FormLabel>
+                     <FormControl className="w-full">
+                        <Selector
+                           options={academicFacultys}
+                           placeholder="Selecione um curso"
+                           formField={field}
+                           className="w-full"
+                        />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -118,4 +138,4 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
    )
 }
 
-export default CreateDepartment
+export default UpdatedDepartmentForm

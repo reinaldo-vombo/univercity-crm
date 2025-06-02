@@ -13,7 +13,7 @@ export const ROUTES = {
   LOGIN_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/login`,
   RECOVER_PASSWORD_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/recover-password`,
   RESET_PASSWORD_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/reset-password`,
-  ACCOUNT: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/account`,
+  ACCOUNT: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/profile`,
   SETTINGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/settings`,
 };
 export const DUMMY_DATA = {

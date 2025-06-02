@@ -24,7 +24,7 @@ export type TAvatarProps = {
 };
 export type TSelectPros = {
   placeholder: string;
-  className: string;
+  className?: string;
   options: {
     id: string;
     label: string;

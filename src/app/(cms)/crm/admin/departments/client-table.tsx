@@ -1,15 +1,18 @@
 "use client";
 
 import { DataTable } from "@/components/sheard/data-table";
-import { TDepartemant } from "@/lib/types/global";
+import { TAcademicFaculty, TDepartemant, TUser } from "@/lib/types/global";
 import { DepartmentColumns } from "./columns";
 
 interface Props {
-   data: TDepartemant[];
+   departements: TDepartemant[];
+   users: TUser[];
+   academicFaculty: TAcademicFaculty[];
 }
 
-export function DepartamentTable({ data }: Props) {
-   const columns = DepartmentColumns();
+export function DepartamentTable({ departements, users, academicFaculty }: Props) {
 
-   return <DataTable columns={columns} data={data} filterColumn="title" />;
+   const columns = DepartmentColumns(users, academicFaculty);
+
+   return <DataTable columns={columns} data={departements} filterColumn="title" />;
 }

@@ -1,46 +1,44 @@
-import Dropzone, { DropzoneState } from 'shadcn-dropzone';
+'use client'
+import { Button } from "@/components/ui/button";
+import {
+   FileUploader,
+   FileUploaderContent,
+   FileUploaderItem,
+   FileInput,
+} from "@/components/ui/file-uploader";
+import { useState } from "react";
+import { DropzoneOptions } from "react-dropzone";
 
-// Use the default UI
-// const DefaultUI = () => {
-//    return (
-//       <Dropzone
-//          onDrop={(acceptedFiles: File) => {
-//             // Do something with the files
-//          }}
-//       />
-//    );
-// }
 
-// Or, pass a custom UI
-export const CustomUI = () => {
+const Uploader = () => {
+   const [files, setFiles] = useState<File[] | null>([]);
+   const dropzone = {
+      accept: {
+         "image/*": [".jpg", ".jpeg", ".png"],
+      },
+      multiple: true,
+      maxFiles: 4,
+      maxSize: 1 * 1024 * 1024,
+   } satisfies DropzoneOptions;
    return (
-      <Dropzone
-         maxFiles={1}
-         accept={"image/*"}
-         maxSize={10485760}
-         onDrop={(acceptedFiles: File) => {
-            console.log(acceptedFiles);
-
-         }}
+      <FileUploader
+         value={files}
+         onValueChange={setFiles}
+         dropzoneOptions={dropzone}
+         className="relative max-w-xs space-y-1"
       >
-         {(dropzone: DropzoneState) => (
-            <>
-               {
-                  dropzone.isDragAccept ? (
-                     <div className='text-sm font-medium'>Drop your files here!</div>
-                  ) : (
-                     <div className='flex items-center flex-col gap-1.5'>
-                        <div className='flex items-center flex-row gap-0.5 text-sm font-medium'>
-                           Upload files
-                        </div>
-                     </div>
-                  )
-               }
-               <div className='text-xs text-gray-400 font-medium'>
-                  {dropzone.acceptedFiles.length} files uploaded so far.
-               </div>
-            </>
-         )}
-      </Dropzone>
+         <FileInput className="border border-dashed border-gray-500">
+            <Button variant={"outline"}>Upload a file</Button>
+         </FileInput>
+         <FileUploaderContent className="h-48 ">
+            {files?.map((file, i) => (
+               <FileUploaderItem key={i} index={i}>
+                  {file.name}
+               </FileUploaderItem>
+            ))}
+         </FileUploaderContent>
+      </FileUploader>
    )
 }
+
+export default Uploader
