@@ -1,5 +1,5 @@
 import React from 'react';
-import { Book, Building, Home, Inbox, User } from 'lucide-react';
+import { Book, Building, Home, Inbox, User, Wheat } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
   STUDENTE: '/student/login',
@@ -35,9 +35,19 @@ export const DUMMY_DATA = {
         icon: React.createElement(Building),
       },
       {
-        href: `${ROUTES.DASHBOARD}/admin/curses`,
-        label: 'Cursos',
+        href: `${ROUTES.DASHBOARD}/admin/academic-faculty`,
+        label: 'Unidade Acadêmica',
         icon: React.createElement(Book),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/admition-exames`,
+        label: 'Exames de admisão',
+        icon: React.createElement(Book),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/academic-semester`,
+        label: 'Semestre Acadêmico',
+        icon: React.createElement(Wheat),
       },
     ],
     admin: [
@@ -109,6 +119,92 @@ export const DUMMY_DATA = {
       value: 'staff',
     },
   ],
+  sesson: [
+    {
+      id: '1',
+      label: 'Primavera',
+      value: 'Primavera',
+    },
+    {
+      id: '2',
+      label: 'Verão',
+      value: 'Verão',
+    },
+    {
+      id: '3',
+      label: 'Outono',
+      value: 'Outono',
+    },
+  ],
+  months: [
+    {
+      id: '1',
+      label: 'Janeiro',
+      value: 'Janeiro',
+    },
+    {
+      id: '2',
+      label: 'Fevereiro',
+      value: 'Fevereiro',
+    },
+    {
+      id: '3',
+      label: 'Março',
+      value: 'Março',
+    },
+    {
+      id: '4',
+      label: 'Abril',
+      value: 'Abril',
+    },
+    {
+      id: '5',
+      label: 'Maio',
+      value: 'Maio',
+    },
+    {
+      id: '6',
+      label: 'Junho',
+      value: 'Junho',
+    },
+    {
+      id: '7',
+      label: 'Julho',
+      value: 'Julho',
+    },
+    {
+      id: '8',
+      label: 'Agosto',
+      value: 'Agosto',
+    },
+    {
+      id: '9',
+      label: 'Setembro',
+      value: 'Setembro',
+    },
+    {
+      id: '10',
+      label: 'Outubro',
+      value: 'Outubro',
+    },
+    {
+      id: '11',
+      label: 'Novembro',
+      value: 'Novembro',
+    },
+    {
+      id: '12',
+      label: 'Dezembro',
+      value: 'Dezembro',
+    },
+  ],
+  code: [
+    {
+      id: '1',
+      label: 'Primavera',
+      value: 'Primavera',
+    },
+  ],
 };
 export const months = [
   'Janeiro',
@@ -124,3 +220,26 @@ export const months = [
   'Novembro',
   'Decembro',
 ] as const;
+
+export const GRADES = [
+  { id: '1', label: '1', value: '1' },
+  { id: '2', label: '2', value: '2' },
+  { id: '3', label: '3', value: '3' },
+  { id: '4', label: '4', value: '4' },
+  { id: '5', label: '5', value: '5' },
+  { id: '6', label: '6', value: '6' },
+  { id: '7', label: '7', value: '7' },
+  { id: '8', label: '8', value: '8' },
+  { id: '9', label: '9', value: '9' },
+  { id: '10', label: '10', value: '10' },
+  { id: '11', label: '11', value: '11' },
+  { id: '12', label: '12', value: '12' },
+  { id: '13', label: '13', value: '13' },
+  { id: '14', label: '14', value: '14' },
+  { id: '15', label: '15', value: '15' },
+  { id: '16', label: '16', value: '16' },
+  { id: '17', label: '17', value: '17' },
+  { id: '18', label: '18', value: '18' },
+  { id: '19', label: '19', value: '19' },
+  { id: '20', label: '20', value: '20' },
+];

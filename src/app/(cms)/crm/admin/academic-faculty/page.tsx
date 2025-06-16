@@ -1,14 +1,13 @@
 import Breadcrumb from '@/components/sheard/breadcrumb'
 import { ROUTES } from '@/constants/mock-data'
-import React from 'react'
-import { CursesTable } from './client-table'
-import { getAllCurses } from '@/lib/helper/db/querys'
+import React, { Suspense } from 'react'
 import SheetModal from '@/components/sheard/sheet-modal'
 import { Plus } from 'lucide-react'
-import CreateCurse from '@/components/forms/admin/create-curse'
+import CreateCurse from '@/components/forms/admin/post/create-faculty'
+import { CurseTableServer } from './table-wrapper'
 
-export default async function AcademicFacultyPage() {
-   const curses = await getAllCurses();
+export default function AcademicFacultyPage() {
+
    return (
       <section className="col-span-12">
          <div className='flex items-center justify-between'>
@@ -23,7 +22,9 @@ export default async function AcademicFacultyPage() {
                title="Cria curso"><CreateCurse /></SheetModal>
          </div>
          <div className="mt-12">
-            <CursesTable data={curses} />
+            <Suspense fallback={<div className="text-muted-foreground">Loading table...</div>}>
+               <CurseTableServer />
+            </Suspense>
          </div>
       </section>
    )

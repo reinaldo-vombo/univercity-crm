@@ -25,19 +25,26 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChevronDown, Plus } from "lucide-react";
 import SheetModal from "./sheet-modal";
-import CreateUser from "../forms/admin/create-user";
 import { TableExport } from "./table-export";
 
 type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];
    data: object[];
    filterColumn?: keyof TData; // e.g., "email"
+   actionForm?: React.ReactNode;
+   fileName?: string
+   fileHerderes?: any
+   modalTitle?: string
 };
 
 export function DataTable<TValue>({
    columns,
    data,
    filterColumn,
+   actionForm,
+   fileHerderes,
+   fileName,
+   modalTitle
 }: DataTableProps<any, TValue>) {
 
    const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -100,23 +107,20 @@ export function DataTable<TValue>({
                         ))}
                   </DropdownMenuContent>
                </DropdownMenu>
-               <SheetModal
-                  triggerStyle="border h-[37px] rounded-md"
-                  side="right"
-                  trigger={<Plus />}
-                  title="Cria novo útilizador"
-               >
-                  <CreateUser />
-               </SheetModal>
+               {actionForm && (
+                  <SheetModal
+                     triggerStyle="border h-[37px] rounded-md"
+                     side="right"
+                     trigger={<Plus />}
+                     title={modalTitle || 'Sheet modal title'}
+                  >
+                     {actionForm}
+                  </SheetModal>
+               )}
                <TableExport
                   data={data}
-                  filename="users"
-                  headers={{
-                     id: "ID",
-                     name: "Full Name",
-                     email: "Email",
-                     role: "Role"
-                  }}
+                  filename={fileName}
+                  headers={fileHerderes}
                />
             </div>
          </div>
@@ -153,7 +157,7 @@ export function DataTable<TValue>({
                   ) : (
                      <TableRow>
                         <TableCell colSpan={columns.length} className="h-24 text-center">
-                           No results.
+                           Sem resultados.
                         </TableCell>
                      </TableRow>
                   )}
@@ -173,7 +177,7 @@ export function DataTable<TValue>({
                   onClick={() => table.previousPage()}
                   disabled={!table.getCanPreviousPage()}
                >
-                  Previous
+                  Anterior
                </Button>
                <Button
                   variant="outline"
@@ -181,7 +185,7 @@ export function DataTable<TValue>({
                   onClick={() => table.nextPage()}
                   disabled={!table.getCanNextPage()}
                >
-                  Next
+                  Proximo
                </Button>
             </div>
          </div>

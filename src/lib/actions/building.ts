@@ -2,11 +2,11 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '../helper/api/server-fetch';
-import { TBuiding, TCurse } from '../types/global';
-import { validatedActionWithUser } from '../action-helper';
+import { TBuiding } from '../types/global';
+import { validatedActionWithUser } from '../helper/action-helper';
 import { buildingSchema } from '../validation/building';
 import { ApiResponseError } from '../helper/api/api-error';
-import { ActionResult, ActionState } from '../types/api-error';
+import { ActionResult } from '../types/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewBuilding = validatedActionWithUser(
@@ -77,16 +77,15 @@ export const updateBuilding = validatedActionWithUser(
 );
 export const deleteBuilding = async (
   id: string
-): Promise<ActionState<TCurse>> => {
+): Promise<ActionResult<TBuiding>> => {
   try {
-    const data = await serverFetch<TCurse>(`/building/${id}`, {
+    const data = await serverFetch<TBuiding>(`/building/${id}`, {
       method: 'DELETE',
     });
 
     revalidateTag('buidings');
     return {
       error: false,
-      message: 'Edificio criado',
       data,
     };
   } catch (error) {

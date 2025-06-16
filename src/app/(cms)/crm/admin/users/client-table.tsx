@@ -7,9 +7,22 @@ interface Props {
    data: Users[];
 }
 
-export function StudentTable({ data }: Props) {
+const herader = {
+   id: "ID",
+   name: "Full Name",
+   email: "Email",
+   role: "Role"
+}
+
+export function UsersTable({ data }: Props) {
 
    const columns = UsersColumns();
 
-   return <DataTable columns={columns} data={data} filterColumn="name" />;
+   return <DataTable
+      modalTitle="Cria novo útilizador"
+      fileHerderes={herader}
+      fileName="users"
+      columns={columns}
+      data={data}
+      filterColumn="name" />;
 }

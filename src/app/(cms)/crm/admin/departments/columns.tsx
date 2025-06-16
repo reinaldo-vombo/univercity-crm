@@ -9,7 +9,7 @@ import axios from "axios"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAcademicFaculty, TDepartemant, TUser } from "@/lib/types/global"
 import Avatar from "@/components/sheard/avatar"
-import UpdatedDepartment from "@/components/forms/admin/update-department"
+import UpdatedDepartment from "@/components/forms/admin/update/update-department"
 
 type TDepartmentWithUser = TDepartemant & {
    user?: TUser;

@@ -15,45 +15,42 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { departmentSchema } from "@/lib/validation/departement"
-import { TUser } from "@/lib/types/global"
-import { addNewDepartemant } from "@/lib/actions/departement"
 import Selector from "@/components/sheard/selector"
-type TPros = {
-   users: TUser[]
-   academicFaculty: any
+import { DUMMY_DATA } from "@/constants/mock-data"
+import { updateCourseSchema } from "@/lib/validation/curses"
+import { addNewCourse } from "@/lib/actions/courses"
+import { TCourse } from "@/lib/types/global"
+
+type TProps = {
+   values: TCourse
 }
-const CreateDepartment = ({ users, academicFaculty }: TPros) => {
-   const admins = users.map(user => ({
-      id: user.id,
-      label: user.name,
-      value: user.id,
-   }));
-   const academicFacultys = academicFaculty.map((faculty: any) => ({
-      id: faculty.id,
-      label: faculty.title,
-      value: faculty.id,
-   }));
-   const form = useForm<z.infer<typeof departmentSchema>>({
-      resolver: zodResolver(departmentSchema),
+
+const UpdateCourseForm = ({ values }: TProps) => {
+   const { id, title, code, credits } = values;
+
+   const form = useForm<z.infer<typeof updateCourseSchema>>({
+      resolver: zodResolver(updateCourseSchema),
       defaultValues: {
-         title: "",
+         id,
+         title,
+         code,
+         credits
       }
    })
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof departmentSchema>) {
+   async function onSubmit(values: z.infer<typeof updateCourseSchema>) {
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
       });
       startTransition(async () => {
          try {
-            const response = await addNewDepartemant(formData);
+            const response = await addNewCourse(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.DEPARTMENT_NOT_CREATED);
+               toast.warning(FLASH_MESSAGE.COURSE_CREATED);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.COURSE_NOT_CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -70,10 +67,40 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
                name="title"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do curso</FormLabel>
+                     <FormLabel>Temporada</FormLabel>
+                     <FormControl>
+                        <Selector options={DUMMY_DATA.sesson} placeholder="Ex: Verao" formField={field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="code"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Codigo</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Nome"
+                           placeholder="Ex: FAC-ENG-2022 "
+                           {...field} />
+                     </FormControl>
+                     <FormDescription>Ex: FAC-ENG-2022</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="credits"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Valor</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="Ex: 40.000"
                            {...field} />
                      </FormControl>
                      <FormDescription></FormDescription>
@@ -81,35 +108,6 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
                   </FormItem>
                )}
             />
-            <FormField
-               control={form.control}
-               name="departmentHeadId"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Utilizadores</FormLabel>
-                     <FormControl>
-                        <Selector options={admins} placeholder="Selecione um admin" formField={field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="academicFacultyId"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Utilizadores</FormLabel>
-                     <FormControl>
-                        <Selector options={academicFacultys} placeholder="Selecione um curso" formField={field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-
             <SubmitBtn
                label="Criar"
                loading={isPending} />
@@ -118,4 +116,4 @@ const CreateDepartment = ({ users, academicFaculty }: TPros) => {
    )
 }
 
-export default CreateDepartment
+export default UpdateCourseForm;

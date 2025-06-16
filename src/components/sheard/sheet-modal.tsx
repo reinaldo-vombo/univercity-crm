@@ -18,7 +18,9 @@ const SheetModal = ({ children, trigger, description, className, side, triggerSt
       <SheetContent side={side} className={className}>
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
-          {description && <SheetDescription>{description}</SheetDescription>}
+          <SheetDescription className="sr-only">
+            {description || 'Modal description'}
+          </SheetDescription>
           {children}
         </SheetHeader>
       </SheetContent>

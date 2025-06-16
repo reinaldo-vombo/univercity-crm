@@ -24,6 +24,7 @@ export type TAvatarProps = {
 };
 export type TSelectPros = {
   placeholder: string;
+  disabled?: boolean;
   className?: string;
   options: {
     id: string;
@@ -49,7 +50,7 @@ export type DropdownMenuProps = {
 };
 export type TAlertProps = {
   trigger: any;
-  onClose: () => void;
+  action: () => void;
 };
 export type TExportDocProps<T extends object> = {
   data: T[];

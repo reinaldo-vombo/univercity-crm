@@ -50,9 +50,8 @@ export default function AdminLogin({ onChange }: TProps) {
          if (res?.error) {
             if (res?.error === 'CredentialsSignin') {
                toast.warning(FLASH_MESSAGE.WRONGE_CREDENTIALS)
+               console.error(res.error);
             }
-            toast.error(`Login failed: ${res.error}`);
-            console.error(res.error);
          } else if (res?.ok) {
             toast.success(`${FLASH_MESSAGE.WELLCOME}`);
             router.push("/");  // Redirect on successful login

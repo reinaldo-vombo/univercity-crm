@@ -3,7 +3,7 @@
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '../helper/api/server-fetch';
 import { TDepartemant } from '../types/global';
-import { validatedActionWithUser } from '../action-helper';
+import { validatedActionWithUser } from '../helper/action-helper';
 import { departmentSchema } from '../validation/departement';
 import { ActionResult } from '../types/api-error';
 import { ApiResponseError } from '../helper/api/api-error';
@@ -51,7 +51,7 @@ export const updatedDepartemant = validatedActionWithUser(
     try {
       const { id, ...updateData } = data; // Remove `id` from request body
 
-      const departmentId = data.id;
+      const departmentId = id;
       const departements = await serverFetch<TDepartemant>(
         `/academic-department/${departmentId}`,
         {

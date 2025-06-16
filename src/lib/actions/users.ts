@@ -3,9 +3,10 @@
 import { revalidateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { serverFetch } from '../helper/api/server-fetch';
-import { ActionResult, ActionState, TUser } from '../types/global';
-import { validatedActionWithUser } from '../action-helper';
+import { TUser } from '../types/global';
+import { validatedActionWithUser } from '../helper/action-helper';
 import { updateSchema, userSchema } from '../validation/user';
+import { ActionResult, ActionState } from '../types/api-error';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
@@ -35,11 +36,15 @@ export const addNewUser = validatedActionWithUser(
 );
 export const updatedUser = validatedActionWithUser(
   updateSchema,
-  async (data, _, user): Promise<ActionResult<TUser>> => {
+  async (data, formData, user): Promise<ActionResult<TUser>> => {
+    const file = formData.get('avatar');
+    console.log('file', file);
+    console.log('formData', formData);
+
     try {
       const result = await serverFetch<TUser>(`/users/${user.id}`, {
         method: 'PUT',
-        body: data,
+        body: formData,
       });
 
       revalidateTag('users');

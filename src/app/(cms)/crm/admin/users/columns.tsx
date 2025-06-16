@@ -80,7 +80,7 @@ export function UsersColumns(): ColumnDef<Users>[] {
                   {logUser?.id === users.id ? null : (
                      <AlertModal
                         trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
-                        onClose={() => handleDelete(users.id)} />
+                        action={() => handleDelete(users.id)} />
                   )}
                </div>
             )

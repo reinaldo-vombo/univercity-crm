@@ -16,5 +16,6 @@ export const userSchema = z.object({
 export const updateSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
-  role: z.string().min(1, { message: 'Deve adicionar um cargo'}),
+  role: z.string().optional(),
+  avatar: z.instanceof(File).optional(),
 });

@@ -8,13 +8,48 @@ export type TUser = {
   role: string;
   number: number;
 };
-export type TCurse = {
+export type TAcademicFaculty = {
   id: string;
   title: string;
   createdAt: string;
   departments: string;
   facultys: string;
   students: number;
+};
+
+export type TCourse = {
+  id: string;
+  title: string;
+  code: string;
+  credits: number;
+  faculties: TTeacher[];
+  offeredCourses?: TOfferedCourse[];
+  studentEnrolledCourses?: TStudentEnrolledCourse[];
+  preRequisiteCourses?: [
+    {
+      courseId: string;
+      isDeleted?: boolean | null;
+    }
+  ];
+};
+type TOfferedCourse = {
+  id: string;
+};
+type TStudentEnrolledCourse = {
+  id: string;
+};
+
+export type TAdmitionExame = {
+  id: string;
+  applicantName: string;
+  paymentRecipt: string;
+  exameDate: Date;
+  fase: number;
+  document: string;
+  paymentAmoute: number | null;
+  aprovePayment: boolean | null | undefined;
+  exameResults: number | null | undefined;
+  passed: boolean | null;
 };
 
 export type TDepartemant = {
@@ -31,12 +66,7 @@ export type TBuiding = {
   createdAt?: Date;
   updatedAt?: Date;
 };
-export type TAcademicFaculty = {
-  id: string;
-  title: string;
-  createdAt: Date;
-  updatedAt: Date;
-}[];
+
 export type TSemester = {
   id: string;
   title: string;
@@ -50,6 +80,12 @@ export type TSemester = {
 };
 
 export type TStudent = {
+  id: string;
+  name: string;
+  email: string;
+  major: string;
+};
+type TTeacher = {
   id: string;
   name: string;
   email: string;

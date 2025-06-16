@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { TAlertProps } from "./types"
 
-const AlertModal = ({ trigger, onClose }: TAlertProps) => {
+const AlertModal = ({ trigger, action }: TAlertProps) => {
    return (
       <AlertDialog>
          <AlertDialogTrigger>{trigger}</AlertDialogTrigger>
@@ -19,12 +19,12 @@ const AlertModal = ({ trigger, onClose }: TAlertProps) => {
             <AlertDialogHeader>
                <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
                <AlertDialogDescription>
-                  Esta ação não pode ser desfeita. e removerá seus dados de nossos servidores.
+                  Esta ação não pode ser desfeita. e removerá seus dados do servidore.
                </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
                <AlertDialogCancel>Cancel</AlertDialogCancel>
-               <AlertDialogAction onClick={onClose}>Continue</AlertDialogAction>
+               <AlertDialogAction onClick={action}>Continue</AlertDialogAction>
             </AlertDialogFooter>
          </AlertDialogContent>
       </AlertDialog>

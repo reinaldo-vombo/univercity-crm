@@ -20,5 +20,8 @@ export async function DepartmentTableServer() {
          user, // attach full user object
       };
    });
-   return <DepartamentTable departements={departmentsWithUserData} users={users} academicFaculty={academicFaculty} />;
+   return <DepartamentTable
+      departements={departmentsWithUserData}
+      users={users}
+      academicFaculty={academicFaculty} />;
 }

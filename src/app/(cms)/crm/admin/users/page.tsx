@@ -1,14 +1,11 @@
 
 import Breadcrumb from "@/components/sheard/breadcrumb";
-import { StudentTable } from "./client-table";
 import { ROUTES } from "@/constants/mock-data";
-import { serverFetch } from "@/lib/helper/api/server-fetch";
-import { TUser } from "@/lib/types/global";
+import { UsersTableServer } from "./table-wrapper";
+import { Suspense } from "react";
 
-export default async function UsersPages() {
-   const users = await serverFetch<TUser[]>('/users', {
-      next: { tags: ['users'] }, // 🚀 tags for smart revalidation
-   });
+export default function UsersPages() {
+
    return (
       <section className="col-span-12">
          <Breadcrumb
@@ -17,7 +14,9 @@ export default async function UsersPages() {
             pageUrl={`${ROUTES.DASHBOARD}/admin/users`}
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
-            <StudentTable data={users} />
+            <Suspense fallback={<div className="text-muted-foreground">Loading table...</div>}>
+               <UsersTableServer />
+            </Suspense>
          </div>
       </section>
    )

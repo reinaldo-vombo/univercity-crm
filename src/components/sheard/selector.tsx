@@ -2,13 +2,13 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { TSelectPros } from './types';
 
-const Selector = ({ className, options, placeholder, formField }: TSelectPros) => {
+const Selector = ({ className, options, placeholder, formField, disabled = false }: TSelectPros) => {
    const onChange = (value: string) => {
       formField.onChange(value); // For single select
    }
 
    return (
-      <Select onValueChange={onChange}>
+      <Select onValueChange={onChange} disabled={disabled}>
          <SelectTrigger aria-label={`Select ${placeholder}`} className={`${className ? className : 'w-[180px]'}`}>
             <SelectValue placeholder={placeholder} />
          </SelectTrigger>

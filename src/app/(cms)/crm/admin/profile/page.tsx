@@ -1,3 +1,4 @@
+import UpdatedUserForm from '@/components/forms/admin/update/update-user'
 import Avatar from '@/components/sheard/avatar'
 import Card from '@/components/sheard/card'
 import SheetModal from '@/components/sheard/sheet-modal'
@@ -11,6 +12,7 @@ export default async function ProfilePage() {
    const session = await getServerSession(authOptions)
    const user = session?.user
    const { firstName, lastName } = getFirstAndLastName(user?.name || '');
+
    return (
       <section className="col-span-12">
          <Card>
@@ -36,8 +38,9 @@ export default async function ProfilePage() {
                            side='right'
                            trigger={<Pencil className='cursor-pointer' />}
                            title="Editar Perfil"
+                           description='Editar Perfil'
                            className="">
-                           edit
+                           <UpdatedUserForm userInf={user} />
                         </SheetModal>
                      </div>
                   </div>

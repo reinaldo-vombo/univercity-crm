@@ -16,33 +16,33 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { curseSchema } from "@/lib/validation/curse"
 import { handleApiError } from "@/lib/helper/api/error-handler"
-import axios from "axios"
+import { addNewAcademicFaculty } from "@/lib/actions/academic-faculty"
+import { academicFacultyacultySchema } from "@/lib/validation/academicFaculty"
 
-const CreateCurse = () => {
+const CreateFaculty = () => {
 
-   const form = useForm<z.infer<typeof curseSchema>>({
-      resolver: zodResolver(curseSchema),
+   const form = useForm<z.infer<typeof academicFacultyacultySchema>>({
+      resolver: zodResolver(academicFacultyacultySchema),
       defaultValues: {
          title: "",
       }
    })
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof curseSchema>) {
+   async function onSubmit(values: z.infer<typeof academicFacultyacultySchema>) {
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
       });
       startTransition(async () => {
          try {
-            const response = await axios.post("/api/curses", formData);
+            const response = await addNewAcademicFaculty(formData);
 
-            if (!response.data) {
-               toast.error(FLASH_MESSAGE.USER_NOT_CREATED);
+            if (response.error) {
+               toast.warning(FLASH_MESSAGE.FACULTY_NOT_CREATED);
                return;
             }
-            toast.success(FLASH_MESSAGE.COURSE_CREATED);
+            toast.success(FLASH_MESSAGE.FACULTY_CREATED);
             form.reset();
          } catch (error) {
             toast.error("Network error. Please try again.");
@@ -59,10 +59,10 @@ const CreateCurse = () => {
                name="title"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do curso</FormLabel>
+                     <FormLabel>Nome</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Nome"
+                           placeholder="Ex: Faculdade de Engenharia "
                            {...field} />
                      </FormControl>
                      <FormDescription></FormDescription>
@@ -70,7 +70,6 @@ const CreateCurse = () => {
                   </FormItem>
                )}
             />
-
             <SubmitBtn
                label="Criar"
                loading={isPending} />
@@ -79,4 +78,4 @@ const CreateCurse = () => {
    )
 }
 
-export default CreateCurse
+export default CreateFaculty;

@@ -1,4 +1,3 @@
-'use client'
 import * as z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
@@ -13,50 +12,42 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { updateSchema } from "@/lib/validation/user"
 import SubmitBtn from "@/components/sheard/submit-btn"
-import Selector from "@/components/sheard/selector"
-import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { addNewUser } from "@/lib/actions/users"
+import Selector from "@/components/sheard/selector"
+import { DUMMY_DATA } from "@/constants/mock-data"
+import { courseSchema } from "@/lib/validation/curses"
+import { addNewCourse } from "@/lib/actions/courses"
 
-type TProps = {
-   userInf: {
-      name: string,
-      email: string,
-      role: string
-   }
-}
-const UpdatedUser = ({ userInf }: TProps) => {
-   const { name, email, role } = userInf;
-   const form = useForm<z.infer<typeof updateSchema>>({
-      resolver: zodResolver(updateSchema),
+const CreateCourseForm = () => {
+
+   const form = useForm<z.infer<typeof courseSchema>>({
+      resolver: zodResolver(courseSchema),
       defaultValues: {
-         name: name,
-         role: role,
-         email: email,
+         title: "",
+         code: "",
+         credits: 0
       }
    })
    const [isPending, startTransition] = useTransition();
-
-   async function onSubmit(values: z.infer<typeof updateSchema>) {
-      const formData = new FormData();
+   async function onSubmit(values: z.infer<typeof courseSchema>) {
+      const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
       });
       startTransition(async () => {
          try {
-            const result = await addNewUser(formData);
-            if (result.error) {
-               toast.error(result.message);
+            const response = await addNewCourse(formData);
+            if (response.error) {
+               toast.warning(FLASH_MESSAGE.COURSE_CREATED);
                return;
             }
-            toast.success(FLASH_MESSAGE.USER_UPDATED);
+            toast.success(FLASH_MESSAGE.COURSE_NOT_CREATED);
             form.reset();
-         } catch (err) {
+         } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
-            console.error(err);
+            console.error(error);
          }
       });
 
@@ -66,15 +57,12 @@ const UpdatedUser = ({ userInf }: TProps) => {
          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
             <FormField
                control={form.control}
-               name="name"
+               name="title"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do útilizador</FormLabel>
+                     <FormLabel>Temporada</FormLabel>
                      <FormControl>
-                        <Input
-                           disabled
-                           placeholder="Nome"
-                           {...field} />
+                        <Selector options={DUMMY_DATA.sesson} placeholder="Ex: Verao" formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -83,42 +71,42 @@ const UpdatedUser = ({ userInf }: TProps) => {
             />
             <FormField
                control={form.control}
-               name="email"
+               name="code"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Email</FormLabel>
+                     <FormLabel>Codigo</FormLabel>
                      <FormControl>
-                        <Input disabled placeholder="Email" {...field} />
+                        <Input
+                           placeholder="Ex: FAC-ENG-2022 "
+                           {...field} />
                      </FormControl>
-                     <FormDescription>Ex@gmail.com</FormDescription>
+                     <FormDescription>Ex: FAC-ENG-2022</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
             <FormField
                control={form.control}
-               name="role"
+               name="credits"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Cargo</FormLabel>
+                     <FormLabel>Valor</FormLabel>
                      <FormControl>
-                        <Selector
-                           options={DUMMY_DATA.roles}
-                           className="w-full"
-                           formField={field}
-                           placeholder="Cargos" />
+                        <Input
+                           placeholder="Ex: 40.000"
+                           {...field} />
                      </FormControl>
-                     <FormDescription>Ex: admin, editor...</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
             <SubmitBtn
-               label="Atualisar"
+               label="Criar"
                loading={isPending} />
          </form>
       </Form>
    )
 }
 
-export default UpdatedUser
+export default CreateCourseForm;

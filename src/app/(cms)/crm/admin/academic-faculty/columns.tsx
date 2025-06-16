@@ -5,20 +5,21 @@ import { Eye, Trash } from "lucide-react"
 import SheetModal from "@/components/sheard/sheet-modal"
 import AlertModal from "@/components/sheard/alert-modal"
 import { toast } from "sonner"
-import axios from "axios"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/lib/helper/api/error-handler"
+import { deleteFaculty } from "@/lib/actions/academic-faculty"
+import { TAcademicFaculty } from "@/lib/types/global"
 
-export type TCurse = {
-   id: string
-   title: string
-   createdAt: string
-   departments: string
-   facultys: string
-   students: number
+export type AcademicFaculty = {
+   id: string;
+  title: string;
+  createdAt: string;
+  departments: string;
+  facultys: string;
+  students: number;
 }
 
-export function CurseColumns(): ColumnDef<TCurse>[] {
+export function AcademicFacultyColumns(): ColumnDef<TAcademicFaculty>[] {
    return [
 
       {
@@ -44,13 +45,12 @@ export function CurseColumns(): ColumnDef<TCurse>[] {
             const handleDelete = async (id: string) => {
 
                try {
-                  const res = await axios.delete(`/api/curses/${id}`,);
-                  const result = await res.data;
-                  if (!res.data.success) {
-                     toast.error(result.error || "Failed to delete user.");
+                  const res = await deleteFaculty(id);
+                  if (res.error) {
+                     toast.warning(FLASH_MESSAGE.FACULTY_NOT_DELETED);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.USER_DELETED);
+                  toast.success(FLASH_MESSAGE.FACULTY_DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (error) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -63,11 +63,13 @@ export function CurseColumns(): ColumnDef<TCurse>[] {
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     title="Detalhes do útilizador"
-                     description={`ID: ${curses.id}`}>Detalhes do útilizador {curses.title}</SheetModal>
+                     title="Detalhes"
+                     description='Detalhes da falculdade'>
+                        falculdade
+                     </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
-                     onClose={() => handleDelete(curses.id)} />
+                     action={() => handleDelete(curses.id)} />
                </div>
             )
          },

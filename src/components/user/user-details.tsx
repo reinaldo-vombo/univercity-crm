@@ -1,5 +1,5 @@
 import { Eye, PenBox, PlusSquare, Trash } from "lucide-react"
-import UpdatedUser from "../forms/admin/update-user"
+import UpdatedUser from "../forms/admin/update/update-user"
 
 type TUserDetail = {
    name: string

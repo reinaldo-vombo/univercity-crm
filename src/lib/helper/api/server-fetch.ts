@@ -20,11 +20,13 @@ export async function serverFetch<T>(
 ): Promise<T> {
   try {
     const session = await getServerSession(authOptions);
-
+    const isFormData = options.body instanceof FormData;
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
       ...(options.headers ?? {}),
     };
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     if (session?.user?.accessToken) {
       headers['Authorization'] = `Bearer ${session.user.accessToken}`;
