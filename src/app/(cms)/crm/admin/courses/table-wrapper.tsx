@@ -1,11 +1,15 @@
 
 import { CoursesTable } from "./client-table";
-import { getAllCurses } from "@/lib/helper/db/querys";
+import { getAllCurses, getAllDepartments } from "@/lib/helper/db/querys";
 
 
 export async function CoursesTableServer() {
 
-   const courses = await getAllCurses()
+   const [departements, courses] = await Promise.all([
+      getAllDepartments(),
+      getAllCurses(),
+   ]);
 
-   return <CoursesTable couses={courses} />;
+
+   return <CoursesTable couses={courses} departements={departements} />;
 }

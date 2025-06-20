@@ -1,6 +1,6 @@
 
 
-import { TAcademicFaculty, TAdmitionExame, TCourse, TDepartemant, TSemester, TUser } from "@/lib/types/global";
+import { TAcademicFaculty, TAdmitionExame, TCourse, TDepartemant, TOfferedCourse, TSemester, TUser } from "@/lib/types/global";
 import { handleApiError } from "../api/error-handler";
 import { serverFetch } from "../api/server-fetch";
 
@@ -17,7 +17,7 @@ export const getAllUsers = async (): Promise<TUser[]> => {
 };
 export const getAllCurses = async (): Promise<TCourse[]> => {
    try {
-      const curses = await serverFetch<TCourse[]>('/academic-faculty', {
+      const curses = await serverFetch<TCourse[]>('/course', {
          next: { tags: ['curse'] }, // 🚀 tags for smart revalidation
       });
       return curses
@@ -59,6 +59,16 @@ export const getAllSemester = async (): Promise<TSemester[]> => {
    try {
       const semester = await serverFetch<TSemester[]>('/academic-semester', {
          next: { tags: ['semester'] },
+      })
+      return semester;
+   } catch (error) {
+      handleApiError(error);
+   }
+};
+export const getAllOfferedCourse = async (): Promise<TOfferedCourse[]> => {
+   try {
+      const semester = await serverFetch<TOfferedCourse[]>('/offered-course', {
+         next: { tags: ['offeredCourse'] },
       })
       return semester;
    } catch (error) {

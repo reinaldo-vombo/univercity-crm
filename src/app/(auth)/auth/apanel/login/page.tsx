@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
                   }}
                   transition={{ ease: 'easeInOut', duration: 0.5 }}
                   className='bg-slate-50 absolute inset-0'
-                  style={{ background: `url()`, backgroundPosition: 'center', backgroundSize: 'cover' }} />
+                  style={{ background: `url(/assets/images/cover-2.jpg)`, backgroundPosition: 'center', backgroundSize: 'cover' }} />
                <motion.div
                   initial={false}
                   animate={{
@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
                   }}
                   transition={{ ease: 'easeInOut', duration: 0.5 }}
                   className='bg-slate-50 absolute inset-0'
-                  style={{ background: `url()`, backgroundPosition: 'center', backgroundSize: 'cover' }} />
+                  style={{ background: `url(/assets/images/cover-1.jpg)`, backgroundPosition: 'center', backgroundSize: 'cover' }} />
             </div>
          </motion.div>
       </Fragment>

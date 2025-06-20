@@ -2,12 +2,13 @@ import { months } from '@/constants/mock-data';
 import * as z from 'zod';
 
 export const semesterSchema = z.object({
-  title: z.enum(['Autumn', 'Summer', 'Fall'], {
+  title: z.enum(['Primavera', 'Outono', 'Verão', 'Inverno'], {
     required_error: 'Titulo é obrigatorio',
   }),
   year: z.string({
     required_error: 'Ano corrente é obrigatorio',
   }),
+  isCurrent: z.boolean(),
   code: z.enum(['01', '02', '03']),
   startMonth: z.enum(months, {
     required_error: 'Mês inicial é obrigatorio',
@@ -19,7 +20,7 @@ export const semesterSchema = z.object({
 export const updateSemesterSchema = z.object({
   body: z
     .object({
-      title: z.enum(['Autumn', 'Summer', 'Fall']).optional(),
+      title: z.enum(['Primavera', 'Outono', 'Verão', 'Inverno']).optional(),
       year: z.string().optional(),
       code: z.enum(['01', '02', '03']).optional(),
       startMonth: z.enum(months).optional(),

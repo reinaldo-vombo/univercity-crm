@@ -62,18 +62,22 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
       });
 
    }
+   const onInvalid = (errors: unknown) => {
+      //This helpe me fix a two week form not submiting god kwon's way bug
+      console.error("Validation Errors:", errors);
+   };
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
+         <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
                name="title"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do curso</FormLabel>
+                     <FormLabel>Nome do Departamento</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Nome"
+                           placeholder="Nome do Departamento"
                            {...field} />
                      </FormControl>
                      <FormDescription></FormDescription>
@@ -86,11 +90,15 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
                name="departmentHeadId"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Utilizadores</FormLabel>
+                     <FormLabel>Membros</FormLabel>
                      <FormControl>
-                        <Selector options={admins} placeholder="Selecione um admin" formField={field} />
+                        <Selector
+                           className="w-full"
+                           options={admins}
+                           placeholder="Selecione um admin"
+                           formField={field} />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>Selecione o director do departamento</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -100,9 +108,12 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
                name="academicFacultyId"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Utilizadores</FormLabel>
+                     <FormLabel>Unidade Acadêmica</FormLabel>
                      <FormControl>
-                        <Selector options={academicFacultys} placeholder="Selecione um curso" formField={field} />
+                        <Selector
+                           className="w-full"
+                           options={academicFacultys}
+                           placeholder="Ex: Faculdade de Engenharia" formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />

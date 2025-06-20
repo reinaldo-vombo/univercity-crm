@@ -1,5 +1,13 @@
 import React from 'react';
-import { Book, Building, Home, Inbox, User, Wheat } from 'lucide-react';
+import {
+  Book,
+  Building,
+  Home,
+  Inbox,
+  User,
+  BookCheck,
+  BookType,
+} from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
   STUDENTE: '/student/login',
@@ -30,14 +38,14 @@ export const DUMMY_DATA = {
         icon: React.createElement(User),
       },
       {
-        href: `${ROUTES.DASHBOARD}/admin/departments`,
-        label: 'Departamentos',
-        icon: React.createElement(Building),
-      },
-      {
         href: `${ROUTES.DASHBOARD}/admin/academic-faculty`,
         label: 'Unidade Acadêmica',
         icon: React.createElement(Book),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/departments`,
+        label: 'Departamentos',
+        icon: React.createElement(Building),
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/admition-exames`,
@@ -47,7 +55,17 @@ export const DUMMY_DATA = {
       {
         href: `${ROUTES.DASHBOARD}/admin/academic-semester`,
         label: 'Semestre Acadêmico',
-        icon: React.createElement(Wheat),
+        icon: React.createElement(BookCheck),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/courses`,
+        label: 'Cursos',
+        icon: React.createElement(BookType),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/offered-course`,
+        label: 'Deciplinas',
+        icon: React.createElement(BookType),
       },
     ],
     admin: [

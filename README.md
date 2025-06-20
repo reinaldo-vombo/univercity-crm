@@ -45,8 +45,9 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [ ] Dashboard/root
 - [ ] All studente pages
 - [ ] All Teacher pages
-- [ ] All departemant pages
-- [ ] All curses pages
+- [x] All departemant pages
+- [x] All Semester pages
+- [x] All curses pages
 - [ ] All building pages
 - [ ] All Payment pages
 - [x] All users pages
@@ -129,7 +130,8 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Create departement CRUD
 - [x] Create semester CRUD
 - [x] Create buildind CRUD
-- [x] Create events CRUD
+- [x] Create curses CRUD
+- [ ] Create events CRUD
 
 ---
 

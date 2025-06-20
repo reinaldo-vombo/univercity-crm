@@ -26,6 +26,8 @@ export const addNewCourse = validatedActionWithUser(
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
+        console.error(err.message);
+
         return {
           error: true,
           message: err.message,

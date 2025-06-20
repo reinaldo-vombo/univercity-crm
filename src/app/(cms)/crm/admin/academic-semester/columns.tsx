@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Eye, Trash } from "lucide-react"
+import { Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/sheard/sheet-modal"
 import AlertModal from "@/components/sheard/alert-modal"
 import { toast } from "sonner"
@@ -9,6 +9,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TSemester, } from "@/lib/types/global"
 import UpdateSemesterForm from "@/components/forms/admin/update/update-semester"
 import { deleteSemester } from "@/lib/actions/semester"
+import { Badge } from "@/components/ui/badge"
 
 
 export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
@@ -33,6 +34,18 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
       {
          accessorKey: "endMonth",
          header: "Mês final",
+      },
+      {
+         accessorKey: "isCurrent",
+         header: "Status",
+         cell: ({ row }) => {
+            const status = row.original.isCurrent;
+            return (
+               <Badge className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
+                  {status ? 'Decorrendo' : 'Terminado'}
+               </Badge>
+            );
+         },
       },
 
       {
@@ -63,10 +76,10 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
             return (
                <div className="flex items-center gap-3">
                   <SheetModal
-                     trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
+                     trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     title="Detalhes do departamento"
-                     description={`ID: ${semester.id}`}>
+                     title="Atualizar semester acadêmico"
+                     description='Formulário de atualização do semester acadêmico'>
                      <UpdateSemesterForm values={semester} />
                   </SheetModal>
                   <AlertModal

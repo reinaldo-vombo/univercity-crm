@@ -19,13 +19,31 @@ import { semesterSchema } from "@/lib/validation/semester"
 import { addNewSemester } from "@/lib/actions/semester"
 import Selector from "@/components/sheard/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
+import { Switch } from "@/components/ui/switch"
 
+const startYear = 2000;
+const currentYear = new Date().getFullYear();
+
+const yearsArray: any = [];
+
+for (let year = startYear; year <= currentYear; year++) {
+   yearsArray.push({
+      id: year.toString(),      // id as a string (for uniqueness)
+      value: year,              // value as the year itself
+      label: year.toString()    // label as the year (can be customized further)
+   });
+}
 const CreateSemesterForm = () => {
 
    const form = useForm<z.infer<typeof semesterSchema>>({
       resolver: zodResolver(semesterSchema),
       defaultValues: {
-
+         title: 'Primavera',
+         code: '01',
+         isCurrent: true,
+         year: currentYear.toString(),  // Set a default year
+         startMonth: 'Abril',           // Set a default start month
+         endMonth: 'Agosto',
       }
    })
    const [isPending, startTransition] = useTransition();
@@ -38,10 +56,10 @@ const CreateSemesterForm = () => {
          try {
             const response = await addNewSemester(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.DEPARTMENT_NOT_CREATED);
+               toast.error(FLASH_MESSAGE.SEMESTER_NOT_CREATED);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.SEMESTER_CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -60,7 +78,29 @@ const CreateSemesterForm = () => {
                   <FormItem>
                      <FormLabel>Temporada</FormLabel>
                      <FormControl>
-                        <Selector options={DUMMY_DATA.sesson} placeholder="Ex: Verao" formField={field} />
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.sesson}
+                           placeholder="Ex: Verao"
+                           formField={field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="isCurrent"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel id="semesterStatus">Status</FormLabel>
+                     <FormControl>
+                        <Switch
+                           checked={field.value as boolean}
+                           onChange={field.onChange}
+                           id="semesterStatus"
+                        />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -75,10 +115,10 @@ const CreateSemesterForm = () => {
                      <FormLabel>Codigo</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Ex: FAC-ENG-2022 "
+                           placeholder="Ex: 01/2022"
                            {...field} />
                      </FormControl>
-                     <FormDescription>Ex: FAC-ENG-2022</FormDescription>
+                     <FormDescription>Ex: 01/2022</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -90,7 +130,11 @@ const CreateSemesterForm = () => {
                   <FormItem>
                      <FormLabel>Ano corrente</FormLabel>
                      <FormControl>
-                        <Selector options={DUMMY_DATA.months} placeholder="Ex: 2025" formField={field} />
+                        <Selector
+                           className="w-full"
+                           options={yearsArray}
+                           placeholder="Ex: 2025"
+                           formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -104,7 +148,11 @@ const CreateSemesterForm = () => {
                   <FormItem>
                      <FormLabel>Mês de inicio</FormLabel>
                      <FormControl>
-                        <Selector options={DUMMY_DATA.months} placeholder="Ex: Março" formField={field} />
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.months}
+                           placeholder="Ex: Março"
+                           formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -118,7 +166,11 @@ const CreateSemesterForm = () => {
                   <FormItem>
                      <FormLabel>Mês de encerramento</FormLabel>
                      <FormControl>
-                        <Selector options={DUMMY_DATA.months} placeholder="Ex: Dezembro" formField={field} />
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.months}
+                           placeholder="Ex: Dezembro"
+                           formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />

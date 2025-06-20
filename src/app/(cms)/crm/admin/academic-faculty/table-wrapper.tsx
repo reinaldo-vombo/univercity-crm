@@ -1,9 +1,9 @@
 
 import { getAllAcademicFaculty } from "@/lib/helper/db/querys";
-import { CursesTable } from "./client-table";
+import { AcademicFacultyTable } from "./client-table";
 
 export async function CurseTableServer() {
    const acdemicFaculty = await getAllAcademicFaculty();
 
-   return <CursesTable data={acdemicFaculty} />;
+   return <AcademicFacultyTable data={acdemicFaculty} />;
 }

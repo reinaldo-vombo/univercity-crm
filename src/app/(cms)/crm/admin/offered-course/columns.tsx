@@ -8,7 +8,6 @@ import { toast } from "sonner"
 import axios from "axios"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAcademicFaculty, TDepartemant, TUser } from "@/lib/types/global"
-import Avatar from "@/components/sheard/avatar"
 import UpdatedDepartment from "@/components/forms/admin/update/update-department"
 import DepartmenteDetails from "@/components/admin/departmente-details"
 
@@ -16,21 +15,12 @@ type TDepartmentWithUser = TDepartemant & {
    user?: TUser;
 };
 
-export function DepartmentColumns(users: TUser[], academicFaculty: TAcademicFaculty[]): ColumnDef<TDepartmentWithUser>[] {
+export function OfferdCourseColumns(users: TUser[], academicFaculty: TAcademicFaculty[]): ColumnDef<TDepartmentWithUser>[] {
 
    return [
       {
-         accessorKey: "avatarUrl",
-         header: "Director",
-         cell: ({ row }) => {
-            const user = row.original.user;
-
-            return (
-               <Avatar name={user?.name || ''} photo={user?.avatar || ''} className="size-11" />
-            );
-         },
-         enableSorting: false,
-         enableHiding: false,
+         accessorKey: "academicFaculty",
+         header: "Faculty",
       },
       {
          accessorKey: "title",

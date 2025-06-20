@@ -22,6 +22,12 @@ export type TCourse = {
   title: string;
   code: string;
   credits: number;
+  durationInYears: number;
+  academicDepartment: {
+    title: string;
+  };
+  academicDepartmentId: string;
+  coursePricing: number;
   faculties: TTeacher[];
   offeredCourses?: TOfferedCourse[];
   studentEnrolledCourses?: TStudentEnrolledCourse[];
@@ -32,8 +38,22 @@ export type TCourse = {
     }
   ];
 };
-type TOfferedCourse = {
+export type TOfferedCourse = {
   id: string;
+  academicDepartmentId: string;
+  courseId: string;
+  semesterRegistrationId: string;
+  offeredCourseSections: TOfferedCourseSection[];
+};
+type TOfferedCourseSection = {
+  id: string;
+  semesterRegistrationId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  offeredCourseId: string;
+  maxCapacity: number;
+  currentlyEnrolledStudent: number;
 };
 type TStudentEnrolledCourse = {
   id: string;

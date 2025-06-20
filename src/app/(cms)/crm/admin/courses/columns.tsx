@@ -24,8 +24,16 @@ export function CoursesColumns(): ColumnDef<TCourse>[] {
          header: "Codigo",
       },
       {
-         accessorKey: "credits",
-         header: "Creditos",
+         accessorKey: "durationInYears",
+         header: "duração em anos",
+      },
+      {
+         accessorKey: "academicDepartment",
+         header: "Departamento",
+      },
+      {
+         accessorKey: "coursePricing",
+         header: "Preço",
       },
 
       {

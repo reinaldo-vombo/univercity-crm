@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { departmentSchema } from "@/lib/validation/departement"
+import { updateDepartmentSchema } from "@/lib/validation/departement"
 import { TAcademicFaculty, TUser } from "@/lib/types/global"
 import { updatedDepartemant } from "@/lib/actions/departement"
 import Selector from "@/components/sheard/selector"
@@ -41,8 +41,8 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
       label: faculty.title,
       value: faculty.id,
    }));
-   const form = useForm<z.infer<typeof departmentSchema>>({
-      resolver: zodResolver(departmentSchema),
+   const form = useForm<z.infer<typeof updateDepartmentSchema>>({
+      resolver: zodResolver(updateDepartmentSchema),
       defaultValues: {
          id: values.id,
          title: values.title,
@@ -51,7 +51,7 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
       }
    })
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof departmentSchema>) {
+   async function onSubmit(values: z.infer<typeof updateDepartmentSchema>) {
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
@@ -119,7 +119,7 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
                      <FormControl className="w-full">
                         <Selector
                            options={academicFacultys}
-                           placeholder="Selecione um curso"
+                           placeholder="Unidade Acadêmica"
                            formField={field}
                            className="w-full"
                         />
