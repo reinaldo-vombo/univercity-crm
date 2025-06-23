@@ -20,7 +20,7 @@ import { handleApiError } from "@/lib/helper/api/error-handler"
 import { addNewAcademicFaculty } from "@/lib/actions/academic-faculty"
 import { academicFacultyacultySchema } from "@/lib/validation/academicFaculty"
 
-const CreateFaculty = () => {
+const UpadateAcademicFaculty = () => {
 
    const form = useForm<z.infer<typeof academicFacultyacultySchema>>({
       resolver: zodResolver(academicFacultyacultySchema),
@@ -39,13 +39,13 @@ const CreateFaculty = () => {
             const response = await addNewAcademicFaculty(formData);
 
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.FACULTY_NOT_CREATED);
+               toast.warning(FLASH_MESSAGE.ACADEMIC_FACULTY_NOT_CREATED);
                return;
             }
-            toast.success(FLASH_MESSAGE.FACULTY_CREATED);
+            toast.success(FLASH_MESSAGE.ACADEMIC_FACULTY_CREATED);
             form.reset();
          } catch (error) {
-            toast.error("Network error. Please try again.");
+            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             handleApiError(error);
          }
       });
@@ -71,11 +71,11 @@ const CreateFaculty = () => {
                )}
             />
             <SubmitBtn
-               label="Criar"
+               label="Atualisar"
                loading={isPending} />
          </form>
       </Form>
    )
 }
 
-export default CreateFaculty;
+export default UpadateAcademicFaculty;

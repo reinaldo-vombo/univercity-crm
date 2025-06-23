@@ -98,8 +98,8 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
     // Parse with Zod
     const parsed = schema.safeParse(formObject);
 
-    console.log('parsed path', parsed.error?.errors[0].path);
-    console.log('parsed message', parsed.error?.errors[0].message);
+    // console.log('parsed path', parsed.error?.errors[0].path);
+    // console.log('parsed message', parsed.error?.errors[0].message);
 
     if (!parsed.success) {
       return {

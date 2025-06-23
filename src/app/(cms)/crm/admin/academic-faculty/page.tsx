@@ -3,8 +3,9 @@ import { ROUTES } from '@/constants/mock-data'
 import React, { Suspense } from 'react'
 import SheetModal from '@/components/sheard/sheet-modal'
 import { Plus } from 'lucide-react'
-import CreateCurse from '@/components/forms/admin/post/create-faculty'
+import CreateCurse from '@/components/forms/admin/post/create-academic-faculty'
 import { CurseTableServer } from './table-wrapper'
+import DataTableSkeleton from '@/components/skeleton/data-table'
 
 export default function AcademicFacultyPage() {
 
@@ -22,7 +23,7 @@ export default function AcademicFacultyPage() {
                title="Cria curso"><CreateCurse /></SheetModal>
          </div>
          <div className="mt-12">
-            <Suspense fallback={<div className="text-muted-foreground">Loading table...</div>}>
+            <Suspense fallback={<DataTableSkeleton />}>
                <CurseTableServer />
             </Suspense>
          </div>

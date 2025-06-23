@@ -51,6 +51,9 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [ ] All building pages
 - [ ] All Payment pages
 - [x] All users pages
+- [x] All course pages
+- [x] All course price pages
+- [x] All discipline pages
 - [ ] Events page
 
 ---
@@ -125,13 +128,16 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [ ] Role-based access control
 - [ ] Dashboard with stats (students, revenue, attendance)
 - [ ] Logs or recent activity tracker
-- [ ] Assignd user to departament
+- [x] Assignd user to departament
 - [x] Create user CRUD
 - [x] Create departement CRUD
+- [x] Create academic faucluty CRUD
 - [x] Create semester CRUD
-- [x] Create buildind CRUD
+- [x] Create curses pricing CRUD
 - [x] Create curses CRUD
-- [ ] Create events CRUD
+- [x] Create discipline CRUD
+- [x] Create buildind CRUD
+- [x] Create events CRUD
 
 ---
 

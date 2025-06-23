@@ -7,7 +7,10 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ActionResult } from '../types/api-error';
 import { TAcademicFaculty } from '../types/global';
 import { ApiResponseError } from '../helper/api/api-error';
-import { academicFacultyacultySchema } from '../validation/academicFaculty';
+import {
+  academicFacultyacultySchema,
+  updateAcademicFacultyacultySchema,
+} from '../validation/academicFaculty';
 
 export const addNewAcademicFaculty = validatedActionWithUser(
   academicFacultyacultySchema,
@@ -36,13 +39,16 @@ export const addNewAcademicFaculty = validatedActionWithUser(
   }
 );
 export const updateAcademicFaculty = validatedActionWithUser(
-  academicFacultyacultySchema,
+  updateAcademicFacultyacultySchema,
   async (data): Promise<ActionResult<TAcademicFaculty>> => {
     try {
-      const curses = await serverFetch<TAcademicFaculty>('/academic-faculty', {
-        method: 'POST',
-        body: data,
-      });
+      const curses = await serverFetch<TAcademicFaculty>(
+        `/academic-faculty/${data.id}`,
+        {
+          method: 'PATCH',
+          body: data,
+        }
+      );
 
       revalidateTag('faculty');
 

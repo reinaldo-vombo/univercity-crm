@@ -3,6 +3,7 @@ import Breadcrumb from "@/components/sheard/breadcrumb";
 import { ROUTES } from "@/constants/mock-data";
 import { UsersTableServer } from "./table-wrapper";
 import { Suspense } from "react";
+import DataTableSkeleton from "@/components/skeleton/data-table";
 
 export default function UsersPages() {
 
@@ -14,7 +15,7 @@ export default function UsersPages() {
             pageUrl={`${ROUTES.DASHBOARD}/admin/users`}
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
-            <Suspense fallback={<div className="text-muted-foreground">Loading table...</div>}>
+            <Suspense fallback={<DataTableSkeleton />}>
                <UsersTableServer />
             </Suspense>
          </div>

@@ -5,12 +5,12 @@ import { Eye, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/sheard/sheet-modal"
 import AlertModal from "@/components/sheard/alert-modal"
 import { toast } from "sonner"
-import axios from "axios"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAcademicFaculty, TDepartemant, TUser } from "@/lib/types/global"
 import Avatar from "@/components/sheard/avatar"
 import UpdatedDepartment from "@/components/forms/admin/update/update-department"
 import DepartmenteDetails from "@/components/admin/departmente-details"
+import { deleteDepartment } from "@/lib/actions/departement"
 
 type TDepartmentWithUser = TDepartemant & {
    user?: TUser;
@@ -53,13 +53,12 @@ export function DepartmentColumns(users: TUser[], academicFaculty: TAcademicFacu
             }
             const handleDelete = async (id: string) => {
                try {
-                  const res = await axios.delete(`/academic-department/${id}`,);
-                  const result = await res.data;
-                  if (!res.data.success) {
-                     toast.error(result.error || "Failed to delete user.");
+                  const res = await deleteDepartment(id);
+                  if (res.error) {
+                     toast.warning(FLASH_MESSAGE.DEPARTMENT_NOT_DELETED);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.USER_DELETED);
+                  toast.success(FLASH_MESSAGE.DEPARTMENT_DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -73,14 +72,14 @@ export function DepartmentColumns(users: TUser[], academicFaculty: TAcademicFacu
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
                      title="Detalhes do departamento"
-                     description={`ID: ${department.id}`}>
+                     description='Detalhes do departamento'>
                      <DepartmenteDetails users={users} academicFaculty={academicFaculty} department={department} />
                   </SheetModal>
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     title="Detalhes do departamento"
-                     description={`ID: ${department.id}`}>
+                     title="Atualização do departamento"
+                     description='Formulario do departamento'>
                      <UpdatedDepartment users={users} academicFaculty={academicFaculty} values={defaultValues} />
                   </SheetModal>
                   <AlertModal

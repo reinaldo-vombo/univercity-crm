@@ -2,41 +2,35 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '../helper/api/server-fetch';
-import { TDepartemant } from '../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import {
-  departmentSchema,
-  updateDepartmentSchema,
-} from '../validation/departement';
-import { ActionResult } from '../types/api-error';
-import { ApiResponseError } from '../helper/api/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { validatedActionWithUser } from '../helper/action-helper';
+import { ApiResponseError } from '../helper/api/api-error';
+import { ActionResult } from '../types/api-error';
+import { courseSchema, updateCourseSchema } from '../validation/curses';
+import { TDiscipline } from '../types/global';
 
-export const addNewDepartemant = validatedActionWithUser(
-  departmentSchema,
-  async (data): Promise<ActionResult<TDepartemant>> => {
+export const addNewEvent = validatedActionWithUser(
+  courseSchema,
+  async (data): Promise<ActionResult<TDiscipline>> => {
     try {
-      const departements = await serverFetch<TDepartemant>(
-        '/academic-department',
-        {
-          method: 'POST',
-          body: data,
-        }
-      );
+      const curses = await serverFetch<TDiscipline>('/events', {
+        method: 'POST',
+        body: data,
+      });
 
-      revalidateTag('departement');
+      revalidateTag('events');
 
       return {
         error: false,
-        data: departements,
+        data: curses,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
+        console.error(err.message);
+
         return {
           error: true,
           message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
         };
       }
 
@@ -48,32 +42,27 @@ export const addNewDepartemant = validatedActionWithUser(
     }
   }
 );
-export const updatedDepartemant = validatedActionWithUser(
-  updateDepartmentSchema,
-  async (data): Promise<ActionResult<TDepartemant>> => {
+export const updateEvent = validatedActionWithUser(
+  updateCourseSchema,
+  async (data): Promise<ActionResult<TDiscipline>> => {
+    const { id, ...updateData } = data;
     try {
-      const { id, ...updateData } = data;
-      const departements = await serverFetch<TDepartemant>(
-        `/academic-department/${id}`,
-        {
-          method: 'PATCH',
-          body: updateData,
-        }
-      );
+      const curses = await serverFetch<TDiscipline>(`/events/${id}`, {
+        method: 'PATCH',
+        body: updateData,
+      });
 
-      revalidateTag('departement');
+      revalidateTag('events');
 
       return {
         error: false,
-        data: departements,
+        data: curses,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
         return {
           error: true,
           message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
         };
       }
 
@@ -86,15 +75,15 @@ export const updatedDepartemant = validatedActionWithUser(
   }
 );
 
-export const deleteDepartment = async (
+export const deleteEvent = async (
   id: string
-): Promise<ActionResult<TDepartemant>> => {
+): Promise<ActionResult<TDiscipline>> => {
   try {
-    const data = await serverFetch<TDepartemant>(`/academic-department/${id}`, {
+    const data = await serverFetch<TDiscipline>(`/events/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('departement');
+    revalidateTag('events');
     return {
       error: false,
       data,

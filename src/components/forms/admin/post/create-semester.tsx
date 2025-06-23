@@ -33,7 +33,7 @@ for (let year = startYear; year <= currentYear; year++) {
       label: year.toString()    // label as the year (can be customized further)
    });
 }
-const CreateSemesterForm = () => {
+const CreateDisciplineForm = () => {
 
    const form = useForm<z.infer<typeof semesterSchema>>({
       resolver: zodResolver(semesterSchema),
@@ -186,4 +186,4 @@ const CreateSemesterForm = () => {
    )
 }
 
-export default CreateSemesterForm;
+export default CreateDisciplineForm;

@@ -2,6 +2,7 @@ import Breadcrumb from "@/components/sheard/breadcrumb";
 import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { AdmitionExameTableServer } from "./table-wrapper";
+import DataTableSkeleton from "@/components/skeleton/data-table";
 
 
 export default function DepartmentsPage() {
@@ -14,7 +15,7 @@ export default function DepartmentsPage() {
             pageUrl={`${ROUTES.DASHBOARD}/admin/admition-exames`}
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
-            <Suspense fallback={<div className="text-muted-foreground">Loading table...</div>}>
+            <Suspense fallback={<DataTableSkeleton />}>
                <AdmitionExameTableServer />
             </Suspense>
          </div>

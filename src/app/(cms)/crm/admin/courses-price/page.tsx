@@ -1,22 +1,22 @@
 import Breadcrumb from "@/components/sheard/breadcrumb";
 import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
-import { AcademicSemesterTableServer } from "./table-wrapper";
+import { CoursesPricingTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+//Preços dos cursos
 
-//academicDepartmentId, courseId, semesterRegistrationId
 export default function DepartmentsPage() {
 
    return (
       <section className="col-span-12">
          <Breadcrumb
-            name="Semestres"
-            pageName="Semestres"
-            pageUrl={`${ROUTES.DASHBOARD}/admin/academic-semester`}
+            name="Preços dos cursos"
+            pageName="Preços dos cursos"
+            pageUrl={`${ROUTES.DASHBOARD}/admin/courses-price`}
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
             <Suspense fallback={<DataTableSkeleton />}>
-               <AcademicSemesterTableServer />
+               <CoursesPricingTableServer />
             </Suspense>
          </div>
       </section>

@@ -7,6 +7,8 @@ import {
   User,
   BookCheck,
   BookType,
+  Currency,
+  BookKey,
 } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
@@ -63,9 +65,14 @@ export const DUMMY_DATA = {
         icon: React.createElement(BookType),
       },
       {
-        href: `${ROUTES.DASHBOARD}/admin/offered-course`,
+        href: `${ROUTES.DASHBOARD}/admin/courses-price`,
+        label: 'Preços dos curso',
+        icon: React.createElement(Currency),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/disciplines`,
         label: 'Deciplinas',
-        icon: React.createElement(BookType),
+        icon: React.createElement(BookKey),
       },
     ],
     admin: [

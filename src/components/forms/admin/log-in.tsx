@@ -20,6 +20,7 @@ import { adminSchema } from "@/lib/validation/admin"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import { Dispatch, SetStateAction } from "react"
+import { ROUTES } from "@/constants/mock-data"
 
 type TProps = {
    onChange: Dispatch<SetStateAction<boolean>>
@@ -54,7 +55,7 @@ export default function AdminLogin({ onChange }: TProps) {
             }
          } else if (res?.ok) {
             toast.success(`${FLASH_MESSAGE.WELLCOME}`);
-            router.push("/");  // Redirect on successful login
+            router.push(`${ROUTES.DASHBOARD}/admin`);  // Redirect on successful login
          } else {
             toast.error(`${FLASH_MESSAGE.UNESPECTED_ERROR}`);
          }

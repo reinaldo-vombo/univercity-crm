@@ -1,6 +1,6 @@
 "use client";
 
-import CreateFaculty from "@/components/forms/admin/post/create-faculty";
+import CreateAcademicFacultyForm from "@/components/forms/admin/post/create-academic-faculty";
 import { AcademicFacultyColumns, AcademicFaculty } from "./columns";
 import { DataTable } from "@/components/sheard/data-table";
 
@@ -20,7 +20,7 @@ export function AcademicFacultyTable({ data }: Props) {
       columns={columns}
       fileHerderes={herader}
       modalTitle="Unidade Acadêmica"
-      actionForm={<CreateFaculty />}
+      actionForm={<CreateAcademicFacultyForm />}
       fileName="unidade-academica"
       data={data}
       filterColumn="title"

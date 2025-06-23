@@ -8,6 +8,17 @@ export type TUser = {
   role: string;
   number: number;
 };
+export type TEvents = {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  color: string;
+  location: Date;
+  mandatory: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
 export type TAcademicFaculty = {
   id: string;
   title: string;
@@ -27,7 +38,9 @@ export type TCourse = {
     title: string;
   };
   academicDepartmentId: string;
-  coursePricing: number;
+  coursePricing: {
+    price: number;
+  };
   faculties: TTeacher[];
   offeredCourses?: TOfferedCourse[];
   studentEnrolledCourses?: TStudentEnrolledCourse[];
@@ -37,6 +50,23 @@ export type TCourse = {
       isDeleted?: boolean | null;
     }
   ];
+};
+export type TCoursePrice = {
+  id: string;
+  price: number;
+  courseId: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type TDiscipline = {
+  id: string;
+  name: string;
+  code: string;
+  description: string | null;
+  credits: number;
+  minimumGradeToDismiss: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 export type TOfferedCourse = {
   id: string;

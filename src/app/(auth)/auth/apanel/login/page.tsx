@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
             }}
             transition={{ duration: 0.75 }}
             className="rounded-lg absolute inset-1 bg-white z-0 overflow-hidden w-full">
-            <div className="relative">
+            <div className="relative size-full">
                <motion.div
                   initial={false}
                   animate={{
@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
                   }}
                   transition={{ ease: 'easeInOut', duration: 0.5 }}
                   className='bg-slate-50 absolute inset-0'
-                  style={{ background: `url(/assets/images/cover-2.jpg)`, backgroundPosition: 'center', backgroundSize: 'cover' }} />
+                  style={{ backgroundImage: 'url(/cover-3.jpg)', backgroundPosition: 'center', backgroundSize: 'cover' }} />
                <motion.div
                   initial={false}
                   animate={{
@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
                   }}
                   transition={{ ease: 'easeInOut', duration: 0.5 }}
                   className='bg-slate-50 absolute inset-0'
-                  style={{ background: `url(/assets/images/cover-1.jpg)`, backgroundPosition: 'center', backgroundSize: 'cover' }} />
+                  style={{ backgroundImage: `url(/cover-1.jpg)`, backgroundPosition: 'center', backgroundSize: 'cover' }} />
             </div>
          </motion.div>
       </Fragment>

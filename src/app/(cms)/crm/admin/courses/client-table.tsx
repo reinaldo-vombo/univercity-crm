@@ -10,19 +10,21 @@ interface Props {
    departements: TDepartemant[]
 }
 const herader = {
-   id: "ID",
-   title: "Full Name",
+   title: "Nome do curso",
+   coursePricing: "Preço",
    code: "Codigo",
+   durationInYears: "Ano de duração",
    credits: "Preco",
+   createdAt: "Data de criação",
+   academicDepartment: "Departamento"
 }
 
 export function CoursesTable({ couses, departements }: Props) {
    const modifiedCouses = couses.map(course => ({
       ...course,  // Copy existing fields
-      academicDepartment: course.academicDepartment.title,  // Flatten `academicDepartment` to just `title`
+      academicDepartment: course.academicDepartment.title,
+      coursePricing: course.coursePricing.price
    }));
-
-
    const columns = CoursesColumns();
 
    return <DataTable

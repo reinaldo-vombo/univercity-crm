@@ -6,48 +6,39 @@ import SheetModal from "@/components/sheard/sheet-modal"
 import AlertModal from "@/components/sheard/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TCourse } from "@/lib/types/global"
-import { deleteCourse } from "@/lib/actions/courses"
-import UpdateCourseForm from "@/components/forms/admin/update/update-couses"
-import CourseDetails from "@/components/admin/course-details"
+import { TDiscipline } from "@/lib/types/global"
+import { deleteDiscipline } from "@/lib/actions/discipline"
+import UpdateDisciplineForm from "@/components/forms/admin/update/update-discipline"
 
-
-export function CoursesColumns(): ColumnDef<TCourse>[] {
+export function DisciplineColumns(): ColumnDef<TDiscipline>[] {
 
    return [
       {
-         accessorKey: "title",
-         header: "Titulo",
+         accessorKey: "name",
+         header: "Nome",
       },
       {
          accessorKey: "code",
          header: "Codigo",
       },
       {
-         accessorKey: "durationInYears",
-         header: "duração em anos",
-      },
-      {
-         accessorKey: "academicDepartment",
-         header: "Departamento",
-      },
-      {
-         accessorKey: "coursePricing",
-         header: "Preço",
+         accessorKey: "minimumGradeToDismiss",
+         header: "Nota chave",
       },
 
       {
          id: "actions",
          cell: ({ row }) => {
-            const credits = row.original
+            const discipline = row.original
 
             const handleDelete = async (id: string) => {
                try {
-                  const res = await deleteCourse(id);
+                  const res = await deleteDiscipline(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.COURSE_NOT_DELETED)
+                     toast.warning(FLASH_MESSAGE.DISCIPLINE_NOT_DELETED);
+                     return;
                   }
-                  toast.success(FLASH_MESSAGE.COURSE_DELETED);
+                  toast.success(FLASH_MESSAGE.DISCIPLINE_DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -60,20 +51,20 @@ export function CoursesColumns(): ColumnDef<TCourse>[] {
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     title="Detalhes do curso"
-                     description='Visualizar detalhes do curso'>
-                     <CourseDetails data={credits} />
+                     title="Detalhes do departamento"
+                     description=''>
+                     hello
                   </SheetModal>
                   <SheetModal
-                     trigger={<Pen className="h-4 w-4  cursor-pointer" />}
+                     trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     title="Atualizar curso"
-                     description=' Formulario para atualizar o curso'>
-                     <UpdateCourseForm values={credits} />
+                     title="Atualizar disciplina"
+                     description='Formulario de atualização'>
+                     <UpdateDisciplineForm values={discipline} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
-                     action={() => handleDelete(credits.id)} />
+                     action={() => handleDelete(discipline.id)} />
                </div>
             )
          },

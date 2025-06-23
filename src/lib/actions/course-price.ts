@@ -2,41 +2,45 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '../helper/api/server-fetch';
-import { TDepartemant } from '../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import {
-  departmentSchema,
-  updateDepartmentSchema,
-} from '../validation/departement';
-import { ActionResult } from '../types/api-error';
-import { ApiResponseError } from '../helper/api/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { validatedActionWithUser } from '../helper/action-helper';
+import { ApiResponseError } from '../helper/api/api-error';
+import { ActionResult } from '../types/api-error';
+import { TCoursePrice } from '../types/global';
+import {
+  coursePriceSchema,
+  updateCoursePriceSchema,
+} from '../validation/coursePrice';
 
-export const addNewDepartemant = validatedActionWithUser(
-  departmentSchema,
-  async (data): Promise<ActionResult<TDepartemant>> => {
+export const addNewCoursePrice = validatedActionWithUser(
+  coursePriceSchema,
+  async (data): Promise<ActionResult<TCoursePrice>> => {
+    const { courseId, price } = data;
+    const covertePrice = Number(price);
+    const newbody = {
+      courseId,
+      price: covertePrice,
+    };
+
     try {
-      const departements = await serverFetch<TDepartemant>(
-        '/academic-department',
-        {
-          method: 'POST',
-          body: data,
-        }
-      );
+      const curses = await serverFetch<TCoursePrice>('/course-price', {
+        method: 'POST',
+        body: newbody,
+      });
 
-      revalidateTag('departement');
+      revalidateTag('coursePrice');
 
       return {
         error: false,
-        data: departements,
+        data: curses,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
+        console.error(err.message);
+
         return {
           error: true,
           message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
         };
       }
 
@@ -48,32 +52,32 @@ export const addNewDepartemant = validatedActionWithUser(
     }
   }
 );
-export const updatedDepartemant = validatedActionWithUser(
-  updateDepartmentSchema,
-  async (data): Promise<ActionResult<TDepartemant>> => {
+export const updateCoursePrice = validatedActionWithUser(
+  updateCoursePriceSchema,
+  async (data): Promise<ActionResult<TCoursePrice>> => {
+    const { courseId, id, price } = data;
+    const covertePrice = Number(price);
+    const newBody = {
+      courseId,
+      price: covertePrice,
+    };
     try {
-      const { id, ...updateData } = data;
-      const departements = await serverFetch<TDepartemant>(
-        `/academic-department/${id}`,
-        {
-          method: 'PATCH',
-          body: updateData,
-        }
-      );
+      const curses = await serverFetch<TCoursePrice>(`/course-price/${id}`, {
+        method: 'PATCH',
+        body: newBody,
+      });
 
-      revalidateTag('departement');
+      revalidateTag('coursePrice');
 
       return {
         error: false,
-        data: departements,
+        data: curses,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
         return {
           error: true,
           message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
         };
       }
 
@@ -86,15 +90,15 @@ export const updatedDepartemant = validatedActionWithUser(
   }
 );
 
-export const deleteDepartment = async (
+export const deleteCoursePrice = async (
   id: string
-): Promise<ActionResult<TDepartemant>> => {
+): Promise<ActionResult<TCoursePrice>> => {
   try {
-    const data = await serverFetch<TDepartemant>(`/academic-department/${id}`, {
+    const data = await serverFetch<TCoursePrice>(`/course-price/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('departement');
+    revalidateTag('coursePrice');
     return {
       error: false,
       data,

@@ -1,6 +1,6 @@
 
 
-import { TAcademicFaculty, TAdmitionExame, TCourse, TDepartemant, TOfferedCourse, TSemester, TUser } from "@/lib/types/global";
+import { TAcademicFaculty, TAdmitionExame, TCourse, TCoursePrice, TDepartemant, TDiscipline, TEvents, TOfferedCourse, TSemester, TUser } from "@/lib/types/global";
 import { handleApiError } from "../api/error-handler";
 import { serverFetch } from "../api/server-fetch";
 
@@ -71,6 +71,36 @@ export const getAllOfferedCourse = async (): Promise<TOfferedCourse[]> => {
          next: { tags: ['offeredCourse'] },
       })
       return semester;
+   } catch (error) {
+      handleApiError(error);
+   }
+};
+export const getAllCoursePrice = async (): Promise<TCoursePrice[]> => {
+   try {
+      const prices = await serverFetch<TCoursePrice[]>('/course-price', {
+         next: { tags: ['coursePrice'] },
+      })
+      return prices;
+   } catch (error) {
+      handleApiError(error);
+   }
+};
+export const getAllDiscipline = async (): Promise<TDiscipline[]> => {
+   try {
+      const prices = await serverFetch<TDiscipline[]>('/discipline', {
+         next: { tags: ['discipline'] },
+      })
+      return prices;
+   } catch (error) {
+      handleApiError(error);
+   }
+};
+export const getAllEvents = async (): Promise<TEvents[]> => {
+   try {
+      const events = await serverFetch<TEvents[]>('/events', {
+         next: { tags: ['events'] },
+      })
+      return events;
    } catch (error) {
       handleApiError(error);
    }

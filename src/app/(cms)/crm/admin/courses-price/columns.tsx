@@ -6,34 +6,29 @@ import SheetModal from "@/components/sheard/sheet-modal"
 import AlertModal from "@/components/sheard/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TCourse } from "@/lib/types/global"
-import { deleteCourse } from "@/lib/actions/courses"
-import UpdateCourseForm from "@/components/forms/admin/update/update-couses"
-import CourseDetails from "@/components/admin/course-details"
+import { TCourse, TCoursePrice } from "@/lib/types/global"
+import UpdateCoursePriceForm from "@/components/forms/admin/update/update-course-price"
+import { deleteCoursePrice } from "@/lib/actions/course-price"
 
 
-export function CoursesColumns(): ColumnDef<TCourse>[] {
+export function CoursesPriceColumns(course: TCourse[]): ColumnDef<TCoursePrice>[] {
 
    return [
       {
-         accessorKey: "title",
-         header: "Titulo",
-      },
-      {
-         accessorKey: "code",
-         header: "Codigo",
-      },
-      {
-         accessorKey: "durationInYears",
-         header: "duração em anos",
-      },
-      {
-         accessorKey: "academicDepartment",
-         header: "Departamento",
-      },
-      {
-         accessorKey: "coursePricing",
+         accessorKey: "price",
          header: "Preço",
+      },
+      {
+         accessorKey: "course",
+         header: "Nome do curso",
+      },
+      {
+         accessorKey: "createdAt",
+         header: "Data de  criação",
+      },
+      {
+         accessorKey: "updatedAt",
+         header: "Data de  atualização",
       },
 
       {
@@ -43,11 +38,11 @@ export function CoursesColumns(): ColumnDef<TCourse>[] {
 
             const handleDelete = async (id: string) => {
                try {
-                  const res = await deleteCourse(id);
+                  const res = await deleteCoursePrice(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.COURSE_NOT_DELETED)
+                     toast.warning(FLASH_MESSAGE.COURSE_PRICE_NOT_DELETED)
                   }
-                  toast.success(FLASH_MESSAGE.COURSE_DELETED);
+                  toast.success(FLASH_MESSAGE.COURSE_PRICE_DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -62,14 +57,14 @@ export function CoursesColumns(): ColumnDef<TCourse>[] {
                      side="right"
                      title="Detalhes do curso"
                      description='Visualizar detalhes do curso'>
-                     <CourseDetails data={credits} />
+                     helloi
                   </SheetModal>
                   <SheetModal
                      trigger={<Pen className="h-4 w-4  cursor-pointer" />}
                      side="right"
                      title="Atualizar curso"
                      description=' Formulario para atualizar o curso'>
-                     <UpdateCourseForm values={credits} />
+                     <UpdateCoursePriceForm courses={course} defaultValue={credits} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
