@@ -4,21 +4,21 @@ import { revalidateTag } from 'next/cache';
 import { serverFetch } from '../helper/api/server-fetch';
 import { TBuiding } from '../types/global';
 import { validatedActionWithUser } from '../helper/action-helper';
-import { buildingSchema, updateBuildingSchema } from '../validation/building';
+import { roomSchema, updateRoomSchema } from '../validation/building';
 import { ApiResponseError } from '../helper/api/api-error';
 import { ActionResult } from '../types/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
-export const addNewBuilding = validatedActionWithUser(
-  buildingSchema,
+export const addNewRoom = validatedActionWithUser(
+  roomSchema,
   async (data): Promise<ActionResult<TBuiding>> => {
     try {
-      const curses = await serverFetch<TBuiding>('/building', {
+      const curses = await serverFetch<TBuiding>('/room', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('building');
+      revalidateTag('room');
 
       return {
         error: false,
@@ -42,17 +42,17 @@ export const addNewBuilding = validatedActionWithUser(
     }
   }
 );
-export const updateBuilding = validatedActionWithUser(
-  updateBuildingSchema,
+export const updateRoom = validatedActionWithUser(
+  updateRoomSchema,
   async (data): Promise<ActionResult<TBuiding>> => {
-    const { id, title } = data;
+    const { id, ...body } = data;
     try {
-      const building = await serverFetch<TBuiding>(`/building/${id}`, {
+      const building = await serverFetch<TBuiding>(`/room/${id}`, {
         method: 'PATCH',
-        body: title,
+        body: body,
       });
 
-      revalidateTag('building');
+      revalidateTag('room');
 
       return {
         error: false,
@@ -76,15 +76,15 @@ export const updateBuilding = validatedActionWithUser(
     }
   }
 );
-export const deleteBuilding = async (
+export const deleteRoom = async (
   id: string
 ): Promise<ActionResult<TBuiding>> => {
   try {
-    const data = await serverFetch<TBuiding>(`/building/${id}`, {
+    const data = await serverFetch<TBuiding>(`/room/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('building');
+    revalidateTag('room');
     return {
       error: false,
       data,

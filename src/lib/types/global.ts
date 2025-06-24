@@ -28,6 +28,15 @@ export type TAcademicFaculty = {
   students: number;
 };
 
+export type TRoom = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  roomNumber: string;
+  floor: string;
+  buildingId: string;
+};
+
 export type TCourse = {
   id: string;
   title: string;

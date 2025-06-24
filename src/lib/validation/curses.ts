@@ -14,6 +14,8 @@ export const courseSchema = z.object({
   durationInYears: z.number({
     required_error: 'O ano de duração é obrigatorio',
   }),
+  yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']).optional(),
+  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']).optional(),
 });
 export const updateCourseSchema = z.object({
   id: z.string(),
@@ -31,5 +33,13 @@ export const updateCourseSchema = z.object({
   }),
   credits: z.number({
     required_error: 'Creditos é obrigatorio',
+  }),
+  yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']).optional(),
+  shift: z.enum(['Morning', 'Afternoon', 'Evening']).optional(),
+});
+export const assignRemoveFacultiesSchema = z.object({
+  id: z.string(),
+  faculties: z.array(z.string(), {
+    required_error: 'Faculties Are Required',
   }),
 });

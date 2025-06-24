@@ -9,6 +9,7 @@ import {
   BookType,
   Currency,
   BookKey,
+  Building2Icon,
 } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
@@ -73,6 +74,11 @@ export const DUMMY_DATA = {
         href: `${ROUTES.DASHBOARD}/admin/disciplines`,
         label: 'Deciplinas',
         icon: React.createElement(BookKey),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/buildings`,
+        label: 'Edificios & Salas',
+        icon: React.createElement(Building2Icon),
       },
     ],
     admin: [
@@ -223,11 +229,48 @@ export const DUMMY_DATA = {
       value: 'Dezembro',
     },
   ],
-  code: [
+  shifts: [
     {
       id: '1',
-      label: 'Primavera',
-      value: 'Primavera',
+      label: 'Manhã',
+      value: 'MORNING',
+    },
+    {
+      id: '2',
+      label: 'Tarde',
+      value: 'AFTERNOON',
+    },
+    {
+      id: '3',
+      label: 'Noite',
+      value: 'EVENING',
+    },
+  ],
+  yearLevel: [
+    {
+      id: '1',
+      label: '1',
+      value: 'FIRST',
+    },
+    {
+      id: '2',
+      label: '2',
+      value: 'SECOND',
+    },
+    {
+      id: '3',
+      label: '3',
+      value: 'THIRD',
+    },
+    {
+      id: '4',
+      label: '4',
+      value: 'FOURTH',
+    },
+    {
+      id: '5',
+      label: '5',
+      value: 'FIFTH',
     },
   ],
 };

@@ -1,6 +1,6 @@
 
 
-import { TAcademicFaculty, TAdmitionExame, TCourse, TCoursePrice, TDepartemant, TDiscipline, TEvents, TOfferedCourse, TSemester, TUser } from "@/lib/types/global";
+import { TAcademicFaculty, TAdmitionExame, TBuiding, TCourse, TCoursePrice, TDepartemant, TDiscipline, TEvents, TOfferedCourse, TRoom, TSemester, TUser } from "@/lib/types/global";
 import { handleApiError } from "../api/error-handler";
 import { serverFetch } from "../api/server-fetch";
 
@@ -101,6 +101,26 @@ export const getAllEvents = async (): Promise<TEvents[]> => {
          next: { tags: ['events'] },
       })
       return events;
+   } catch (error) {
+      handleApiError(error);
+   }
+};
+export const getAllBuilding = async (): Promise<TBuiding[]> => {
+   try {
+      const building = await serverFetch<TBuiding[]>('/building', {
+         next: { tags: ['building'] },
+      })
+      return building;
+   } catch (error) {
+      handleApiError(error);
+   }
+};
+export const getAllRoom = async (): Promise<TRoom[]> => {
+   try {
+      const rooms = await serverFetch<TRoom[]>('/room', {
+         next: { tags: ['room'] },
+      })
+      return rooms;
    } catch (error) {
       handleApiError(error);
    }

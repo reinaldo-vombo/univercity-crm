@@ -29,21 +29,23 @@ export const metadata: Metadata = {
     default: NEXT_PUBLIC_SITE_NAME || "Enrollix",
     template: `%s | ${NEXT_PUBLIC_SITE_NAME || "Enrollix"}`,
   },
-  description: "A powerful University CRM system to manage students, courses, departments, and faculty records.",
+  description: "Um poderoso sistema de CRM universitário para gerenciar alunos, cursos, departamentos e registros de professores.",
   keywords: [
-    "University",
+    "Universidade",
+    "Dashboard",
+    "Gestão de notas",
     "CRM",
-    "Student Management",
-    "Course Management",
-    "Faculty System",
-    "Education Software",
-    "University Admin Portal",
+    "Gestão de Estudantes",
+    "Gestão de Cursos",
+    "Sistema de Faculdade",
+    "Software educacional",
+    "Portal de Administração da Universidade",
   ],
   authors: [
     { name: NEXT_PUBLIC_AUTHOR_NAME, url: NEXT_PUBLIC_AUTHOR_SITE },
   ],
-  creator: "University IT Department",
-  publisher: "University CRM",
+  creator: NEXT_PUBLIC_AUTHOR_NAME,
+  publisher: NEXT_PUBLIC_AUTHOR_NAME,
   openGraph: {
     title: "University CRM",
     description: "Manage university operations with a centralized CRM system for administration and records.",
@@ -78,6 +80,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt" suppressHydrationWarning>
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <meta name="msapplication-TileColor" content="#2b5797" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

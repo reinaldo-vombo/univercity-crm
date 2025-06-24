@@ -6,7 +6,11 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUser } from '../helper/action-helper';
 import { ApiResponseError } from '../helper/api/api-error';
 import { ActionResult } from '../types/api-error';
-import { courseSchema, updateCourseSchema } from '../validation/curses';
+import {
+  assignRemoveFacultiesSchema,
+  courseSchema,
+  updateCourseSchema,
+} from '../validation/curses';
 import { TCourse } from '../types/global';
 
 export const addNewCourse = validatedActionWithUser(
@@ -49,6 +53,38 @@ export const updateCourse = validatedActionWithUser(
     try {
       const curses = await serverFetch<TCourse>(`/course/${id}`, {
         method: 'PATCH',
+        body: updateData,
+      });
+
+      revalidateTag('curse');
+
+      return {
+        error: false,
+        data: curses,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+        };
+      }
+
+      return {
+        error: true,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      };
+    }
+  }
+);
+export const assignFaculties = validatedActionWithUser(
+  assignRemoveFacultiesSchema,
+  async (data): Promise<ActionResult<TCourse>> => {
+    const { id, ...updateData } = data;
+    try {
+      const curses = await serverFetch<TCourse>(`/assign-faculties/${id}`, {
+        method: 'POST',
         body: updateData,
       });
 
