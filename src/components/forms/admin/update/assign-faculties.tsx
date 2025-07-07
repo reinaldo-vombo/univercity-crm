@@ -62,19 +62,19 @@ const AssignFacultiesForm = ({ values }: TProps) => {
                name="faculties"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Temporada</FormLabel>
+                     <FormLabel>Professores</FormLabel>
                      <FormControl>
                         <MultiSelect
                            field={field}
                            options={[]}
                            defaultValue={field.value}
-                           placeholder="Selecione tags"
+                           placeholder="Selecione os professores"
                            variant="inverted"
                            animation={2}
                            maxCount={3}
                         />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>Abribua professores curso</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

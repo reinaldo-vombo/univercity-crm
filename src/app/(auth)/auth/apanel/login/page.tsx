@@ -4,9 +4,11 @@ import { motion } from 'framer-motion'
 import AdminLogin from "@/components/forms/admin/log-in";
 import { Fragment, useState } from "react";
 import AdminForgotPassWord from '@/components/forms/admin/forgot-password';
+import Image from 'next/image';
 
 export default function AdminLoginPage() {
    const [isLogin, setIslogin] = useState(true)
+
    return (
       <Fragment>
          <div className="col-span-12 relative lg:col-span-6 p-8 rounded-l-lg space-y-10">
@@ -14,8 +16,16 @@ export default function AdminLoginPage() {
                animate={{ x: isLogin ? "0%" : "-100%" }}
                transition={{ duration: 0.75, ease: "easeInOut" }}
                className="absolute inset-0 z-10 w-full px-44">
+               <Image
+                  className="dark:invert"
+                  src="/logo.svg"
+                  alt="Enrollix logo"
+                  width={180}
+                  height={38}
+                  priority
+               />
                <div className="flex items-center justify-center">
-                  <h2 className="font-bold text-3xl">Admin</h2>
+                  <h2 className="font-bold text-3xl">Faça o login para aceder ao painel administrativo</h2>
                </div>
                <AdminLogin onChange={setIslogin} />
             </motion.div>

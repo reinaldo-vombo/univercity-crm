@@ -10,6 +10,8 @@ import {
   Currency,
   BookKey,
   Building2Icon,
+  AlignHorizontalJustifyEndIcon,
+  UserPlus2,
 } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
@@ -18,6 +20,8 @@ export const END_POINTS = {
 };
 export const ROUTES = {
   DASHBOARD: '/crm',
+  ADMIN_DASHBORD: '/crm/admin',
+  UNAUTHORIZED: '/unauthorized',
   LOGIN_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/login`,
   RECOVER_PASSWORD_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/recover-password`,
   RESET_PASSWORD_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/reset-password`,
@@ -77,8 +81,18 @@ export const DUMMY_DATA = {
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/buildings`,
-        label: 'Edificios & Salas',
+        label: 'Edificios',
         icon: React.createElement(Building2Icon),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/rooms`,
+        label: 'Salas',
+        icon: React.createElement(AlignHorizontalJustifyEndIcon),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/faculty`,
+        label: 'Professores',
+        icon: React.createElement(UserPlus2),
       },
     ],
     admin: [
@@ -244,6 +258,18 @@ export const DUMMY_DATA = {
       id: '3',
       label: 'Noite',
       value: 'EVENING',
+    },
+  ],
+  gender: [
+    {
+      id: '1',
+      label: 'Masculino',
+      value: 'masculino',
+    },
+    {
+      id: '2',
+      label: 'Feminino',
+      value: 'feminino',
     },
   ],
   yearLevel: [

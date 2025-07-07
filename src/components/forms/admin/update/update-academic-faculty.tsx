@@ -17,15 +17,18 @@ import SubmitBtn from "@/components/sheard/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/lib/helper/api/error-handler"
-import { addNewAcademicFaculty } from "@/lib/actions/academic-faculty"
+import { updateAcademicFaculty } from "@/lib/actions/academic-faculty"
 import { academicFacultyacultySchema } from "@/lib/validation/academicFaculty"
 
-const UpadateAcademicFaculty = () => {
+type TProps = {
+   title: string;
+}
+const UpadateAcademicFaculty = ({ title }: TProps) => {
 
    const form = useForm<z.infer<typeof academicFacultyacultySchema>>({
       resolver: zodResolver(academicFacultyacultySchema),
       defaultValues: {
-         title: "",
+         title,
       }
    })
    const [isPending, startTransition] = useTransition();
@@ -36,7 +39,7 @@ const UpadateAcademicFaculty = () => {
       });
       startTransition(async () => {
          try {
-            const response = await addNewAcademicFaculty(formData);
+            const response = await updateAcademicFaculty(formData);
 
             if (response.error) {
                toast.warning(FLASH_MESSAGE.ACADEMIC_FACULTY_NOT_CREATED);

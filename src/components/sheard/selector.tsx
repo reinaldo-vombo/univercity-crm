@@ -3,13 +3,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { TSelectPros } from './types';
 
 const Selector = ({ className, options, placeholder, formField, disabled = false }: TSelectPros) => {
-   const onChange = (value: string) => {
-      formField.onChange(value); // For single select
-   }
+
 
    return (
-      <Select onValueChange={onChange} disabled={disabled}>
-         <SelectTrigger aria-label={`Select ${placeholder}`} className={`${className ? className : 'w-[180px]'}`}>
+      <Select onValueChange={(value) => {
+         formField.onChange(value);
+      }}
+         value={formField.value ?? ''} // ensure it is never undefined
+         disabled={disabled}>
+         <SelectTrigger aria-label={placeholder} className={`${className || 'w-[180px]'}`}>
             <SelectValue placeholder={placeholder} />
          </SelectTrigger>
          <SelectContent>

@@ -48,7 +48,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] All departemant pages
 - [x] All Semester pages
 - [x] All curses pages
-- [ ] All building pages
+- [x] All building pages
 - [ ] All Payment pages
 - [x] All users pages
 - [x] All course pages
@@ -118,15 +118,16 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 ### 📁 File Uploads (Optional)
 
 - [x] Setup file upload (e.g., FilePond, Dropzone)
-- [ ] Store uploaded files securely
+- [x] Setup cloudinary
+- [x] Store uploaded files securely
 - [ ] Link documents to student profiles
 
 ---
 
 ### 🧠 Admin Features
 
-- [ ] Role-based access control
-- [ ] Dashboard with stats (students, revenue, attendance)
+- [x] Role-based access control
+- [x] Dashboard with stats (students, revenue, attendance)
 - [ ] Logs or recent activity tracker
 - [x] Assignd user to departament
 - [x] Create user CRUD
@@ -143,7 +144,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 
 ### 🧪 Testing & Validation
 
-- [ ] Add form validation with Zod/Yup
+- [x] Add form validation with Zod/Yup
 - [ ] Write unit tests for API routes and utilities
 - [ ] Basic UI testing with Playwright or Cypress
 

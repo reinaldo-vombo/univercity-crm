@@ -88,12 +88,12 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
     }
 
     const formObject: any = Object.fromEntries(formData.entries());
-    if (formObject.durationInYears) {
-      formObject.durationInYears = Number(formObject.durationInYears);
-    }
-    if (formObject.credits) {
-      formObject.credits = Number(formObject.credits);
-    }
+    // if (formObject.durationInYears) {
+    //   formObject.durationInYears = Number(formObject.durationInYears);
+    // }
+    // if (formObject.credits) {
+    //   formObject.credits = Number(formObject.credits);
+    // }
 
     // Parse with Zod
     const parsed = schema.safeParse(formObject);

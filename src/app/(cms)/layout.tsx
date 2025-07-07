@@ -1,8 +1,10 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import Header from "@/components/sheard/nav-bar/Header";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ROUTES } from "@/constants/mock-data";
 import { authOptions } from "@/lib/helper/auth/config";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function CmsLayout({
    children,
@@ -14,7 +16,7 @@ export default async function CmsLayout({
 
    if (role !== "admin" && role !== "super_admin" && role !== "student" && role !== "faculty") {
       // Optionally redirect or render fallback
-      throw new Error("Invalid role or unauthenticated");
+      redirect(ROUTES.UNAUTHORIZED);
    }
    return (
       <div>

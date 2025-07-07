@@ -8,6 +8,7 @@ export type TUser = {
   role: string;
   number: number;
 };
+
 export type TEvents = {
   id: string;
   title: string;
@@ -19,6 +20,7 @@ export type TEvents = {
   createdAt: Date;
   updatedAt: Date;
 };
+
 export type TAcademicFaculty = {
   id: string;
   title: string;
@@ -50,7 +52,7 @@ export type TCourse = {
   coursePricing: {
     price: number;
   };
-  faculties: TTeacher[];
+  faculties: TFaculty[];
   offeredCourses?: TOfferedCourse[];
   studentEnrolledCourses?: TStudentEnrolledCourse[];
   preRequisiteCourses?: [
@@ -119,7 +121,7 @@ export type TDepartemant = {
   academicFacultyId: string;
   departmentHeadId: string | null;
 };
-export type TBuiding = {
+export type TBuilding = {
   id: string;
   title: string;
   createdAt?: Date;
@@ -144,9 +146,28 @@ export type TStudent = {
   email: string;
   major: string;
 };
-type TTeacher = {
+export type TFaculty = {
   id: string;
-  name: string;
-  email: string;
-  major: string;
+  facultyId: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  email: string | null;
+  contactNo: string | null;
+  profileImage: string;
+  designation: string;
+  gender: string;
+  shift: string;
+  password: string;
+  academicDepartment: {
+    title: string;
+  };
+  courses: {
+    facultyId: string;
+    courseId: string;
+  }[];
+  academicFacultyId: string;
+  academicDepartmentId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

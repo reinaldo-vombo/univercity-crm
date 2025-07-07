@@ -15,49 +15,47 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { departmentSchema } from "@/lib/validation/departement"
-import { TAcademicFaculty, TUser } from "@/lib/types/global"
-import { addNewDepartemant } from "@/lib/actions/departement"
+import { updateRoomSchema } from "@/lib/validation/building"
+import { TBuilding, TRoom } from "@/lib/types/global"
 import Selector from "@/components/sheard/selector"
+import { updateRoom } from "@/lib/actions/room"
 
-type TPros = {
-   users: TUser[]
-   academicFaculty: TAcademicFaculty[]
+type TProps = {
+   buildings: TBuilding[]
+   values: TRoom
 }
 
-const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
-   const admins = users.map(user => ({
-      id: user.id,
-      label: user.name,
-      value: user.id,
-   }));
-   const academicFacultys = academicFaculty.map((faculty) => ({
-      id: faculty.id,
-      label: faculty.title,
-      value: faculty.id,
-   }));
-   const form = useForm<z.infer<typeof departmentSchema>>({
-      resolver: zodResolver(departmentSchema),
+const UpdateRoomForm = ({ buildings, values }: TProps) => {
+   const { buildingId, floor, roomNumber, id } = values;
+   const buildingsList = buildings.map((build) => ({
+      id: build.id,
+      label: build.title,
+      value: build.title,
+   }))
+
+   const form = useForm<z.infer<typeof updateRoomSchema>>({
+      resolver: zodResolver(updateRoomSchema),
       defaultValues: {
-         title: "",
-         academicFacultyId: "",
-         departmentHeadId: ""
+         id,
+         roomNumber,
+         floor,
+         buildingId
       }
    })
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof departmentSchema>) {
+   async function onSubmit(values: z.infer<typeof updateRoomSchema>) {
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
       });
       startTransition(async () => {
          try {
-            const response = await addNewDepartemant(formData);
+            const response = await updateRoom(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.DEPARTMENT_NOT_CREATED);
+               toast.error(FLASH_MESSAGE.ROOM_NOT_UPDATED);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.ROOM_UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -75,13 +73,13 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
-               name="title"
+               name="roomNumber"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do Departamento</FormLabel>
+                     <FormLabel>Número da Sala</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="EX: Departamento de Ciência e Tecnologias"
+                           placeholder="EX: P001, 01, 200"
                            {...field} />
                      </FormControl>
                      <FormDescription></FormDescription>
@@ -91,46 +89,45 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
             />
             <FormField
                control={form.control}
-               name="departmentHeadId"
+               name="floor"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Membros</FormLabel>
+                     <FormLabel>Andar</FormLabel>
                      <FormControl>
-                        <Selector
-                           className="w-full"
-                           options={admins}
-                           placeholder="Selecione um membro"
-                           formField={field} />
+                        <Input
+                           placeholder="EX: 1ª 2ª 3ª"
+                           {...field} />
                      </FormControl>
-                     <FormDescription>Selecione o director do departamento</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
             <FormField
                control={form.control}
-               name="academicFacultyId"
+               name="floor"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Unidade Acadêmica</FormLabel>
+                     <FormLabel>Edificio</FormLabel>
                      <FormControl>
                         <Selector
+                           formField={field}
+                           options={buildingsList}
+                           placeholder="Selecione o edificio"
                            className="w-full"
-                           options={academicFacultys}
-                           placeholder="Ex: Faculdade de Engenharia" formField={field} />
+                        />
                      </FormControl>
-                     <FormDescription>Selecione a unidade ao qual o departamento pertence</FormDescription>
+                     <FormDescription>Selecione o edificio no qual a sala pertence</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
-
             <SubmitBtn
-               label="Criar"
+               label="Atualisar"
                loading={isPending} />
          </form>
       </Form>
    )
 }
 
-export default CreateDepartmentFrom;
+export default UpdateRoomForm;

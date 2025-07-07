@@ -30,6 +30,7 @@ import { TableExport } from "./table-export";
 type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];
    data: object[];
+   className?: string
    filterColumn?: keyof TData; // e.g., "email"
    actionForm?: React.ReactNode;
    fileName?: string
@@ -44,7 +45,8 @@ export function DataTable<TValue>({
    actionForm,
    fileHerderes,
    fileName,
-   modalTitle
+   modalTitle,
+   className
 }: DataTableProps<any, TValue>) {
 
    const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -109,8 +111,9 @@ export function DataTable<TValue>({
                </DropdownMenu>
                {actionForm && (
                   <SheetModal
-                     triggerStyle="border h-[37px] rounded-md"
+                     triggerStyle="border h-[37px] rounded-md cursor-pointer"
                      side="right"
+                     className={className}
                      trigger={<Plus />}
                      title={modalTitle || 'Sheet modal title'}
                   >

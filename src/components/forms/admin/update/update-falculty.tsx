@@ -15,58 +15,59 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/sheard/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { courseSchema } from "@/lib/validation/curses"
-import { addNewCourse } from "@/lib/actions/courses"
-import { TDepartemant } from "@/lib/types/global"
+import { TAcademicFaculty, TDepartemant, TFaculty } from "@/lib/types/global"
 import Selector from "@/components/sheard/selector"
-import { DUMMY_DATA } from "@/constants/mock-data"
+import { updateFacultySchema } from "@/lib/validation/faculty"
+import { updatedFaculty } from "@/lib/actions/faculty"
 
-type TProps = {
-   departments: TDepartemant[]
+type TPros = {
+   defaultValues: TFaculty
+   departemants: TDepartemant[]
+   academicFaculty: TAcademicFaculty[]
 }
-const CreateCourseForm = ({ departments }: TProps) => {
-   const departmentOptions = departments.map((department) => ({
-      id: department.id,
-      label: department.title,
-      value: department.id
-   }))
 
-   const form = useForm<z.infer<typeof courseSchema>>({
-      resolver: zodResolver(courseSchema),
+const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPros) => {
+   const academicDepartemant = departemants.map(departemant => ({
+      id: departemant.id,
+      label: departemant.title,
+      value: departemant.id,
+   }));
+   const academicFacultys = academicFaculty.map((faculty) => ({
+      id: faculty.id,
+      label: faculty.title,
+      value: faculty.id,
+   }));
+   const form = useForm<z.infer<typeof updateFacultySchema>>({
+      resolver: zodResolver(updateFacultySchema),
       defaultValues: {
-         title: "",
-         code: "",
+         firstName: defaultValues.firstName,
+         middleName: defaultValues.middleName || "",
+         lastName: defaultValues.lastName,
+         contactNo: defaultValues.contactNo,
+         gender: defaultValues.gender,
+         email: defaultValues.email,
+         profileImage: defaultValues.profileImage,
+         designation: defaultValues.designation,
+         facultyId: defaultValues.facultyId,
          shift: "MORNING",
-         yearLevel: "FIFTH",
-         durationInYears: 4,
-         academicDepartmentId: "",
+         academicDepartmentId: defaultValues.academicDepartmentId,
+         academicFacultyId: defaultValues.academicFacultyId,
       }
    })
-
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof courseSchema>) {
-
+   async function onSubmit(values: z.infer<typeof updateFacultySchema>) {
       const formData: any = new FormData();
-
-      // Convert numeric values to numbers before appending to FormData
       Object.entries(values).forEach(([key, value]) => {
-         if (typeof value === 'number') {
-            formData.append(key, value.toString()); // Convert number to string, but treat as number
-         } else {
-            formData.append(key, value); // For other types, append as is
-         }
+         formData.append(key, value);
       });
-
       startTransition(async () => {
          try {
-            const response = await addNewCourse(formData);
-            console.log('error', response);
-
+            const response = await updatedFaculty(formData);
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.COURSE_NOT_CREATED);
+               toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.COURSE_CREATED);
+            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -84,33 +85,64 @@ const CreateCourseForm = ({ departments }: TProps) => {
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
-               name="title"
+               name="firstName"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome</FormLabel>
+                     <FormLabel>Primero nome</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Ex: Recursos Humanos, Ciencia da Computacao..."
+                           placeholder="EX: Paulo"
                            {...field} />
                      </FormControl>
-                     <FormDescription>O nome do curso</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
             <FormField
                control={form.control}
-               name="durationInYears"
+               name="middleName"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Ano de curso</FormLabel>
+                     <FormLabel>Nome do meio</FormLabel>
                      <FormControl>
                         <Input
-                           type="number"
-                           placeholder="Ex: 4, 3, 2..."
+                           placeholder="EX: Manuel Dos Santos"
                            {...field} />
                      </FormControl>
-                     <FormDescription>O ano de duracao do curso</FormDescription>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="lastName"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Último nome</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="EX: Cardoso"
+                           {...field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="gender"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Último nome</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="EX: Cardoso"
+                           {...field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -124,73 +156,39 @@ const CreateCourseForm = ({ departments }: TProps) => {
                      <FormControl>
                         <Selector
                            className="w-full"
-                           options={departmentOptions}
-                           placeholder="Escolha um departamento"
+                           options={academicDepartemant}
+                           placeholder="Selecione o departamento"
                            formField={field} />
                      </FormControl>
-                     <FormDescription>O departamento ao qual o curso pertence</FormDescription>
+                     <FormDescription>Selecione o departamento ao qual o professor pertence</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
             <FormField
                control={form.control}
-               name="code"
+               name="academicFacultyId"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Codigo</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Ex: MAT101 "
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>O codigo do curso</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="shift"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Turno</FormLabel>
+                     <FormLabel>Unidade Acadêmica</FormLabel>
                      <FormControl>
                         <Selector
-                           formField={field}
-                           placeholder="EX: Manhã, Tarde, Noite"
                            className="w-full"
-                           options={DUMMY_DATA.shifts} />
+                           options={academicFacultys}
+                           placeholder="Ex: Faculdade de Engenharia" formField={field} />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>Selecione a unidade ao qual o professor pertence</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
-            <FormField
-               control={form.control}
-               name="yearLevel"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Nivel do curso</FormLabel>
-                     <FormControl>
-                        <Selector
-                           formField={field}
-                           placeholder="EX: primero ano, segundo ano"
-                           className="w-full"
-                           options={DUMMY_DATA.yearLevel} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+
             <SubmitBtn
-               label="Criar"
+               label="Atualisar"
                loading={isPending} />
          </form>
       </Form>
    )
 }
 
-export default CreateCourseForm;
+export default UpdateFacultyFrom;

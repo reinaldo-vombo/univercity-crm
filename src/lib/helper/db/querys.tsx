@@ -1,16 +1,26 @@
 
 
-import { TAcademicFaculty, TAdmitionExame, TBuiding, TCourse, TCoursePrice, TDepartemant, TDiscipline, TEvents, TOfferedCourse, TRoom, TSemester, TUser } from "@/lib/types/global";
+import { TAcademicFaculty, TAdmitionExame, TBuilding, TCourse, TCoursePrice, TDepartemant, TDiscipline, TEvents, TFaculty, TOfferedCourse, TRoom, TSemester, TUser } from "@/lib/types/global";
 import { handleApiError } from "../api/error-handler";
 import { serverFetch } from "../api/server-fetch";
 
 
 export const getAllUsers = async (): Promise<TUser[]> => {
    try {
-      const curses = await serverFetch<TUser[]>('/users', {
+      const users = await serverFetch<TUser[]>('/users', {
          next: { tags: ['users'] },
       })
-      return curses
+      return users;
+   } catch (error) {
+      handleApiError(error);
+   }
+};
+export const getAllFalculty = async (): Promise<TFaculty[]> => {
+   try {
+      const faculty = await serverFetch<TFaculty[]>('/faculty', {
+         next: { tags: ['faculty'] },
+      })
+      return faculty;
    } catch (error) {
       handleApiError(error);
    }
@@ -20,7 +30,7 @@ export const getAllCurses = async (): Promise<TCourse[]> => {
       const curses = await serverFetch<TCourse[]>('/course', {
          next: { tags: ['curse'] }, // 🚀 tags for smart revalidation
       });
-      return curses
+      return curses;
    } catch (error) {
       handleApiError(error);
    }
@@ -30,7 +40,7 @@ export const getAllDepartments = async (): Promise<TDepartemant[]> => {
       const departements = await serverFetch<TDepartemant[]>('/academic-department', {
          next: { tags: ['departement'] },
       })
-      return departements
+      return departements;
    } catch (error) {
       handleApiError(error);
    }
@@ -40,7 +50,7 @@ export const getAllAcademicFaculty = async (): Promise<TAcademicFaculty[]> => {
       const AacademicFaculty = await serverFetch<TAcademicFaculty[]>('/academic-faculty', {
          next: { tags: ['academicFaculty'] },
       })
-      return AacademicFaculty
+      return AacademicFaculty;
    } catch (error) {
       handleApiError(error);
    }
@@ -50,7 +60,7 @@ export const getAllAdmitionExames = async (): Promise<TAdmitionExame[]> => {
       const exames = await serverFetch<TAdmitionExame[]>('/admission-exame', {
          next: { tags: ['admitionExame'] },
       })
-      return exames
+      return exames;
    } catch (error) {
       handleApiError(error);
    }
@@ -87,10 +97,10 @@ export const getAllCoursePrice = async (): Promise<TCoursePrice[]> => {
 };
 export const getAllDiscipline = async (): Promise<TDiscipline[]> => {
    try {
-      const prices = await serverFetch<TDiscipline[]>('/discipline', {
+      const discipline = await serverFetch<TDiscipline[]>('/discipline', {
          next: { tags: ['discipline'] },
       })
-      return prices;
+      return discipline;
    } catch (error) {
       handleApiError(error);
    }
@@ -105,9 +115,9 @@ export const getAllEvents = async (): Promise<TEvents[]> => {
       handleApiError(error);
    }
 };
-export const getAllBuilding = async (): Promise<TBuiding[]> => {
+export const getAllBuilding = async (): Promise<TBuilding[]> => {
    try {
-      const building = await serverFetch<TBuiding[]>('/building', {
+      const building = await serverFetch<TBuilding[]>('/building', {
          next: { tags: ['building'] },
       })
       return building;

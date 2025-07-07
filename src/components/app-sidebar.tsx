@@ -10,6 +10,7 @@ import {
    SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { DUMMY_DATA } from "@/constants/mock-data";
+import Image from "next/image";
 import Link from "next/link";
 
 type SidebarProps = {
@@ -22,7 +23,16 @@ export function AppSidebar({ role }: SidebarProps) {
       <Sidebar>
          <SidebarContent>
             <SidebarGroup>
-               <SidebarGroupLabel>Application</SidebarGroupLabel>
+               <SidebarGroupLabel className="mb-4">
+                  <Image
+                     className="dark:invert"
+                     src="/logo.svg"
+                     alt="Enrollix logo"
+                     width={70}
+                     height={70}
+                     priority
+                  />
+               </SidebarGroupLabel>
                <SidebarGroupContent>
                   <SidebarMenu>
                      {links.map((item) => (

@@ -7,6 +7,7 @@ import { TUser } from '../types/global';
 import { validatedActionWithUser } from '../helper/action-helper';
 import { updateSchema, userSchema } from '../validation/user';
 import { ActionResult, ActionState } from '../types/api-error';
+import { saveFile } from '../helper/uploade';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
@@ -34,17 +35,20 @@ export const addNewUser = validatedActionWithUser(
     }
   }
 );
+
 export const updatedUser = validatedActionWithUser(
   updateSchema,
   async (data, formData, user): Promise<ActionResult<TUser>> => {
-    const file = formData.get('avatar');
-    console.log('file', file);
-    console.log('formData', formData);
-
     try {
+      let avatarUrl: any = data.avatar;
+      if (data.avatar instanceof File) {
+        avatarUrl = await saveFile(data.avatar, 'users');
+      }
+      data = { ...data, avatar: avatarUrl };
+
       const result = await serverFetch<TUser>(`/users/${user.id}`, {
         method: 'PUT',
-        body: formData,
+        body: data,
       });
 
       revalidateTag('users');
