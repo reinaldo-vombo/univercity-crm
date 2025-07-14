@@ -41,8 +41,8 @@ const CreateDisciplineForm = () => {
          title: 'Primavera',
          code: '01',
          isCurrent: true,
-         year: currentYear.toString(),  // Set a default year
-         startMonth: 'Abril',           // Set a default start month
+         year: currentYear.toString(),
+         startMonth: 'Abril',
          endMonth: 'Agosto',
       }
    })
@@ -56,7 +56,7 @@ const CreateDisciplineForm = () => {
          try {
             const response = await addNewSemester(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.SEMESTER_NOT_CREATED);
+               toast.error(response.message);
                return;
             }
             toast.success(FLASH_MESSAGE.SEMESTER_CREATED);

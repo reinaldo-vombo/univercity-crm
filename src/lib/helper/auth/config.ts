@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
-import axios from 'axios';
+// import axios from 'axios';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { END_POINTS } from '@/constants/mock-data';
 
@@ -61,26 +61,67 @@ export const authOptions: NextAuthOptions = {
           default:
             return null;
         }
+        // try {
+        //   const res = await axios.post(`${baseUrl}${endpoint}`, body);
+        //   // ✅ Access the nested `data` inside `data`
+        //   const data = res.data?.data;
+
+        //   if (!data?.user || !data?.accessToken) {
+        //     console.error('❌ Missing user or accessToken in response', data);
+        //     return null;
+        //   }
+        //   return {
+        //     ...data.user,
+        //     accessToken: data.accessToken,
+        //   };
+        // } catch (err: any) {
+        //   if (axios.isAxiosError(err)) {
+        //     console.error('❌ Axios error:', err.response?.data || err.message);
+        //   } else {
+        //     console.error(`❌ ${FLASH_MESSAGE.SERVER_ERROR_500}`, err);
+        //   }
+
+        //   return null;
+        // }
         try {
-          const res = await axios.post(`${baseUrl}${endpoint}`, body);
-          // ✅ Access the nested `data` inside `data`
-          const data = res.data?.data;
+          const res = await fetch(`${baseUrl}${endpoint}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+          });
+
+          if (!res.ok) {
+            // Parse error response if available
+            let errorResponse = null;
+            try {
+              errorResponse = await res.json();
+            } catch {
+              // ignore parsing error
+            }
+            console.error('❌ API error response:', {
+              status: res.status,
+              statusText: res.statusText,
+              errorResponse,
+            });
+            return null;
+          }
+
+          const json = await res.json();
+          const data = json?.data;
 
           if (!data?.user || !data?.accessToken) {
             console.error('❌ Missing user or accessToken in response', data);
             return null;
           }
+
           return {
             ...data.user,
             accessToken: data.accessToken,
           };
-        } catch (err: any) {
-          if (axios.isAxiosError(err)) {
-            console.error('❌ Axios error:', err.response?.data || err.message);
-          } else {
-            console.error(`❌ ${FLASH_MESSAGE.SERVER_ERROR_500}`, err);
-          }
-
+        } catch (err) {
+          console.error(`❌ ${FLASH_MESSAGE.SERVER_ERROR_500}`, err);
           return null;
         }
       },

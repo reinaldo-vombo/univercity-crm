@@ -16,14 +16,19 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { assignRemoveFacultiesSchema } from "@/lib/validation/curses"
 import { assignFaculties } from "@/lib/actions/courses"
-import { TCourse } from "@/lib/types/global"
+import { TCourse, TFaculty } from "@/lib/types/global"
 import { MultiSelect } from "@/components/ui/multi-select"
 
 type TProps = {
    values: TCourse
+   falculty: TFaculty[]
 }
 
-const AssignFacultiesForm = ({ values }: TProps) => {
+const AssignFacultiesForm = ({ values, falculty }: TProps) => {
+   const falcultys = falculty.map((item) => ({
+      label: item.firstName,
+      value: item.id,
+   }))
 
    const form = useForm<z.infer<typeof assignRemoveFacultiesSchema>>({
       resolver: zodResolver(assignRemoveFacultiesSchema),
@@ -32,6 +37,8 @@ const AssignFacultiesForm = ({ values }: TProps) => {
          faculties: [],
       }
    })
+   console.log('falcultys', form.getValues('faculties'));
+
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof assignRemoveFacultiesSchema>) {
       const formData: any = new FormData();
@@ -42,7 +49,7 @@ const AssignFacultiesForm = ({ values }: TProps) => {
          try {
             const response = await assignFaculties(formData);
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.ASSIGN_FACULTIES_ERROR);
+               toast.warning(response.message);
                return;
             }
             toast.success(FLASH_MESSAGE.ASSIGN_FACULTIES);
@@ -65,8 +72,9 @@ const AssignFacultiesForm = ({ values }: TProps) => {
                      <FormLabel>Professores</FormLabel>
                      <FormControl>
                         <MultiSelect
+                           modalPopover={true}
                            field={field}
-                           options={[]}
+                           options={falcultys}
                            defaultValue={field.value}
                            placeholder="Selecione os professores"
                            variant="inverted"

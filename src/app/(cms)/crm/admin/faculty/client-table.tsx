@@ -46,5 +46,5 @@ export function FalcultyTable({ falcultys, departements, academicFaculty }: Prop
       modalTitle="Cadastrar professor"
       fileName="professores"
       data={mergedFaculty}
-      filterColumn="firstName" />;
+      filterColumn="email" />;
 }

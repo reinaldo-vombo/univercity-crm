@@ -1,20 +1,26 @@
-import { TAcademicFaculty, TDepartemant, TUser } from "@/lib/types/global"
+import { TUser } from "@/lib/types/global"
 
 type TProps = {
-   users: TUser[]
-   department: TDepartemant
-   academicFaculty: TAcademicFaculty[]
+   data: {
+      academicFaculty: string;
+      director: TUser | undefined;
+      id: string;
+      title: string;
+      createdAt?: Date;
+      updatedAt?: Date;
+      academicFacultyId: string;
+      departmentHeadId: string | null;
+   }
 }
-const DepartmenteDetails = ({ users, academicFaculty, department }: TProps) => {
-   const departmentHead = users.filter((user) => user.id === department.departmentHeadId)
-   const faculty = academicFaculty.filter((faculty) => faculty.id === department.academicFacultyId)
+const DepartmenteDetails = ({ data }: TProps) => {
+   const { academicFaculty, title, director } = data
 
    return (
       <div>
          <ul className="space-y-4">
-            <li>Titulo: <b>{department.title}</b></li>
-            <li>Unidade Acadêmica: <b>{faculty[0].title}</b></li>
-            <li>Director: <b>{departmentHead[0].name}</b></li>
+            <li>Titulo: <b>{title}</b></li>
+            <li>Unidade Acadêmica: <b>{academicFaculty}</b></li>
+            <li>Director: <b>{director?.name}</b></li>
          </ul>
       </div>
    )

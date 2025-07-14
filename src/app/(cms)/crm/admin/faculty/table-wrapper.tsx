@@ -13,13 +13,6 @@ export async function FalcultyTableServer() {
       getAllAcademicFaculty(),
    ]);
 
-   // const departmentsWithUserData = departements.map((dept) => {
-   //    const user = users.find((u) => u.id === dept.departmentHeadId);
-   //    return {
-   //       ...dept,
-   //       user, // attach full user object
-   //    };
-   // });
    return <FalcultyTable
       falcultys={falcultys}
       departements={departements}

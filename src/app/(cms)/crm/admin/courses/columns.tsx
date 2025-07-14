@@ -11,9 +11,10 @@ import { deleteCourse } from "@/lib/actions/courses"
 import UpdateCourseForm from "@/components/forms/admin/update/update-couses"
 import CourseDetails from "@/components/admin/course-details"
 import AssignFacultiesForm from "@/components/forms/admin/update/assign-faculties"
+import { TFaculty } from "@/lib/types/global"
 
 
-export function CoursesColumns(): ColumnDef<TCourse>[] {
+export function CoursesColumns(falculty: TFaculty[]): ColumnDef<TCourse>[] {
 
    return [
       {
@@ -75,9 +76,10 @@ export function CoursesColumns(): ColumnDef<TCourse>[] {
                   <SheetModal
                      trigger={<Link2Icon className="h-4 w-4  cursor-pointer" />}
                      side="left"
+                     className="sm:max-w-lg"
                      title="Atribuir Professores ao curso"
                      description=' Formulario para Atribuir Professores ao curso'>
-                     <AssignFacultiesForm values={credits} />
+                     <AssignFacultiesForm falculty={falculty} values={credits} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}

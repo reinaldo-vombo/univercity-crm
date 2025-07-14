@@ -82,10 +82,12 @@ export const assignFaculties = validatedActionWithUser(
   assignRemoveFacultiesSchema,
   async (data): Promise<ActionResult<TCourse>> => {
     const { id, ...updateData } = data;
+    console.log('updateData', updateData);
+
     try {
       const curses = await serverFetch<TCourse>(`/assign-faculties/${id}`, {
         method: 'POST',
-        body: updateData,
+        body: [updateData],
       });
 
       revalidateTag('curse');
