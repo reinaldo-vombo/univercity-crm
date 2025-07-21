@@ -41,7 +41,7 @@ const events = [
       name: 'Some event',
       date: 20,
       color: 'red',
-      icon: 'shomthing.png'
+      icon: '/shomthing.png'
    }
 ]
 function EventCalendar() {
@@ -114,7 +114,7 @@ function EventCalendar() {
             </Modal>
          </div>
          <div className="grid grid-cols-7 gap-px bg-muted rounded-lg overflow-hidden">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" >
                {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((day) => (
                   <motion.div
                      key={day}
@@ -156,12 +156,12 @@ function EventCalendar() {
                               style={{ borderColor: subscription.color }}
                            >
                               <div className="relative w-4 h-4">
-                                 <Image
+                                 {/* <Image
                                     src={subscription.icon}
                                     alt={subscription.name}
                                     className="rounded-sm object-cover"
                                     fill
-                                 />
+                                 /> */}
                               </div>
                               <span className="text-xs truncate flex-1">
                                  {subscription.name}

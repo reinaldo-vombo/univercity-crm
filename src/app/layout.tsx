@@ -103,11 +103,18 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
             themes={[
+              "light",
+              "dark",
               "solar-dust",
+              "dark-solar-dust",
               "super-base",
+              "dark-super-base",
               "gebins",
+              "dark-gebins",
               "nature",
+              "dark-nature",
               "graphite",
+              "dark-graphite",
             ]}
           >
             {children}

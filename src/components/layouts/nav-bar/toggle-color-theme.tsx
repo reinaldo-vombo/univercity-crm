@@ -59,33 +59,30 @@ const themes = [
 ];
 
 export function ColorThemeSelector() {
-   const { theme, setTheme } = useTheme();
+
+   const { theme, setTheme, resolvedTheme } = useTheme();
    const [mounted, setMounted] = useState(false);
 
    useEffect(() => setMounted(true), []);
 
    if (!mounted) return null;
 
+   const isDark = resolvedTheme?.startsWith("dark");
+
+   const handleThemeChange = (baseTheme: string) => {
+      setTheme(isDark ? `dark-${baseTheme}` : baseTheme);
+   };
+
    return (
-      <RadioGroup value={theme} onValueChange={setTheme} className="space-y-2">
-         {themes.map((themeOption) => (
-            <div key={themeOption.value} className="flex items-center space-x-2">
-               <RadioGroupItem value={themeOption.value} id={themeOption.value} />
-               <Label
-                  htmlFor={themeOption.value}
-                  className="flex items-center space-x-2"
-               >
-                  <span>{themeOption.name}</span>
-                  <div className="flex">
-                     {themeOption.colors.map((color, index) => (
-                        <div
-                           key={index}
-                           style={{ backgroundColor: color }}
-                           className="w-6 h-6 border border-gray-300"
-                        />
-                     ))}
-                  </div>
-               </Label>
+      <RadioGroup
+         value={theme?.replace("dark-", "")}
+         onValueChange={handleThemeChange}
+         className="space-y-2"
+      >
+         {themes.map((t) => (
+            <div key={t.value} className="flex items-center space-x-2">
+               <RadioGroupItem value={t.value} id={t.value} />
+               <Label htmlFor={t.value}>{t.name}</Label>
             </div>
          ))}
       </RadioGroup>
