@@ -82,12 +82,12 @@ export const assignFaculties = validatedActionWithUser(
   assignRemoveFacultiesSchema,
   async (data): Promise<ActionResult<TCourse>> => {
     const { id, ...updateData } = data;
-    console.log('updateData', updateData);
+    console.log('updateData', updateData.faculties);
 
     try {
       const curses = await serverFetch<TCourse>(`/assign-faculties/${id}`, {
         method: 'POST',
-        body: [updateData],
+        body: updateData.faculties,
       });
 
       revalidateTag('curse');
@@ -98,6 +98,7 @@ export const assignFaculties = validatedActionWithUser(
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
+        console.log('err.message', err.message);
         return {
           error: true,
           message: err.message,

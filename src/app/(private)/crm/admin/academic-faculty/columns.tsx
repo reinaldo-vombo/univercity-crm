@@ -6,10 +6,10 @@ import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { handleApiError } from "@/lib/helper/api/error-handler"
 import { deleteFaculty } from "@/lib/actions/academic-faculty"
 import { TAcademicFaculty } from "@/types/global"
 import UpadateAcademicFaculty from "@/components/forms/admin/update/update-academic-faculty"
+import { handleApiError } from "@/services/error-handler"
 
 export type AcademicFaculty = {
    id: string;

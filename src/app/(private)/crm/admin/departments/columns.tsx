@@ -33,7 +33,10 @@ export function DepartementColumns(users: TUser[], academicFaculty: AcademicFacu
          cell: ({ row }) => {
             const user = row.original.director;
             return (
-               <Avatar name={user?.name ?? ''} photo={user?.avatar ?? ''} className="size-11" />
+               <div className="flex items-center gap-2">
+                  <Avatar name={user?.name ?? ''} photo={user?.avatar ?? ''} className="size-11" />
+                  <p>{user?.name ?? ''}</p>
+               </div>
             )
          }
       },
