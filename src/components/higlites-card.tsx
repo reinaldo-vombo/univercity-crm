@@ -1,5 +1,5 @@
 import React from 'react'
-import Card from './sheard/card'
+import Card from './shared/card'
 
 const HighlightsCard = () => {
    return (

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TUser } from '@/lib/types/global';
+import { TUser } from '@/types/global';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/config';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
@@ -87,7 +87,15 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
       } as R;
     }
 
-    const formObject: any = Object.fromEntries(formData.entries());
+    const formObject: Record<
+      string,
+      FormDataEntryValue | FormDataEntryValue[]
+    > = {};
+
+    for (const key of formData.keys()) {
+      const values = formData.getAll(key);
+      formObject[key] = values.length > 1 ? values : values[0];
+    }
 
     // Parse with Zod
     const parsed = schema.safeParse(formObject);

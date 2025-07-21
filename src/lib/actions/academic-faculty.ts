@@ -1,12 +1,12 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { serverFetch } from '../helper/api/server-fetch';
+import { serverFetch } from '@/services/server-fetch';
 import { validatedActionWithUser } from '../helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../types/api-error';
-import { TAcademicFaculty } from '../types/global';
-import { ApiResponseError } from '../helper/api/api-error';
+import { ActionResult } from '../../types/api-error';
+import { TAcademicFaculty } from '../../types/global';
+import { ApiResponseError } from '@/services/api-error';
 import {
   academicFacultyacultySchema,
   updateAcademicFacultyacultySchema,

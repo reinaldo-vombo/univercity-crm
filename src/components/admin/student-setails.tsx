@@ -1,5 +1,5 @@
-import { TFaculty } from "@/lib/types/global"
-import Avatar from "../sheard/avatar";
+import { TFaculty } from "@/types/global"
+import Avatar from "../shared/avatar";
 import { Separator } from "../ui/separator";
 
 type TProps = {

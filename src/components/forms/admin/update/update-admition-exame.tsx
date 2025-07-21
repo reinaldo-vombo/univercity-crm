@@ -12,15 +12,15 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TAdmitionExame } from "@/lib/types/global"
+import { TAdmitionExame } from "@/types/global"
 import { admitionExameSchema } from "@/lib/validation/adnition-exame"
 import { updateAdmitionExame } from "@/lib/actions/admition-exame"
 import { Switch } from "@/components/ui/switch"
 import Image from "next/image"
-import Selector from "@/components/sheard/selector"
+import Selector from "@/components/shared/selector"
 import { GRADES } from "@/constants/mock-data"
 type TPros = {
    values: TAdmitionExame
@@ -101,7 +101,7 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
             /> */}
             <div className="space-y-4">
                <Image
-                  src={`${process.env.NEXT_PUBLIC_API_ASSETS_URL}/${reciptUrl}`}
+                  src={`${process.env.API_ASSETS_URL}/${reciptUrl}`}
                   alt="recipt"
                   className="rounded-md"
                   width={500}

@@ -1,8 +1,9 @@
 
 
-import { TAcademicFaculty, TAdmitionExame, TBuilding, TCourse, TCoursePrice, TDepartemant, TDiscipline, TEvents, TFaculty, TOfferedCourse, TRoom, TSemester, TUser } from "@/lib/types/global";
-import { handleApiError } from "../api/error-handler";
-import { serverFetch } from "../api/server-fetch";
+import { handleApiError } from "@/services/error-handler";
+import { serverFetch } from "@/services/server-fetch";
+import { TAcademicFaculty, TAdmitionExame, TBuilding, TCourse, TCoursePrice, TDepartemant, TDiscipline, TEvents, TFaculty, TOfferedCourse, TRoom, TSemester, TUser } from "@/types/global";
+
 
 
 export const getAllUsers = async (): Promise<TUser[]> => {

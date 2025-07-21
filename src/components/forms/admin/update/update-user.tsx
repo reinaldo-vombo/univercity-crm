@@ -14,13 +14,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { updateSchema } from "@/lib/validation/user"
-import SubmitBtn from "@/components/sheard/submit-btn"
-import Selector from "@/components/sheard/selector"
+import SubmitBtn from "@/components/shared/submit-btn"
+import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updatedUser } from "@/lib/actions/users"
-import Uploader from "@/components/sheard/file-upload/uploader"
+import Uploader from "@/components/shared/file-upload/uploader"
 import { useSession } from "next-auth/react"
 
 

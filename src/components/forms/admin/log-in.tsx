@@ -18,9 +18,10 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { adminSchema } from "@/lib/validation/admin"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import SubmitBtn from "@/components/sheard/submit-btn"
-import { Dispatch, SetStateAction } from "react"
+import SubmitBtn from "@/components/shared/submit-btn"
+import { Dispatch, SetStateAction, useState } from "react"
 import { ROUTES } from "@/constants/mock-data"
+import { Eye, EyeClosed } from "lucide-react"
 
 type TProps = {
    onChange: Dispatch<SetStateAction<boolean>>
@@ -28,6 +29,7 @@ type TProps = {
 
 export default function AdminLogin({ onChange }: TProps) {
    const router = useRouter();
+   const [showPassword, setShowPassWord] = useState('password')
    const form = useForm<z.infer<typeof adminSchema>>({
       resolver: zodResolver(adminSchema),
       defaultValues: {
@@ -47,6 +49,7 @@ export default function AdminLogin({ onChange }: TProps) {
             identifier,
             password,
          });
+         console.log('error', res?.error);
 
          if (res?.error) {
             if (res?.error === 'CredentialsSignin') {
@@ -91,7 +94,16 @@ export default function AdminLogin({ onChange }: TProps) {
                   <FormItem>
                      <FormLabel>Palavra-passe</FormLabel>
                      <FormControl>
-                        <Input placeholder="*********" {...field} />
+                        <div className="relative">
+                           <Input placeholder="xxx-xx-xxxx-xx" type={showPassword} {...field} />
+                           {showPassword === 'password' ?
+                              <EyeClosed className="absolute cursor-pointer right-3 top-2" onClick={() => setShowPassWord('text')} />
+                              :
+                              <Eye className="absolute cursor-pointer right-3 top-2" onClick={() => setShowPassWord('password')} />
+                           }
+
+                        </div>
+
                      </FormControl>
                      <FormDescription>Sua senha</FormDescription>
                      <FormMessage />

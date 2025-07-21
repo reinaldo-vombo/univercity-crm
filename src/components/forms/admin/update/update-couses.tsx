@@ -12,14 +12,14 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import Selector from "@/components/sheard/selector"
+import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { updateCourseSchema } from "@/lib/validation/curses"
 import { addNewCourse } from "@/lib/actions/courses"
-import { TCourse } from "@/lib/types/global"
+import { TCourse } from "@/types/global"
 
 type TProps = {
    values: TCourse

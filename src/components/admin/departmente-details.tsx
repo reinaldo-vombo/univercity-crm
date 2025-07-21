@@ -1,4 +1,4 @@
-import { TUser } from "@/lib/types/global"
+import { TUser } from "@/types/global"
 
 type TProps = {
    data: {

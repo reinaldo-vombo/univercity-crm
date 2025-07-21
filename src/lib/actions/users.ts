@@ -2,11 +2,11 @@
 
 import { revalidateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { serverFetch } from '../helper/api/server-fetch';
-import { TUser } from '../types/global';
+import { serverFetch } from '@/services/server-fetch';
+import { TUser } from '../../types/global';
 import { validatedActionWithUser } from '../helper/action-helper';
 import { updateSchema, userSchema } from '../validation/user';
-import { ActionResult, ActionState } from '../types/api-error';
+import { ActionResult, ActionState } from '../../types/api-error';
 import { saveFile } from '../helper/uploade';
 
 export const addNewUser = validatedActionWithUser(

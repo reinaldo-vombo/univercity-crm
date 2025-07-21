@@ -1,9 +1,9 @@
-import { TAdmitionExame } from "@/lib/types/global";
+import { TAdmitionExame } from "@/types/global";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Image from "next/image";
 import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area";
-import Modal from "../sheard/Modal";
+import Modal from "../shared/Modal";
 import { Eye } from "lucide-react";
 
 type TAdmitionExameDetailsProps = {
@@ -36,7 +36,7 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
                      <div className="m-auto">
                         <Modal trigger={<Eye className="text-white cursor-pointer opacity-0 group-hover:opacity-100" />} title="Bilhete de indentidade" description="Bilhete de indentidade" >
                            <Image
-                              src={`${process.env.NEXT_PUBLIC_API_ASSETS_URL}/${document}`}
+                              src={`${process.env.API_ASSETS_URL}/${document}`}
                               alt="BiDocumentUrl"
                               width={500}
                               height={500} />
@@ -44,7 +44,7 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
                      </div>
                   </div>
                   <Image
-                     src={`${process.env.NEXT_PUBLIC_API_ASSETS_URL}/${document}`}
+                     src={`${process.env.API_ASSETS_URL}/${document}`}
                      alt="BiDocumentUrl"
                      width={500}
                      height={500} />
@@ -57,7 +57,7 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
                      <div className="m-auto">
                         <Modal trigger={<Eye className="text-white cursor-pointer opacity-0 group-hover:opacity-100" />} title="Recibo de pagamento" description="Recibo de pagamento" >
                            <Image
-                              src={`${process.env.NEXT_PUBLIC_API_ASSETS_URL}/${paymentRecipt}`}
+                              src={`${process.env.API_ASSETS_URL}/${paymentRecipt}`}
                               alt="PaymentReciptUrl"
                               width={500}
                               height={500} />
@@ -65,7 +65,7 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
                      </div>
                   </div>
                   <Image
-                     src={`${process.env.NEXT_PUBLIC_API_ASSETS_URL}/${paymentRecipt}`}
+                     src={`${process.env.API_ASSETS_URL}/${paymentRecipt}`}
                      alt="BiDocumentUrl"
                      width={500}
                      height={500} />

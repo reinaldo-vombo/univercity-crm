@@ -21,8 +21,9 @@ const {
   NEXT_PUBLIC_AUTHOR_SITE,
   NEXT_PUBLIC_AUTHOR_NAME } = process.env;
 
+
 const baseUrl = NEXT_PUBLIC_BASE_URL
-  ? `https://${NEXT_PUBLIC_BASE_URL}`
+  ? `${NEXT_PUBLIC_BASE_URL}`
   : 'http://localhost:3000';
 export const metadata: Metadata = {
   title: {
@@ -98,8 +99,17 @@ export default function RootLayout({
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
+            enableColorScheme
             enableSystem
-            disableTransitionOnChange>
+            disableTransitionOnChange
+            themes={[
+              "solar-dust",
+              "super-base",
+              "gebins",
+              "nature",
+              "graphite",
+            ]}
+          >
             {children}
           </ThemeProvider>
         </SessionWrapper>

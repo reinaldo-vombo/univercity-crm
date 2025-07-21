@@ -17,7 +17,7 @@ export function AutoLogoutProvider({
    debug = false,
    requireSession = false,
    children
-}: PropsWithChildren) {
+}: PropsWithChildren<AutoLogoutProviderProps>) {
    const [lastActivity, setLastActivity] = useState(new Date().getTime());
    const { data: session, status } = useSession({ required: requireSession });
 

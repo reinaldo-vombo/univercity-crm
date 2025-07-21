@@ -12,13 +12,13 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { departmentSchema } from "@/lib/validation/departement"
-import { TAcademicFaculty, TUser } from "@/lib/types/global"
+import { TAcademicFaculty, TUser } from "@/types/global"
 import { addNewDepartemant } from "@/lib/actions/departement"
-import Selector from "@/components/sheard/selector"
+import Selector from "@/components/shared/selector"
 
 type TPros = {
    users: TUser[]

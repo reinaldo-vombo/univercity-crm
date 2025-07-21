@@ -18,8 +18,7 @@ export default function NotFound() {
                src="/404.svg"
                width={562}
                height={156}
-               alt="erro code 500"
-               className="dark:hidden" />
+               alt="erro code 500" />
             {/* <img src="src/images/error/500-dark.svg" alt="500" className="hidden dark:block"/> */}
 
             <p className="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">

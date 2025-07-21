@@ -12,6 +12,7 @@ import {
   Building2Icon,
   AlignHorizontalJustifyEndIcon,
   UserPlus2,
+  Calendar,
 } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
@@ -93,6 +94,11 @@ export const DUMMY_DATA = {
         href: `${ROUTES.DASHBOARD}/admin/faculty`,
         label: 'Professores',
         icon: React.createElement(UserPlus2),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/events`,
+        label: 'Events',
+        icon: React.createElement(Calendar),
       },
     ],
     admin: [

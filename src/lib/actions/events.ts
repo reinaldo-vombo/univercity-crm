@@ -1,13 +1,13 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { serverFetch } from '../helper/api/server-fetch';
+import { serverFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUser } from '../helper/action-helper';
-import { ApiResponseError } from '../helper/api/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/services/api-error';
+import { ActionResult } from '../../types/api-error';
 import { courseSchema, updateCourseSchema } from '../validation/curses';
-import { TDiscipline } from '../types/global';
+import { TDiscipline } from '../../types/global';
 
 export const addNewEvent = validatedActionWithUser(
   courseSchema,

@@ -2,8 +2,8 @@ import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
 // import axios from 'axios';
-import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { END_POINTS } from '@/constants/mock-data';
+import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const baseUrl = process.env.API_BASE_URL;
 
         let endpoint = '';
         let body: any = {};

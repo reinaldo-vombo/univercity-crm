@@ -1,4 +1,4 @@
-import { TCourse } from "@/lib/types/global"
+import { TCourse } from "@/types/global"
 
 type TProps = {
    data: TCourse

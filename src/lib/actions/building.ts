@@ -1,19 +1,19 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { serverFetch } from '../helper/api/server-fetch';
-import { TBuiding } from '../types/global';
+import { serverFetch } from '@/services/server-fetch';
+import { TBuilding } from '@/types/global';
 import { validatedActionWithUser } from '../helper/action-helper';
 import { buildingSchema, updateBuildingSchema } from '../validation/building';
-import { ApiResponseError } from '../helper/api/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/services/api-error';
+import { ActionResult } from '../../types/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewBuilding = validatedActionWithUser(
   buildingSchema,
-  async (data): Promise<ActionResult<TBuiding>> => {
+  async (data): Promise<ActionResult<TBuilding>> => {
     try {
-      const curses = await serverFetch<TBuiding>('/building', {
+      const curses = await serverFetch<TBuilding>('/building', {
         method: 'POST',
         body: data,
       });
@@ -44,10 +44,10 @@ export const addNewBuilding = validatedActionWithUser(
 );
 export const updateBuilding = validatedActionWithUser(
   updateBuildingSchema,
-  async (data): Promise<ActionResult<TBuiding>> => {
+  async (data): Promise<ActionResult<TBuilding>> => {
     const { id, title } = data;
     try {
-      const building = await serverFetch<TBuiding>(`/building/${id}`, {
+      const building = await serverFetch<TBuilding>(`/building/${id}`, {
         method: 'PATCH',
         body: title,
       });
@@ -78,9 +78,9 @@ export const updateBuilding = validatedActionWithUser(
 );
 export const deleteBuilding = async (
   id: string
-): Promise<ActionResult<TBuiding>> => {
+): Promise<ActionResult<TBuilding>> => {
   try {
-    const data = await serverFetch<TBuiding>(`/building/${id}`, {
+    const data = await serverFetch<TBuilding>(`/building/${id}`, {
       method: 'DELETE',
     });
 

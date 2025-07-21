@@ -1,12 +1,12 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { serverFetch } from '../helper/api/server-fetch';
+import { serverFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUser } from '../helper/action-helper';
-import { ApiResponseError } from '../helper/api/api-error';
-import { ActionResult } from '../types/api-error';
-import { TCoursePrice } from '../types/global';
+import { ApiResponseError } from '@/services/api-error';
+import { ActionResult } from '../../types/api-error';
+import { TCoursePrice } from '../../types/global';
 import {
   coursePriceSchema,
   updateCoursePriceSchema,

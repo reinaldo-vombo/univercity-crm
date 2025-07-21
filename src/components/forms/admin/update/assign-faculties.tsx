@@ -11,12 +11,12 @@ import {
    FormLabel,
    FormMessage,
 } from "@/components/ui/form"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { assignRemoveFacultiesSchema } from "@/lib/validation/curses"
 import { assignFaculties } from "@/lib/actions/courses"
-import { TCourse, TFaculty } from "@/lib/types/global"
+import { TCourse, TFaculty } from "@/types/global"
 import { MultiSelect } from "@/components/ui/multi-select"
 
 type TProps = {

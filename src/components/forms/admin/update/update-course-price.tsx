@@ -12,11 +12,11 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TCourse, TCoursePrice } from "@/lib/types/global"
-import Selector from "@/components/sheard/selector"
+import { TCourse, TCoursePrice } from "@/types/global"
+import Selector from "@/components/shared/selector"
 import { updateCoursePriceSchema } from "@/lib/validation/coursePrice"
 import { updateCoursePrice } from "@/lib/actions/course-price"
 

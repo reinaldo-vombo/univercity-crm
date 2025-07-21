@@ -1,12 +1,12 @@
 'use server';
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from '../helper/api/api-error';
+import { ApiResponseError } from '@/services/api-error';
 import { revalidateTag } from 'next/cache';
-import { serverFetch } from '../helper/api/server-fetch';
-import { TAdmitionExame } from '../types/global';
+import { serverFetch } from '@/services/server-fetch';
+import { TAdmitionExame } from '../../types/global';
 import { validatedActionWithUser } from '../helper/action-helper';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../../types/api-error';
 import { admitionExameSchema } from '../validation/adnition-exame';
 
 export const updateAdmitionExame = validatedActionWithUser(
@@ -42,7 +42,7 @@ export const updateAdmitionExame = validatedActionWithUser(
     }
   }
 );
-export const deleteBuilding = async (
+export const deleteAdmitionExame = async (
   id: string
 ): Promise<ActionResult<TAdmitionExame>> => {
   try {

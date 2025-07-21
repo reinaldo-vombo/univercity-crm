@@ -1,15 +1,15 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { serverFetch } from '../helper/api/server-fetch';
-import { TDepartemant } from '../types/global';
+import { serverFetch } from '@/services/server-fetch';
+import { TDepartemant } from '../../types/global';
 import { validatedActionWithUser } from '../helper/action-helper';
 import {
   departmentSchema,
   updateDepartmentSchema,
 } from '../validation/departement';
-import { ActionResult } from '../types/api-error';
-import { ApiResponseError } from '../helper/api/api-error';
+import { ActionResult } from '../../types/api-error';
+import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewDepartemant = validatedActionWithUser(

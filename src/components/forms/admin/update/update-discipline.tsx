@@ -12,12 +12,12 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateDisciplineSchema } from "@/lib/validation/discipline"
 import { updateDiscipline } from "@/lib/actions/discipline"
-import { TDiscipline } from "@/lib/types/global"
+import { TDiscipline } from "@/types/global"
 type TProps = {
    values: TDiscipline
 }

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { forgotPasswordSchema } from "@/lib/validation/admin"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { Dispatch, SetStateAction } from "react"
 
 type TProps = {

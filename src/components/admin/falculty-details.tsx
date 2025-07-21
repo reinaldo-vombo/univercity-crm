@@ -1,5 +1,5 @@
 
-import Avatar from "../sheard/avatar";
+import Avatar from "../shared/avatar";
 import { Separator } from "../ui/separator";
 
 type TProps = {

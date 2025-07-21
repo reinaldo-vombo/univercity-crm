@@ -12,12 +12,12 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/sheard/submit-btn"
+import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateRoomSchema } from "@/lib/validation/building"
-import { TBuilding, TRoom } from "@/lib/types/global"
-import Selector from "@/components/sheard/selector"
+import { TBuilding, TRoom } from "@/types/global"
+import Selector from "@/components/shared/selector"
 import { updateRoom } from "@/lib/actions/room"
 
 type TProps = {

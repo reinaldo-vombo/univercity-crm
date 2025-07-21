@@ -1,19 +1,19 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { serverFetch } from '../helper/api/server-fetch';
-import { TSemester } from '../types/global';
+import { serverFetch } from '@/services/server-fetch';
+import { TSemester } from '../../types/global';
 import { validatedActionWithUser } from '../helper/action-helper';
 import { semesterSchema } from '../validation/semester';
-import { ApiResponseError } from '../helper/api/api-error';
+import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../../types/api-error';
 
 export const addNewSemester = validatedActionWithUser(
   semesterSchema,
   async (data): Promise<ActionResult<TSemester>> => {
     console.log('data', data);
-    
+
     try {
       const semester = await serverFetch<TSemester>('/academic-semester', {
         method: 'POST',
