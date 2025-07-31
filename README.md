@@ -44,7 +44,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 
 - [ ] Dashboard/root
 - [ ] All studente pages
-- [ ] All Teacher pages
+- [x] All Teacher pages
 - [x] All departemant pages
 - [x] All Semester pages
 - [x] All curses pages
@@ -54,7 +54,10 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] All course pages
 - [x] All course price pages
 - [x] All discipline pages
-- [ ] Events page
+- [x] Events page
+- [x] Error page
+- [x] NotFound page
+- [x] Unauthenticated page
 
 ---
 
@@ -63,13 +66,13 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Server action
 - [x] Data revalidation
 - [x] Dark mode
+- [x] Color themes
 - [x] Assigne user to departament
+- [x] Assigne faculty to curse
 - [x] Reusible table-table
 - [x] Add data-table filteres
 - [x] Create export button to export data as doc type /csv/excel
-- [x] Users CRUD
-- [x] Departement CRUD
-- [ ] Update account info
+- [x] Update account info
 
 ---
 
@@ -162,6 +165,9 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 
 /app
 /components
+/config
+/constants
 /lib
-/utils
-/public
+/providers
+/services
+/types

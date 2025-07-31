@@ -1,6 +1,7 @@
 {
   "name": "univercity-cms",
-  "version": "0.1.0",
+  "author": "Reinaldo Vombo",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

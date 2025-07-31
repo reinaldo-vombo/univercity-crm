@@ -13,7 +13,7 @@ export const addNewUser = validatedActionWithUser(
   userSchema,
   async (data): Promise<ActionResult<TUser>> => {
     try {
-      const user = await serverFetch<TUser>('/auth/register', {
+      const user = await serverFetch<TUser>('/users', {
         method: 'POST',
         body: data,
       });
@@ -84,6 +84,30 @@ export const deleteUser = async (id: string): Promise<ActionState<null>> => {
     return {
       error: true,
       message: error as string,
+    };
+  }
+};
+export const recoverPassword = async (
+  data: string
+): Promise<ActionState<null>> => {
+  try {
+    const res = await serverFetch<null>('/recover-password', {
+      method: 'POST',
+      body: data,
+    });
+
+    console.log('the res', res);
+
+    return {
+      error: false,
+      message: 'Um email foi enviado a sua caixa',
+      data: null,
+    };
+  } catch (err) {
+    return {
+      error: true,
+      message:
+        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
     };
   }
 };

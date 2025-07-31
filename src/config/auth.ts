@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
 import { END_POINTS } from '@/constants/mock-data';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
+import config from '@/config/env';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -12,7 +13,7 @@ export const authOptions: NextAuthOptions = {
   jwt: {
     maxAge: 7 * 24 * 60 * 60, // ✅ Add this to match token expiry
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: config.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: 'Sign in',
@@ -31,7 +32,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const baseUrl = process.env.API_BASE_URL;
+        const baseUrl = config.API_URL;
 
         let endpoint = '';
         let body: any = {};

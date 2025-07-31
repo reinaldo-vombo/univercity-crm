@@ -142,9 +142,23 @@ export type TSemester = {
 
 export type TStudent = {
   id: string;
-  name: string;
-  email: string;
-  major: string;
+  firstName: string;
+  studentId: string;
+  studentType: string;
+  middleName: string | null;
+  lastName: string;
+  profileImage: string | null;
+  email: string | null;
+  contactNo: string | null;
+  shift: string;
+  gender: string;
+  isWoker: boolean;
+  yearLevel: string;
+  isActive: boolean;
+  gradeDeclarationFile: string;
+  biFile: string;
+  presentAddress: string;
+  createdAt: Date;
 };
 export type TFaculty = {
   id: string;

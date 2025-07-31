@@ -1,6 +1,7 @@
 'use client';
 import { signOut, useSession } from "next-auth/react";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import config from '@/config/env'
 
 export interface AutoLogoutProviderProps {
    timeoutMs?: number;
@@ -12,8 +13,8 @@ export interface AutoLogoutProviderProps {
 type WindowActivityEvent = keyof WindowEventMap;
 
 export function AutoLogoutProvider({
-   timeoutMs = +(process.env.NEXT_PUBLIC_TIME_OUT_MS || 600000), // Inactivity time
-   timeoutCheckMs = +(process.env.NEXT_PUBLIC_TIME_OUT_CHECK_MS || 10000), // Time out to check
+   timeoutMs = +(config.NEXT_PUBLIC_TIME_OUT_MS || 600000), // Inactivity time
+   timeoutCheckMs = +(config.NEXT_PUBLIC_TIME_OUT_CHECK_MS || 10000), // Time out to check
    debug = false,
    requireSession = false,
    children
