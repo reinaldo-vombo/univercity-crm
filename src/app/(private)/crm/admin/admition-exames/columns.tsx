@@ -14,10 +14,12 @@ import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name
 import { FaseColumnFilter } from "@/components/admin/table-filters/Fase-column-filter"
 import { BoolenColumnFilter } from "@/components/admin/table-filters/boolen-column-filter"
 import { deleteAdmitionExame } from "@/lib/actions/admition-exame"
-
+import config from '@/config/env'
+import { formatDate } from "@/lib/helper"
 
 export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
 
+   console.log('url', config.API_ASSETS);
    return [
       {
          accessorKey: "applicantName",
@@ -28,11 +30,25 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
       {
          accessorKey: "fase",
          header: ({ column }) => <FaseColumnFilter column={column} />,
-         cell: ({ row }) => <span>{row.getValue("fase")}</span>,
+         cell: ({ row }) => {
+            const fase = row.original.fase.name;
+            return (
+               <span>{fase}</span>
+
+            )
+         },
       },
       {
          accessorKey: "exameDate",
          header: "Data do exame",
+         cell: ({ row }) => {
+            const date = row.original.exameDate;
+            return (
+               <span>
+                  {formatDate(date)}
+               </span>
+            );
+         },
       },
       {
          accessorKey: "exameResults",

@@ -106,6 +106,8 @@ export type TAdmitionExame = {
   paymentRecipt: string;
   exameDate: Date;
   document: string;
+  phoneNumber: string;
+  email: string;
   paymentAmoute: number | null;
   aprovePayment: boolean | null | undefined;
   exameResults: number | null | undefined;

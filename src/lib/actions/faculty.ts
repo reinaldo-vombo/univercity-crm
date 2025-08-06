@@ -8,11 +8,17 @@ import { ActionResult } from '../../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { facultySchema, updateFacultySchema } from '../validation/faculty';
+import { saveFile } from '../helper/uploade';
 
 export const addNewFaculty = validatedActionWithUser(
   facultySchema,
   async (data): Promise<ActionResult<TFaculty>> => {
     try {
+      let avatarUrl: any = data.profileImage;
+      if (data.profileImage instanceof File) {
+        avatarUrl = await saveFile(data.profileImage, 'facultys');
+      }
+      data = { ...data, profileImage: avatarUrl };
       const facultys = await serverFetch<TFaculty>('/faculty', {
         method: 'POST',
         body: data,

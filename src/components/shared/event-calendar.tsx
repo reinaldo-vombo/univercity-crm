@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 import {
    add,

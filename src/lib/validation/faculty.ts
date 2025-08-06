@@ -8,7 +8,7 @@ export const facultySchema = z.object({
     required_error: 'Último nome é obrigatorio',
   }),
   middleName: z.string().optional(),
-  profileImage: z.string().optional(),
+  profileImage: z.union([z.string().url(), z.instanceof(File)]).optional(),
   email: z.string({
     required_error: 'Email é obrigatorio',
   }),

@@ -22,7 +22,7 @@ import { Switch } from "@/components/ui/switch"
 import Image from "next/image"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
-import config from '@/config/env'
+
 type TPros = {
    values: TAdmitionExame
 }
@@ -41,6 +41,18 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
 
       }
    })
+
+   // const exameResults = form.watch("exameResults");
+   // useEffect(() => {
+   //    if (exameResults && exameResults >= 10) {
+   //       form.setValue("passed", true);
+   //    } else {
+   //       form.setValue("passed", false);
+   //    }
+   // }, [exameResults, form]);
+   // console.log('log', exameResults);
+   // console.log('Situaçao', form.getValues("passed"));
+
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof admitionExameSchema>) {
       const formData: any = new FormData();
@@ -102,7 +114,7 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
             /> */}
             <div className="space-y-4">
                <Image
-                  src={`${config.API_ASSETS_URL}/${reciptUrl}`}
+                  src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/${reciptUrl}`}
                   alt="recipt"
                   className="rounded-md"
                   width={500}
@@ -139,7 +151,7 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
                            formField={field}
                            className="w-full"
                            placeholder="Selecione a nota"
-                           options={DUMMY_DATA.gender}
+                           options={DUMMY_DATA.exameGrades}
                         />
                      </FormControl>
                      <FormDescription></FormDescription>

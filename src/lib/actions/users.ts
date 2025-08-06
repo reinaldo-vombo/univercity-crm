@@ -77,7 +77,7 @@ export const deleteUser = async (id: string): Promise<ActionState<null>> => {
     revalidateTag('users');
     return {
       error: false,
-      message: FLASH_MESSAGE.USER_DELETED,
+      message: FLASH_MESSAGE.DELETED,
       data: null,
     };
   } catch (error) {

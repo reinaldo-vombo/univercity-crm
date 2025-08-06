@@ -41,7 +41,7 @@ export function FalcultyTable({ falcultys, departements, academicFaculty }: Prop
    return <DataTable
       actionForm={<CreateFacultyFrom departemants={departements} academicFaculty={academicFaculty} />}
       columns={columns}
-      className="sm:max-w-md"
+      className="sm:max-w-lg"
       fileHerderes={herader}
       modalTitle="Cadastrar professor"
       fileName="professores"
