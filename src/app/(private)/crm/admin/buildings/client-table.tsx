@@ -1,12 +1,12 @@
 "use client";
 
 import { DataTable } from "@/components/shared/data-table";
-import { TBuiding } from "@/types/global";
+import { TBuilding } from "@/types/global";
 import { BuildingColumns } from "./columns";
 import CreateBuildingFrom from "@/components/forms/admin/post/create-building";
 
 interface Props {
-   buidings: TBuiding[];
+   buidings: TBuilding[];
 }
 const herader = {
    title: "Nome do curso",

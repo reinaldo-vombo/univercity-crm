@@ -15,15 +15,15 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { studentSchema } from "@/lib/validation/studente"
+import { studentLogIn } from "@/lib/validation/student"
 import Link from "next/link"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
 export default function StudentLogin() {
    const router = useRouter();
-   const form = useForm<z.infer<typeof studentSchema>>({
-      resolver: zodResolver(studentSchema),
+   const form = useForm<z.infer<typeof studentLogIn>>({
+      resolver: zodResolver(studentLogIn),
       defaultValues: {
          number: '',
          password: ''
@@ -31,7 +31,7 @@ export default function StudentLogin() {
 
    })
 
-   async function onSubmit(values: z.infer<typeof studentSchema>) {
+   async function onSubmit(values: z.infer<typeof studentLogIn>) {
       const { number, password } = values;
       const userType = "student";
       const identifier = number;
@@ -44,9 +44,9 @@ export default function StudentLogin() {
          });
 
          if (res?.ok) {
-            router.push("/");
+            router.push("/crm/student");
          } else {
-            toast.error("Login failed. Check your credentials.");
+            toast.error(res?.error);
          }
       } catch (error) {
          console.error("Form submission error", error);

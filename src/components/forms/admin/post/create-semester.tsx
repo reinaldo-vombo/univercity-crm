@@ -59,7 +59,7 @@ const CreateDisciplineForm = () => {
                toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.SEMESTER_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

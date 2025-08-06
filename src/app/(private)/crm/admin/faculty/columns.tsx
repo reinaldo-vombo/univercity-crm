@@ -10,7 +10,7 @@ import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global"
 import Avatar from "@/components/shared/avatar"
 import { deleteFaculty } from "@/lib/actions/faculty"
 import UpdateFacultyFrom from "@/components/forms/admin/update/update-falculty"
-import FalcultyDetails from "@/components/admin/falculty-details"
+import FalcultyDetails from "@/components/admin/container/falculty-details"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
 
@@ -99,7 +99,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
          header: "Turno",
          cell: ({ row }) => (
             <div className="flex items-center gap-2">
-               {row.getValue("shift") === "day" ? <Sun className="text-yellow-300 size-4" /> : <Moon className="text-blue-500 size-4" />}
+               {row.getValue("shift") === "MORNING" ? <Sun className="text-yellow-300 size-4" /> : <Moon className="text-blue-500 size-4" />}
                <span>{row.getValue("shift")}</span>
             </div>
          ),
@@ -116,7 +116,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
                      toast.warning(res.message);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.FACULTY_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

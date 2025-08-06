@@ -9,7 +9,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAdmitionExame } from "@/types/global"
 import { Badge } from "@/components/ui/badge"
 import UpdateAdmitionExameForm from "@/components/forms/admin/update/update-admition-exame"
-import AdmitionExameDetails from "@/components/admin/admition-exame-details"
+import AdmitionExameDetails from "@/components/admin/container/admition-exame-details"
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
 import { FaseColumnFilter } from "@/components/admin/table-filters/Fase-column-filter"
 import { BoolenColumnFilter } from "@/components/admin/table-filters/boolen-column-filter"
@@ -79,7 +79,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                      toast.error(res.message);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.ADMITION_EXAME_NOT_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

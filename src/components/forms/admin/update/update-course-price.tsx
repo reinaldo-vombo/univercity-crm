@@ -54,10 +54,10 @@ const UpdateCoursePriceForm = ({ courses, defaultValue }: TProps) => {
             const response = await updateCoursePrice(formData);
 
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.COURSE_NOT_UPDATED);
+               toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.COURSE_UPDATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

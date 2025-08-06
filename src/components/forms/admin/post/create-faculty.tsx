@@ -20,6 +20,7 @@ import Selector from "@/components/shared/selector"
 import { facultySchema } from "@/lib/validation/faculty"
 import { addNewFaculty } from "@/lib/actions/faculty"
 import { DUMMY_DATA } from "@/constants/mock-data"
+import Uploader from "@/components/shared/file-upload/uploader"
 
 type TPros = {
    departemants: TDepartemant[]
@@ -44,11 +45,10 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
          middleName: "",
          lastName: "",
          contactNo: "",
-         gender: "",
+         gender: "Masculino",
          email: "",
          profileImage: "",
          designation: "",
-         facultyId: "",
          shift: "MORNING",
          academicDepartmentId: "",
          academicFacultyId: "",
@@ -67,7 +67,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -83,12 +83,28 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-6">
+            <div >
+               <FormField
+                  control={form.control}
+                  name="profileImage"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Foto do professor</FormLabel>
+                        <FormControl className="w-full place-content-center">
+                           <Uploader field={field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
             <div className="flex items-center gap-2">
                <FormField
                   control={form.control}
                   name="firstName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Primero nome</FormLabel>
                         <FormControl>
                            <Input
@@ -104,7 +120,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   control={form.control}
                   name="middleName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Nome do meio</FormLabel>
                         <FormControl>
                            <Input
@@ -122,7 +138,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   control={form.control}
                   name="lastName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Último nome</FormLabel>
                         <FormControl>
                            <Input
@@ -138,7 +154,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   control={form.control}
                   name="contactNo"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Telefone</FormLabel>
                         <FormControl>
                            <Input
@@ -156,7 +172,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                            <Input
@@ -172,9 +188,9 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   control={form.control}
                   name="gender"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Género</FormLabel>
-                        <FormControl className="w-full">
+                        <FormControl>
                            <Selector
                               placeholder="Selecione o género"
                               className="w-full"
@@ -192,7 +208,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   control={form.control}
                   name="designation"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Designação</FormLabel>
                         <FormControl>
                            <Input
@@ -208,7 +224,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   control={form.control}
                   name="shift"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Turno</FormLabel>
                         <FormControl>
                            <Selector

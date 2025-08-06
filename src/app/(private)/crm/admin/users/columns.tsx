@@ -26,10 +26,9 @@ export function UsersColumns(): ColumnDef<Users>[] {
          accessorKey: "avatarUrl",
          header: "Avatar",
          cell: ({ row }) => {
-            const student = row.original;
-
+            const user = row.original;
             return (
-               <Avatar name={student.name} photo={student.avatar} className="size-11" />
+               <Avatar name={user.name} photo={user.avatar} className="size-11" />
             );
          },
          enableSorting: false,
@@ -58,7 +57,7 @@ export function UsersColumns(): ColumnDef<Users>[] {
                      toast.error(res.message);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.USER_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
                   console.error(err);

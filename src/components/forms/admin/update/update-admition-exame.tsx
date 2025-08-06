@@ -51,10 +51,10 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
          try {
             const response = await updateAdmitionExame(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.DEPARTMENT_NOT_CREATED);
+               toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

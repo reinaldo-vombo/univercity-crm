@@ -9,7 +9,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TCourse } from "@/types/global"
 import { deleteCourse } from "@/lib/actions/courses"
 import UpdateCourseForm from "@/components/forms/admin/update/update-couses"
-import CourseDetails from "@/components/admin/course-details"
+import CourseDetails from "@/components/admin/container/course-details"
 import AssignFacultiesForm from "@/components/forms/admin/update/assign-faculties"
 import { TFaculty } from "@/types/global"
 
@@ -56,9 +56,9 @@ export function CoursesColumns(falculty: TFaculty[]): ColumnDef<TCourse>[] {
                try {
                   const res = await deleteCourse(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.COURSE_NOT_DELETED)
+                     toast.warning(res.message)
                   }
-                  toast.success(FLASH_MESSAGE.COURSE_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

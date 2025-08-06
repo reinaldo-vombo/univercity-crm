@@ -27,7 +27,7 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
             const name = `${faculty.firstName} ${faculty.lastName}`
 
             return (
-               <Avatar name={name || ''} photo={faculty?.profileImage || ''} className="size-11" />
+               <Avatar name={name || '/default-img-1.jpeg'} photo={faculty?.profileImage || ''} className="size-11" />
             );
          },
          enableSorting: false,
@@ -135,7 +135,7 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
                      toast.warning(res.message);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.FACULTY_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

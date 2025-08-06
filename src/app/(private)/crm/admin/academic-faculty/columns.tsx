@@ -48,10 +48,10 @@ export function AcademicFacultyColumns(): ColumnDef<TAcademicFaculty>[] {
                try {
                   const res = await deleteFaculty(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.FACULTY_NOT_DELETED);
+                     toast.warning(res.message);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.FACULTY_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (error) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

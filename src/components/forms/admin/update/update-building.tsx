@@ -17,9 +17,9 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { addNewBuilding } from "@/lib/actions/building"
 import { updateBuildingSchema } from "@/lib/validation/building"
-import { TBuiding } from "@/types/global"
+import { TBuilding } from "@/types/global"
 type TProps = {
-   building: TBuiding
+   building: TBuilding
 }
 
 const UpdateBuildingFrom = ({ building }: TProps) => {
@@ -42,10 +42,10 @@ const UpdateBuildingFrom = ({ building }: TProps) => {
          try {
             const response = await addNewBuilding(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.BUILDING_NOT_UPDATED);
+               toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.BUILDING_UPDATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

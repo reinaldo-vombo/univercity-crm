@@ -1,9 +1,6 @@
 import { z } from 'zod';
 
 export const facultySchema = z.object({
-  facultyId: z.string({
-    required_error: 'Número é obrigatorio',
-  }),
   firstName: z.string({
     required_error: 'Primero nome é obrigatorio',
   }),
@@ -33,13 +30,12 @@ export const facultySchema = z.object({
 
 export const updateFacultySchema = z.object({
   id: z.string(),
-  facultyId: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   middleName: z.string().optional(),
   profileImage: z.string().optional().nullable(),
-  email: z.string().optional().nullable(),
-  contactNo: z.string().optional().nullable(),
+  email: z.string(),
+  contactNo: z.string(),
   gender: z.string(),
   designation: z.string(),
   academicDepartmentId: z.string(),

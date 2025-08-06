@@ -10,7 +10,7 @@ import { TUser } from "@/types/global"
 import { AcademicFaculty } from "../academic-faculty/columns"
 import Avatar from "@/components/shared/avatar"
 import { deleteDepartment } from "@/lib/actions/departement"
-import DepartmenteDetails from "@/components/admin/departmente-details"
+import DepartmenteDetails from "@/components/admin/container/departmente-details"
 import UpdatedDepartmentForm from "@/components/forms/admin/update/update-department"
 
 type TProps = {
@@ -65,7 +65,7 @@ export function DepartementColumns(users: TUser[], academicFaculty: AcademicFacu
                   if (res.error) {
                      toast.warning(res.message)
                   }
-                  toast.success(FLASH_MESSAGE.DEPARTMENT_NOT_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

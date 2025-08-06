@@ -97,6 +97,11 @@ export const DUMMY_DATA = {
         icon: React.createElement(UserPlus2),
       },
       {
+        href: `${ROUTES.DASHBOARD}/admin/student`,
+        label: 'Estudeantes',
+        icon: React.createElement(UserPlus2),
+      },
+      {
         href: `${ROUTES.DASHBOARD}/events`,
         label: 'Events',
         icon: React.createElement(Calendar),

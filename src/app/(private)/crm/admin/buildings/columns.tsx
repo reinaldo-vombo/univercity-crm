@@ -6,12 +6,12 @@ import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TBuiding } from "@/types/global"
 import { deleteBuilding } from "@/lib/actions/building"
 import UpdateBuildingFrom from "@/components/forms/admin/update/update-building"
+import { TBuilding } from "@/types/global"
 
 
-export function BuildingColumns(): ColumnDef<TBuiding>[] {
+export function BuildingColumns(): ColumnDef<TBuilding>[] {
 
    return [
       {
@@ -36,9 +36,9 @@ export function BuildingColumns(): ColumnDef<TBuiding>[] {
                try {
                   const res = await deleteBuilding(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.BUILDING_NOT_DELETED)
+                     toast.warning(res.message)
                   }
-                  toast.success(FLASH_MESSAGE.BUILDING_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

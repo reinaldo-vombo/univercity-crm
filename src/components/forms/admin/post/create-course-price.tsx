@@ -42,8 +42,6 @@ const CreateCoursePriceForm = ({ courses }: TProps) => {
    async function onSubmit(values: z.infer<typeof coursePriceSchema>) {
 
       const formData: any = new FormData();
-
-      // Convert numeric values to numbers before appending to FormData
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
       });
@@ -53,10 +51,10 @@ const CreateCoursePriceForm = ({ courses }: TProps) => {
             const response = await addNewCoursePrice(formData);
 
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.COURSE_PRICE_NOT_CREATED);
+               toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.COURSE_PRICE_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

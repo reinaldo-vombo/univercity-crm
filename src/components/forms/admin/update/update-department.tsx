@@ -60,10 +60,10 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
          try {
             const response = await updatedDepartemant(formData);
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.DEPARTMENT_NOT_UPDATED);
+               toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.DEPARTMENT_UPDATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

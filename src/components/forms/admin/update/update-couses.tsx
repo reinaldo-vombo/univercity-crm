@@ -47,10 +47,10 @@ const UpdateCourseForm = ({ values }: TProps) => {
          try {
             const response = await addNewCourse(formData);
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.COURSE_CREATED);
+               toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.COURSE_NOT_CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -88,22 +88,6 @@ const UpdateCourseForm = ({ values }: TProps) => {
                            {...field} />
                      </FormControl>
                      <FormDescription>Ex: FAC-ENG-2022</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="credits"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Valor</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Ex: 40.000"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

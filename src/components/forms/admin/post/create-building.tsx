@@ -36,10 +36,10 @@ const CreateBuildingFrom = () => {
          try {
             const response = await addNewBuilding(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.BUILDING_NOT_CREATED);
+               toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.BUILDING_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

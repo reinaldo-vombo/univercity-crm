@@ -66,7 +66,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                   avatar: result.data.avatar
                },
             })
-            toast.success(FLASH_MESSAGE.USER_UPDATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
          } catch (err) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(err);

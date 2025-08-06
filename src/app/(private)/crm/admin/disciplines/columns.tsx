@@ -35,10 +35,10 @@ export function DisciplineColumns(): ColumnDef<TDiscipline>[] {
                try {
                   const res = await deleteDiscipline(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.DISCIPLINE_NOT_DELETED);
+                     toast.warning(res.message);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.DISCIPLINE_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

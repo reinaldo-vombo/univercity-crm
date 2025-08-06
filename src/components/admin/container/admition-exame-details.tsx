@@ -1,9 +1,9 @@
 import { TAdmitionExame } from "@/types/global";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/helper";
 import Image from "next/image";
-import { Separator } from "../ui/separator"
-import { ScrollArea } from "../ui/scroll-area";
-import Modal from "../shared/Modal";
+import { Separator } from "../../ui/separator"
+import { ScrollArea } from "../../ui/scroll-area";
+import Modal from "../../shared/Modal";
 import { Eye } from "lucide-react";
 import config from '@/config/env'
 
@@ -19,10 +19,10 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
       <div className="space-y-4">
          <ul className="space-y-4">
             <li>Nome do aplicante: <b>{applicantName}</b></li>
-            <li>Número de inscrição: <b>1111</b></li>
+            <li>Número de inscrição: <b># 1111</b></li>
             <li>Número do telefone: <b>9251-1111</b></li>
             <li>Data do exame: <b>{formatDate(exameDate, 'DD/MM/YYYY')}</b></li>
-            <li>Fase do exame: <b>{fase}</b></li>
+            <li>Fase do exame: <b>{fase.ordem}</b></li>
             <li>Resultado do exame: <b>{exameResults}</b></li>
             <li>Valor Pago: <b>{formatCurrency(payment)}</b></li>
             <li>Estado do pagamento: <b>{aprovePayment ? 'provado' : 'Nao provado'}</b></li>

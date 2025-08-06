@@ -54,10 +54,10 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
          try {
             const response = await addNewDepartemant(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.DEPARTMENT_NOT_CREATED);
+               toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

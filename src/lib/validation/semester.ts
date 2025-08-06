@@ -18,19 +18,19 @@ export const semesterSchema = z.object({
   }),
 });
 export const updateSemesterSchema = z.object({
-  body: z
-    .object({
-      title: z.enum(['Primavera', 'Outono', 'Verão', 'Inverno']).optional(),
-      year: z.string().optional(),
-      code: z.enum(['01', '02', '03']).optional(),
-      startMonth: z.enum(months).optional(),
-      endMonth: z.enum(months).optional(),
-    })
-    .refine(
-      (data) => (data.title && data.code) || (!data.title && !data.code),
-      {
-        message: 'Title and code must be provided together',
-        path: ['title', 'code'],
-      }
-    ),
+  id: z.string(),
+  title: z.string({
+    required_error: 'Titulo é obrigatorio',
+  }),
+  year: z.string({
+    required_error: 'Ano corrente é obrigatorio',
+  }),
+  isCurrent: z.boolean(),
+  code: z.string(),
+  startMonth: z.string({
+    required_error: 'Mês inicial é obrigatorio',
+  }),
+  endMonth: z.string({
+    required_error: 'Mês de encerramento é obrigatorio',
+  }),
 });

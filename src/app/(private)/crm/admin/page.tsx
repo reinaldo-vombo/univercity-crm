@@ -1,4 +1,4 @@
-import { SectionCards } from "@/components/admin/section-card";
+import { SectionCards } from "@/components/admin/container/section-card";
 
 export default function AdminDashboard() {
    return (

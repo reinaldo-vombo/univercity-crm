@@ -44,7 +44,7 @@ const CreateUser = () => {
                toast.error(result.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.USER_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (err) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

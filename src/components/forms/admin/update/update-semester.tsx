@@ -17,9 +17,8 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/services/error-handler"
-import { addNewAcademicFaculty } from "@/lib/actions/academic-faculty"
 import { TSemester } from "@/types/global"
-import { semesterSchema } from "@/lib/validation/semester"
+import { updateSemesterSchema } from "@/lib/validation/semester"
 import { updatedSemester } from "@/lib/actions/semester"
 type Props = {
    values: TSemester
@@ -28,19 +27,20 @@ type Props = {
 const UpdateSemesterForm = ({ values }: Props) => {
    const { id, title, code, year, startMonth, endMonth, isCurrent } = values
 
-   const form = useForm<z.infer<typeof semesterSchema>>({
-      resolver: zodResolver(semesterSchema),
+   const form = useForm<z.infer<typeof updateSemesterSchema>>({
+      resolver: zodResolver(updateSemesterSchema),
       defaultValues: {
-         // title: title,
-         // code: code,
-         // year: year,
-         // startMonth: startMonth,
-         // endMonth: endMonth,
-         // isCurrent: isCurrent,
+         id,
+         title: title,
+         code: code,
+         year: year,
+         startMonth: startMonth,
+         endMonth: endMonth,
+         isCurrent: isCurrent,
       }
    })
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof semesterSchema>) {
+   async function onSubmit(values: z.infer<typeof updateSemesterSchema>) {
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
@@ -50,13 +50,13 @@ const UpdateSemesterForm = ({ values }: Props) => {
             const response = await updatedSemester(formData);
 
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.FACULTY_NOT_CREATED);
+               toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.FACULTY_CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
-            toast.error("Network error. Please try again.");
+            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             handleApiError(error);
          }
       });

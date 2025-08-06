@@ -52,10 +52,10 @@ const UpdateRoomForm = ({ buildings, values }: TProps) => {
          try {
             const response = await updateRoom(formData);
             if (response.error) {
-               toast.error(FLASH_MESSAGE.ROOM_NOT_UPDATED);
+               toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.ROOM_UPDATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

@@ -19,6 +19,8 @@ import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { updateFacultySchema } from "@/lib/validation/faculty"
 import { updatedFaculty } from "@/lib/actions/faculty"
+import { DUMMY_DATA } from "@/constants/mock-data"
+import Uploader from "@/components/shared/file-upload/uploader"
 
 type TPros = {
    defaultValues: TFaculty
@@ -48,8 +50,7 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
          email: defaultValues.email,
          profileImage: defaultValues.profileImage,
          designation: defaultValues.designation,
-         facultyId: defaultValues.facultyId,
-         shift: "MORNING",
+         shift: defaultValues.shift || "MORNING",
          academicDepartmentId: defaultValues.academicDepartmentId,
          academicFacultyId: defaultValues.academicFacultyId,
       }
@@ -67,7 +68,7 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
                toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -83,70 +84,162 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
-            <FormField
-               control={form.control}
-               name="firstName"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Primero nome</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="EX: Paulo"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="middleName"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Nome do meio</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="EX: Manuel Dos Santos"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="lastName"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Último nome</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="EX: Cardoso"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="gender"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Último nome</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="EX: Cardoso"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+            <div className="">
+               <FormField
+                  control={form.control}
+                  name="profileImage"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Foto do professor</FormLabel>
+                        <FormControl>
+                           <Uploader field={field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <div className="flex items-center gap-2">
+               <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Primero nome</FormLabel>
+                        <FormControl>
+                           <Input
+                              placeholder="EX: Paulo"
+                              {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="middleName"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Nome do meio</FormLabel>
+                        <FormControl>
+                           <Input
+                              placeholder="EX: Manuel Dos Santos"
+                              {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <div className="flex items-center gap-2">
+               <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Último nome</FormLabel>
+                        <FormControl>
+                           <Input
+                              placeholder="EX: Cardoso"
+                              {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="gender"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Génro</FormLabel>
+                        <FormControl className="w-full">
+                           <Selector
+                              placeholder="Selecione o génro"
+                              className="w-full"
+                              formField={field}
+                              options={DUMMY_DATA.gender} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <div className="flex items-center gap-2">
+               <FormField
+                  control={form.control}
+                  name="contactNo"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Número de telefone</FormLabel>
+                        <FormControl>
+                           <Input
+                              placeholder="EX: (+244) 922 456 927"
+                              {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                           <Input
+                              placeholder="EX: exemplo@gmail.com"
+                              {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <div className="flex items-center gap-2">
+               <FormField
+                  control={form.control}
+                  name="designation"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Designação</FormLabel>
+                        <FormControl>
+                           <Input
+                              placeholder="EX: Professor"
+                              {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="shift"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl className="w-full">
+                           <Selector
+                              placeholder="Selecione o Turno"
+                              className="w-full"
+                              formField={field}
+                              options={DUMMY_DATA.shifts} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
             <FormField
                control={form.control}
                name="academicDepartmentId"

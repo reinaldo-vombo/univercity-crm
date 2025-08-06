@@ -17,10 +17,11 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TCourse, TSemester, TStudent } from "@/types/global"
 import Selector from "@/components/shared/selector"
-import { addNewFaculty } from "@/lib/actions/faculty"
+import { updatedStudent } from "@/lib/actions/student"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { updateStudentSchema } from "@/lib/validation/student"
 import Uploader from "@/components/shared/file-upload/uploader"
+import { Switch } from "@/components/ui/switch"
 
 type TProps = {
    academicSemester: TSemester[],
@@ -28,7 +29,7 @@ type TProps = {
    defaultValue: TStudent
 }
 
-const UpdatedStudentFrom = ({ academicSemester, courses }: TProps) => {
+const UpdatedStudentFrom = ({ academicSemester, courses, defaultValue }: TProps) => {
 
    const semester = academicSemester.map((semester) => ({
       id: semester.id,
@@ -44,16 +45,18 @@ const UpdatedStudentFrom = ({ academicSemester, courses }: TProps) => {
    const form = useForm<z.infer<typeof updateStudentSchema>>({
       resolver: zodResolver(updateStudentSchema),
       defaultValues: {
-         firstName: "",
-         middleName: "",
-         lastName: "",
-         contactNo: "",
-         gender: "",
-         email: "",
+         id: defaultValue.id,
+         firstName: defaultValue.firstName,
+         middleName: defaultValue.middleName,
+         lastName: defaultValue.lastName,
+         contactNo: defaultValue.contactNo,
+         isWoker: defaultValue.isWoker,
+         studentType: defaultValue.studentType,
+         email: defaultValue.email,
          profileImage: "",
-         shift: "MORNING",
-         academicSemesterId: "",
-         CourseId: ""
+         shift: defaultValue.shift,
+         academicSemesterId: '',
+         CourseId: ''
       }
    })
 
@@ -65,12 +68,12 @@ const UpdatedStudentFrom = ({ academicSemester, courses }: TProps) => {
       });
       startTransition(async () => {
          try {
-            const response = await addNewFaculty(formData);
+            const response = await updatedStudent(formData);
             if (response.error) {
                toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -190,16 +193,16 @@ const UpdatedStudentFrom = ({ academicSemester, courses }: TProps) => {
                />
                <FormField
                   control={form.control}
-                  name="gender"
+                  name="isWoker"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel>Género</FormLabel>
-                        <FormControl className="w-full">
-                           <Selector
-                              placeholder="Selecione o género"
-                              className="w-full"
-                              formField={field}
-                              options={DUMMY_DATA.gender} />
+                        <FormLabel id="isWorker">Tipo de estudante</FormLabel>
+                        <FormControl>
+                           <Switch
+                              checked={field.value}
+                              onChange={field.onChange}
+                              id="isWorker"
+                           />
                         </FormControl>
                         <FormDescription></FormDescription>
                         <FormMessage />

@@ -42,10 +42,10 @@ const UpadateAcademicFaculty = ({ title }: TProps) => {
             const response = await updateAcademicFaculty(formData);
 
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.ACADEMIC_FACULTY_NOT_CREATED);
+               toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.ACADEMIC_FACULTY_CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

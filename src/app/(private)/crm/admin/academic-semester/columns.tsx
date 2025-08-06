@@ -62,10 +62,10 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
                try {
                   const res = await deleteSemester(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.SEMESTER_NOT_CREATED);
+                     toast.warning(res.message);
                      return;
                   }
-                  toast.success(FLASH_MESSAGE.SEMESTER_CREATED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

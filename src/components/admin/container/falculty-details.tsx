@@ -1,24 +1,24 @@
 
-import Avatar from "../shared/avatar";
-import { Separator } from "../ui/separator";
+import Avatar from "../../shared/avatar";
+import { Separator } from "../../ui/separator";
 
-type TProps = {
-   data: {
-      firstName: string;
-      middleName: string | null;
-      facultyId: string;
-      lastName: string;
-      contactNo: string | null;
-      email: string | null;
-      gender: string;
-      profileImage: string;
-      shift: string;
-      designation: string;
-      academicDepartment: string;
-   };
-}
+// type TProps = {
+//    data: {
+//       firstName: string;
+//       middleName: string | null;
+//       facultyId: string;
+//       lastName: string;
+//       contactNo: string | null;
+//       email: string | null;
+//       gender: string;
+//       profileImage: string;
+//       shift: string;
+//       designation: string;
+//       academicDepartment: string;
+//    };
+// }
 
-const FalcultyDetails = ({ data }: TProps) => {
+const FalcultyDetails = ({ data }: any) => {
    const { firstName, middleName, lastName, contactNo, facultyId, email, gender, profileImage, shift, designation, academicDepartment } = data;
    const name = `${firstName} ${lastName}`;
    console.log(data);

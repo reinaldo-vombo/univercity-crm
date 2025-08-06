@@ -17,10 +17,10 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TCourse, TSemester } from "@/types/global"
 import Selector from "@/components/shared/selector"
-import { addNewFaculty } from "@/lib/actions/faculty"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { studentSchema } from "@/lib/validation/student"
 import Uploader from "@/components/shared/file-upload/uploader"
+import { addNewStudent } from "@/lib/actions/student"
 
 type TProps = {
    academicSemester: TSemester[],
@@ -64,12 +64,12 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
       });
       startTransition(async () => {
          try {
-            const response = await addNewFaculty(formData);
+            const response = await addNewStudent(formData);
             if (response.error) {
                toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.DETEPARTMENT_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -85,28 +85,26 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-6">
-            <div className="">
-               <FormField
-                  control={form.control}
-                  name="profileImage"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Foto do aluno</FormLabel>
-                        <FormControl>
-                           <Uploader field={field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-            </div>
+            <FormField
+               control={form.control}
+               name="profileImage"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Foto do aluno</FormLabel>
+                     <FormControl className="w-full place-content-center">
+                        <Uploader field={field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
             <div className="flex items-center gap-2">
                <FormField
                   control={form.control}
                   name="firstName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Primero nome</FormLabel>
                         <FormControl>
                            <Input
@@ -122,7 +120,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   control={form.control}
                   name="middleName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Nome do meio</FormLabel>
                         <FormControl>
                            <Input
@@ -140,7 +138,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   control={form.control}
                   name="lastName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Último nome</FormLabel>
                         <FormControl>
                            <Input
@@ -156,7 +154,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                            <Input
@@ -175,7 +173,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   control={form.control}
                   name="contactNo"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Telefone</FormLabel>
                         <FormControl>
                            <Input
@@ -191,9 +189,9 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   control={form.control}
                   name="gender"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Género</FormLabel>
-                        <FormControl className="w-full">
+                        <FormControl>
                            <Selector
                               placeholder="Selecione o género"
                               className="w-full"
@@ -207,22 +205,6 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                />
             </div>
             <div className="flex items-center gap-2">
-               <FormField
-                  control={form.control}
-                  name="shift"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Designação</FormLabel>
-                        <FormControl>
-                           <Input
-                              placeholder="EX: Professor | Coordenador de Departamento"
-                              {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
                <FormField
                   control={form.control}
                   name="shift"

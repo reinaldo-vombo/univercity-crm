@@ -37,9 +37,9 @@ export function RoomColumns(buldings: TBuilding[]): ColumnDef<TRoom>[] {
                try {
                   const res = await deleteRoom(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.COURSE_NOT_DELETED)
+                     toast.warning(res.message)
                   }
-                  toast.success(FLASH_MESSAGE.COURSE_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

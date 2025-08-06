@@ -105,12 +105,20 @@ export type TAdmitionExame = {
   applicantName: string;
   paymentRecipt: string;
   exameDate: Date;
-  fase: number;
   document: string;
   paymentAmoute: number | null;
   aprovePayment: boolean | null | undefined;
   exameResults: number | null | undefined;
   passed: boolean | null;
+  fase: {
+    name: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    startDate: Date;
+    endDate: Date;
+    ordem: number;
+  };
 };
 
 export type TDepartemant = {
@@ -145,12 +153,12 @@ export type TStudent = {
   firstName: string;
   studentId: string;
   studentType: string;
-  middleName: string | null;
+  middleName: string;
   lastName: string;
   profileImage: string | null;
-  email: string | null;
-  contactNo: string | null;
-  shift: string;
+  email: string;
+  contactNo: string;
+  shift: 'MORNING' | 'AFTERNOON' | 'EVENING';
   gender: string;
   isWoker: boolean;
   yearLevel: string;
@@ -166,12 +174,12 @@ export type TFaculty = {
   firstName: string;
   middleName: string | null;
   lastName: string;
-  email: string | null;
-  contactNo: string | null;
+  email: string;
+  contactNo: string;
   profileImage: string;
   designation: string;
   gender: string;
-  shift: string;
+  shift: 'MORNING' | 'AFTERNOON' | 'EVENING';
   password: string;
   academicDepartment: {
     title: string;

@@ -18,6 +18,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateDisciplineSchema } from "@/lib/validation/discipline"
 import { updateDiscipline } from "@/lib/actions/discipline"
 import { TDiscipline } from "@/types/global"
+import { generateSlug } from "@/lib/helper"
 type TProps = {
    values: TDiscipline
 }
@@ -50,11 +51,11 @@ const UpdateDisciplineForm = ({ values }: TProps) => {
             const response = await updateDiscipline(formData);
 
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.DISCIPLINE_NOT_UPDATED);
+               toast.warning(response.message);
                return;
             }
 
-            toast.success(FLASH_MESSAGE.DISCIPLINE_UPDATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -76,7 +77,12 @@ const UpdateDisciplineForm = ({ values }: TProps) => {
                      <FormControl>
                         <Input
                            placeholder="Ex: Matematica, Eletronica"
-                           {...field} />
+                           {...field}
+                           onChange={(e) => {
+                              field.onChange(e);
+                              form.setValue('code', generateSlug(e.target.value))
+                           }}
+                        />
                      </FormControl>
                      <FormDescription>Nome da disciplina</FormDescription>
                      <FormMessage />

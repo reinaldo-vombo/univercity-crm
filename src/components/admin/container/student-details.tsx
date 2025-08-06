@@ -9,12 +9,12 @@ type TProps = {
 
 const StudentDetails = ({ data }: TProps) => {
    const { firstName, middleName, lastName, contactNo, email, gender, profileImage, shift, isActive, studentType, studentId, yearLevel, isWoker, biFile, gradeDeclarationFile } = data;
-   const name = `${firstName} ${middleName} ${lastName}`;
+   const fullName = `${firstName} ${middleName} ${lastName}`;
    return (
       <div>
          <div className="flex flex-col items-center justify-center gap-3">
-            <Avatar name={name} photo={profileImage || ''} />
-            <h2>{firstName} {middleName} {lastName}</h2>
+            <Avatar name={fullName} photo={profileImage || '/default-img-1.jpeg'} />
+            <h2>{fullName}</h2>
             <Separator />
          </div>
          <div className="space-y-4">

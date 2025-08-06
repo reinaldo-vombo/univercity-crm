@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { TUser } from '@/types/global';
 import { getServerSession } from 'next-auth';
-import { authOptions } from './auth/config';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { authOptions } from '@/config/auth';
 
 export type ActionState = {
   error?: string;

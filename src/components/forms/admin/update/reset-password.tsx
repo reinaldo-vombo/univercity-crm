@@ -1,7 +1,7 @@
 "use client"
 
 import * as z from "zod"
-import { toast } from "sonner"
+// import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -28,7 +28,8 @@ export default function AdminResetPassword() {
    })
    async function onSubmit(values: z.infer<typeof resetPasswordSchema>) {
       const { token } = values;
-      toast.success(token)
+      console.log(token);
+
    }
 
    return (

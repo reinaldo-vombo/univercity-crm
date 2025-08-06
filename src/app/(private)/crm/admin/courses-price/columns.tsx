@@ -40,9 +40,9 @@ export function CoursesPriceColumns(course: TCourse[]): ColumnDef<TCoursePrice>[
                try {
                   const res = await deleteCoursePrice(id);
                   if (res.error) {
-                     toast.warning(FLASH_MESSAGE.COURSE_PRICE_NOT_DELETED)
+                     toast.warning(res.message)
                   }
-                  toast.success(FLASH_MESSAGE.COURSE_PRICE_DELETED);
+                  toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
                   toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

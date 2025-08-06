@@ -47,26 +47,17 @@ const CreateCourseForm = ({ departments }: TProps) => {
    async function onSubmit(values: z.infer<typeof courseSchema>) {
 
       const formData: any = new FormData();
-
-      // Convert numeric values to numbers before appending to FormData
       Object.entries(values).forEach(([key, value]) => {
-         if (typeof value === 'number') {
-            formData.append(key, value.toString()); // Convert number to string, but treat as number
-         } else {
-            formData.append(key, value); // For other types, append as is
-         }
+         formData.append(key, value);
       });
-
       startTransition(async () => {
          try {
             const response = await addNewCourse(formData);
-            console.log('error', response);
-
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.COURSE_NOT_CREATED);
+               toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.COURSE_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

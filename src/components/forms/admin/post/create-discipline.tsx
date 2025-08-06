@@ -17,6 +17,7 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { disciplineSchema } from "@/lib/validation/discipline"
 import { addNewDiscipline } from "@/lib/actions/discipline"
+import { generateSlug } from "@/lib/helper"
 
 const CreateDisciplineForm = () => {
 
@@ -45,12 +46,12 @@ const CreateDisciplineForm = () => {
             const response = await addNewDiscipline(formData);
 
             if (response.error) {
-               toast.warning(FLASH_MESSAGE.DISCIPLINE_NOT_CREATED);
+               toast.warning(response.message);
                return;
             }
             console.log('response erro', response.error);
 
-            toast.success(FLASH_MESSAGE.DISCIPLINE_CREATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -72,7 +73,12 @@ const CreateDisciplineForm = () => {
                      <FormControl>
                         <Input
                            placeholder="Ex: Matematica, Eletronica"
-                           {...field} />
+                           {...field}
+                           onChange={(e) => {
+                              field.onChange(e);
+                              form.setValue('code', generateSlug(e.target.value))
+                           }}
+                        />
                      </FormControl>
                      <FormDescription>Nome da disciplina</FormDescription>
                      <FormMessage />

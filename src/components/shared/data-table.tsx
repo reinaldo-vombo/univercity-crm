@@ -111,7 +111,7 @@ export function DataTable<TValue>({
                </DropdownMenu>
                {actionForm && (
                   <SheetModal
-                     triggerStyle="border h-[37px] rounded-md cursor-pointer"
+                     triggerStyle="border h-[37px] rounded-md cursor-pointer hover:bg-primary"
                      side="right"
                      className={className}
                      trigger={<Plus />}
