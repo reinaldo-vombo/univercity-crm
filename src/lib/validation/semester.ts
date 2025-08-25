@@ -3,12 +3,12 @@ import * as z from 'zod';
 
 export const semesterSchema = z.object({
   title: z.enum(['Primavera', 'Outono', 'Verão', 'Inverno'], {
-    required_error: 'Titulo é obrigatorio',
+    required_error: 'Temorada é obrigatorio',
   }),
   year: z.string({
     required_error: 'Ano corrente é obrigatorio',
   }),
-  isCurrent: z.boolean(),
+  isCurrent: z.coerce.boolean(),
   code: z.enum(['01', '02', '03']),
   startMonth: z.enum(months, {
     required_error: 'Mês inicial é obrigatorio',
@@ -25,7 +25,7 @@ export const updateSemesterSchema = z.object({
   year: z.string({
     required_error: 'Ano corrente é obrigatorio',
   }),
-  isCurrent: z.boolean(),
+  isCurrent: z.coerce.boolean(),
   code: z.string(),
   startMonth: z.string({
     required_error: 'Mês inicial é obrigatorio',

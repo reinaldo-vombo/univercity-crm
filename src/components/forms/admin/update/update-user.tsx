@@ -19,7 +19,7 @@ import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { updatedUser } from "@/lib/actions/users"
+import { updatedUser } from "@/actions/users"
 import Uploader from "@/components/shared/file-upload/uploader"
 import { useSession } from "next-auth/react"
 

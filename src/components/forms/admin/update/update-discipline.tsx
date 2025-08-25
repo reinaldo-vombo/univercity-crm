@@ -16,7 +16,7 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateDisciplineSchema } from "@/lib/validation/discipline"
-import { updateDiscipline } from "@/lib/actions/discipline"
+import { updateDiscipline } from "@/actions/discipline"
 import { TDiscipline } from "@/types/global"
 import { generateSlug } from "@/lib/helper"
 type TProps = {

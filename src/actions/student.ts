@@ -2,29 +2,27 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { TSemester } from '../../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import { semesterSchema } from '../validation/semester';
+import { TStudent } from '../types/global';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { ActionResult } from '../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../../types/api-error';
+import { studentSchema, updateStudentSchema } from '../lib/validation/student';
 
-export const addNewSemester = validatedActionWithUser(
-  semesterSchema,
-  async (data): Promise<ActionResult<TSemester>> => {
-    console.log('data', data);
-
+export const addNewStudent = validatedActionWithUser(
+  studentSchema,
+  async (data): Promise<ActionResult<TStudent>> => {
     try {
-      const semester = await serverFetch<TSemester>('/academic-semester', {
+      const Students = await serverFetch<TStudent>('/student', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('semester');
+      revalidateTag('student');
 
       return {
         error: false,
-        data: semester,
+        data: Students,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -44,23 +42,21 @@ export const addNewSemester = validatedActionWithUser(
     }
   }
 );
-export const updatedSemester = validatedActionWithUser(
-  semesterSchema,
-  async (data, _, user): Promise<ActionResult<TSemester>> => {
+export const updatedStudent = validatedActionWithUser(
+  updateStudentSchema,
+  async (data): Promise<ActionResult<TStudent>> => {
     try {
-      const semester = await serverFetch<TSemester>(
-        `/academic-semester/${user.id}`,
-        {
-          method: 'PATCH',
-          body: data,
-        }
-      );
+      const { id, ...updateData } = data;
+      const departements = await serverFetch<TStudent>(`/student/${id}`, {
+        method: 'PATCH',
+        body: updateData,
+      });
 
-      revalidateTag('semester');
+      revalidateTag('student');
 
       return {
         error: false,
-        data: semester,
+        data: departements,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -80,15 +76,16 @@ export const updatedSemester = validatedActionWithUser(
     }
   }
 );
-export const deleteSemester = async (
+
+export const deleteStudent = async (
   id: string
-): Promise<ActionResult<TSemester>> => {
+): Promise<ActionResult<TStudent>> => {
   try {
-    const data = await serverFetch<TSemester>(`/academic-semester/${id}`, {
+    const data = await serverFetch<TStudent>(`/student/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('semester');
+    revalidateTag('student');
     return {
       error: false,
       data,

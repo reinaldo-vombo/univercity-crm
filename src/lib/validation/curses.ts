@@ -34,7 +34,7 @@ export const updateCourseSchema = z.object({
     required_error: 'Creditos é obrigatorio',
   }),
   yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']).optional(),
-  shift: z.enum(['Morning', 'Afternoon', 'Evening']).optional(),
+  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']).optional(),
 });
 export const assignRemoveFacultiesSchema = z.object({
   id: z.string(),

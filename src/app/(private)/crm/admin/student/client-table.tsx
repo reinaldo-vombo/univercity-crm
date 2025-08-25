@@ -18,6 +18,9 @@ const herader = {
    contactNo: "Contact",
    gender: "Género",
    shift: "Turno",
+   isWoker: "Trabalhador",
+   yearLevel: "Ano curricular",
+   isActive: "Satutus",
 }
 
 export function StudentTable({ students, academicSemester, courses }: Props) {
@@ -27,7 +30,7 @@ export function StudentTable({ students, academicSemester, courses }: Props) {
    return <DataTable
       actionForm={<CreateStudentFrom academicSemester={academicSemester} courses={courses} />}
       columns={columns}
-      className="sm:max-w-md"
+      className="sm:max-w-[38rem]"
       fileHerderes={herader}
       modalTitle="Cadastrar aluno"
       fileName="alunos"

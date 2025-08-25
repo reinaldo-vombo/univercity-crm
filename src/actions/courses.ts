@@ -3,15 +3,15 @@
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUser } from '../helper/action-helper';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../../types/api-error';
+import { ActionResult } from '../types/api-error';
 import {
   assignRemoveFacultiesSchema,
   courseSchema,
   updateCourseSchema,
-} from '../validation/curses';
-import { TCourse } from '../../types/global';
+} from '../lib/validation/curses';
+import { TCourse } from '../types/global';
 
 export const addNewCourse = validatedActionWithUser(
   courseSchema,

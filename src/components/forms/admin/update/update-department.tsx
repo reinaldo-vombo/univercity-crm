@@ -17,7 +17,7 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateDepartmentSchema } from "@/lib/validation/departement"
 import { TAcademicFaculty, TUser } from "@/types/global"
-import { updatedDepartemant } from "@/lib/actions/departement"
+import { updatedDepartemant } from "@/actions/departement"
 import Selector from "@/components/shared/selector"
 type TPros = {
    users: TUser[]
@@ -80,10 +80,10 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
                name="title"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do curso</FormLabel>
+                     <FormLabel>Nome do departamento</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Nome"
+                           placeholder="EX: Engenharia Civil, Ciência da Computação..."
                            {...field} />
                      </FormControl>
                      <FormDescription></FormDescription>
@@ -96,11 +96,11 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
                name="departmentHeadId"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Utilizadores</FormLabel>
+                     <FormLabel>Directores</FormLabel>
                      <FormControl className="w-full">
                         <Selector
                            options={admins}
-                           placeholder="Selecione um admin"
+                           placeholder="Selecione um Membro"
                            formField={field}
                            className="w-full"
                         />
@@ -115,11 +115,11 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
                name="academicFacultyId"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Facultys</FormLabel>
+                     <FormLabel>Unidade Acadêmica</FormLabel>
                      <FormControl className="w-full">
                         <Selector
                            options={academicFacultys}
-                           placeholder="Unidade Acadêmica"
+                           placeholder="EX: Falculdade Engiaria"
                            formField={field}
                            className="w-full"
                         />

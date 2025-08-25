@@ -18,7 +18,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { roomSchema } from "@/lib/validation/building"
 import { TBuilding } from "@/types/global"
 import Selector from "@/components/shared/selector"
-import { addNewRoom } from "@/lib/actions/room"
+import { addNewRoom } from "@/actions/room"
 
 type TProps = {
    buildings: TBuilding[]

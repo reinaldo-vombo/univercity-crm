@@ -2,38 +2,41 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUser } from '../helper/action-helper';
+import { TFaculty } from '../types/global';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { ActionResult } from '../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../../types/api-error';
-import { TDiscipline } from '../../types/global';
-import {
-  disciplineSchema,
-  updateDisciplineSchema,
-} from '../validation/discipline';
+import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { facultySchema, updateFacultySchema } from '../lib/validation/faculty';
+import { saveFile } from '../lib/helper/uploade';
 
-export const addNewDiscipline = validatedActionWithUser(
-  disciplineSchema,
-  async (data): Promise<ActionResult<TDiscipline>> => {
+export const addNewFaculty = validatedActionWithUser(
+  facultySchema,
+  async (data): Promise<ActionResult<TFaculty>> => {
     try {
-      const curses = await serverFetch<TDiscipline>('/discipline', {
+      let avatarUrl: any = data.profileImage;
+      if (data.profileImage instanceof File) {
+        avatarUrl = await saveFile(data.profileImage, 'facultys');
+      }
+      data = { ...data, profileImage: avatarUrl };
+      const facultys = await serverFetch<TFaculty>('/faculty', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('discipline');
+      revalidateTag('faculty');
 
       return {
         error: false,
-        data: curses,
+        data: facultys,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
-        console.error(err.message);
-
         return {
           error: true,
           message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
         };
       }
 
@@ -45,27 +48,29 @@ export const addNewDiscipline = validatedActionWithUser(
     }
   }
 );
-export const updateDiscipline = validatedActionWithUser(
-  updateDisciplineSchema,
-  async (data): Promise<ActionResult<TDiscipline>> => {
-    const { id, ...updateData } = data;
+export const updatedFaculty = validatedActionWithUser(
+  updateFacultySchema,
+  async (data): Promise<ActionResult<TFaculty>> => {
     try {
-      const curses = await serverFetch<TDiscipline>(`/discipline/${id}`, {
+      const { id, ...updateData } = data;
+      const departements = await serverFetch<TFaculty>(`/faculty/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
 
-      revalidateTag('discipline');
+      revalidateTag('faculty');
 
       return {
         error: false,
-        data: curses,
+        data: departements,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
         return {
           error: true,
           message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
         };
       }
 
@@ -78,15 +83,15 @@ export const updateDiscipline = validatedActionWithUser(
   }
 );
 
-export const deleteDiscipline = async (
+export const deleteFaculty = async (
   id: string
-): Promise<ActionResult<TDiscipline>> => {
+): Promise<ActionResult<TFaculty>> => {
   try {
-    const data = await serverFetch<TDiscipline>(`/discipline/${id}`, {
+    const data = await serverFetch<TFaculty>(`/faculty/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('discipline');
+    revalidateTag('faculty');
     return {
       error: false,
       data,

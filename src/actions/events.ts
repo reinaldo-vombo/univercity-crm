@@ -2,35 +2,35 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { TStudent } from '../../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import { ActionResult } from '../../types/api-error';
-import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { studentSchema, updateStudentSchema } from '../validation/student';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { ApiResponseError } from '@/services/api-error';
+import { ActionResult } from '../types/api-error';
+import { courseSchema, updateCourseSchema } from '../lib/validation/curses';
+import { TDiscipline } from '../types/global';
 
-export const addNewStudent = validatedActionWithUser(
-  studentSchema,
-  async (data): Promise<ActionResult<TStudent>> => {
+export const addNewEvent = validatedActionWithUser(
+  courseSchema,
+  async (data): Promise<ActionResult<TDiscipline>> => {
     try {
-      const Students = await serverFetch<TStudent>('/student', {
+      const curses = await serverFetch<TDiscipline>('/events', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('student');
+      revalidateTag('events');
 
       return {
         error: false,
-        data: Students,
+        data: curses,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
+        console.error(err.message);
+
         return {
           error: true,
           message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
         };
       }
 
@@ -42,29 +42,27 @@ export const addNewStudent = validatedActionWithUser(
     }
   }
 );
-export const updatedStudent = validatedActionWithUser(
-  updateStudentSchema,
-  async (data): Promise<ActionResult<TStudent>> => {
+export const updateEvent = validatedActionWithUser(
+  updateCourseSchema,
+  async (data): Promise<ActionResult<TDiscipline>> => {
+    const { id, ...updateData } = data;
     try {
-      const { id, ...updateData } = data;
-      const departements = await serverFetch<TStudent>(`/student/${id}`, {
+      const curses = await serverFetch<TDiscipline>(`/events/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
 
-      revalidateTag('student');
+      revalidateTag('events');
 
       return {
         error: false,
-        data: departements,
+        data: curses,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
         return {
           error: true,
           message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
         };
       }
 
@@ -77,15 +75,15 @@ export const updatedStudent = validatedActionWithUser(
   }
 );
 
-export const deleteStudent = async (
+export const deleteEvent = async (
   id: string
-): Promise<ActionResult<TStudent>> => {
+): Promise<ActionResult<TDiscipline>> => {
   try {
-    const data = await serverFetch<TStudent>(`/student/${id}`, {
+    const data = await serverFetch<TDiscipline>(`/events/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('student');
+    revalidateTag('events');
     return {
       error: false,
       data,

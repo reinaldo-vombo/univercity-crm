@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { addNewEvent } from "@/lib/actions/events"
+import { addNewEvent } from "@/actions/events"
 import { createEventSchema } from "@/lib/validation/events"
 
 const today = new Date()

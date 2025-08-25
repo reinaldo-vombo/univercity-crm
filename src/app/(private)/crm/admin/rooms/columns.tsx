@@ -7,7 +7,7 @@ import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TBuilding, TRoom } from "@/types/global"
-import { deleteRoom } from "@/lib/actions/room"
+import { deleteRoom } from "@/actions/room"
 import UpdateRoomForm from "@/components/forms/admin/update/update-room"
 
 

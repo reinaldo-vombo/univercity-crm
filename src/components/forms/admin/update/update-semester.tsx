@@ -19,7 +19,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/services/error-handler"
 import { TSemester } from "@/types/global"
 import { updateSemesterSchema } from "@/lib/validation/semester"
-import { updatedSemester } from "@/lib/actions/semester"
+import { updatedSemester } from "@/actions/semester"
 type Props = {
    values: TSemester
 }

@@ -2,27 +2,30 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { TRoom } from '../../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import { roomSchema, updateRoomSchema } from '../validation/building';
+import { TBuilding } from '@/types/global';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  buildingSchema,
+  updateBuildingSchema,
+} from '../lib/validation/building';
 import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../../types/api-error';
+import { ActionResult } from '../types/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
-export const addNewRoom = validatedActionWithUser(
-  roomSchema,
-  async (data): Promise<ActionResult<TRoom>> => {
+export const addNewBuilding = validatedActionWithUser(
+  buildingSchema,
+  async (data): Promise<ActionResult<TBuilding>> => {
     try {
-      const room = await serverFetch<TRoom>('/room', {
+      const curses = await serverFetch<TBuilding>('/building', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('room');
+      revalidateTag('building');
 
       return {
         error: false,
-        data: room,
+        data: curses,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -42,21 +45,21 @@ export const addNewRoom = validatedActionWithUser(
     }
   }
 );
-export const updateRoom = validatedActionWithUser(
-  updateRoomSchema,
-  async (data): Promise<ActionResult<TRoom>> => {
-    const { id, ...body } = data;
+export const updateBuilding = validatedActionWithUser(
+  updateBuildingSchema,
+  async (data): Promise<ActionResult<TBuilding>> => {
+    const { id, title } = data;
     try {
-      const room = await serverFetch<TRoom>(`/room/${id}`, {
+      const building = await serverFetch<TBuilding>(`/building/${id}`, {
         method: 'PATCH',
-        body: body,
+        body: title,
       });
 
-      revalidateTag('room');
+      revalidateTag('building');
 
       return {
         error: false,
-        data: room,
+        data: building,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -76,13 +79,15 @@ export const updateRoom = validatedActionWithUser(
     }
   }
 );
-export const deleteRoom = async (id: string): Promise<ActionResult<TRoom>> => {
+export const deleteBuilding = async (
+  id: string
+): Promise<ActionResult<TBuilding>> => {
   try {
-    const data = await serverFetch<TRoom>(`/room/${id}`, {
+    const data = await serverFetch<TBuilding>(`/building/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('room');
+    revalidateTag('building');
     return {
       error: false,
       data,

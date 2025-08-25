@@ -10,13 +10,14 @@ type Props = {
    children: React.ReactNode
    lable?: string
    description?: string
+   showTitle?: boolean
 }
 
-const Card = ({ children, lable, description }: Props) => {
+const Card = ({ children, lable, description, showTitle = true }: Props) => {
    return (
       <CardBody>
          <CardHeader>
-            <CardTitle>{lable || 'card title'}</CardTitle>
+            {showTitle && <CardTitle>{lable || 'card title'}</CardTitle>}
             <CardDescription className="sr-only">{description || 'Card description'}</CardDescription>
          </CardHeader>
          <CardContent>

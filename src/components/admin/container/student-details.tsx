@@ -13,7 +13,7 @@ const StudentDetails = ({ data }: TProps) => {
    return (
       <div>
          <div className="flex flex-col items-center justify-center gap-3">
-            <Avatar name={fullName} photo={profileImage || '/default-img-1.jpeg'} />
+            <Avatar name={fullName} photo={profileImage || '/default.jpeg'} />
             <h2>{fullName}</h2>
             <Separator />
          </div>
@@ -38,7 +38,7 @@ const StudentDetails = ({ data }: TProps) => {
             </ul>
          </div>
          <div>
-            <span>Documentos</span>
+            <span>Documentos:</span>
             <div>
                <Image
                   src={biFile}

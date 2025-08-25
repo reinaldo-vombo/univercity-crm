@@ -1,18 +1,19 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Eye, Mail, Moon, Pen, Phone, Sun, Trash, User } from "lucide-react"
+import { Calendar, Eye, Mail, Moon, Pen, Phone, Sun, Trash, User } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TCourse, TSemester, TStudent } from "@/types/global"
 import Avatar from "@/components/shared/avatar"
-import { deleteFaculty } from "@/lib/actions/faculty"
+import { deleteFaculty } from "@/actions/faculty"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
 import StudentDetails from "@/components/admin/container/student-details"
 import UpdatedStudentFrom from "@/components/forms/admin/update/updated-student"
+import { formatDate } from "@/lib/helper"
 
 
 
@@ -67,7 +68,7 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
          header: "Status",
          cell: ({ row }) => (
             <Badge className={row.getValue("isActive") ? 'bg-green-500' : 'bg-red-500'}>
-               {row.getValue("gender")}
+               {row.getValue("isActive")}
             </Badge>
          ),
       },
@@ -107,7 +108,7 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
          header: "Telefone",
          cell: ({ row }) => (
             <div className="flex items-center gap-2">
-               <Phone className="h-4 w-4 text-green-500" />
+               <Phone className="h-4 w-4 text-blue-500" />
                <span>(+244) {row.getValue("contactNo")}</span>
             </div>
          ),
@@ -122,9 +123,20 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
             </div>
          ),
       },
+      {
+         accessorKey: "createdAt",
+         header: "Data de cadastro",
+         cell: ({ row }) => (
+            <div>
+               <Calendar className="h-4 w-4 text-yellow-500" />
+               <b className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</b>
+            </div>
+         ),
+      },
 
       {
          id: "actions",
+         header: 'Acção',
          cell: ({ row }) => {
             const student = row.original
 
@@ -156,7 +168,7 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     className="sm:max-w-md"
+                     className="sm:max-w-lg"
                      title="Atualização do aluno"
                      description='Formulario de atualização do aluno'>
                      <UpdatedStudentFrom academicSemester={academicSemester} courses={courses} defaultValue={student} />

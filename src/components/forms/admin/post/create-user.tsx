@@ -19,7 +19,7 @@ import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { addNewUser } from "@/lib/actions/users"
+import { addNewUser } from "@/actions/users"
 
 const CreateUser = () => {
    const [isPending, startTransition] = useTransition();

@@ -2,15 +2,15 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { validatedActionWithUser } from '../helper/action-helper';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../../types/api-error';
-import { TAcademicFaculty } from '../../types/global';
+import { ActionResult } from '../types/api-error';
+import { TAcademicFaculty } from '../types/global';
 import { ApiResponseError } from '@/services/api-error';
 import {
   academicFacultyacultySchema,
   updateAcademicFacultyacultySchema,
-} from '../validation/academicFaculty';
+} from '../lib/validation/academicFaculty';
 
 export const addNewAcademicFaculty = validatedActionWithUser(
   academicFacultyacultySchema,

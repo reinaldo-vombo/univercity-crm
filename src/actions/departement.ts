@@ -2,33 +2,33 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { TFaculty } from '../../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import { ActionResult } from '../../types/api-error';
+import { TDepartemant } from '../types/global';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  departmentSchema,
+  updateDepartmentSchema,
+} from '../lib/validation/departement';
+import { ActionResult } from '../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { facultySchema, updateFacultySchema } from '../validation/faculty';
-import { saveFile } from '../helper/uploade';
 
-export const addNewFaculty = validatedActionWithUser(
-  facultySchema,
-  async (data): Promise<ActionResult<TFaculty>> => {
+export const addNewDepartemant = validatedActionWithUser(
+  departmentSchema,
+  async (data): Promise<ActionResult<TDepartemant>> => {
     try {
-      let avatarUrl: any = data.profileImage;
-      if (data.profileImage instanceof File) {
-        avatarUrl = await saveFile(data.profileImage, 'facultys');
-      }
-      data = { ...data, profileImage: avatarUrl };
-      const facultys = await serverFetch<TFaculty>('/faculty', {
-        method: 'POST',
-        body: data,
-      });
+      const departements = await serverFetch<TDepartemant>(
+        '/academic-department',
+        {
+          method: 'POST',
+          body: data,
+        }
+      );
 
-      revalidateTag('faculty');
+      revalidateTag('departement');
 
       return {
         error: false,
-        data: facultys,
+        data: departements,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -48,17 +48,20 @@ export const addNewFaculty = validatedActionWithUser(
     }
   }
 );
-export const updatedFaculty = validatedActionWithUser(
-  updateFacultySchema,
-  async (data): Promise<ActionResult<TFaculty>> => {
+export const updatedDepartemant = validatedActionWithUser(
+  updateDepartmentSchema,
+  async (data): Promise<ActionResult<TDepartemant>> => {
     try {
       const { id, ...updateData } = data;
-      const departements = await serverFetch<TFaculty>(`/faculty/${id}`, {
-        method: 'PATCH',
-        body: updateData,
-      });
+      const departements = await serverFetch<TDepartemant>(
+        `/academic-department/${id}`,
+        {
+          method: 'PATCH',
+          body: updateData,
+        }
+      );
 
-      revalidateTag('faculty');
+      revalidateTag('departement');
 
       return {
         error: false,
@@ -83,15 +86,15 @@ export const updatedFaculty = validatedActionWithUser(
   }
 );
 
-export const deleteFaculty = async (
+export const deleteDepartment = async (
   id: string
-): Promise<ActionResult<TFaculty>> => {
+): Promise<ActionResult<TDepartemant>> => {
   try {
-    const data = await serverFetch<TFaculty>(`/faculty/${id}`, {
+    const data = await serverFetch<TDepartemant>(`/academic-department/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('faculty');
+    revalidateTag('departement');
     return {
       error: false,
       data,

@@ -20,7 +20,7 @@ import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { studentSchema } from "@/lib/validation/student"
 import Uploader from "@/components/shared/file-upload/uploader"
-import { addNewStudent } from "@/lib/actions/student"
+import { addNewStudent } from "@/actions/student"
 
 type TProps = {
    academicSemester: TSemester[],
@@ -40,6 +40,11 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
       label: couse.title,
       value: couse.id,
    }));
+   const academicDep = courses.map((couse) => ({
+      id: couse.id,
+      label: couse.academicDepartment.title,
+      value: couse.academicDepartmentId,
+   }));
    const form = useForm<z.infer<typeof studentSchema>>({
       resolver: zodResolver(studentSchema),
       defaultValues: {
@@ -52,6 +57,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
          profileImage: "",
          shift: "MORNING",
          academicSemesterId: "",
+         academicDepartmentId: "",
          CourseId: ""
       }
    })
@@ -89,7 +95,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                control={form.control}
                name="profileImage"
                render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                      <FormLabel>Foto do aluno</FormLabel>
                      <FormControl className="w-full place-content-center">
                         <Uploader field={field} />
@@ -209,7 +215,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   control={form.control}
                   name="shift"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Turno</FormLabel>
                         <FormControl>
                            <Selector
@@ -223,13 +229,31 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                      </FormItem>
                   )}
                />
+               <FormField
+                  control={form.control}
+                  name="academicDepartmentId"
+                  render={({ field }) => (
+                     <FormItem className="w-full">
+                        <FormLabel>Departamento</FormLabel>
+                        <FormControl>
+                           <Selector
+                              placeholder="Selecione o Departamento"
+                              className="w-full"
+                              formField={field}
+                              options={academicDep} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
             </div>
             <div className="flex items-center gap-2">
                <FormField
                   control={form.control}
                   name="CourseId"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Curso</FormLabel>
                         <FormControl>
                            <Selector
@@ -246,7 +270,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   control={form.control}
                   name="academicSemesterId"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-full">
                         <FormLabel>Semestre Acadêmico</FormLabel>
                         <FormControl>
                            <Selector
@@ -260,8 +284,36 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
                   )}
                />
             </div>
+            <FormField
+               control={form.control}
+               name="gradeDeclarationFile"
+               render={({ field }) => (
+                  <FormItem className="w-full">
+                     <FormLabel>Declaração de notas</FormLabel>
+                     <FormControl className="w-full place-content-center">
+                        <Uploader field={field} />
+                     </FormControl>
+                     <FormDescription>Anexe a o tua declaração de notas valida do ensino medio</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="biFile"
+               render={({ field }) => (
+                  <FormItem className="w-full">
+                     <FormLabel>Copia do bilhete</FormLabel>
+                     <FormControl className="w-full place-content-center">
+                        <Uploader field={field} />
+                     </FormControl>
+                     <FormDescription>Anexe a foto copia do seu bilhete colorida</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
             <SubmitBtn
-               label="Criar"
+               label="Registar"
                loading={isPending} />
          </form>
       </Form>

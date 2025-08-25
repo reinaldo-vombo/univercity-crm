@@ -18,14 +18,14 @@ export default async function ProfilePage() {
          <Card>
             <h1 className="text-2xl font-bold">Profile Page</h1>
             <div className="flex flex-col items-center justify-center h-full mt-4">
-               <div className='p-5 w-full mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6'>
+               <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
                   <div className="flex items-center justify-between">
                      <div className="flex gap-6 items-center">
                         <Avatar name={user?.name || ''} photo={user?.avatar || ''} className="mr-4 size-12" />
                         <div>
                            <h4 className="text-lg font-semibold">{user?.name || ''}</h4>
                            <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                              <p className="text-sm text-gray-500 dark:text-gray-400">
+                              <p className="text-sm ">
                                  {user?.role || ''}
                               </p>
                               <Separator orientation="vertical" />
@@ -45,25 +45,25 @@ export default async function ProfilePage() {
                      </div>
                   </div>
                </div>
-               <div className='p-5 w-full mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6'>
+               <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
                   <div>
-                     <p className='text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6'>Informações pessoais</p>
+                     <p className='text-lg font-semibold lg:mb-6'>Informações pessoais</p>
                   </div>
                   <div>
-                     <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Pimero Nome</p>
-                     <p className="text-sm font-medium text-gray-800 dark:text-white/90">{firstName}</p>
+                     <p className="mb-2 text-xs leading-normal">Pimero Nome</p>
+                     <b className="text-sm font-medium">{firstName}</b>
                   </div>
                   <div>
-                     <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Último Nome</p>
-                     <p className="text-sm font-medium text-gray-800 dark:text-white/90">{lastName}</p>
+                     <p className="mb-2 text-xs leading-normal">Último Nome</p>
+                     <b className="text-sm font-medium ">{lastName}</b>
                   </div>
                   <div>
-                     <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Email address</p>
-                     <p className="text-sm font-medium text-gray-800 dark:text-white/90">{user?.email}</p>
+                     <p className="mb-2 text-xs leading-normal ">Email address</p>
+                     <b className="text-sm font-medium ">{user?.email}</b>
                   </div>
                   <div>
-                     <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">Phone</p>
-                     <p className="text-sm font-medium text-gray-800 dark:text-white/90">(+244)</p>
+                     <p className="mb-2 text-xs leading-normal ">Phone</p>
+                     <b className="text-sm font-medium ">(+244)</b>
                   </div>
                </div>
             </div>

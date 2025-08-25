@@ -3,7 +3,9 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
 import { END_POINTS } from '@/constants/mock-data';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import config from '@/config/env';
+import { serverEnv } from '@/config/env';
+import { getSigleUser } from '@/lib/helper/db/querys';
+import { logUserActivitys } from '@/actions/users';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -13,7 +15,7 @@ export const authOptions: NextAuthOptions = {
   jwt: {
     maxAge: 7 * 24 * 60 * 60, // ✅ Add this to match token expiry
   },
-  secret: config.NEXTAUTH_SECRET,
+  secret: serverEnv.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: 'Sign in',
@@ -32,7 +34,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const baseUrl = config.API_URL;
+        const baseUrl = serverEnv.API_BASE_URL;
 
         let endpoint = '';
         let body: any = {};
@@ -88,6 +90,7 @@ export const authOptions: NextAuthOptions = {
 
           const json = await res.json();
           const data = json?.data;
+          await logUserActivitys(data.user.id);
 
           if (!data?.user || !data?.accessToken) {
             console.error('❌ Missing user or accessToken in response', data);
@@ -106,9 +109,16 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    jwt: ({ token, user, trigger, session }: any) => {
+    async jwt({ token, user, trigger, session }: any) {
       if (token.expiresAt && token.expiresAt < Math.floor(Date.now() / 1000)) {
         return {};
+      }
+      if (token.id) {
+        const dbUser = await getSigleUser(token.id);
+
+        if (!dbUser) {
+          return {};
+        }
       }
       if (trigger === 'update' && session?.user) {
         return {
@@ -137,7 +147,13 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    session: ({ session, token }: any) => {
+    session: ({ session, token }) => {
+      if (!token.id) {
+        return {
+          ...session,
+          user: undefined,
+        };
+      }
       return {
         ...session,
         user: {

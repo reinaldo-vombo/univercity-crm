@@ -16,7 +16,7 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { courseSchema } from "@/lib/validation/curses"
-import { addNewCourse } from "@/lib/actions/courses"
+import { addNewCourse } from "@/actions/courses"
 import { TDepartemant } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
@@ -24,6 +24,7 @@ import { DUMMY_DATA } from "@/constants/mock-data"
 type TProps = {
    departments: TDepartemant[]
 }
+
 const CreateCourseForm = ({ departments }: TProps) => {
    const departmentOptions = departments.map((department) => ({
       id: department.id,
@@ -148,8 +149,8 @@ const CreateCourseForm = ({ departments }: TProps) => {
                      <FormLabel>Turno</FormLabel>
                      <FormControl>
                         <Selector
-                           formField={field}
                            placeholder="EX: Manhã, Tarde, Noite"
+                           formField={field}
                            className="w-full"
                            options={DUMMY_DATA.shifts} />
                      </FormControl>

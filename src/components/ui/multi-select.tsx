@@ -28,6 +28,7 @@ import {
    CommandList,
    CommandSeparator,
 } from "@/components/ui/command";
+import Image from "next/image";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -70,6 +71,8 @@ interface MultiSelectProps
       value: string;
       /** Optional icon component to display alongside the option. */
       icon?: React.ComponentType<{ className?: string }>;
+      /** Optional image component to display alongside the option. */
+      image?: string;
    }[];
 
    /**
@@ -337,6 +340,14 @@ export const MultiSelect = React.forwardRef<
                                  </div>
                                  {option.icon && (
                                     <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                                 )}
+                                 {option.image && (
+                                    <Image
+                                       src={option.image}
+                                       className="mr-2 h-4 w-4 rounded-full text-muted-foreground"
+                                       width={20}
+                                       height={20}
+                                       alt="avatar" />
                                  )}
                                  <span>{option.label}</span>
                               </CommandItem>

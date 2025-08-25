@@ -1,14 +1,14 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Eye, Mail, Moon, Pen, Phone, Sun, Trash, User } from "lucide-react"
+import { Eye, Hash, Mail, Moon, Pen, Phone, Sun, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global"
 import Avatar from "@/components/shared/avatar"
-import { deleteFaculty } from "@/lib/actions/faculty"
+import { deleteFaculty } from "@/actions/faculty"
 import UpdateFacultyFrom from "@/components/forms/admin/update/update-falculty"
 import FalcultyDetails from "@/components/admin/container/falculty-details"
 import { Badge } from "@/components/ui/badge"
@@ -22,18 +22,34 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
 
    return [
       {
-         accessorKey: "profileImage",
-         header: "Avatar",
+         accessorKey: "firstName",
+         header: ({ column }) => (
+            <DataTableColumnHeaderName column={column} title="Nome" />
+         ),
          cell: ({ row }) => {
             const faculty = row.original;
+            const fullName = `${faculty.firstName} ${faculty.middleName} ${faculty.lastName}`
             const name = `${faculty.firstName} ${faculty.lastName}`
-
             return (
-               <Avatar name={name || ''} photo={faculty?.profileImage || ''} className="size-11" />
-            );
-         },
-         enableSorting: false,
-         enableHiding: false,
+               <div className="flex items-center gap-2">
+                  <Avatar name={name || ''} photo={faculty?.profileImage || ''} className="size-11" />
+                  <span>{fullName}</span>
+               </div>
+            )
+         }
+      },
+      {
+         accessorKey: "facultyId",
+         header: 'Numero do professor',
+         cell: ({ row }) => {
+            const faculty = row.original;
+            return (
+               <div className="flex items-center gap-2">
+                  <Hash className="text-orange-500" />
+                  <span>{faculty.facultyId}</span>
+               </div>
+            )
+         }
       },
       {
          accessorKey: "academicDepartment",
@@ -53,18 +69,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
             </Badge>
          ),
       },
-      {
-         accessorKey: "firstName",
-         header: ({ column }) => (
-            <DataTableColumnHeaderName column={column} title="Nome" />
-         ),
-         cell: ({ row }) => (
-            <div className="flex items-center gap-2">
-               <User className="h-4 w-4 text-green-500" />
-               <span>{row.getValue("firstName")}</span>
-            </div>
-         ),
-      },
+
       {
          accessorKey: "email",
          header: ({ column }) => (
@@ -90,7 +95,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
          cell: ({ row }) => (
             <div className="flex items-center gap-2">
                <Phone className="h-4 w-4 text-green-500" />
-               <span>{row.getValue("contactNo")}</span>
+               <span>(+244) {row.getValue("contactNo")}</span>
             </div>
          ),
       },
@@ -106,6 +111,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
       },
       {
          id: "actions",
+         header: "Acção",
          cell: ({ row }) => {
             const falculty = row.original
 

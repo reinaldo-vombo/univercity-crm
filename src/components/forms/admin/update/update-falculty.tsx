@@ -18,7 +18,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { updateFacultySchema } from "@/lib/validation/faculty"
-import { updatedFaculty } from "@/lib/actions/faculty"
+import { updatedFaculty } from "@/actions/faculty"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import Uploader from "@/components/shared/file-upload/uploader"
 

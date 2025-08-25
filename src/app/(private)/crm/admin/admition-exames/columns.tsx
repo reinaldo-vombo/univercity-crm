@@ -13,13 +13,10 @@ import AdmitionExameDetails from "@/components/admin/container/admition-exame-de
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
 import { FaseColumnFilter } from "@/components/admin/table-filters/Fase-column-filter"
 import { BoolenColumnFilter } from "@/components/admin/table-filters/boolen-column-filter"
-import { deleteAdmitionExame } from "@/lib/actions/admition-exame"
-import config from '@/config/env'
+import { deleteAdmitionExame } from "@/actions/admition-exame"
 import { formatDate } from "@/lib/helper"
 
 export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
-
-   console.log('url', config.API_ASSETS);
    return [
       {
          accessorKey: "applicantName",
@@ -82,6 +79,13 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
             );
          },
       },
+      {
+         accessorKey: "createdAt",
+         header: "Data de  publicação",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
+         ),
+      },
 
       {
          id: "actions",
@@ -109,6 +113,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
                      title="Detalhes do exame de admisão"
+                     className="sm:max-w-lg"
                      description='Detalhes do exame de admisão'>
                      <AdmitionExameDetails data={exames} />
                   </SheetModal>

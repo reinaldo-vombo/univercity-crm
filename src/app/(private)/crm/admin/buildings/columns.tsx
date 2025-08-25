@@ -6,9 +6,10 @@ import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { deleteBuilding } from "@/lib/actions/building"
+import { deleteBuilding } from "@/actions/building"
 import UpdateBuildingFrom from "@/components/forms/admin/update/update-building"
 import { TBuilding } from "@/types/global"
+import { formatDate } from "@/lib/helper"
 
 
 export function BuildingColumns(): ColumnDef<TBuilding>[] {
@@ -20,15 +21,21 @@ export function BuildingColumns(): ColumnDef<TBuilding>[] {
       },
       {
          accessorKey: "createdAt",
-         header: "Data de  criação",
+         header: "Data de  publicação",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
+         ),
       },
       {
          accessorKey: "updatedAt",
          header: "Data de  atualização",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("updatedAt"))}</span>
+         ),
       },
-
       {
          id: "actions",
+         header: 'Acção',
          cell: ({ row }) => {
             const building = row.original
 

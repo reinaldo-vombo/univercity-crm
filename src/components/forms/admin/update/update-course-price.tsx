@@ -18,7 +18,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TCourse, TCoursePrice } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { updateCoursePriceSchema } from "@/lib/validation/coursePrice"
-import { updateCoursePrice } from "@/lib/actions/course-price"
+import { updateCoursePrice } from "@/actions/course-price"
 
 type TProps = {
    courses: TCourse[],

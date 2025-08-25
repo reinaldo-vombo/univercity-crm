@@ -4,19 +4,22 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ApiResponseError } from '@/services/api-error';
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { TAdmitionExame } from '../../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import { ActionResult } from '../../types/api-error';
-import { admitionExameSchema } from '../validation/adnition-exame';
+import { TAdmitionExame } from '../types/global';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { ActionResult } from '../types/api-error';
+import { admitionExameSchema } from '../lib/validation/adnition-exame';
 
 export const updateAdmitionExame = validatedActionWithUser(
   admitionExameSchema,
   async (data): Promise<ActionResult<TAdmitionExame>> => {
     try {
-      const exames = await serverFetch<TAdmitionExame>('/admission-exame', {
-        method: 'PUT',
-        body: data,
-      });
+      const exames = await serverFetch<TAdmitionExame>(
+        `/admission-exame/${data.id}`,
+        {
+          method: 'PUT',
+          body: data,
+        }
+      );
 
       revalidateTag('admitionExame');
 

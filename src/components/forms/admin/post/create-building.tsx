@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { addNewBuilding } from "@/lib/actions/building"
+import { addNewBuilding } from "@/actions/building"
 import { buildingSchema } from "@/lib/validation/building"
 
 const CreateBuildingFrom = () => {

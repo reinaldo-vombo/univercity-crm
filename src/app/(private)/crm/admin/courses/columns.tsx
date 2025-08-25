@@ -7,11 +7,12 @@ import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TCourse } from "@/types/global"
-import { deleteCourse } from "@/lib/actions/courses"
+import { deleteCourse } from "@/actions/courses"
 import UpdateCourseForm from "@/components/forms/admin/update/update-couses"
 import CourseDetails from "@/components/admin/container/course-details"
 import AssignFacultiesForm from "@/components/forms/admin/update/assign-faculties"
 import { TFaculty } from "@/types/global"
+import { formatCurrency, formatDate } from "@/lib/helper"
 
 
 export function CoursesColumns(falculty: TFaculty[]): ColumnDef<TCourse>[] {
@@ -37,18 +38,22 @@ export function CoursesColumns(falculty: TFaculty[]): ColumnDef<TCourse>[] {
          accessorKey: "coursePricing",
          header: () => <div className="text-right">Preço</div>,
          cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("coursePricing"))
-            const formatted = new Intl.NumberFormat("pt-PT", {
-               style: "currency",
-               currency: "AOA",
-            }).format(amount)
-
+            const amount = parseFloat(row?.getValue("coursePricing"))
+            const formatted = formatCurrency(amount)
             return <div className="text-right font-medium">{formatted}</div>
          },
+      },
+      {
+         accessorKey: "createdAt",
+         header: "Data de  publicação",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
+         ),
       },
 
       {
          id: "actions",
+         header: "Acção",
          cell: ({ row }) => {
             const credits = row.original
 

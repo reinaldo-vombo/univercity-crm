@@ -108,10 +108,10 @@ export type TAdmitionExame = {
   document: string;
   phoneNumber: string;
   email: string;
-  paymentAmoute: number | null;
-  aprovePayment: boolean | null | undefined;
-  exameResults: number | null | undefined;
-  passed: boolean | null;
+  paymentAmoute: number;
+  aprovePayment: boolean;
+  exameResults: number;
+  passed: boolean;
   fase: {
     name: string;
     id: string;
@@ -120,6 +120,18 @@ export type TAdmitionExame = {
     startDate: Date;
     endDate: Date;
     ordem: number;
+  };
+  payment?: {
+    id: string;
+    paymentRecipt?: string;
+    totalAmount: number;
+    approved: boolean;
+    paymentType: string;
+    status: string;
+    method: string;
+
+    createdAt: Date;
+    updatedAt: Date;
   };
 };
 
@@ -195,3 +207,13 @@ export type TFaculty = {
   createdAt: Date;
   updatedAt: Date;
 };
+export type TAuthLogos = {
+  id: string;
+  userId: string;
+  ip: string;
+  browser: string;
+  os: string;
+  deviceType: string;
+  timestamp: Date;
+  isActive: boolean;
+}

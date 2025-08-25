@@ -9,6 +9,8 @@ export const studentSchema = z.object({
   }),
   middleName: z.string().optional(),
   profileImage: z.string().optional(),
+  gradeDeclarationFile: z.instanceof(File),
+  biFile: z.instanceof(File),
   email: z.string({
     required_error: 'Email é obrigatorio',
   }),
@@ -19,7 +21,9 @@ export const studentSchema = z.object({
   academicSemesterId: z.string({
     required_error: 'Semestre academico é obrigatorio',
   }),
-
+  academicDepartmentId: z.string({
+    required_error: 'Departamento é obrigatorio',
+  }),
   CourseId: z.string({
     required_error: 'Curso é obrigatorio',
   }),
@@ -32,6 +36,8 @@ export const updateStudentSchema = z.object({
   lastName: z.string(),
   middleName: z.string(),
   profileImage: z.string(),
+  gradeDeclarationFile: z.instanceof(File).optional(),
+  biFile: z.instanceof(File).optional(),
   email: z.string(),
   contactNo: z.string(),
   academicSemesterId: z.string(),

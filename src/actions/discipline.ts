@@ -3,32 +3,25 @@
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUser } from '../helper/action-helper';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../../types/api-error';
-import { TCoursePrice } from '../../types/global';
+import { ActionResult } from '../types/api-error';
+import { TDiscipline } from '../types/global';
 import {
-  coursePriceSchema,
-  updateCoursePriceSchema,
-} from '../validation/coursePrice';
+  disciplineSchema,
+  updateDisciplineSchema,
+} from '../lib/validation/discipline';
 
-export const addNewCoursePrice = validatedActionWithUser(
-  coursePriceSchema,
-  async (data): Promise<ActionResult<TCoursePrice>> => {
-    const { courseId, price } = data;
-    const covertePrice = Number(price);
-    const newbody = {
-      courseId,
-      price: covertePrice,
-    };
-
+export const addNewDiscipline = validatedActionWithUser(
+  disciplineSchema,
+  async (data): Promise<ActionResult<TDiscipline>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>('/course-price', {
+      const curses = await serverFetch<TDiscipline>('/discipline', {
         method: 'POST',
-        body: newbody,
+        body: data,
       });
 
-      revalidateTag('coursePrice');
+      revalidateTag('discipline');
 
       return {
         error: false,
@@ -52,22 +45,17 @@ export const addNewCoursePrice = validatedActionWithUser(
     }
   }
 );
-export const updateCoursePrice = validatedActionWithUser(
-  updateCoursePriceSchema,
-  async (data): Promise<ActionResult<TCoursePrice>> => {
-    const { courseId, id, price } = data;
-    const covertePrice = Number(price);
-    const newBody = {
-      courseId,
-      price: covertePrice,
-    };
+export const updateDiscipline = validatedActionWithUser(
+  updateDisciplineSchema,
+  async (data): Promise<ActionResult<TDiscipline>> => {
+    const { id, ...updateData } = data;
     try {
-      const curses = await serverFetch<TCoursePrice>(`/course-price/${id}`, {
+      const curses = await serverFetch<TDiscipline>(`/discipline/${id}`, {
         method: 'PATCH',
-        body: newBody,
+        body: updateData,
       });
 
-      revalidateTag('coursePrice');
+      revalidateTag('discipline');
 
       return {
         error: false,
@@ -90,15 +78,15 @@ export const updateCoursePrice = validatedActionWithUser(
   }
 );
 
-export const deleteCoursePrice = async (
+export const deleteDiscipline = async (
   id: string
-): Promise<ActionResult<TCoursePrice>> => {
+): Promise<ActionResult<TDiscipline>> => {
   try {
-    const data = await serverFetch<TCoursePrice>(`/course-price/${id}`, {
+    const data = await serverFetch<TDiscipline>(`/discipline/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('coursePrice');
+    revalidateTag('discipline');
     return {
       error: false,
       data,

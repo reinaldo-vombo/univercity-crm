@@ -1,5 +1,4 @@
 import React from 'react';
-import config from '@/config/env';
 import {
   Book,
   Building,
@@ -14,6 +13,8 @@ import {
   AlignHorizontalJustifyEndIcon,
   UserPlus2,
   Calendar,
+  Receipt,
+  ReceiptText,
 } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
@@ -24,14 +25,14 @@ export const ROUTES = {
   DASHBOARD: '/crm',
   ADMIN_DASHBORD: '/crm/admin',
   UNAUTHORIZED: '/unauthorized',
-  LOGIN_APANEL: `${config.PUBLIC_URL}/auth/apanel/login`,
-  RECOVER_PASSWORD_APANEL: `${config.PUBLIC_URL}/auth/apanel/recover-password`,
-  RESET_PASSWORD_APANEL: `${config.PUBLIC_URL}/auth/apanel/reset-password`,
-  LOGIN_STUDENT: `${config.PUBLIC_URL}/auth/student/login`,
-  RECOVER_PASSWORD_STUDENT: `${config.PUBLIC_URL}/auth/student/recover-password`,
-  RESET_PASSWORD_STUDENT: `${config.PUBLIC_URL}/auth/student/reset-password`,
-  ACCOUNT: `${config.PUBLIC_URL}/crm/profile`,
-  SETTINGS: `${config.PUBLIC_URL}/crm/settings`,
+  LOGIN_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/login`,
+  RECOVER_PASSWORD_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/recover-password`,
+  RESET_PASSWORD_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/reset-password`,
+  LOGIN_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/login`,
+  RECOVER_PASSWORD_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/recover-password`,
+  RESET_PASSWORD_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/reset-password`,
+  ACCOUNT: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/profile`,
+  SETTINGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/settings`,
 };
 export const DUMMY_DATA = {
   linksByRole: {
@@ -53,7 +54,7 @@ export const DUMMY_DATA = {
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/departments`,
-        label: 'Departamentos',
+        label: 'Departamentos Acadêmico',
         icon: React.createElement(Building),
       },
       {
@@ -68,7 +69,7 @@ export const DUMMY_DATA = {
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/courses`,
-        label: 'Cursos',
+        label: 'Cursos Acadêmico',
         icon: React.createElement(BookType),
       },
       {
@@ -78,7 +79,7 @@ export const DUMMY_DATA = {
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/disciplines`,
-        label: 'Deciplinas',
+        label: 'Deciplinas Acadêmico',
         icon: React.createElement(BookKey),
       },
       {
@@ -105,6 +106,16 @@ export const DUMMY_DATA = {
         href: `${ROUTES.DASHBOARD}/events`,
         label: 'Events',
         icon: React.createElement(Calendar),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/finance/budgets`,
+        label: 'Orçamentos',
+        icon: React.createElement(Receipt),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/finance/payments`,
+        label: 'Pagamentos',
+        icon: React.createElement(ReceiptText),
       },
     ],
     admin: [

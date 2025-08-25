@@ -18,7 +18,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { updateCourseSchema } from "@/lib/validation/curses"
-import { addNewCourse } from "@/lib/actions/courses"
+import { addNewCourse } from "@/actions/courses"
 import { TCourse } from "@/types/global"
 
 type TProps = {

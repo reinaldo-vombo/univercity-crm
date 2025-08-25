@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
-import { useTransition } from "react"
+import { useEffect, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAdmitionExame } from "@/types/global"
 import { admitionExameSchema } from "@/lib/validation/adnition-exame"
-import { updateAdmitionExame } from "@/lib/actions/admition-exame"
+import { updateAdmitionExame } from "@/actions/admition-exame"
 import { Switch } from "@/components/ui/switch"
 import Image from "next/image"
 import Selector from "@/components/shared/selector"
@@ -29,29 +29,28 @@ type TPros = {
 const UpdateAdmitionExameForm = ({ values }: TPros) => {
    const reciptUrl = values.paymentRecipt;
 
+
    const form = useForm<z.infer<typeof admitionExameSchema>>({
       resolver: zodResolver(admitionExameSchema),
       defaultValues: {
+         id: values.id,
          applicantName: values.applicantName,
          aprovePayment: values.aprovePayment,
          exameResults: values.exameResults,
          passed: values.passed,
-         paymentAmoute: values.paymentAmoute,
+         paymentAmoute: 45000,
          exameDate: values.exameDate
-
       }
    })
 
-   // const exameResults = form.watch("exameResults");
-   // useEffect(() => {
-   //    if (exameResults && exameResults >= 10) {
-   //       form.setValue("passed", true);
-   //    } else {
-   //       form.setValue("passed", false);
-   //    }
-   // }, [exameResults, form]);
-   // console.log('log', exameResults);
-   // console.log('Situaçao', form.getValues("passed"));
+   const exameResults = form.watch("exameResults");
+   useEffect(() => {
+      if (exameResults && exameResults >= 10) {
+         form.setValue("passed", true);
+      } else {
+         form.setValue("passed", false);
+      }
+   }, [exameResults, form]);
 
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof admitionExameSchema>) {
@@ -75,9 +74,13 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
       });
 
    }
+   const onInvalid = (errors: unknown) => {
+      //This helpe me fix a two week form not submiting god kwon's way bug
+      console.error("Validation Errors:", errors);
+   };
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-7">
+         <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-6 py-7">
             <FormField
                control={form.control}
                name="applicantName"
@@ -95,23 +98,23 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
                   </FormItem>
                )}
             />
-            {/* <FormField
+            <FormField
                control={form.control}
                name="paymentAmoute"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do aplicante</FormLabel>
+                     <FormLabel>Valor pago</FormLabel>
                      <FormControl>
                         <Input
                            disabled
-                           placeholder="Nome"
+                           placeholder="EX: 45000, 35000, 50000"
                            {...field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
-            /> */}
+            />
             <div className="space-y-4">
                <Image
                   src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/${reciptUrl}`}
@@ -128,8 +131,8 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
                         <FormLabel id="aprovePayment">Estatus do pagamento</FormLabel>
                         <FormControl>
                            <Switch
-                              checked={values.aprovePayment as boolean}
-                              onChange={field.onChange}
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
                               id="aprovePayment"
                            />
                         </FormControl>
@@ -167,8 +170,8 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
                      <FormLabel id="aproveExame">Situação</FormLabel>
                      <FormControl>
                         <Switch
-                           checked={values.passed as boolean}
-                           onChange={field.onChange}
+                           checked={field.value}
+                           onCheckedChange={field.onChange}
                            id="aproveExame"
                         />
                      </FormControl>

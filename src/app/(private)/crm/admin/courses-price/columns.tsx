@@ -8,7 +8,8 @@ import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TCourse, TCoursePrice } from "@/types/global"
 import UpdateCoursePriceForm from "@/components/forms/admin/update/update-course-price"
-import { deleteCoursePrice } from "@/lib/actions/course-price"
+import { deleteCoursePrice } from "@/actions/course-price"
+import { formatDate } from "@/lib/helper"
 
 
 export function CoursesPriceColumns(course: TCourse[]): ColumnDef<TCoursePrice>[] {
@@ -24,15 +25,21 @@ export function CoursesPriceColumns(course: TCourse[]): ColumnDef<TCoursePrice>[
       },
       {
          accessorKey: "createdAt",
-         header: "Data de  criação",
+         header: "Data de  publicação",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
+         ),
       },
       {
          accessorKey: "updatedAt",
-         header: "Data de  atualização",
+         header: "Data de  publicação",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("updatedAt"))}</span>
+         ),
       },
-
       {
          id: "actions",
+         header: "Acção",
          cell: ({ row }) => {
             const credits = row.original
 

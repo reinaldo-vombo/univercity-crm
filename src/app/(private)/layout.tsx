@@ -23,7 +23,7 @@ export default async function CmsLayout({
          <SidebarProvider>
             <AppSidebar role={role} />
             <main className="w-full">
-               <div className="flex items-center border-border lg:border-b bg-card">
+               <div className="flex items-center bg-card">
                   <SidebarTrigger className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11 " />
                   <Header />
                </div>

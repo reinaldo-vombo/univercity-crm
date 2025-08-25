@@ -8,8 +8,9 @@ import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TSemester, } from "@/types/global"
 import UpdateSemesterForm from "@/components/forms/admin/update/update-semester"
-import { deleteSemester } from "@/lib/actions/semester"
+import { deleteSemester } from "@/actions/semester"
 import { Badge } from "@/components/ui/badge"
+import { formatDate } from "@/lib/helper"
 
 
 export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
@@ -47,10 +48,12 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
             );
          },
       },
-
       {
          accessorKey: "createdAt",
-         header: "Data de criação",
+         header: "Data de  publicação",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
+         ),
       },
 
       {

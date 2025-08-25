@@ -3,11 +3,13 @@
 import { revalidateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { serverFetch } from '@/services/server-fetch';
-import { TUser } from '../../types/global';
-import { validatedActionWithUser } from '../helper/action-helper';
-import { updateSchema, userSchema } from '../validation/user';
-import { ActionResult, ActionState } from '../../types/api-error';
-import { saveFile } from '../helper/uploade';
+import { TAuthLogos, TUser } from '../types/global';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { updateSchema, userSchema } from '../lib/validation/user';
+import { ActionResult, ActionState } from '../types/api-error';
+import { saveFile } from '../lib/helper/uploade';
+import { headers } from 'next/headers';
+import { ApiResponseError } from '@/services/api-error';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
@@ -38,7 +40,7 @@ export const addNewUser = validatedActionWithUser(
 
 export const updatedUser = validatedActionWithUser(
   updateSchema,
-  async (data, formData, user): Promise<ActionResult<TUser>> => {
+  async (data): Promise<ActionResult<TUser>> => {
     try {
       let avatarUrl: any = data.avatar;
       if (data.avatar instanceof File) {
@@ -46,7 +48,7 @@ export const updatedUser = validatedActionWithUser(
       }
       data = { ...data, avatar: avatarUrl };
 
-      const result = await serverFetch<TUser>(`/users/${user.id}`, {
+      const result = await serverFetch<TUser>(`/users/${data.id}`, {
         method: 'PUT',
         body: data,
       });
@@ -91,12 +93,10 @@ export const recoverPassword = async (
   data: string
 ): Promise<ActionState<null>> => {
   try {
-    const res = await serverFetch<null>('/recover-password', {
+    await serverFetch<null>('/recover-password', {
       method: 'POST',
       body: data,
     });
-
-    console.log('the res', res);
 
     return {
       error: false,
@@ -104,6 +104,73 @@ export const recoverPassword = async (
       data: null,
     };
   } catch (err) {
+    return {
+      error: true,
+      message:
+        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+    };
+  }
+};
+
+export const logUserActivitys = async (id: string) => {
+  const headersList = await headers();
+
+  const forwardedFor = headersList.get('x-forwarded-for');
+  const realIp = headersList.get('x-real-ip');
+  const ip = forwardedFor?.split(',')[0] || realIp || 'unkwon';
+
+  const userAgent = headersList.get('user-agent') || 'unkwon';
+
+  const timestamp = new Date();
+  console.log(ip, userAgent, timestamp);
+  const data = {
+    userId: id,
+    ip,
+    browser: '',
+    os: '',
+    deviceType: '',
+    timestamp: '',
+    isActive: true,
+  };
+
+  try {
+    await serverFetch<TAuthLogos>('/users/logs', {
+      method: 'POST',
+      body: data,
+    });
+  } catch (err) {
+    if (err instanceof ApiResponseError) {
+      return {
+        error: true,
+        message: err.message,
+        errorMessages: err.errorMessages,
+        meta: err.meta,
+      };
+    }
+
+    return {
+      error: true,
+      message:
+        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+    };
+  }
+};
+export const logoutUserActivitys = async (id: string) => {
+  try {
+    await serverFetch(`/users/logs/${id}`, {
+      method: 'POST',
+      body: null,
+    });
+  } catch (err) {
+    if (err instanceof ApiResponseError) {
+      return {
+        error: true,
+        message: err.message,
+        errorMessages: err.errorMessages,
+        meta: err.meta,
+      };
+    }
+
     return {
       error: true,
       message:

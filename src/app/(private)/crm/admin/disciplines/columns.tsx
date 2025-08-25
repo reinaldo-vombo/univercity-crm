@@ -7,7 +7,7 @@ import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TDiscipline } from "@/types/global"
-import { deleteDiscipline } from "@/lib/actions/discipline"
+import { deleteDiscipline } from "@/actions/discipline"
 import UpdateDisciplineForm from "@/components/forms/admin/update/update-discipline"
 
 export function DisciplineColumns(): ColumnDef<TDiscipline>[] {

@@ -15,7 +15,7 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { assignRemoveFacultiesSchema } from "@/lib/validation/curses"
-import { assignFaculties } from "@/lib/actions/courses"
+import { assignFaculties } from "@/actions/courses"
 import { TCourse, TFaculty } from "@/types/global"
 import { MultiSelect } from "@/components/ui/multi-select"
 
@@ -28,6 +28,7 @@ const AssignFacultiesForm = ({ values, falculty }: TProps) => {
    const falcultys = falculty.map((item) => ({
       label: item.firstName,
       value: item.id,
+      avatar: item.profileImage || '/default.jpeg'
    }))
 
    const form = useForm<z.infer<typeof assignRemoveFacultiesSchema>>({
@@ -37,7 +38,6 @@ const AssignFacultiesForm = ({ values, falculty }: TProps) => {
          faculties: [],
       }
    })
-   console.log('falcultys', form.getValues('faculties'));
 
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof assignRemoveFacultiesSchema>) {

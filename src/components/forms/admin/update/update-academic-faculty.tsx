@@ -17,7 +17,7 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/services/error-handler"
-import { updateAcademicFaculty } from "@/lib/actions/academic-faculty"
+import { updateAcademicFaculty } from "@/actions/academic-faculty"
 import { academicFacultyacultySchema } from "@/lib/validation/academicFaculty"
 
 type TProps = {

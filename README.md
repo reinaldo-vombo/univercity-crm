@@ -12,6 +12,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Setup Tailwind CSS
 - [x] Setup shadcn-ui
 - [x] Create `.env` with necessary secrets and DB connection
+- [x] Create `.env.ts` with zod for client and server env
 
 ---
 
@@ -64,6 +65,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 ### ⚙️ Features & Function
 
 - [x] Server action
+- [ ] Server action rate limit
 - [x] Data revalidation
 - [x] Dark mode
 - [x] Color themes

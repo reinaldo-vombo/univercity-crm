@@ -16,7 +16,7 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { disciplineSchema } from "@/lib/validation/discipline"
-import { addNewDiscipline } from "@/lib/actions/discipline"
+import { addNewDiscipline } from "@/actions/discipline"
 import { generateSlug } from "@/lib/helper"
 
 const CreateDisciplineForm = () => {

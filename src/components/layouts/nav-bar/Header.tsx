@@ -43,7 +43,13 @@ const Header = () => {
                      className="border-none shadow-none"
                      showLogOut={true}
                      lable={user?.name || 'John Doe'}
-                     trigger={<Avatar name={user?.name || 'John Doe'} photo={user?.avatar || "https://github.com/shadcn.png"} />}>
+                     trigger={
+                        <div className="flex items-center gap-2">
+                           <Avatar name={user?.name || 'John Doe'} photo={user?.avatar || "https://github.com/shadcn.png"} />
+                           <span>{user?.name}</span>
+                        </div>
+                     }
+                  >
                      <UserSetting />
                   </DropdownMenu>
                </div>
