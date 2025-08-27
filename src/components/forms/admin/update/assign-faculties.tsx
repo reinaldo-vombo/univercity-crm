@@ -35,7 +35,7 @@ const AssignFacultiesForm = ({ values, falculty }: TProps) => {
       resolver: zodResolver(assignRemoveFacultiesSchema),
       defaultValues: {
          id: values.id,
-         faculties: [],
+         faculties: [''],
       }
    })
 

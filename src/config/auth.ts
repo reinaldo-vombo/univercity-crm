@@ -3,8 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
 import { END_POINTS } from '@/constants/mock-data';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { getSigleUser } from '@/lib/helper/db/querys';
-// import { logUserActivitys } from '@/actions/users';
+import { logUserActivitys } from '@/actions/users';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -89,7 +88,6 @@ export const authOptions: NextAuthOptions = {
 
           const json = await res.json();
           const data = json?.data;
-          // await logUserActivitys(data.user.id);
 
           if (!data?.user || !data?.accessToken) {
             console.error('❌ Missing user or accessToken in response', data);
@@ -108,17 +106,29 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user }) {
+      try {
+        if (user?.id) {
+          // 👇 pass req.headers into your logging function
+          await logUserActivitys(user.id);
+        }
+      } catch (err) {
+        console.error('❌ Failed to log user activity:', err);
+        // Don’t block login if logging fails
+      }
+      return true;
+    },
     async jwt({ token, user, trigger, session }: any) {
       if (token.expiresAt && token.expiresAt < Math.floor(Date.now() / 1000)) {
         return {};
       }
-      if (token.id) {
-        const dbUser = await getSigleUser(token.id);
+      // if (token.id) {
+      //   const dbUser = await getSigleUser(token.id);
 
-        if (!dbUser) {
-          return {};
-        }
-      }
+      //   if (!dbUser) {
+      //     return {};
+      //   }
+      // }
       if (trigger === 'update' && session?.user) {
         return {
           ...token,

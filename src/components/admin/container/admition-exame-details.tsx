@@ -20,7 +20,7 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
          id: '2',
          lable: 'Pagamento',
          value: 'pagamento',
-         tabContent: <AdmitionExamePaymentDetails data={data} />,
+         tabContent: <AdmitionExamePaymentDetails />,
          description: ''
       },
    ]

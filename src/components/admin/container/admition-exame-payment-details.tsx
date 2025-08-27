@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency } from "@/lib/helper"
-import { TAdmitionExame } from "@/types/global"
+// import { TAdmitionExame } from "@/types/global"
 import { Check, Loader, X } from "lucide-react"
 
-type TAdmitionExameDetailsProps = {
-   data: TAdmitionExame
-}
+// type TAdmitionExameDetailsProps = {
+//    data: TAdmitionExame
+// }
 const payment = {
    id: '1',
    paymentRecipt: '',
@@ -15,8 +15,7 @@ const payment = {
    status: 'PENDING',
    method: 'EXPRESS'
 }
-const AdmitionExamePaymentDetails = ({ data }: TAdmitionExameDetailsProps) => {
-   console.log(data);
+const AdmitionExamePaymentDetails = () => {
 
    const showStatus = () => {
       if (payment.status === 'APROVED') return <Check className="text-green-500" />

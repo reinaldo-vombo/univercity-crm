@@ -34,8 +34,8 @@ export function DropdownMenu({ children, trigger, showLogOut = false, lable, var
             {showLogOut && (
                <Fragment>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex items-center bg-red-400" onClick={() => signOut()}>
-                     <LogOut />
+                  <DropdownMenuItem className="flex items-center rounded-md bg-red-800" onClick={() => signOut()}>
+                     <LogOut className="text-red-500" />
                      Sair
                   </DropdownMenuItem>
                </Fragment>

@@ -3,7 +3,6 @@ import SecurityTab from '@/components/container/security-tab'
 import { TabsNav } from '@/components/shared/toggle-tabs'
 import { serverUser } from '@/lib/helper/auth/user'
 import { getUserLogs } from '@/services/data/user'
-import React from 'react'
 
 export default async function ServerWrapper() {
    const currentUser = await serverUser()

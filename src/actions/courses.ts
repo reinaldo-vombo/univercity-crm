@@ -82,7 +82,7 @@ export const assignFaculties = validatedActionWithUser(
   assignRemoveFacultiesSchema,
   async (data): Promise<ActionResult<TCourse>> => {
     const { id, ...updateData } = data;
-    console.log('updateData', updateData.faculties);
+    console.log('updateData.faculties', updateData.faculties);
 
     try {
       const curses = await serverFetch<TCourse>(`/assign-faculties/${id}`, {
@@ -98,7 +98,6 @@ export const assignFaculties = validatedActionWithUser(
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
-        console.log('err.message', err.message);
         return {
           error: true,
           message: err.message,

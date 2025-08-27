@@ -68,7 +68,7 @@ export function UsersColumns(): ColumnDef<Users>[] {
          accessorKey: "createdAt",
          header: "Data de cadastro",
          cell: ({ row }) => (
-            <div>
+            <div className="flex items-center gap-2">
                <Calendar1 className="h-4 w-4 text-yellow-500" />
                <b className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</b>
             </div>

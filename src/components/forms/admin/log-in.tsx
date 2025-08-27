@@ -49,7 +49,6 @@ export default function AdminLogin({ onChange }: TProps) {
             identifier,
             password,
          });
-         console.log('error', res?.error);
 
          if (res?.error) {
             if (res?.error === 'CredentialsSignin') {

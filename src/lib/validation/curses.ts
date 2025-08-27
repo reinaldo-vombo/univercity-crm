@@ -38,7 +38,15 @@ export const updateCourseSchema = z.object({
 });
 export const assignRemoveFacultiesSchema = z.object({
   id: z.string(),
-  faculties: z.array(z.string(), {
-    required_error: 'Faculties Are Required',
-  }),
+  // faculties: z.array(z.string(), {
+  //   required_error: 'Faculties Are Required',
+  // }),
+  faculties: z.any(),
+  // faculties: z
+  //   .union([z.string(), z.array(z.string())])
+  //   .transform((val) => (typeof val === 'string' ? [val] : val))
+  //   .refine((val) => val.length > 0, {
+  //     message: 'Faculties are required',
+  //   }),
 });
+export type AssignRemoveFaculties = z.infer<typeof assignRemoveFacultiesSchema>;

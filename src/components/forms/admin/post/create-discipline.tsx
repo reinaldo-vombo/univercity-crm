@@ -49,7 +49,6 @@ const CreateDisciplineForm = () => {
                toast.warning(response.message);
                return;
             }
-            console.log('response erro', response.error);
 
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
