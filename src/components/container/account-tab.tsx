@@ -1,18 +1,23 @@
 'use client'
 
 import { getFirstAndLastName } from "@/lib/helper";
-import { User as loggedUser } from "@/lib/helper/auth/user";
 import SheetModal from "../shared/sheet-modal";
 import { Briefcase, Pencil, UserCircle } from "lucide-react";
 import UpdatedUserForm from "../forms/admin/update/update-user";
 import { Separator } from "../ui/separator";
 import Avatar from "../shared/avatar";
 import { Checkbox } from "../ui/checkbox";
-
+import { IUser } from "next-auth";
+type TProps = {
+   user: (IUser & {
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+   }) | undefined
+}
 
 const permition = ['view', 'create', 'edite', 'delete'];
-const AccountTab = () => {
-   const user = loggedUser()
+const AccountTab = ({ user }: TProps) => {
    const { firstName, lastName } = getFirstAndLastName(user?.name || '');
    const actions = permition.map((p) => ({
       id: p,

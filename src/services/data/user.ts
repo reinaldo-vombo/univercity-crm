@@ -22,7 +22,10 @@ export const getAllUsers = async (): Promise<TAuthLogos[]> => {
     handleApiError(error);
   }
 };
-export const getUserLogs = async (id: string): Promise<TAuthLogos[]> => {
+export const getUserLogs = async (id?: string): Promise<TAuthLogos[]> => {
+  if (!id) {
+    return [];
+  }
   try {
     const logs = await serverFetch<TAuthLogos[]>(`/users/logs/${id}`, {
       next: { tags: ['logs'] },

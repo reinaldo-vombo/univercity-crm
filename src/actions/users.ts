@@ -10,6 +10,7 @@ import { ActionResult, ActionState } from '../types/api-error';
 import { saveFile } from '../lib/helper/uploade';
 import { headers } from 'next/headers';
 import { ApiResponseError } from '@/services/api-error';
+import { UAParser } from 'ua-parser-js';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
@@ -120,16 +121,16 @@ export const logUserActivitys = async (id: string) => {
   const ip = forwardedFor?.split(',')[0] || realIp || 'unkwon';
 
   const userAgent = headersList.get('user-agent') || 'unkwon';
+  const { browser, device, os } = UAParser(userAgent);
 
   const timestamp = new Date();
-  console.log(ip, userAgent, timestamp);
   const data = {
     userId: id,
     ip,
-    browser: '',
-    os: '',
-    deviceType: '',
-    timestamp: '',
+    browser,
+    os,
+    deviceType: device,
+    timestamp,
     isActive: true,
   };
 

@@ -8,7 +8,7 @@ const {
   NEXT_PUBLIC_TWITTER_CREATOR,
   NEXT_PUBLIC_AUTHOR_SITE,
   NEXT_PUBLIC_AUTHOR_NAME,
-} = clientEnv;
+} = process.env;
 
 const baseUrl = NEXT_PUBLIC_BASE_URL
   ? `${NEXT_PUBLIC_BASE_URL}`

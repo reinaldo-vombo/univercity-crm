@@ -5,7 +5,7 @@ import { END_POINTS } from '@/constants/mock-data';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { serverEnv } from '@/config/env';
 import { getSigleUser } from '@/lib/helper/db/querys';
-import { logUserActivitys } from '@/actions/users';
+// import { logUserActivitys } from '@/actions/users';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -90,7 +90,7 @@ export const authOptions: NextAuthOptions = {
 
           const json = await res.json();
           const data = json?.data;
-          await logUserActivitys(data.user.id);
+          // await logUserActivitys(data.user.id);
 
           if (!data?.user || !data?.accessToken) {
             console.error('❌ Missing user or accessToken in response', data);

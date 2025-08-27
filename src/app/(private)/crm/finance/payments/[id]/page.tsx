@@ -2,7 +2,9 @@ import Breadcrumb from "@/components/shared/breadcrumb"
 import { TabsNav } from "@/components/shared/toggle-tabs"
 import { ROUTES } from "@/constants/mock-data"
 import { PaymentTableServer } from "../table-wrapper"
-
+type TSearchParams = {
+   params: Promise<{ id: string }>
+}
 
 const student = {
    id: '123456789',
@@ -41,7 +43,9 @@ const tabs = [
       description: 'Propinas mensal',
    },
 ]
-export default function StudentSemesterPaymentPage() {
+export default function StudentSemesterPaymentPage({ params }: TSearchParams) {
+   console.log(params);
+
    if (!student) {
       return 'Not found'
    }

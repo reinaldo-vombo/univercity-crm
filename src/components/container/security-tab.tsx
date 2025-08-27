@@ -1,23 +1,15 @@
 import { Fragment } from "react"
-import { Clock, Lock, MailOpen, MapPin, Monitor, PhoneIncoming, ShieldCheck, Trash } from "lucide-react"
+import { Clock, Globe, Lock, MailOpen, MapPin, Monitor, Option, PhoneIncoming, ShieldCheck } from "lucide-react"
 import { Separator } from "../ui/separator"
 import { Switch } from "@/components/ui/switch"
+import { TAuthLogos } from "@/types/global"
+import { formatDate } from "@/lib/helper"
+type TProps = {
+   sessionHistory: TAuthLogos[]
+}
 
-const SecurityTab = () => {
-   const sessionHistory = [
-      {
-         browser: 'Safari on Mac OS X',
-         icon: '',
-         location: 'Angola, Luanda',
-         status: 'activo',
-      },
-      {
-         browser: 'Chrome on Lenove Thinkpad',
-         icon: '',
-         location: 'Angola, Soio',
-         status: '1 mês atras',
-      },
-   ]
+const SecurityTab = ({ sessionHistory }: TProps) => {
+
    return (
       <Fragment>
          <div className="grid grid-cols-12 gap-2">
@@ -66,23 +58,35 @@ const SecurityTab = () => {
                <Clock className="size-5 text-slate-200" />
                <b>Historico de sessão</b>
             </div>
-            {sessionHistory.map((session, i) => (
+            {sessionHistory && sessionHistory.map((session, i) => (
                <Fragment key={i}>
                   <Separator />
                   <div className="flex justify-around">
                      <div className="flex items-center gap-2 w-80">
                         <div className="border rounded-full size-10 flex items-center justify-center">
-                           <Monitor className="size-4" />
+                           <Globe className="size-4" />
                         </div>
                         <b>{session.browser}</b>
                      </div>
+                     <div className="flex items-center gap-2 w-80">
+                        <div className="border rounded-full size-10 flex items-center justify-center">
+                           <Monitor className="size-4" />
+                        </div>
+                        <b>{session.deviceType}</b>
+                     </div>
+                     <div className="flex items-center gap-2 w-80">
+                        <div className="border rounded-full size-10 flex items-center justify-center">
+                           <Option className="size-4" />
+                        </div>
+                        <b>{session.os}</b>
+                     </div>
                      <div className="flex items-center gap-2">
                         <MapPin className="text-slate-200 size-5" />
-                        <b>{session.location}</b>
+                        <b>{session.ip}</b>
                      </div>
                      <div className="flex items-center gap-16">
-                        <b>{session.status}</b>
-                        <Trash className="text-slate-200 size-4" />
+                        <b>{formatDate(session.timestamp)}</b>
+                        <b className={session.isActive ? 'text-green-500' : 'text-red-500'}>{session.isActive ? 'Activo agora' : 'Inativo'}</b>
                      </div>
                   </div>
                </Fragment>
