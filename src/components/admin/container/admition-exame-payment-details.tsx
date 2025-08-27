@@ -16,6 +16,8 @@ const payment = {
    method: 'EXPRESS'
 }
 const AdmitionExamePaymentDetails = ({ data }: TAdmitionExameDetailsProps) => {
+   console.log(data);
+
    const showStatus = () => {
       if (payment.status === 'APROVED') return <Check className="text-green-500" />
       if (payment.status === 'PENDING') return <Loader className="animate-spin text-white" />

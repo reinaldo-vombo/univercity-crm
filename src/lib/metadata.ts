@@ -1,6 +1,6 @@
 import { CONTENT } from '@/constants/site-contentent';
 import { Metadata } from 'next';
-import { clientEnv } from '@/config/env';
+// import { clientEnv } from '@/config/env';
 
 const {
   NEXT_PUBLIC_BASE_URL,

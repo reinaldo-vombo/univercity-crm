@@ -9,7 +9,6 @@ import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { deleteUser } from "@/actions/users"
 import { User } from "@/lib/helper/auth/user"
-import UserDetails from "@/components/user/user-details"
 import { formatDate } from "@/lib/helper"
 
 export type Users = {
@@ -101,10 +100,7 @@ export function UsersColumns(): ColumnDef<Users>[] {
                      side="right"
                      title="Detalhes do útilizador"
                      description={`ID: ${users.id}`}>
-                     <UserDetails
-                        email={users.email}
-                        name={users.name}
-                        role={users.role} />
+                     helo
                   </SheetModal>
                   {logUser?.id === users.id ? null : (
                      <AlertModal
