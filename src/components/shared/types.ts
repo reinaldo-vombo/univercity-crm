@@ -34,18 +34,19 @@ export type TSelectPros = {
   formField: any;
 };
 export type TTabsNav = {
-   tabList: {
-      id: string;
-      lable: string;
-      value: string;
-      tabContent: JSX.Element
-      description: string;
-   }[]
-   defaultValue: string
-}
+  tabList: {
+    id: string;
+    lable: string;
+    value: string;
+    tabContent: JSX.Element;
+    description: string;
+  }[];
+  defaultValue: string;
+};
 export type DropdownMenuProps = {
   children: React.ReactNode;
   trigger: React.ReactNode;
+  userId?: string;
   className?: string;
   lable: string;
   showLogOut?: boolean;

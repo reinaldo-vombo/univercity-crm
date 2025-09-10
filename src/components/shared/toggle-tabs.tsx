@@ -15,6 +15,7 @@ import {
    TabsTrigger,
 } from "@/components/ui/tabs"
 import { TTabsNav } from "./types"
+import { Separator } from "../ui/separator"
 
 
 export function TabsNav({ defaultValue, tabList }: TTabsNav) {
@@ -35,6 +36,7 @@ export function TabsNav({ defaultValue, tabList }: TTabsNav) {
                            {content.description || ''}
                         </CardDescription>
                      </CardHeader>
+                     <Separator />
                      <CardContent className="grid gap-6">
                         {content.tabContent}
                      </CardContent>

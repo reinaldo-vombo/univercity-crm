@@ -6,6 +6,10 @@ export type TUser = {
   email: string;
   avatar: string;
   role: string;
+  contact: {
+    phone: number;
+    location: string;
+  };
   number: number;
 };
 
@@ -38,19 +42,26 @@ export type TRoom = {
   floor: string;
   buildingId: string;
 };
-
+type TMeta = {
+  total: number;
+  totalResult: number;
+  totalPages: number;
+  currentPage: number;
+  limit: number | undefined;
+};
 export type TCourse = {
   id: string;
   title: string;
   code: string;
-  credits: number;
+  meta?: TMeta;
   durationInYears: number;
   academicDepartment: {
     title: string;
   };
   academicDepartmentId: string;
-  coursePricing: {
-    price: number;
+  price: {
+    amount: number;
+    currency: string;
   };
   faculties: TFaculty[];
   offeredCourses?: TOfferedCourse[];
@@ -61,6 +72,13 @@ export type TCourse = {
       isDeleted?: boolean | null;
     }
   ];
+};
+export type TPrice = {
+  id: string;
+  amount: number;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 export type TCoursePrice = {
   id: string;
@@ -211,9 +229,54 @@ export type TAuthLogos = {
   id: string;
   userId: string;
   ip: string;
-  browser: string;
-  os: string;
-  deviceType: string;
+  browser: {
+    name: string;
+    version: string;
+    major: string;
+    type: string | undefined;
+  };
+  os: { name: string; version: string };
+  deviceType: {
+    type: string | undefined;
+    model: string | undefined;
+    vendor: string | undefined;
+  };
   timestamp: Date;
   isActive: boolean;
-}
+};
+export type TNotification = {
+  id: string;
+  type: string;
+  message: string;
+  userId: string;
+  metadata: {
+    message: string;
+    authorId: string;
+    description: string;
+    url: string;
+  };
+  read: boolean;
+  createdAt: Date;
+};
+
+export type TNotificationPreference = {
+  id: string;
+  userId: string;
+  enabled: boolean;
+  settings: {
+    user: boolean;
+    important: boolean;
+    payment: boolean;
+    department: boolean;
+  };
+  updatedAt: Date;
+};
+export type TActionHistory = {
+  id: string;
+  createdAt: Date;
+  userId: string | null;
+  action: string;
+  entityType: string;
+  entityId: string;
+  user: TUser;
+};

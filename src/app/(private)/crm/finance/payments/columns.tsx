@@ -27,8 +27,8 @@ type TProps = {
 
 export function PaymentColumns(): ColumnDef<TProps>[] {
    const showStatus = (status: string) => {
-      if (status === 'APROVED') return <Check className="text-green-500" />
-      if (status === 'PENDING') return <Loader className="animate-spin text-white" />
+      if (status === 'APROVED' || 'PAID') return <Check className="text-green-950 " />
+      if (status === 'PENDING' || 'PENDING') return <Loader className="animate-spin text-white" />
       if (status === 'NOT_APROVED') return <X className="text-red-500" />
    }
    return [
@@ -47,7 +47,7 @@ export function PaymentColumns(): ColumnDef<TProps>[] {
             const status = row.original.semesterPayment[0].payment[0].status;
             return (
                <Badge className={`${status === 'PAID' ? 'bg-green-500' : status === 'PENDING' ? 'bg-amber-500' : 'bg-red-500'} rounded-full`}>
-                  {showStatus(status)} <b>{status}</b>
+                  {showStatus(status)} <b className="text-white">{status}</b>
                </Badge>
             );
          },
@@ -71,7 +71,7 @@ export function PaymentColumns(): ColumnDef<TProps>[] {
          cell: ({ row }) => {
             const status = row.original.semesterPayment[0].payment[0].approved;
             return (
-               <Badge className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
+               <Badge className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full text-white`}>
                   {status ? 'Confirmado' : 'Pendente'}
                </Badge>
             );

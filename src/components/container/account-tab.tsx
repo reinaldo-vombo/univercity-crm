@@ -3,11 +3,11 @@
 import { getFirstAndLastName } from "@/lib/helper";
 import SheetModal from "../shared/sheet-modal";
 import { Briefcase, Pencil, UserCircle } from "lucide-react";
-import UpdatedUserForm from "../forms/admin/update/update-user";
 import { Separator } from "../ui/separator";
 import Avatar from "../shared/avatar";
 import { Checkbox } from "../ui/checkbox";
 import { IUser } from "next-auth";
+import UpdatedAccountForm from "../forms/admin/update/update-account";
 type TProps = {
    user: (IUser & {
       name?: string | null;
@@ -50,7 +50,7 @@ const AccountTab = ({ user }: TProps) => {
                      title="Editar Perfil"
                      description='Editar Perfil'
                      className="">
-                     <UpdatedUserForm userInf={user} />
+                     <UpdatedAccountForm defaultValues={user} />
                   </SheetModal>
                </div>
             </div>

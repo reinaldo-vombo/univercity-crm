@@ -9,8 +9,8 @@ interface Props {
 }
 
 const herader = {
-   id: "ID",
-   name: "Full Name",
+   id: "id",
+   name: "Nome completo",
    email: "Email",
    role: "Role"
 }

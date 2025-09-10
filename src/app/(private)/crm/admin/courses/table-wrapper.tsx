@@ -1,7 +1,9 @@
 
-import { getAllFalculty } from "../../../../../lib/helper/db/querys";
+
+import { getAllCurses } from "@/services/data/couses";
 import { CoursesTable } from "./client-table";
-import { getAllCurses, getAllDepartments } from "@/lib/helper/db/querys";
+import { getAllDepartments } from "@/services/data/department";
+import { getAllFalculty } from "@/services/data/falculty";
 
 
 export async function CoursesTableServer() {

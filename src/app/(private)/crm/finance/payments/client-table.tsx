@@ -22,7 +22,7 @@ const student = [{
                approved: true,
                atendent: 'Maria Sousar',
                message: 'Pagamento aprovado',
-               createAt: new Date()
+               createAt: new Date().getDate()
             }
          ]
       }

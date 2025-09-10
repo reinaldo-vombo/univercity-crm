@@ -23,6 +23,8 @@ type ValidatedUserActionFn<S extends z.ZodTypeAny, R> = (
   user: TUser
 ) => Promise<R>;
 
+type TUserIdAction<R> = (id: string, user: TUser) => Promise<R>;
+
 /**
  * Wraps an action function with schema validation only
  */
@@ -45,33 +47,20 @@ export function validatedAction<S extends z.ZodTypeAny, R>(
  * Wraps an action function with schema validation and session-based auth
  */
 
-// export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
-//   schema: S,
-//   actionFn: ValidatedUserActionFn<S, R>
-// ) {
-//   return async (formData: FormData): Promise<R> => {
-//     const session = await getServerSession(authOptions);
-//     const user = session?.user;
+export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
+  return async (id: string): Promise<R> => {
+    const session = await getServerSession(authOptions);
+    const user = session?.user;
 
-//     if (!user) {
-//       return {
-//         error: true,
-//         message: FLASH_MESSAGE.NOTAUTHORIZED,
-//       } as R;
-//     }
-//     const parsed = schema.safeParse(Object.fromEntries(formData.entries()));
-//     console.log('parsed path', parsed.error?.errors[0].path);
-//     console.log('parsed message', parsed.error?.errors[0].message);
-//     if (!parsed.success) {
-//       return {
-//         error: true,
-//         message: parsed.error.errors[0].message,
-//       } as R;
-//     }
-
-//     return actionFn(parsed.data, formData, user);
-//   };
-// }
+    if (!user) {
+      return {
+        error: true,
+        message: FLASH_MESSAGE.NOTAUTHORIZED,
+      } as R;
+    }
+    return actionnFn(id, user);
+  };
+}
 export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
   schema: S,
   actionFn: ValidatedUserActionFn<S, R>

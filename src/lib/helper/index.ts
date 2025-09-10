@@ -36,3 +36,20 @@ export const formatCurrency = (price: number) => {
   }).format(price);
   return converted;
 };
+
+export const createQueryString = (
+  searchParams: URLSearchParams,
+  name: string,
+  value: string
+): string => {
+  const params = new URLSearchParams(searchParams.toString());
+
+  // Toggle logic: Remove the parameter if the value matches
+  if (params.get(name) === value) {
+    params.delete(name);
+  } else {
+    params.set(name, value);
+  }
+
+  return params.toString();
+};

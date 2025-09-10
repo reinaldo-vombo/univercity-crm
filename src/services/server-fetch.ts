@@ -12,6 +12,7 @@ type ServerFetchOptions = {
   body?: any;
   headers?: Record<string, string>;
   next?: { revalidate?: number; tags?: string[] };
+  cache?: RequestCache;
 };
 
 export async function serverFetch<T>(
@@ -37,6 +38,7 @@ export async function serverFetch<T>(
       body: options.body ? JSON.stringify(options.body) : undefined,
       headers,
       next: options.next,
+      cache: options.cache,
     });
     const json = await response.json();
 

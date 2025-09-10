@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
 import { END_POINTS } from '@/constants/mock-data';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { logUserActivitys } from '@/actions/users';
+import { logUserActivitys } from '@/actions/activitiys';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -113,7 +113,7 @@ export const authOptions: NextAuthOptions = {
           await logUserActivitys(user.id);
         }
       } catch (err) {
-        console.error('❌ Failed to log user activity:', err);
+        console.error('❌ Failed to register user activity log:', err);
         // Don’t block login if logging fails
       }
       return true;
@@ -146,6 +146,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           email: user.email,
           avatar: user.avatar,
+          contact: user.contact,
           accessToken: user.accessToken,
           expiresAt: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60,
           ...(user.role === 'admin' && { department: user.department }),
@@ -172,6 +173,7 @@ export const authOptions: NextAuthOptions = {
           name: token.name,
           email: token.email,
           avatar: token.avatar,
+          contact: token.contact,
           accessToken: token.accessToken,
           ...(token.role === 'admin' && { department: token.department }),
           ...(token.role === 'student' && { class_id: token.class_id }),

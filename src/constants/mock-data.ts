@@ -15,11 +15,21 @@ import {
   Calendar,
   Receipt,
   ReceiptText,
+  Activity,
 } from 'lucide-react';
 export const END_POINTS = {
   ADMIN: '/auth/login',
   STUDENTE: '/student/login',
   FACULTY: '/faculty/login',
+};
+export const REVALIDATION = {
+  ONE_MINUTES: 60,
+  FIVE_MINUTES: 5 * 60,
+  TEN_MINUTES: 10 * 60,
+  FIFTEEN_MINUTES: 15 * 60,
+  TWENTY_MINUTES: 20 * 60,
+  THIRTY_MINUTE: 30 * 60,
+  ONE_HOUR: 60 * 60,
 };
 export const ROUTES = {
   DASHBOARD: '/crm',
@@ -46,6 +56,11 @@ export const DUMMY_DATA = {
         href: `${ROUTES.DASHBOARD}/admin/users`,
         label: 'Útilizadores',
         icon: React.createElement(User),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/activitys`,
+        label: 'Registo de actividade',
+        icon: React.createElement(Activity),
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/academic-faculty`,
@@ -376,6 +391,61 @@ export const DUMMY_DATA = {
     },
   ],
 };
+export const NOTIFICATION_TYPES = [
+  {
+    key: 'user_action',
+    label: 'Apenas Actividades dos membros',
+    description:
+      'Notifica-me sobre todas publicações e atualizações dos membros',
+  },
+  {
+    key: 'payment_action',
+    label: 'Apenas Actividades Financeiras',
+    description: 'Notifica-me sobre todas actividades finançeiras',
+  },
+  {
+    key: 'users_logs',
+    label: 'Apenas Actividades dos membros',
+    description: 'Notifica-me sobre todas actividades dos membros',
+  },
+  {
+    key: 'student_action',
+    label: 'Actividades dos estudantes',
+    description:
+      'Notifica-me sobre todas publicações e atualizações dos estudantes',
+  },
+  {
+    key: 'department_action',
+    label: 'Actividades dos departamentos',
+    description:
+      'Notifica-me sobre todas publicações e atualizações dos departamentos',
+  },
+  {
+    key: 'course-action',
+    label: 'Actividades dos cursos',
+    description:
+      'Notifica-me sobre todas publicações e atualizações dos cursos',
+  },
+  {
+    key: 'events_action',
+    label: 'Actividades dos eventos',
+    description:
+      'Notifica-me sobre todas publicações e atualizações dos eventos',
+  },
+  {
+    key: 'calendar_action',
+    label: 'Actividades dos calendarios',
+    description:
+      'Notifica-me sobre todas publicações e atualizações dos calendarios',
+  },
+  {
+    key: 'exames_action',
+    label: 'Actividades dos calendarios',
+    description:
+      'Notifica-me sobre todas publicações e atualizações dos exames',
+  },
+] as const;
+
 export const months = [
   'Janeiro',
   'Fevereiro',

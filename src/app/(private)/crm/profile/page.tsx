@@ -3,14 +3,12 @@ import Avatar from '@/components/shared/avatar'
 import Card from '@/components/shared/card'
 import SheetModal from '@/components/shared/sheet-modal'
 import { Separator } from '@/components/ui/separator'
-import { authOptions } from '@/config/auth'
 import { getFirstAndLastName } from '@/lib/helper'
+import { User } from '@/lib/helper/auth/user'
 import { Pencil } from 'lucide-react'
-import { getServerSession } from 'next-auth'
 
-export default async function ProfilePage() {
-   const session = await getServerSession(authOptions)
-   const user = session?.user
+export default function ProfilePage() {
+   const user = User()
    const { firstName, lastName } = getFirstAndLastName(user?.name || '');
 
    return (

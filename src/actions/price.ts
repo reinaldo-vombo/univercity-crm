@@ -7,28 +7,18 @@ import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
 import { ActionResult } from '../types/api-error';
 import { TCoursePrice } from '../types/global';
-import {
-  coursePriceSchema,
-  updateCoursePriceSchema,
-} from '../lib/validation/coursePrice';
+import { createpriceSchema, UpdatePriceSchema } from '../lib/validation/price';
 
-export const addNewCoursePrice = validatedActionWithUser(
-  coursePriceSchema,
+export const addNewPrice = validatedActionWithUser(
+  createpriceSchema,
   async (data): Promise<ActionResult<TCoursePrice>> => {
-    const { courseId, price } = data;
-    const covertePrice = Number(price);
-    const newbody = {
-      courseId,
-      price: covertePrice,
-    };
-
     try {
-      const curses = await serverFetch<TCoursePrice>('/course-price', {
+      const curses = await serverFetch<TCoursePrice>('/price', {
         method: 'POST',
-        body: newbody,
+        body: data,
       });
 
-      revalidateTag('coursePrice');
+      revalidateTag('price');
 
       return {
         error: false,
@@ -52,22 +42,16 @@ export const addNewCoursePrice = validatedActionWithUser(
     }
   }
 );
-export const updateCoursePrice = validatedActionWithUser(
-  updateCoursePriceSchema,
+export const updatePrice = validatedActionWithUser(
+  UpdatePriceSchema,
   async (data): Promise<ActionResult<TCoursePrice>> => {
-    const { courseId, id, price } = data;
-    const covertePrice = Number(price);
-    const newBody = {
-      courseId,
-      price: covertePrice,
-    };
     try {
-      const curses = await serverFetch<TCoursePrice>(`/course-price/${id}`, {
+      const curses = await serverFetch<TCoursePrice>(`/price/${data.id}`, {
         method: 'PATCH',
-        body: newBody,
+        body: data,
       });
 
-      revalidateTag('coursePrice');
+      revalidateTag('price');
 
       return {
         error: false,
@@ -90,15 +74,15 @@ export const updateCoursePrice = validatedActionWithUser(
   }
 );
 
-export const deleteCoursePrice = async (
+export const deletePrice = async (
   id: string
 ): Promise<ActionResult<TCoursePrice>> => {
   try {
-    const data = await serverFetch<TCoursePrice>(`/course-price/${id}`, {
+    const data = await serverFetch<TCoursePrice>(`/price/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('coursePrice');
+    revalidateTag('price');
     return {
       error: false,
       data,

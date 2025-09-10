@@ -3,7 +3,10 @@
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
 import { TDepartemant } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import {
   departmentSchema,
   updateDepartmentSchema,
@@ -14,10 +17,10 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewDepartemant = validatedActionWithUser(
   departmentSchema,
-  async (data): Promise<ActionResult<TDepartemant>> => {
+  async (data, _, user): Promise<ActionResult<TDepartemant>> => {
     try {
       const departements = await serverFetch<TDepartemant>(
-        '/academic-department',
+        `/academic-department?userId=${user.id}&authorName=${user.name}`,
         {
           method: 'POST',
           body: data,
@@ -50,11 +53,11 @@ export const addNewDepartemant = validatedActionWithUser(
 );
 export const updatedDepartemant = validatedActionWithUser(
   updateDepartmentSchema,
-  async (data): Promise<ActionResult<TDepartemant>> => {
+  async (data, _, user): Promise<ActionResult<TDepartemant>> => {
     try {
       const { id, ...updateData } = data;
       const departements = await serverFetch<TDepartemant>(
-        `/academic-department/${id}`,
+        `/academic-department/${id}?userId=${user.id}&authorName=${user.name}`,
         {
           method: 'PATCH',
           body: updateData,
@@ -86,33 +89,56 @@ export const updatedDepartemant = validatedActionWithUser(
   }
 );
 
-export const deleteDepartment = async (
-  id: string
-): Promise<ActionResult<TDepartemant>> => {
-  try {
-    const data = await serverFetch<TDepartemant>(`/academic-department/${id}`, {
-      method: 'DELETE',
-    });
+// export const deleteDepartment = async (
+//   id: string
+// ): Promise<ActionResult<TDepartemant>> => {
+//   try {
+//     const data = await serverFetch<TDepartemant>(`/academic-department/${id}`, {
+//       method: 'DELETE',
+//     });
 
-    revalidateTag('departement');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+//     revalidateTag('departement');
+//     return {
+//       error: false,
+//       data,
+//     };
+//   } catch (error) {
+//     if (error instanceof ApiResponseError) {
+//       return {
+//         error: true,
+//         message: error.message,
+//         errorMessages: error.errorMessages,
+//         meta: error.meta,
+//       };
+//     }
+
+//     return {
+//       error: true,
+//       message:
+//         error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+//     };
+//   }
+// };
+export const deleteDepartment = actionWithUser(
+  async (id, user): Promise<ActionResult<TDepartemant>> => {
+    try {
+      const data = await serverFetch<TDepartemant>(
+        `/academic-department/${id}?userId=${user.id}&authorName=${user.name}`,
+        {
+          method: 'DELETE',
+        }
+      );
+
+      revalidateTag('departement');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message: error as string,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
   }
-};
+);

@@ -1,4 +1,4 @@
-'use client'
+
 
 import { BellRing, Search } from "lucide-react"
 import { Input } from "../../ui/input"
@@ -6,11 +6,23 @@ import ThemeToggle from "./toggle-theme"
 import { DropdownMenu } from "../../shared/dropdwon"
 import Avatar from "../../shared/avatar"
 import UserSetting from "./user-setting"
-import { User } from "@/lib/helper/auth/user"
+import { serverUser } from "@/lib/helper/auth/user"
 import { ThemePopOver } from "./theme-popover"
+import { getUserNotifications } from "@/services/data/history-logs"
+import NotificationTab from "@/components/container/notification-tab"
+//cmeyvtiab0000ukys0s3kak3u
+type TSeachParams = {
+   searchParams: Promise<{
+      [key: string]: string | string[] | undefined
+   }>
+}
+const Header = async ({ searchParams }: TSeachParams) => {
+   const take = (await searchParams).take;
+   console.log(take);
 
-const Header = () => {
-   const user = User();
+   const user = await serverUser();
+   const notifications = await getUserNotifications(user?.id || '')
+   console.log('notifn', notifications);
 
    return (
       <header className="sticky top-0 flex w-full bg-card">
@@ -37,7 +49,7 @@ const Header = () => {
                      className="relative flex size-11 items-center justify-center rounded-full border border-border bg-primary-foreground text-gray-500 transition-colors hover:bg-primary"
                      lable="Notificações"
                      trigger={<BellRing />}>
-                     notifications
+                     <NotificationTab data={notifications} />
                   </DropdownMenu>
                   <DropdownMenu
                      className="border-none shadow-none"

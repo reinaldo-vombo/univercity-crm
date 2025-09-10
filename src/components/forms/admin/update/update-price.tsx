@@ -15,31 +15,25 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TCourse } from "@/types/global"
-import Selector from "@/components/shared/selector"
-import { coursePriceSchema } from "@/lib/validation/coursePrice"
-import { addNewCoursePrice } from "@/actions/course-price"
+import { TPrice } from "@/types/global"
+import { UpdatePriceSchema } from "@/lib/validation/price"
+import { updatePrice } from "@/actions/price"
 
 type TProps = {
-   courses: TCourse[]
+   defaultValue: TPrice
 }
-const CreateCoursePriceForm = ({ courses }: TProps) => {
-   const courseOptions = courses.map((course) => ({
-      id: course.id,
-      label: course.title,
-      value: course.id
-   }))
+const UpdatePriceForm = ({ defaultValue }: TProps) => {
 
-   const form = useForm<z.infer<typeof coursePriceSchema>>({
-      resolver: zodResolver(coursePriceSchema),
+   const form = useForm<z.infer<typeof UpdatePriceSchema>>({
+      resolver: zodResolver(UpdatePriceSchema),
       defaultValues: {
-         price: '',
-         courseId: ''
+         id: defaultValue.id,
+         amount: defaultValue.amount || 0,
       }
    })
 
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof coursePriceSchema>) {
+   async function onSubmit(values: z.infer<typeof UpdatePriceSchema>) {
 
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
@@ -48,13 +42,13 @@ const CreateCoursePriceForm = ({ courses }: TProps) => {
 
       startTransition(async () => {
          try {
-            const response = await addNewCoursePrice(formData);
+            const response = await updatePrice(formData);
 
             if (response.error) {
                toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -72,13 +66,12 @@ const CreateCoursePriceForm = ({ courses }: TProps) => {
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
-               name="price"
+               name="amount"
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Preço</FormLabel>
                      <FormControl>
                         <Input
-                           type="number"
                            placeholder="Ex: 40000, 55000.."
                            {...field} />
                      </FormControl>
@@ -89,29 +82,27 @@ const CreateCoursePriceForm = ({ courses }: TProps) => {
             />
             <FormField
                control={form.control}
-               name="courseId"
+               name="description"
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Curso</FormLabel>
                      <FormControl>
-                        <Selector
-                           className="w-full"
-                           options={courseOptions}
-                           placeholder="Escolha um curso"
-                           formField={field} />
+                        <Input
+                           placeholder="Ex: Curso Recurso humanos"
+                           {...field} />
                      </FormControl>
-                     <FormDescription>O curso ao qual o preço pertence</FormDescription>
+                     <FormDescription>Opcional</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
 
             <SubmitBtn
-               label="Criar"
+               label="Atualisar"
                loading={isPending} />
          </form>
       </Form>
    )
 }
 
-export default CreateCoursePriceForm;
+export default UpdatePriceForm;

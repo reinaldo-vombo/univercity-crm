@@ -15,34 +15,22 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TCourse, TCoursePrice } from "@/types/global"
-import Selector from "@/components/shared/selector"
-import { updateCoursePriceSchema } from "@/lib/validation/coursePrice"
-import { updateCoursePrice } from "@/actions/course-price"
+import { createpriceSchema } from "@/lib/validation/price"
+import { addNewPrice } from "@/actions/price"
 
-type TProps = {
-   courses: TCourse[],
-   defaultValue: TCoursePrice
-}
-const UpdateCoursePriceForm = ({ courses, defaultValue }: TProps) => {
-   const courseOptions = courses.map((course) => ({
-      id: course.id,
-      label: course.title,
-      value: course.id
-   }))
-   const price = defaultValue.price !== undefined ? defaultValue.price.toString() : '';
 
-   const form = useForm<z.infer<typeof updateCoursePriceSchema>>({
-      resolver: zodResolver(updateCoursePriceSchema),
+const CreateCoursePriceForm = () => {
+
+   const form = useForm<z.infer<typeof createpriceSchema>>({
+      resolver: zodResolver(createpriceSchema),
       defaultValues: {
-         id: defaultValue.id,
-         price: price,
-         courseId: defaultValue.courseId
+         amount: 0,
+         description: ''
       }
    })
 
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof updateCoursePriceSchema>) {
+   async function onSubmit(values: z.infer<typeof createpriceSchema>) {
 
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
@@ -51,13 +39,13 @@ const UpdateCoursePriceForm = ({ courses, defaultValue }: TProps) => {
 
       startTransition(async () => {
          try {
-            const response = await updateCoursePrice(formData);
+            const response = await addNewPrice(formData);
 
             if (response.error) {
                toast.warning(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.UPDATED);
+            toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -75,12 +63,13 @@ const UpdateCoursePriceForm = ({ courses, defaultValue }: TProps) => {
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
-               name="price"
+               name="amount"
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Preço</FormLabel>
                      <FormControl>
                         <Input
+                           type="number"
                            placeholder="Ex: 40000, 55000.."
                            {...field} />
                      </FormControl>
@@ -91,29 +80,28 @@ const UpdateCoursePriceForm = ({ courses, defaultValue }: TProps) => {
             />
             <FormField
                control={form.control}
-               name="courseId"
+               name="description"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Curso</FormLabel>
+                     <FormLabel>Descrição</FormLabel>
                      <FormControl>
-                        <Selector
-                           className="w-full"
-                           options={courseOptions}
-                           placeholder="Escolha um curso"
-                           formField={field} />
+                        <Input
+                           type="number"
+                           placeholder="Ex: Monografia"
+                           {...field} />
                      </FormControl>
-                     <FormDescription>O curso ao qual o preço pertence</FormDescription>
+                     <FormDescription>Opcional</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
 
             <SubmitBtn
-               label="Atualisar"
+               label="Criar"
                loading={isPending} />
          </form>
       </Form>
    )
 }
 
-export default UpdateCoursePriceForm;
+export default CreateCoursePriceForm;
