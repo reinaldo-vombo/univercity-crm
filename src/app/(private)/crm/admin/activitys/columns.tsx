@@ -1,15 +1,15 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Trash, Trash2 } from "lucide-react"
+import { Trash } from "lucide-react"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TActionHistory } from "@/types/global"
-import { formatDate } from "@/lib/helper"
+import { formatDate, formatTimeAgo } from "@/lib/helper"
 import Avatar from "@/components/shared/avatar"
 import { Badge } from "@/components/ui/badge"
-import { deleteAllAudiLog, deleteAudiLog } from "@/actions/activitiys"
+import { deleteAudiLog } from "@/actions/activitiys"
 
 
 export function AuditColumns(): ColumnDef<TActionHistory>[] {
@@ -62,29 +62,30 @@ export function AuditColumns(): ColumnDef<TActionHistory>[] {
          cell: ({ row }) => {
             const type = row.original.entityType
             return (
-               <b className="truncate max-w-[180px]">{type}</b>
+               <Badge>
+                  <b>{type}</b>
+               </Badge>
             )
          },
       },
       {
          accessorKey: "createdAt",
-         header: "Data de  publicação",
+         header: "Data de registro",
          cell: ({ row }) => {
-            const createdAt = row.original.createdAt
+            const createdAt = row.original.createdAt;
             return (
-               <div>
+               <div className="grid">
                   <span className="truncate max-w-[180px]">{formatDate(createdAt)}</span>
-                  {/* <span className="truncate max-w-[180px]">{createdAt.getTime()}</span> */}
+                  <span className="truncate max-w-[180px]">{formatTimeAgo(createdAt)}</span>
                </div>
             )
          }
-
       },
       {
          id: "actions",
          header: 'Acção',
          cell: ({ row }) => {
-            const building = row.original
+            const audit = row.original
 
             const handleDelete = async (id: string) => {
                try {
@@ -99,28 +100,11 @@ export function AuditColumns(): ColumnDef<TActionHistory>[] {
                   console.error(err);
                }
             };
-            const handleDeleteAll = async (id: string) => {
-               try {
-                  const res = await deleteAllAudiLog(id);
-                  if (res.error) {
-                     toast.warning(res.message)
-                  }
-                  toast.success(FLASH_MESSAGE.DELETED);
-                  // Optionally refresh UI or mutate local state
-               } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
-                  console.error(err);
-               }
-            };
-
             return (
                <div className="flex items-center gap-3">
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
-                     action={() => handleDelete(building.id)} />
-                  <AlertModal
-                     trigger={<Trash2 className="h-4 w-4 text-red-500 cursor-pointer" />}
-                     action={() => handleDeleteAll(building.id)} />
+                     action={() => handleDelete(audit.id)} />
                </div>
             )
          },

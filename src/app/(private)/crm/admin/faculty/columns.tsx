@@ -135,7 +135,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     className="sm:max-w-md"
+                     className="sm:max-w-4xl"
                      title="Detalhes do professore"
                      description='Informções relecionadass ao professore'>
                      <FalcultyDetails data={falculty} />

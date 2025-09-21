@@ -9,6 +9,7 @@ const herader = {
 }
 const payments = [
    {
+      id: '1',
       paymentId: 'PTM-001',
       paymentType: 'EXPRESS',
       transactionRef: '09776',
@@ -17,6 +18,7 @@ const payments = [
       TotalAmount: 45000,
       status: 'PAID',
       approved: true,
+      entity: 'Reginalde Baggle',
       atendent: 'Maria Sousar',
       currency: 'AOA',
       paymentPurpose: {
@@ -24,8 +26,8 @@ const payments = [
          description: 'Pagemento da propina'
       },
       message: 'Pagamento aprovado',
-      createAt: new Date()
-   }
+      createdAt: new Date()
+   },
 ]
 
 export function PaymentTable() {

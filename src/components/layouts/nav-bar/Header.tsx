@@ -1,5 +1,4 @@
 
-
 import { BellRing, Search } from "lucide-react"
 import { Input } from "../../ui/input"
 import ThemeToggle from "./toggle-theme"
@@ -10,19 +9,17 @@ import { serverUser } from "@/lib/helper/auth/user"
 import { ThemePopOver } from "./theme-popover"
 import { getUserNotifications } from "@/services/data/history-logs"
 import NotificationTab from "@/components/container/notification-tab"
+import Popover from "@/components/shared/popover"
 //cmeyvtiab0000ukys0s3kak3u
-type TSeachParams = {
-   searchParams: Promise<{
-      [key: string]: string | string[] | undefined
-   }>
-}
-const Header = async ({ searchParams }: TSeachParams) => {
-   const take = (await searchParams).take;
-   console.log(take);
-
+// type TSeachParams = {
+//    searchParams: Promise<{
+//       [key: string]: string | string[] | undefined
+//    }>
+// }
+const Header = async () => {
    const user = await serverUser();
    const notifications = await getUserNotifications(user?.id || '')
-   console.log('notifn', notifications);
+   const unreadCount = notifications.filter((notification) => !notification.read).length
 
    return (
       <header className="sticky top-0 flex w-full bg-card">
@@ -45,12 +42,15 @@ const Header = async ({ searchParams }: TSeachParams) => {
                <div className="flex items-center gap-2 2xsm:gap-3">
                   <ThemePopOver />
                   <ThemeToggle />
-                  <DropdownMenu
-                     className="relative flex size-11 items-center justify-center rounded-full border border-border bg-primary-foreground text-gray-500 transition-colors hover:bg-primary"
-                     lable="Notificações"
-                     trigger={<BellRing />}>
+                  <Popover
+                     className="w-[37rem]"
+                     trigger={
+                        <>
+                           <BellRing />
+                           {unreadCount > 0 && <span className="absolute rounded-full size-2 bg-green-500 bottom-0 right-0" />}
+                        </>}>
                      <NotificationTab data={notifications} />
-                  </DropdownMenu>
+                  </Popover>
                   <DropdownMenu
                      className="border-none shadow-none"
                      showLogOut={true}

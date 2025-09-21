@@ -17,17 +17,17 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
    return [
       {
          accessorKey: "paymentId",
-         header: "Id do pagamento",
+         header: "Id",
       },
       {
          accessorKey: "transactionRef",
-         header: "Referencia do pagamento",
+         header: "Referencia",
       },
       {
          accessorKey: "TotalAmount",
          header: "Valor pago",
          cell: ({ row }) => {
-            const amount = row.original.totalAmount;
+            const amount = row.original.TotalAmount;
             return (
                <b>{formatCurrency(amount)}</b>
             );
@@ -60,8 +60,16 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
          header: "Tipo de Pagamento",
       },
       {
-         accessorKey: "paymentMethod",
-         header: "Metodo",
+         accessorKey: "entity",
+         cell: ({ row }) => {
+            const user = row.original.entity;
+            return (
+               <div className="flex items-center gap-2">
+                  <Avatar name={user} photo="/figure-1.png" />
+                  <b>{user}</b>
+               </div>
+            );
+         },
       },
 
       {
@@ -84,7 +92,7 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
             const status = row.original.approved;
             return (
                <Badge className={`${status ? 'bg-green-300' : 'bg-red-300'} rounded-full text-white flex items-center gap-2`}>
-                  <span className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full size-4`} />
+                  <span className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full size-3`} />
                   <b>{status ? 'Confirmado' : 'Pendente'}</b>
                </Badge>
             );
@@ -95,13 +103,6 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
          header: "Data de  publicação",
          cell: ({ row }) => (
             <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
-         ),
-      },
-      {
-         accessorKey: "updatedAt",
-         header: "Data de  atualização",
-         cell: ({ row }) => (
-            <span className="truncate max-w-[180px]">{formatDate(row.getValue("updatedAt"))}</span>
          ),
       },
       {

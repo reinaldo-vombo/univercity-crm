@@ -18,11 +18,11 @@ import {
 } from '../ui/form';
 import { NOTIFICATION_TYPES } from '@/constants/mock-data';
 import SubmitBtn from '../shared/submit-btn';
-import { createNotificationPreference } from '@/actions/users';
 import { toast } from 'sonner';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { TNotificationPreference } from '@/types/global';
 import { Bell, Mail, Smartphone } from 'lucide-react';
+import { createNotificationPreference } from '@/actions/activitiys';
 
 type FormValues = z.infer<typeof preferenceShema>
 type TProps = {
@@ -34,10 +34,15 @@ const Notification = ({ config }: TProps) => {
       resolver: zodResolver(preferenceShema),
       defaultValues: {
          enabled: enabled || true,
-         important: settings.important || true,
-         department: settings.department || false,
-         payment: settings.payment || false,
-         user: settings.payment || false,
+         calendar_action: settings.calendar_action,
+         course_action: settings.course_action,
+         department_action: settings.department_action,
+         events_action: settings.events_action,
+         exames_action: settings.exames_action,
+         payment_action: settings.payment_action,
+         student_action: settings.student_action,
+         user_action: settings.user_action,
+         users_logs: settings.users_logs
       }
    })
    const [isPending, startTransition] = useTransition();

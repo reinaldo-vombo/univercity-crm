@@ -48,7 +48,7 @@ export function validatedAction<S extends z.ZodTypeAny, R>(
  */
 
 export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
-  return async (id: string): Promise<R> => {
+  return async (id?: string): Promise<R> => {
     const session = await getServerSession(authOptions);
     const user = session?.user;
 

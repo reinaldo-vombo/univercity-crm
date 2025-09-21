@@ -5,7 +5,7 @@ import { Clock, Lock, MailOpen, MapPin, PhoneIncoming, ShieldCheck } from "lucid
 import { Separator } from "../ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { TAuthLogos } from "@/types/global"
-import { formatDate } from "@/lib/helper"
+import { formatDate, formatTimeAgo } from "@/lib/helper"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -222,7 +222,7 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
                   </div>
                   <div className="flex items-center gap-16">
                      <b>{formatDate(session.timestamp)}</b>
-                     {/* <b>{session.timestamp.getTime()}</b> */}
+                     <b>{formatTimeAgo(session.timestamp)}</b>
                      <b className={session.isActive ? 'text-green-500' : 'text-red-500'}>{session.isActive ? 'Activo' : 'Inativo'}</b>
                   </div>
                </div>

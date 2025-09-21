@@ -1,3 +1,4 @@
+'use server';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
   actionWithUser,
@@ -37,13 +38,11 @@ export const logUserActivitys = async (id: string) => {
     timestamp,
     isActive: true,
   };
-  console.log('logs', data);
   try {
     await serverFetch<TAuthLogos>('/users-session', {
       method: 'POST',
       body: data,
     });
-    console.log('sucesse');
   } catch (err) {
     if (err instanceof ApiResponseError) {
       return {
@@ -67,7 +66,7 @@ export const logoutUserActivitys = actionWithUser(async (id, user) => {
       method: 'PUT',
       body: {
         id,
-        userId: user.id,
+        userId: user?.id,
       },
     });
   } catch (err) {
@@ -139,14 +138,11 @@ export const markAllNotificationAsRead = async (id: string) => {
 export const createNotificationPreference = validatedActionWithUser(
   preferenceShema,
   async (data, _, user): Promise<ActionResult<TNotificationPreference>> => {
+    const { enabled, ...settings } = data;
     const newBody = {
       userId: user.id,
-      settings: {
-        important: data.important,
-        payment: data.department,
-        user: data.user,
-        department: data.payment,
-      },
+      enabled,
+      settings,
     };
 
     try {
@@ -253,7 +249,29 @@ export const deleteNotification = actionWithUser(
     }
   }
 );
-export const deleteAllNotification = actionWithUser(
+export const deleteAllNotification = async (): Promise<
+  ActionState<TNotification>
+> => {
+  try {
+    const log = await serverFetch<TNotification>(`/notifications/`, {
+      method: 'DELETE',
+    });
+
+    revalidateTag('notification');
+    return {
+      error: false,
+      message: FLASH_MESSAGE.DELETED,
+      data: log,
+    };
+  } catch (error) {
+    return {
+      error: true,
+      message: error as string,
+    };
+  }
+};
+
+export const deleteAllUserNotification = actionWithUser(
   async (id, user): Promise<ActionState<TNotification>> => {
     try {
       const log = await serverFetch<TNotification>(

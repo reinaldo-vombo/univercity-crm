@@ -264,10 +264,15 @@ export type TNotificationPreference = {
   userId: string;
   enabled: boolean;
   settings: {
-    user: boolean;
-    important: boolean;
-    payment: boolean;
-    department: boolean;
+    user_action: boolean;
+    users_logs: boolean;
+    student_action: boolean;
+    department_action: boolean;
+    payment_action: boolean;
+    course_action: boolean;
+    events_action: boolean;
+    calendar_action: boolean;
+    exames_action: boolean;
   };
   updatedAt: Date;
 };
@@ -279,4 +284,19 @@ export type TActionHistory = {
   entityType: string;
   entityId: string;
   user: TUser;
+};
+export type TPayment = {
+  id: string;
+  atendent: string;
+  method: string;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
+  currency: string;
+  entity: string;
+  TotalAmount: number;
+  extraAmount: number;
+  transactionRef: string;
+  approved: boolean;
+  paymentType: string;
 };

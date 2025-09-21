@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback } from "react"
-import Card from "./card"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { createQueryString } from "@/lib/helper"
 import { Button } from "../ui/button"
@@ -33,20 +32,19 @@ const MessageFilter = () => {
       router.push(pathname + '?' + generateQueryString(queryName, queryValue), { scroll: false })
    }
    return (
-      <Card>
-         <div className="flex items-center">
-            {notificationType.map((type) => (
-               <div className="flex items-center justify-around" key={type.value}>
-                  <Button
-                     variant={query === type.value ? 'secondary' : 'default'}
-                     onClick={() => onChange('type', type.value)}
-                  >
-                     {type.lable}
-                  </Button>
-               </div>
-            ))}
-         </div>
-      </Card>
+      <div className="flex items-center gap-4 p-3">
+         {notificationType.map((type) => (
+            <div className="flex items-center " key={type.value}>
+               <Button
+                  className="rounded-lg"
+                  variant={query === type.value ? 'secondary' : 'default'}
+                  onClick={() => onChange('type', type.value)}
+               >
+                  {type.lable}
+               </Button>
+            </div>
+         ))}
+      </div>
    )
 }
 

@@ -19,7 +19,7 @@ export type TCardProps = {
 
 export type TAvatarProps = {
   name: string;
-  photo: string;
+  photo?: string;
   className?: string;
 };
 export type TSelectPros = {

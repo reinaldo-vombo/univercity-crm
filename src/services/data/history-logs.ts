@@ -40,26 +40,7 @@ export const getUserNotifications = async (
     handleApiError(error);
   }
 };
-export const getSigleUserNotifications = async (
-  id: string,
-  take?: number
-): Promise<TNotification[]> => {
-  if (!id) {
-    console.error('Id é obrigatorio');
-    return [];
-  }
-  try {
-    const notifications = await serverFetch<TNotification[]>(
-      `/notifications?userId=${id}&?take=${take}`,
-      {
-        next: { tags: ['notification'], revalidate: REVALIDATION.ONE_MINUTES },
-      }
-    );
-    return notifications;
-  } catch (error) {
-    handleApiError(error);
-  }
-};
+
 export const getUserNotificationsPreference = async (
   id: string
 ): Promise<TNotificationPreference> => {
