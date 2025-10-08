@@ -1,7 +1,6 @@
 
+import { getAllBuilding } from "@/services/data/academic";
 import { BuldingTable } from "./client-table";
-import { getAllBuilding } from "@/lib/helper/db/querys";
-
 
 export async function BuildingTableServer() {
 

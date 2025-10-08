@@ -2,7 +2,7 @@
 import { getAllDepartments } from "@/services/data/department";
 import { DepartmentTable } from "./client-table";
 import { getAllUsers } from '@/services/data/user'
-import { getAllAcademicFaculty } from "@/lib/helper/db/querys";
+import { getAllAcademicFaculty } from "@/services/data/academic";
 
 
 export async function DepartmentTableServer() {

@@ -12,7 +12,18 @@ export type TUser = {
   };
   number: number;
 };
-
+export type IQueryParams = {
+  page?: number;
+  limit?: number;
+  search?: string | string[];
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+};
+export type TSeachParams = {
+  searchParams: Promise<{
+    [key: string]: string | string[] | undefined;
+  }>;
+};
 export type TEvents = {
   id: string;
   title: string;
@@ -92,7 +103,6 @@ export type TDiscipline = {
   name: string;
   code: string;
   description: string | null;
-  credits: number;
   minimumGradeToDismiss: number;
   createdAt: Date;
   updatedAt: Date;
@@ -156,10 +166,15 @@ export type TAdmitionExame = {
 export type TDepartemant = {
   id: string;
   title: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
   academicFacultyId: string;
   departmentHeadId: string | null;
+  departmentHead: {
+    name: string;
+    id: string;
+    avatar: string | null;
+  } | null;
 };
 export type TBuilding = {
   id: string;
@@ -200,30 +215,63 @@ export type TStudent = {
   presentAddress: string;
   createdAt: Date;
 };
+// export type TFaculty = {
+//   id: string;
+//   facultyId: string;
+//   firstName: string;
+//   middleName: string | null;
+//   lastName: string;
+//   email: string;
+//   contactNo: string;
+//   profileImage: string;
+//   designation: string;
+//   gender: string;
+//   shift: 'MORNING' | 'AFTERNOON' | 'EVENING';
+//   password: string;
+//   academicDepartment: {
+//     title: string;
+//   };
+//   courses: {
+//     facultyId: string;
+//     courseId: string;
+//   }[];
+//   academicFacultyId: string;
+//   academicDepartmentId: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+// };
 export type TFaculty = {
+  academicDepartment: {
+    title: string;
+  };
+  courses: {
+    course: {
+      title: string;
+    };
+  } & {
+    facultyId: string;
+    courseId: string;
+  }[];
+  shift: {
+    name: string;
+  };
+} & {
   id: string;
   facultyId: string;
   firstName: string;
   middleName: string | null;
   lastName: string;
-  email: string;
-  contactNo: string;
-  profileImage: string;
-  designation: string;
+  profileImage: string | null;
+  email: string | null;
+  contactNo: string | null;
   gender: string;
-  shift: 'MORNING' | 'AFTERNOON' | 'EVENING';
+  designation: string;
   password: string;
-  academicDepartment: {
-    title: string;
-  };
-  courses: {
-    facultyId: string;
-    courseId: string;
-  }[];
   academicFacultyId: string;
   academicDepartmentId: string;
   createdAt: Date;
   updatedAt: Date;
+  shiftId: string;
 };
 export type TAuthLogos = {
   id: string;
@@ -299,4 +347,14 @@ export type TPayment = {
   transactionRef: string;
   approved: boolean;
   paymentType: string;
+};
+
+export type TMenssage = {
+  id: string;
+  type: string;
+  smsMessage?: string | undefined;
+  menssage?: string | undefined;
+  phoneNumber?: string | undefined;
+  email?: string | undefined;
+  senderName: string;
 };

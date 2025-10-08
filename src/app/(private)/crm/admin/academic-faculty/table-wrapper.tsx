@@ -1,5 +1,5 @@
 
-import { getAllAcademicFaculty } from "@/lib/helper/db/querys";
+import { getAllAcademicFaculty } from "@/services/data/academic";
 import { AcademicFacultyTable } from "./client-table";
 
 export async function CurseTableServer() {

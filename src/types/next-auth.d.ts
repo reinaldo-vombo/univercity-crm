@@ -7,12 +7,14 @@ declare module 'next-auth' {
     email: string;
     avatar: string;
     number: number;
+    contact: any;
     role: string;
     accessToken: string;
     expiresAt: number;
   }
   interface Session {
     user?: IUser & DefaultSession['user'];
+    expiresAt: any;
   }
 }
 

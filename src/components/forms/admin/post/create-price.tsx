@@ -17,10 +17,11 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { createpriceSchema } from "@/lib/validation/price"
 import { addNewPrice } from "@/actions/price"
+import useQueryParam from "@/lib/hooks/use-query-param"
 
 
 const CreateCoursePriceForm = () => {
-
+   const { removeParam } = useQueryParam()
    const form = useForm<z.infer<typeof createpriceSchema>>({
       resolver: zodResolver(createpriceSchema),
       defaultValues: {
@@ -47,6 +48,7 @@ const CreateCoursePriceForm = () => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            removeParam("sheet")
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

@@ -7,15 +7,18 @@ import {
   TNotification,
   TNotificationPreference,
 } from '@/types/global';
+import { FLASH_MESSAGE } from '@/constants/flash-message';
 
-export const getUserSeesionLogs = async (id: string): Promise<TAuthLogos[]> => {
-  if (!id) {
-    console.error('Id é obrigatorio');
+export const getUserSeesionLogs = async (
+  userId: string
+): Promise<TAuthLogos[]> => {
+  if (!userId) {
+    console.error(FLASH_MESSAGE.ID_REQUIRID);
     return [];
   }
   try {
     const sessionLogs = await serverFetch<TAuthLogos[]>(
-      `/users-session/${id}`,
+      `/users-session/${userId}`,
       {
         next: { tags: ['logs'], revalidate: REVALIDATION.ONE_MINUTES },
       }
@@ -26,11 +29,15 @@ export const getUserSeesionLogs = async (id: string): Promise<TAuthLogos[]> => {
   }
 };
 export const getUserNotifications = async (
-  id: string
+  userId: string
 ): Promise<TNotification[]> => {
+  if (!userId) {
+    console.error(FLASH_MESSAGE.ID_REQUIRID);
+    return [];
+  }
   try {
     const notifications = await serverFetch<TNotification[]>(
-      `/notifications/${id}`,
+      `/notifications/${userId}`,
       {
         next: { tags: ['notification'], revalidate: REVALIDATION.ONE_MINUTES },
       }
@@ -42,11 +49,15 @@ export const getUserNotifications = async (
 };
 
 export const getUserNotificationsPreference = async (
-  id: string
-): Promise<TNotificationPreference> => {
+  userId: string
+): Promise<TNotificationPreference | null> => {
+  if (!userId) {
+    console.error(FLASH_MESSAGE.ID_REQUIRID);
+    return null;
+  }
   try {
     const preferenceSettings = await serverFetch<TNotificationPreference>(
-      `/notifications/preferences/${id}`,
+      `/notifications/preferences/${userId}`,
       {
         next: { tags: ['preference'], revalidate: REVALIDATION.ONE_MINUTES },
       }

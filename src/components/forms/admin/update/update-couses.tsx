@@ -26,7 +26,7 @@ type TProps = {
 }
 
 const UpdateCourseForm = ({ values }: TProps) => {
-   const { id, title, code, credits } = values;
+   const { id, title, code } = values;
 
    const form = useForm<z.infer<typeof updateCourseSchema>>({
       resolver: zodResolver(updateCourseSchema),
@@ -34,7 +34,7 @@ const UpdateCourseForm = ({ values }: TProps) => {
          id,
          title,
          code,
-         credits
+         credits: 0
       }
    })
    const [isPending, startTransition] = useTransition();

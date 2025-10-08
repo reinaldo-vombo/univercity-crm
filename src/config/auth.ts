@@ -179,6 +179,7 @@ export const authOptions: NextAuthOptions = {
           ...(token.role === 'student' && { class_id: token.class_id }),
           ...(token.role === 'faculty' && { subjects: token.subjects }),
         },
+        expiresAt: token.expiresAt,
       };
     },
     async redirect({ url, baseUrl }: any) {

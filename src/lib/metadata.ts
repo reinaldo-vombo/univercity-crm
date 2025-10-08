@@ -19,6 +19,7 @@ export const commonMetadata: Metadata = {
     default: NEXT_PUBLIC_SITE_NAME || 'Enrollix',
     template: `%s | ${NEXT_PUBLIC_SITE_NAME || 'Enrollix'}`,
   },
+  icons: [{ rel: 'icon', url: CONTENT.metadata.favicon }],
   description: CONTENT.metadata.description,
   keywords: CONTENT.metadata.keyWords,
   referrer: 'origin-when-cross-origin',
@@ -56,6 +57,10 @@ export const commonMetadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: { 'pt-PT': '/pt-PT' },
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   metadataBase: new URL(baseUrl),
   category: 'education',

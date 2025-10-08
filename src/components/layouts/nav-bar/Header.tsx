@@ -10,6 +10,9 @@ import { ThemePopOver } from "./theme-popover"
 import { getUserNotifications } from "@/services/data/history-logs"
 import NotificationTab from "@/components/container/notification-tab"
 import Popover from "@/components/shared/popover"
+import Ping from "@/components/shared/ping"
+import LanguageSwitcher from "../LanguageSwitcher"
+import { Fragment } from "react"
 //cmeyvtiab0000ukys0s3kak3u
 // type TSeachParams = {
 //    searchParams: Promise<{
@@ -19,7 +22,7 @@ import Popover from "@/components/shared/popover"
 const Header = async () => {
    const user = await serverUser();
    const notifications = await getUserNotifications(user?.id || '')
-   const unreadCount = notifications.filter((notification) => !notification.read).length
+   const unreadMessageCount = notifications.filter((notification) => !notification.read).length
 
    return (
       <header className="sticky top-0 flex w-full bg-card">
@@ -40,17 +43,23 @@ const Header = async () => {
             </div>
             <div className="w-full items-center justify-between gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none hidden">
                <div className="flex items-center gap-2 2xsm:gap-3">
+                  <LanguageSwitcher />
                   <ThemePopOver />
                   <ThemeToggle />
-                  <Popover
-                     className="w-[37rem]"
-                     trigger={
-                        <>
-                           <BellRing />
-                           {unreadCount > 0 && <span className="absolute rounded-full size-2 bg-green-500 bottom-0 right-0" />}
-                        </>}>
-                     <NotificationTab data={notifications} />
-                  </Popover>
+                  <div className="relative">
+                     <Popover
+                        className="w-[37rem]"
+                        trigger={
+                           <Fragment>
+                              <BellRing />
+                              <div className="absolute bottom-0 right-0">
+                                 {unreadMessageCount > 0 && <Ping />}
+                              </div>
+                           </Fragment>}>
+                        <NotificationTab data={notifications} userId={user?.id} />
+                     </Popover>
+
+                  </div>
                   <DropdownMenu
                      className="border-none shadow-none"
                      showLogOut={true}

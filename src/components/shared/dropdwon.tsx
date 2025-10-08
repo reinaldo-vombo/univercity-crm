@@ -32,7 +32,7 @@ export function DropdownMenu({ children, trigger, showLogOut = false, lable, var
             {showLogOut && (
                <Fragment>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex items-center rounded-md bg-red-800" onClick={() => signOut()}>
+                  <DropdownMenuItem className="flex items-center rounded-md bg-red-800 text-red-500 py-2" onClick={() => signOut()}>
                      <LogOut className="text-red-500" />
                      Sair
                   </DropdownMenuItem>

@@ -1,6 +1,6 @@
 
+import { getAllAcademicFaculty } from "@/services/data/academic";
 import { FalcultyTable } from "./client-table";
-import { getAllAcademicFaculty } from "@/lib/helper/db/querys";
 import { getAllDepartments } from "@/services/data/department";
 import { getAllFalculty } from "@/services/data/falculty";
 

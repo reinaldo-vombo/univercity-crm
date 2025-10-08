@@ -82,6 +82,43 @@ export const updatedFaculty = validatedActionWithUser(
     }
   }
 );
+export const assiFaculty = validatedActionWithUser(
+  updateFacultySchema,
+  async (data): Promise<ActionResult<TFaculty>> => {
+    try {
+      const { id, ...updateData } = data;
+      const departements = await serverFetch<TFaculty>(
+        `/assign-discipline/${id}`,
+        {
+          method: 'PATCH',
+          body: updateData,
+        }
+      );
+
+      revalidateTag('faculty');
+
+      return {
+        error: false,
+        data: departements,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
+      }
+
+      return {
+        error: true,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      };
+    }
+  }
+);
 
 export const deleteFaculty = async (
   id: string

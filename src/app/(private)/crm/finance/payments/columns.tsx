@@ -16,18 +16,18 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
    }
    return [
       {
-         accessorKey: "paymentId",
+         accessorKey: "Id",
          header: "Id do pagamento",
       },
       {
          accessorKey: "transactionRef",
-         header: "Referencia do pagamento",
+         header: "Referencia",
       },
       {
          accessorKey: "TotalAmount",
          header: "Valor pago",
          cell: ({ row }) => {
-            const amount = row.original.totalAmount;
+            const amount = row.original.TotalAmount;
             return (
                <b>{formatCurrency(amount)}</b>
             );
@@ -60,11 +60,6 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
          header: "Tipo de Pagamento",
       },
       {
-         accessorKey: "paymentMethod",
-         header: "Metodo",
-      },
-
-      {
          accessorKey: "atendent",
          header: "Responsavel",
          cell: ({ row }) => {
@@ -77,19 +72,7 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
             );
          },
       },
-      {
-         accessorKey: "approved",
-         header: "Situação",
-         cell: ({ row }) => {
-            const status = row.original.approved;
-            return (
-               <Badge className={`${status ? 'bg-green-300' : 'bg-red-300'} rounded-full text-white flex items-center gap-2`}>
-                  <span className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full size-4`} />
-                  <b>{status ? 'Confirmado' : 'Pendente'}</b>
-               </Badge>
-            );
-         },
-      },
+
       {
          accessorKey: "createdAt",
          header: "Data de  publicação",

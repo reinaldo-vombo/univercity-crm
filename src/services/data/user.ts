@@ -2,23 +2,29 @@ import { TUser } from '@/types/global';
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
 import { REVALIDATION } from '@/constants/mock-data';
+import { FLASH_MESSAGE } from '@/constants/flash-message';
 
-export const getSigleUser = async (id: string): Promise<TUser[]> => {
+export const getAllUsers = async (): Promise<TUser[]> => {
   try {
-    const user = await serverFetch<TUser[]>(`/users/${id}`, {
-      next: { tags: ['user'] },
+    const users = await serverFetch<TUser[]>('/users', {
+      next: { tags: ['user'], revalidate: REVALIDATION.THIRTY_MINUTE },
     });
-    return user;
+    return users;
   } catch (error) {
     handleApiError(error);
   }
 };
-export const getAllUsers = async (): Promise<TUser[]> => {
+
+export const getSigleUser = async (userId: string): Promise<TUser[]> => {
+  if (!userId) {
+    console.error(FLASH_MESSAGE.ID_REQUIRID);
+    return [];
+  }
   try {
-    const users = await serverFetch<TUser[]>('/users', {
-      next: { tags: ['users'], revalidate: REVALIDATION.THIRTY_MINUTE },
+    const user = await serverFetch<TUser[]>(`/users/${userId}`, {
+      next: { tags: ['user'] },
     });
-    return users;
+    return user;
   } catch (error) {
     handleApiError(error);
   }

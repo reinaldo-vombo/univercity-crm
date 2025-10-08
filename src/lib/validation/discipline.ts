@@ -7,20 +7,20 @@ export const disciplineSchema = z.object({
   code: z.string({
     required_error: 'O código da disciplina é obrigatório',
   }),
-  description: z.string().optional(),
-  credits: z.coerce
-    .number({
-      required_error: 'O número de créditos é obrigatório',
-    })
-    .min(1, { message: 'Créditos devem ser maior que 0' }),
+  courseId: z.string({
+    required_error: 'O id do curso é obrigatório',
+  }),
+  semesterId: z.string({
+    required_error: 'O id do semestre é obrigatório',
+  }),
   minimumGradeToDismiss: z.coerce.number(),
 });
 
 export const updateDisciplineSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
+  courseId: z.string().optional(),
+  semesterId: z.string().optional(),
   code: z.string().optional(),
-  description: z.string().optional(),
-  credits: z.coerce.number(),
   minimumGradeToDismiss: z.coerce.number(),
 });

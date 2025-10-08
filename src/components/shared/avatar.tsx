@@ -12,7 +12,7 @@ const Avatar = ({ name, photo, className }: TAvatarProps) => {
 
    return (
       <AvatarContainer className={`${className || 'size-11'} `}>
-         <AvatarImage src={photo || '/default.jpeg'} />
+         <AvatarImage src={photo || '/avatar-1.jpg'} />
          <AvatarFallback>{getInitials(name) || 'CN'}</AvatarFallback>
       </AvatarContainer>
 

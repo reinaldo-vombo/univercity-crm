@@ -44,18 +44,20 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 ### Admin pages
 
 - [ ] Dashboard/root
-- [ ] All studente pages
+- [x] All studente pages
+- [x] Sigle studente pages
 - [x] All Teacher pages
 - [x] All departemant pages
 - [x] All Semester pages
 - [x] All curses pages
 - [x] All building pages
-- [ ] All Payment pages
+- [x] All Payment pages
 - [x] All users pages
 - [x] All course pages
 - [x] All course price pages
 - [x] All discipline pages
 - [x] Events page
+- [ ] Calendar page
 - [x] Error page
 - [x] NotFound page
 - [x] Unauthenticated page
@@ -69,6 +71,11 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Data revalidation
 - [x] Dark mode
 - [x] Color themes
+- [x] Online & Offline status
+- [x] Send menssage to app
+- [x] Send menssage to sms
+- [x] Send menssage to email
+- [x] Generate payment receipt
 - [x] Assigne user to departament
 - [x] Assigne faculty to curse
 - [x] Reusible table-table
@@ -108,7 +115,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [ ] Payment model in Prisma
 - [ ] Add payment entries with status
 - [ ] Filter/search payments
-- [ ] Export reports (CSV or PDF)
+- [x] Export reports (CSV or PDF)
 
 ---
 

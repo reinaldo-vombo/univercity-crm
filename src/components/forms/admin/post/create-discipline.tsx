@@ -18,16 +18,33 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { disciplineSchema } from "@/lib/validation/discipline"
 import { addNewDiscipline } from "@/actions/discipline"
 import { generateSlug } from "@/lib/helper"
+import useQueryParam from "@/lib/hooks/use-query-param"
+import { TCourse, TSemester } from "@/types/global"
+import Selector from "@/components/shared/selector"
 
-const CreateDisciplineForm = () => {
-
+type TProps = {
+   semesters: TSemester[],
+   curses: TCourse[]
+}
+const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
+   const { removeParam } = useQueryParam()
+   const academicSemester = semesters.map(semester => ({
+      id: semester.id,
+      label: semester.title,
+      value: semester.id,
+   }));
+   const academicCurses = curses.map(curse => ({
+      id: curse.id,
+      label: curse.title,
+      value: curse.id,
+   }));
    const form = useForm<z.infer<typeof disciplineSchema>>({
       resolver: zodResolver(disciplineSchema),
       defaultValues: {
          name: "",
          code: "",
-         credits: 1,
-         description: "",
+         courseId: "",
+         semesterId: "",
          minimumGradeToDismiss: 10
       }
    })
@@ -52,6 +69,7 @@ const CreateDisciplineForm = () => {
 
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            removeParam("sheet")
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -102,6 +120,42 @@ const CreateDisciplineForm = () => {
             />
             <FormField
                control={form.control}
+               name="courseId"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Curso</FormLabel>
+                     <FormControl>
+                        <Selector
+                           className="w-full"
+                           options={academicCurses}
+                           placeholder="Recursos Humanos"
+                           formField={field} />
+                     </FormControl>
+                     <FormDescription>Selecione o director do departamento</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="semesterId"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Semestre</FormLabel>
+                     <FormControl>
+                        <Selector
+                           className="w-full"
+                           options={academicSemester}
+                           placeholder="1ª semestre"
+                           formField={field} />
+                     </FormControl>
+                     <FormDescription>Selecione o director do departamento</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
                name="minimumGradeToDismiss"
                render={({ field }) => (
                   <FormItem>
@@ -117,23 +171,6 @@ const CreateDisciplineForm = () => {
                   </FormItem>
                )}
             />
-            <FormField
-               control={form.control}
-               name="description"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Descrição</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Descrição"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>Opcional</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-
             <SubmitBtn
                label="Criar"
                loading={isPending} />

@@ -44,9 +44,18 @@ export const updateFacultySchema = z.object({
 });
 
 export const assignRemoveCoursesZodSchema = z.object({
-  body: z.object({
-    courses: z.array(z.string(), {
-      required_error: 'Courses Are Required',
-    }),
+  courses: z.array(z.string(), {
+    required_error: 'Courses Are Required',
+  }),
+});
+export const assignDisciplinesZodSchema = z.object({
+  id: z.array(z.string(), {
+    required_error: 'Id doprofessor é obrigatorio',
+  }),
+  disciplineId: z.array(z.string(), {
+    required_error: 'Discipline é obrigatorio',
+  }),
+  shiftId: z.array(z.string(), {
+    required_error: 'Shift é obrigatorio',
   }),
 });

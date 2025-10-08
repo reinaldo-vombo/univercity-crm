@@ -25,7 +25,7 @@ export function CoursesTable({ couses, departements, falculty }: Props) {
    const modifiedCouses = couses.map(course => ({
       ...course,  // Copy existing fields
       academicDepartment: course.academicDepartment.title,
-      coursePricing: course.coursePricing.price
+      coursePricing: course.price.amount
    }));
    const columns = CoursesColumns(falculty);
 

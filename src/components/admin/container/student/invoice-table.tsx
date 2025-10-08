@@ -6,7 +6,7 @@ import { formatCurrency, formatDateTime } from "@/lib/helper"
 import { Badge } from "@/components/ui/badge"
 import ReceiptDownloadButton from "@/components/container/receipt/receipt-download-button"
 import SheetModal from "@/components/shared/sheet-modal"
-import InvoiceDocument from "@/components/container/receipt/invoice-document"
+import InvoicePreview from "@/components/container/receipt/invoice-preview"
 
 const invonces = [
    {
@@ -25,18 +25,6 @@ const student = {
    email: 'reiginalde@gmail.com',
    phone: 923456789
 }
-const py = [
-   {
-      id: 1,
-      academicYear: '2025',
-      service: 'Propina',
-      description: 'Pagamento de propina',
-      amount: 40000,
-      currency: 'AOA',
-      status: 'Pago',
-   }
-]
-
 
 const InvoiceTable = () => {
    return (
@@ -88,14 +76,7 @@ const InvoiceTable = () => {
                            className="sm:max-w-[50%]"
                            title="Recibo de pagamento"
                            description="Arquivo pdf do recibo de pagamento">
-                           <InvoiceDocument
-                              receiptNumber={order.id}
-                              student={student}
-                              payments={py}
-                              totals={{
-                                 totalPaid: order.amount,
-                                 balance: order.extraCredit
-                              }}
+                           <InvoicePreview
                            />
                         </SheetModal>
                         <ReceiptDownloadButton payment={order} student={student} />

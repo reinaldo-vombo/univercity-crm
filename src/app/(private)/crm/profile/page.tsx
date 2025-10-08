@@ -11,6 +11,9 @@ export default function ProfilePage() {
    const user = User()
    const { firstName, lastName } = getFirstAndLastName(user?.name || '');
 
+   if (!user) {
+      return 'Utilizador não encontrado'
+   }
    return (
       <section className="col-span-12">
          <Card>
@@ -19,15 +22,15 @@ export default function ProfilePage() {
                <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
                   <div className="flex items-center justify-between">
                      <div className="flex gap-6 items-center">
-                        <Avatar name={user?.name || ''} photo={user?.avatar || ''} className="mr-4 size-12" />
+                        <Avatar name={user.name} photo={user.avatar} className="mr-4 size-12" />
                         <div>
-                           <h4 className="text-lg font-semibold">{user?.name || ''}</h4>
+                           <h4 className="text-lg font-semibold">{user.name || ''}</h4>
                            <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                               <p className="text-sm ">
-                                 {user?.role || ''}
+                                 {user.role || ''}
                               </p>
                               <Separator orientation="vertical" />
-                              <p>{user?.email || ''}</p>
+                              <p>{user.email || ''}</p>
                            </div>
                         </div>
                      </div>
@@ -36,7 +39,7 @@ export default function ProfilePage() {
                            side='right'
                            trigger={<Pencil className='cursor-pointer' />}
                            title="Editar Perfil"
-                           description='Editar Perfil'
+                           description='Formulario para Editar Perfil'
                            className="">
                            <UpdatedUserForm userInf={user} />
                         </SheetModal>
@@ -57,7 +60,7 @@ export default function ProfilePage() {
                   </div>
                   <div>
                      <p className="mb-2 text-xs leading-normal ">Email address</p>
-                     <b className="text-sm font-medium ">{user?.email}</b>
+                     <b className="text-sm font-medium ">{user.email}</b>
                   </div>
                   <div>
                      <p className="mb-2 text-xs leading-normal ">Phone</p>

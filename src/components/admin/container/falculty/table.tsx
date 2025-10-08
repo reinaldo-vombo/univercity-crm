@@ -2,13 +2,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from '../../../ui/button'
 import { ChevronDown } from 'lucide-react'
 import { Input } from '../../../ui/input'
-type TTable = {
-   data: {
-      class: string;
-      shift: string;
-      students: number
-   }
-}
+// type TTable = {
+//    data: {
+//       class: string;
+//       shift: string;
+//       students: number
+//    }
+// }
 
 const InfoTable = () => {
    return (
@@ -32,15 +32,11 @@ const InfoTable = () => {
                </TableRow>
             </TableHeader>
             <TableBody>
-               {filteredOrders.map((order) => (
-                  <TableRow key={order.id}>
-                     <TableCell className="font-medium">{order.id}</TableCell>
-                     <TableCell>{order.customer}</TableCell>
-                     <TableCell>{order.date}</TableCell>
-                     <TableCell>${order.total.toFixed(2)}</TableCell>
-                     <TableCell>{order.status}</TableCell>
-                     <TableCell>
-                        {/* <DropdownMenu>
+               <TableRow>
+                  <TableCell className="font-medium">g</TableCell>
+
+                  <TableCell>
+                     {/* <DropdownMenu>
                            <DropdownMenuTrigger asChild>
                               <Button variant="ghost" className="h-8 w-8 p-0">
                                  <span className="sr-only">Open menu</span>
@@ -55,9 +51,8 @@ const InfoTable = () => {
                               <DropdownMenuItem>Cancel order</DropdownMenuItem>
                            </DropdownMenuContent>
                         </DropdownMenu> */}
-                     </TableCell>
-                  </TableRow>
-               ))}
+                  </TableCell>
+               </TableRow>
             </TableBody>
          </Table>
       </div>

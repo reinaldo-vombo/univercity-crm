@@ -7,6 +7,7 @@ import { formatCurrency, formatDate } from "@/lib/helper"
 import { Badge } from "@/components/ui/badge"
 import Avatar from "@/components/shared/avatar"
 import { TPayment } from "@/types/global"
+import InvoicePreview from "@/components/container/receipt/invoice-preview"
 
 export function PaymentColumns(): ColumnDef<TPayment>[] {
    const showStatus = (status: string) => {
@@ -91,7 +92,7 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
          cell: ({ row }) => {
             const status = row.original.approved;
             return (
-               <Badge className={`${status ? 'bg-green-300' : 'bg-red-300'} rounded-full text-white flex items-center gap-2`}>
+               <Badge className={`${status ? 'bg-green-300 dark:bg-green-500' : 'bg-red-300 dark:bg-green-200'} rounded-full text-white flex items-center gap-2`}>
                   <span className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full size-3`} />
                   <b>{status ? 'Confirmado' : 'Pendente'}</b>
                </Badge>
@@ -116,14 +117,15 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
                      side="right"
                      title="Atualizar curso"
                      description=' Formulario para atualizar o curso'>
-                     hello
+                     hellot
                   </SheetModal>
                   <SheetModal
                      trigger={<Eye className="h-4 w-4  cursor-pointer" />}
                      side="right"
+                     className="sm:max-w-lg"
                      title="Descrição do pagamento"
                      description='Descrição do pagamento'>
-                     hello
+                     <InvoicePreview />
                   </SheetModal>
 
                </div>

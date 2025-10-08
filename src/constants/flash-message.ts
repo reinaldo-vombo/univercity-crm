@@ -16,7 +16,8 @@ export const FLASH_MESSAGE = {
   NOT_UPDATED: 'Ocorreu um erro ao atualizar',
   DELETED: 'Endidate eliminada',
   NOT_DELETED: 'Ocorreu um erro ao excluir',
-  ASSIGN_FACULTIES: ' Atribuir professores ao curso com sucesso',
+  ID_REQUIRID: 'id é obrigatório para essa requisição',
+  ASSIGN_FACULTIES: 'Atribuir professores ao curso com sucesso',
   ASSIGN_FACULTIES_ERROR: 'Ocorreu um erro ao atribuir professores ao curso',
   USER_NOT_DELETED: 'Útilizador não eliminado',
 };

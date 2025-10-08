@@ -13,5 +13,6 @@ export const CONTENT = {
       'Software educacional',
       'Portal de Administração da Universidade',
     ],
+    favicon: '/favicon.ico',
   },
 };

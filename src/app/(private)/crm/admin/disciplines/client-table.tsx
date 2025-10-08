@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/shared/data-table";
 import { DisciplineColumns } from "./columns";
 import CreateDisciplineForm from "@/components/forms/admin/post/create-discipline";
-import { TDiscipline } from "@/types/global";
+import { TCourse, TDiscipline, TSemester } from "@/types/global";
 
 
 const herader = {
@@ -15,14 +15,16 @@ const herader = {
 }
 type TProps = {
    discipline: TDiscipline[]
+   semester: TSemester[],
+   curses: TCourse[]
 }
 
-export function DisciplineTable({ discipline }: TProps) {
+export function DisciplineTable({ discipline, curses, semester }: TProps) {
 
    const columns = DisciplineColumns();
 
    return <DataTable
-      actionForm={<CreateDisciplineForm />}
+      actionForm={<CreateDisciplineForm curses={curses} semesters={semester} />}
       columns={columns}
       fileHerderes={herader}
       modalTitle="Criar disciplina"

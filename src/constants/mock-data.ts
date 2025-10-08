@@ -362,16 +362,16 @@ export const DUMMY_DATA = {
   themes: [
     'light',
     'dark',
+    'dafault',
+    'dark-dafault',
     'solar-dust',
     'dark-solar-dust',
-    'super-base',
-    'dark-super-base',
-    'gebins',
-    'dark-gebins',
     'nature',
     'dark-nature',
-    'graphite',
-    'dark-graphite',
+    'vitage',
+    'dark-vitage',
+    'amethyst',
+    'dark-amethyst'
   ],
   StudentType: [
     {

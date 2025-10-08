@@ -22,6 +22,7 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { Dispatch, SetStateAction, useState } from "react"
 import { ROUTES } from "@/constants/mock-data"
 import { Eye, EyeClosed } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 type TProps = {
    onChange: Dispatch<SetStateAction<boolean>>
@@ -53,7 +54,6 @@ export default function AdminLogin({ onChange }: TProps) {
          if (res?.error) {
             if (res?.error === 'CredentialsSignin') {
                toast.warning(FLASH_MESSAGE.WRONGE_CREDENTIALS)
-               console.error(res.error);
             }
          } else if (res?.ok) {
             toast.success(`${FLASH_MESSAGE.WELLCOME}`);
@@ -110,11 +110,12 @@ export default function AdminLogin({ onChange }: TProps) {
                )}
             />
             <SubmitBtn label="Entrar" loading={form.formState.isSubmitting} />
-            <button
-               className="cursor-pointer text-center"
+            <Button
+               variant={'ghost'}
+               className="cursor-pointer text-center underline"
                type="button"
                aria-label="forgo password"
-               onClick={() => onChange(false)}>Esqueceu a palavra-passe?</button>
+               onClick={() => onChange(false)}>Esqueceu a palavra-passe?</Button>
          </form>
       </Form>
    )

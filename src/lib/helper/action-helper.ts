@@ -51,6 +51,7 @@ export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
   return async (id?: string): Promise<R> => {
     const session = await getServerSession(authOptions);
     const user = session?.user;
+    const currentUser: any = user;
 
     if (!user) {
       return {
@@ -58,7 +59,7 @@ export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
         message: FLASH_MESSAGE.NOTAUTHORIZED,
       } as R;
     }
-    return actionnFn(id, user);
+    return actionnFn(id || '', currentUser);
   };
 }
 export function validatedActionWithUser<S extends z.ZodTypeAny, R>(

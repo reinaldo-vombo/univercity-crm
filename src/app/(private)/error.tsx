@@ -40,7 +40,7 @@ export default function Error({ error, reset }: TProps) {
           Our servers are currently unreachable. Please try again later.
         </p>
 
-        <Button className='cursor-pointer' onClick={reloadWindows}>try again</Button>
+        <Button className='cursor-pointer' onClick={reloadWindows}>Recarregar</Button>
       </div>
     </div>
 

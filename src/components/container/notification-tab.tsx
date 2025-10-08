@@ -6,22 +6,33 @@ import MessageFilter from "../shared/message-filter"
 import Avatar from "../shared/avatar"
 import { formatTimeAgo } from "@/lib/helper"
 import { Separator } from "../ui/separator"
-import { marknotificationAsRead } from "@/actions/activitiys"
+import { markAllNotificationAsRead, marknotificationAsRead } from "@/actions/activitiys"
+import { Button } from "../ui/button"
+import NoNotification from "../skeleton/NoNotification"
 
 type TProps = {
    data: TNotification[]
+   userId?: string
 }
-const NotificationTab = ({ data }: TProps) => {
+const NotificationTab = ({ data, userId }: TProps) => {
 
    const readNotification = async (id: string) => {
       await marknotificationAsRead(id)
+   }
+   const markAllNotificationAsReaded = async () => {
+      if (userId) await markAllNotificationAsRead(userId)
    }
 
    return (
       <div className="">
          <div className="flex items-center justify-between text-sm">
             <h2 className="text-2xl">Tuas notificações</h2>
-            <span className="text-primary flex items-center"><CheckCheck /> Marcar todas como lidas</span>
+            <Button
+               className="text-blue-600"
+               variant={'ghost'}
+               onClick={() => markAllNotificationAsReaded()}>
+               <CheckCheck /> Marcar todas como lidas
+            </Button>
          </div>
          <div className="mb-4">
             <MessageFilter />
@@ -49,7 +60,7 @@ const NotificationTab = ({ data }: TProps) => {
                   <div>
                   </div>
                </div>
-            )) : (<p>Sem notificações</p>)}
+            )) : (<NoNotification />)}
          </div>
       </div>
    )
