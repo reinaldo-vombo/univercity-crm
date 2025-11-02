@@ -22,9 +22,9 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { addNewEvent } from "@/actions/events"
 import { changePasswordShema } from "@/lib/validation/user"
 import Image from "next/image"
+import { updatedUser } from "@/actions/users"
 
 type TProps = {
    sessionHistory: TAuthLogos[]
@@ -60,7 +60,7 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
       });
       startTransition(async () => {
          try {
-            const response = await addNewEvent(formData);
+            const response = await updatedUser(formData);
             if (response.error) {
                toast.error(response.message);
                return;

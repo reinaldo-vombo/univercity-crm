@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button';
-import { Moon, Sun } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import React from 'react'
 
@@ -24,10 +25,17 @@ const ThemeToggle = () => {
    return (
       <div>
          <Button
-            className='relative flex size-11 items-center justify-center rounded-full border border-border bg-primary-foreground text-gray-500 transition-colors hover:bg-primary'
-            onClick={toggleTheme}>
-            {/* {theme === 'dark' ? <Sun /> : <Moon />} */}
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            variant='outline'
+            size='icon'
+            onClick={() => toggleTheme()}
+            aria-label='Toggle dark mode'
+            className={cn(
+               isDark
+                  ? 'border-sky-600 text-sky-600! hover:bg-sky-600/10 focus-visible:border-sky-600 focus-visible:ring-sky-600/20 dark:border-sky-400 dark:text-sky-400! dark:hover:bg-sky-400/10 dark:focus-visible:border-sky-400 dark:focus-visible:ring-sky-400/40'
+                  : 'border-amber-600 text-amber-600! hover:bg-amber-600/10 focus-visible:border-amber-600 focus-visible:ring-amber-600/20 dark:border-amber-400 dark:text-amber-400! dark:hover:bg-amber-400/10 dark:focus-visible:border-amber-400 dark:focus-visible:ring-amber-400/40'
+            )}
+         >
+            {isDark ? <MoonIcon /> : <SunIcon />}
          </Button>
       </div>
    )

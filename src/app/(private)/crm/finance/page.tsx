@@ -5,6 +5,7 @@ import { formatCurrency } from "@/lib/helper";
 import { Suspense } from "react";
 import { PaymentTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+import LineChartWrapper from "@/components/admin/wrapper/line-chart-wrapper";
 
 
 export default function BugetsPage() {
@@ -16,7 +17,7 @@ export default function BugetsPage() {
             pageUrl={`${ROUTES.DASHBOARD}/finance`}
             pageName="Orçamentos"
          />
-         <div className="mt-12">
+         <div className="mt-12 space-y-6">
             <div className="space-y-3">
                <h2 className="text-2xl">Bem vindo de volta, Reginalde!</h2>
                <p>Todas as informações geral de pagamentos estão nessa pagina</p>
@@ -25,6 +26,9 @@ export default function BugetsPage() {
                <p>Orcamento total</p>
                <h2 className="text-3xl font-bold">{formatCurrency(500000)}</h2>
                <p>Seu orcamento cresceu <b className="text-green-500">2,904</b></p>
+            </div>
+            <div>
+               <LineChartWrapper />
             </div>
             <div className="@container/main flex flex-1 flex-col gap-2">
                <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">

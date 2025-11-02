@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { BadgeCheckIcon, Calendar1, Eye, Mail, Pen, Trash, User2 } from "lucide-react"
+import { BadgeCheckIcon, Calendar1, Eye, Mail, Pen, Trash } from "lucide-react"
 import Avatar from "@/components/shared/avatar"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
@@ -24,26 +24,18 @@ export function UsersColumns(): ColumnDef<Users>[] {
    const logUser = User()
    return [
       {
-         accessorKey: "avatarUrl",
-         header: "Avatar",
-         cell: ({ row }) => {
-            const user = row.original;
-            return (
-               <Avatar name={user.name} photo={user.avatar} className="size-11" />
-            );
-         },
-         enableSorting: false,
-         enableHiding: false,
-      },
-      {
          accessorKey: "name",
          header: "Name",
-         cell: ({ row }) => (
-            <div className="flex items-center gap-2">
-               <User2 className="h-4 w-4 text-green-500" />
-               <b className="truncate max-w-[180px]">{row.getValue("name")}</b>
-            </div>
-         ),
+         cell: ({ row }) => {
+            const name = row.original.name;
+            const avatar = row.original.avatar;
+            return (
+               <div className="flex items-center gap-2">
+                  <Avatar name={name} photo={avatar} className="size-11" />
+                  <b className="truncate max-w-[180px]">{name}</b>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "email",

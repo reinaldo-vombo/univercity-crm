@@ -1,16 +1,14 @@
 
 
 import { TFaculty } from "@/types/global";
-import PersenalInfo from "./falculty/persenal-info";
-import AcademicInfo from "./falculty/academic-info";
+import PersenalInfo from "./persenal-info";
+import AcademicInfo from "./academic-info";
 
 type TProps = {
    data: TFaculty
 }
 
 const FalcultyDetails = ({ data }: TProps) => {
-
-
    return (
       <div>
          <div className="border rounded-lg p-2">

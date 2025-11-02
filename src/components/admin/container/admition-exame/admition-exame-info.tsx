@@ -1,8 +1,8 @@
 import { TAdmitionExame } from '@/types/global'
 import { formatCurrency, formatDate } from "@/lib/helper";
 import Image from "next/image";
-import { Separator } from "../../ui/separator"
-import { ScrollArea } from "../../ui/scroll-area";
+import { Separator } from "../../../ui/separator"
+import { ScrollArea } from "../../../ui/scroll-area";
 import { Calendar, DollarSign, List, Mail, Phone, Star, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 

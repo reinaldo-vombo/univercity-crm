@@ -31,8 +31,6 @@ const UpdateDisciplineForm = ({ values }: TProps) => {
          id,
          name,
          code,
-         credits: 1,
-         description: "",
          minimumGradeToDismiss
       }
    })
@@ -122,23 +120,6 @@ const UpdateDisciplineForm = ({ values }: TProps) => {
                   </FormItem>
                )}
             />
-            <FormField
-               control={form.control}
-               name="description"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Descrição</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Descrição"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>Opcional</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-
             <SubmitBtn
                label="Atualisar"
                loading={isPending} />

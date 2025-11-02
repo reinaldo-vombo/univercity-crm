@@ -29,3 +29,19 @@ export const getSingleStudent = async (
     handleApiError(error);
   }
 };
+export const getStudentCouse = async (
+  studentId: string
+): Promise<TStudent[]> => {
+  if (!studentId) {
+    console.error(FLASH_MESSAGE.ID_REQUIRID);
+    return [];
+  }
+  try {
+    const student = await serverFetch<TStudent[]>(`/my-courses/${studentId}`, {
+      next: { tags: ['student'] },
+    });
+    return student;
+  } catch (error) {
+    handleApiError(error);
+  }
+};

@@ -54,7 +54,7 @@ const UpdatedStudentFrom = ({ academicSemester, courses, defaultValue }: TProps)
          studentType: defaultValue.studentType,
          email: defaultValue.email,
          profileImage: "",
-         shift: defaultValue.shift,
+         shift: defaultValue.shift.name,
          academicSemesterId: '',
          CourseId: ''
       }
@@ -89,7 +89,7 @@ const UpdatedStudentFrom = ({ academicSemester, courses, defaultValue }: TProps)
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-6">
-            <div className="">
+            <div>
                <FormField
                   control={form.control}
                   name="profileImage"

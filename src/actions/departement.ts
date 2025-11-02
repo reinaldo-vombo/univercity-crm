@@ -26,7 +26,6 @@ export const addNewDepartemant = validatedActionWithUser(
           body: data,
         }
       );
-      console.log('create dep run');
 
       revalidateTag('departement');
 

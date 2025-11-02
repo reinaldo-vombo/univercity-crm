@@ -1,20 +1,21 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Check, Eye, Loader, Pen, X } from "lucide-react"
+import { Eye, Pen } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import { formatCurrency, formatDate } from "@/lib/helper"
-import { Badge } from "@/components/ui/badge"
 import Avatar from "@/components/shared/avatar"
 import { TPayment } from "@/types/global"
 import InvoicePreview from "@/components/container/receipt/invoice-preview"
+import { CloseBage, CompleteBage, FaildBage, PendingBage, SucessBage, } from "@/components/shared/bages"
+
+const paymentStatusBage = (status: string) => {
+   if (status === 'APROVED' || 'PAID') return <SucessBage />
+   if (status === 'PENDING' || 'PENDING') return <PendingBage />
+   if (status === 'NOT_PAID') return <FaildBage />
+}
 
 export function PaymentColumns(): ColumnDef<TPayment>[] {
-   const showStatus = (status: string) => {
-      if (status === 'APROVED' || 'PAID') return <Check className="text-green-500 size-5" />
-      if (status === 'PENDING' || 'PENDING') return <Loader className="animate-spin text-amber-500 size-5" />
-      if (status === 'NOT_PAID') return <X className="text-red-500 size-5" />
-   }
    return [
       {
          accessorKey: "paymentId",
@@ -50,9 +51,9 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
          cell: ({ row }) => {
             const status = row.original.status;
             return (
-               <Badge className={`${status === 'PAID' ? 'bg-green-300 border-green-600' : status === 'PENDING' ? 'bg-amber-300 border-amber-600' : 'bg-red-300 border-red-600'} rounded-full`}>
-                  {showStatus(status)} <b className="text-white">{status}</b>
-               </Badge>
+               <div>
+                  {paymentStatusBage(status)}
+               </div>
             );
          },
       },
@@ -92,10 +93,9 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
          cell: ({ row }) => {
             const status = row.original.approved;
             return (
-               <Badge className={`${status ? 'bg-green-300 dark:bg-green-500' : 'bg-red-300 dark:bg-green-200'} rounded-full text-white flex items-center gap-2`}>
-                  <span className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full size-3`} />
-                  <b>{status ? 'Confirmado' : 'Pendente'}</b>
-               </Badge>
+               <>
+                  {status ? <CompleteBage /> : <CloseBage />}
+               </>
             );
          },
       },

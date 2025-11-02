@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pen, Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 
@@ -20,32 +20,39 @@ import {
    startOfWeek,
    endOfWeek,
 } from "date-fns";
-import Modal from "./Modal";
-import CreateEventFrom from "../forms/post/create-event";
-
-interface Subscription {
-   id: string;
-   name: string;
-   date: number;
-   icon: string;
-   color: string;
+import { TCalendar } from "@/types/global";
+import SheetModal from "../shared/sheet-modal";
+import CreateEventFrom from "../forms/post/create-calendar-envent";
+import { deleteCalendarEvent } from "@/actions/calendar";
+import { toast } from "sonner";
+import { isSameDay } from "date-fns";
+import { FLASH_MESSAGE } from "@/constants/flash-message";
+import Modal from "../shared/Modal";
+import { Badge } from "../ui/badge";
+import Tooltip from "../shared/tooltip";
+import Avatar from "../shared/avatar";
+import { formatDateTime } from "@/lib/helper";
+import UpdateEventCalendarFrom from "../forms/update/updated-calendar";
+type TProps = {
+   subscriptions: TCalendar[]
 }
 interface SubscriptionDay {
    date: Date;
-   subscriptions: Subscription[];
+   subscriptions: TCalendar[];
    isCurrentMonth: boolean;
 }
-const events = [
-   {
-      id: '1',
-      name: 'Some event',
-      date: 20,
-      color: 'red',
-      icon: '/shomthing.png'
-   }
-]
-function EventCalendar() {
-   const [subscriptions, setSubscriptions] = React.useState<Subscription[]>(events);
+
+function EventCalendar({ subscriptions }: TProps) {
+   const normalizedSubscriptions = React.useMemo(
+      () =>
+         subscriptions.map((s) => ({
+            ...s,
+            start: new Date(s.start),
+            end: new Date(s.end),
+         })),
+      [subscriptions]
+   );
+
    const [currentMonth, setCurrentMonth] = React.useState(
       format(new Date(), "MMM-yyyy")
    );
@@ -56,13 +63,13 @@ function EventCalendar() {
       return eachDayOfInterval({ start, end }).map(
          (day): SubscriptionDay => ({
             date: day,
-            subscriptions: subscriptions.filter(
-               (subscription) => subscription.date === day.getDate()
+            subscriptions: normalizedSubscriptions.filter((subscription) =>
+               isSameDay(subscription.start, day)
             ),
             isCurrentMonth: isSameMonth(day, firstDayCurrentMonth),
          })
       );
-   }, [firstDayCurrentMonth, subscriptions]);
+   }, [firstDayCurrentMonth, normalizedSubscriptions]);
    function previousMonth() {
       const firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
       setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
@@ -72,8 +79,13 @@ function EventCalendar() {
       setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
    }
 
-   const handleRemoveSubscription = (id: string) => {
-      setSubscriptions(subscriptions.filter((sub) => sub.id !== id));
+   const handleRemoveSubscription = async (id: string) => {
+      const result = await deleteCalendarEvent(id)
+      if (result.error) {
+         toast.error(result.message)
+      }
+      toast.success(FLASH_MESSAGE.DELETED)
+
    };
    return (
       <div className="p-4">
@@ -103,18 +115,18 @@ function EventCalendar() {
                </motion.h2>
             </div>
 
-            <Modal trigger={
+            <SheetModal side="bottom" trigger={
                <div className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3">
                   <Plus className="w-4 h-4 mr-2" />
-                  Add Event
+                  Publicar evento
                </div>}
                title="Criar evento"
                description="formulario">
                <CreateEventFrom />
-            </Modal>
+            </SheetModal>
          </div>
-         <div className="grid grid-cols-7 gap-px bg-muted rounded-lg overflow-hidden">
-            <AnimatePresence mode="wait" >
+         <div className="grid grid-cols-7 gap-2 p-1 bg-muted rounded-lg overflow-hidden">
+            <AnimatePresence mode="popLayout" >
                {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((day) => (
                   <motion.div
                      key={day}
@@ -132,9 +144,9 @@ function EventCalendar() {
                      animate={{ opacity: 1, scale: 1 }}
                      transition={{ delay: dayIdx * 0.02 }}
                      className={cn(
-                        "relative p-2 bg-background min-h-[100px]",
-                        !day.isCurrentMonth && "bg-muted/50",
-                        isEqual(day.date, new Date()) && "bg-accent"
+                        "relative p-2 bg-background min-h-[200px] rounded-lg",
+                        !day.isCurrentMonth && "bg-muted/50 border border-background",
+                        isEqual(day.date, new Date()) && "bg-accent border border-red-500"
                      )}
                   >
                      <time
@@ -149,30 +161,40 @@ function EventCalendar() {
                      </time>
                      <div className="space-y-1 mt-1">
                         {day.subscriptions.map((subscription) => (
-                           <motion.div
+                           <Modal
+                              title={subscription.title}
+                              description='Descrição do evento'
                               key={subscription.id}
-                              whileHover={{ scale: 1.05 }}
-                              className="flex items-center gap-1 p-1 rounded bg-background border text-sm group"
-                              style={{ borderColor: subscription.color }}
-                           >
-                              <div className="relative w-4 h-4">
-                                 {/* <Image
-                                    src={subscription.icon}
-                                    alt={subscription.name}
-                                    className="rounded-sm object-cover"
-                                    fill
-                                 /> */}
+                              trigger={
+                                 <Badge>{subscription.title}</Badge>
+                              }>
+                              <div className="space-y-4">
+                                 <div className="flex items-center gap-2">
+                                    <Button type="button" aria-label="Delete event button" className="bg-red-500" onClick={() => handleRemoveSubscription(subscription.id)}>
+                                       <Trash className="text-red-300" />
+                                    </Button>
+                                    <SheetModal
+                                       trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
+                                       side="bottom"
+                                       title="Atualização do evento"
+                                       description='Formulario de atualização do evento'>
+                                       <UpdateEventCalendarFrom values={subscription} />
+                                    </SheetModal>
+                                 </div>
+                                 <h2 className="text-2xl">{subscription.title}</h2>
+                                 <ul className="space-y-4">
+                                    <li className="flex">
+                                       <p className="text-justify">{subscription.description}</p>
+                                    </li>
+                                    <li>Categoria: <Badge className="bg-amber-500">{subscription.type}</Badge></li>
+                                    <li>Local: {subscription.location}</li>
+                                    <li className="flex items-center gap-2">Publicador: <Tooltip trigger={<Avatar name="Reginalde Baggle" className="size-7" />}>
+                                       Reginalde</Tooltip></li>
+                                    <li className="flex items-center">Data de publicação: {formatDateTime(subscription.createdAt)}</li>
+                                 </ul>
                               </div>
-                              <span className="text-xs truncate flex-1">
-                                 {subscription.name}
-                              </span>
-                              <button
-                                 onClick={() => handleRemoveSubscription(subscription.id)}
-                                 className="opacity-0 group-hover:opacity-100 transition-opacity"
-                              >
-                                 <X className="w-3 h-3" />
-                              </button>
-                           </motion.div>
+                           </Modal>
+
                         ))}
                      </div>
                   </motion.div>

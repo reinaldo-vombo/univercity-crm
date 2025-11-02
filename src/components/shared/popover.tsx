@@ -16,7 +16,7 @@ const Popover = ({ children, trigger, className = 'w-96' }: TPopover) => {
    return (
       <Root>
          <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative flex size-11 items-center justify-center rounded-full border border-border bg-primary-foreground text-gray-500 transition-colors hover:bg-primary">
+            <Button variant="ghost" size="icon" className="relative flex size-11 items-center justify-center rounded-md border border-border bg-primary-foreground text-gray-500 transition-colors hover:bg-primary">
                {trigger}
             </Button>
          </PopoverTrigger>

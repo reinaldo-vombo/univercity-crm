@@ -63,7 +63,7 @@ const StudentDetails = ({ data }: TProps) => {
                            <Sunrise />
                            <span>Turno</span>
                         </div>
-                        <b>{shift === 'MORNING' ? 'Mãnham' : 'Noite'}</b>
+                        <b>{shift.name}</b>
                      </li>
                   </ul>
                </div>

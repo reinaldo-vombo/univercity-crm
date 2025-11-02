@@ -5,10 +5,10 @@ import { CheckCheck } from "lucide-react"
 import MessageFilter from "../shared/message-filter"
 import Avatar from "../shared/avatar"
 import { formatTimeAgo } from "@/lib/helper"
-import { Separator } from "../ui/separator"
 import { markAllNotificationAsRead, marknotificationAsRead } from "@/actions/activitiys"
 import { Button } from "../ui/button"
 import NoNotification from "../skeleton/NoNotification"
+import { ScrollArea } from "../ui/scroll-area"
 
 type TProps = {
    data: TNotification[]
@@ -24,7 +24,7 @@ const NotificationTab = ({ data, userId }: TProps) => {
    }
 
    return (
-      <div className="">
+      <div>
          <div className="flex items-center justify-between text-sm">
             <h2 className="text-2xl">Tuas notificações</h2>
             <Button
@@ -37,14 +37,13 @@ const NotificationTab = ({ data, userId }: TProps) => {
          <div className="mb-4">
             <MessageFilter />
          </div>
-         <div>
+         <ScrollArea className="h-96">
             {data.length > 0 ? data.map((notification) => (
                <div className={`rounded-lg p-2 space-y-4 cursor-pointer ${!notification.read && 'bg-secondary'}`} key={notification.id} onClick={() => readNotification(notification.id)}>
-                  <Separator />
                   <div className="flex items-center gap-2.5">
                      <Avatar name="Reginalde Bag" photo="" />
                      <div className="flex justify-between gap-4">
-                        <b>{notification.message}</b>
+                        <p className="font-semibold">{notification.message}</p>
                         <div className="flex flex-col space-y-3">
                            {!notification.read && <div className="size-2 ml-auto bg-green-700 rounded-full" />}
                            <p>{formatTimeAgo(notification.createdAt)}</p>
@@ -61,7 +60,7 @@ const NotificationTab = ({ data, userId }: TProps) => {
                   </div>
                </div>
             )) : (<NoNotification />)}
-         </div>
+         </ScrollArea>
       </div>
    )
 }

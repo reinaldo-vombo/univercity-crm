@@ -25,7 +25,7 @@ export const facultySchema = z.object({
   academicFacultyId: z.string({
     required_error: 'Únidade acadêmica é obrigatorio',
   }),
-  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']),
+  shift: z.string(),
 });
 
 export const updateFacultySchema = z.object({
@@ -40,7 +40,7 @@ export const updateFacultySchema = z.object({
   designation: z.string(),
   academicDepartmentId: z.string(),
   academicFacultyId: z.string(),
-  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']),
+  shift: z.string(),
 });
 
 export const assignRemoveCoursesZodSchema = z.object({

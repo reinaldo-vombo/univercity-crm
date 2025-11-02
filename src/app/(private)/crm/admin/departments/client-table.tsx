@@ -19,15 +19,6 @@ const herader = {
 
 export function DepartmentTable({ users, departements, academicFacultys }: Props) {
 
-   const modifiedDepartement = departements.map(departement => {
-      const director = users.find((user) => user.id === departement.departmentHeadId)
-      return academicFacultys.map(academicFaculty => ({
-         ...departement,
-         academicFaculty: academicFaculty.title,
-         director
-      }));
-   }).flat();
-
    const columns = DepartementColumns(users, academicFacultys);
 
    return <DataTable
@@ -36,6 +27,6 @@ export function DepartmentTable({ users, departements, academicFacultys }: Props
       fileName="Departamentos"
       modalTitle="Criar Departamento"
       columns={columns}
-      data={modifiedDepartement}
+      data={departements}
       filterColumn="title" />;
 }

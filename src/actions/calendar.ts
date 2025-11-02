@@ -6,19 +6,22 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
 import { ActionResult } from '../types/api-error';
-import { courseSchema, updateCourseSchema } from '../lib/validation/curses';
+import {
+  createEventSchema,
+  updateEventCalendarSchema,
+} from '../lib/validation/events-calendar';
 import { TDiscipline } from '../types/global';
 
-export const addNewEvent = validatedActionWithUser(
-  courseSchema,
+export const addNewEventCalendar = validatedActionWithUser(
+  createEventSchema,
   async (data): Promise<ActionResult<TDiscipline>> => {
     try {
-      const curses = await serverFetch<TDiscipline>('/events', {
+      const curses = await serverFetch<TDiscipline>('/calendar', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('events');
+      revalidateTag('calendar');
 
       return {
         error: false,
@@ -42,17 +45,17 @@ export const addNewEvent = validatedActionWithUser(
     }
   }
 );
-export const updateEvent = validatedActionWithUser(
-  updateCourseSchema,
+export const updateEventCalendar = validatedActionWithUser(
+  updateEventCalendarSchema,
   async (data): Promise<ActionResult<TDiscipline>> => {
     const { id, ...updateData } = data;
     try {
-      const curses = await serverFetch<TDiscipline>(`/events/${id}`, {
+      const curses = await serverFetch<TDiscipline>(`/calendar/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
 
-      revalidateTag('events');
+      revalidateTag('calendar');
 
       return {
         error: false,
@@ -75,15 +78,15 @@ export const updateEvent = validatedActionWithUser(
   }
 );
 
-export const deleteEvent = async (
+export const deleteCalendarEvent = async (
   id: string
 ): Promise<ActionResult<TDiscipline>> => {
   try {
-    const data = await serverFetch<TDiscipline>(`/events/${id}`, {
+    const data = await serverFetch<TDiscipline>(`/calendar/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('events');
+    revalidateTag('calendar');
     return {
       error: false,
       data,

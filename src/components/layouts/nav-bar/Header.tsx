@@ -1,5 +1,5 @@
 
-import { BellRing, Search } from "lucide-react"
+import { BellIcon, Search } from "lucide-react"
 import { Input } from "../../ui/input"
 import ThemeToggle from "./toggle-theme"
 import { DropdownMenu } from "../../shared/dropdwon"
@@ -10,9 +10,9 @@ import { ThemePopOver } from "./theme-popover"
 import { getUserNotifications } from "@/services/data/history-logs"
 import NotificationTab from "@/components/container/notification-tab"
 import Popover from "@/components/shared/popover"
-import Ping from "@/components/shared/ping"
 import LanguageSwitcher from "../LanguageSwitcher"
 import { Fragment } from "react"
+import { Button } from "@/components/ui/button"
 //cmeyvtiab0000ukys0s3kak3u
 // type TSeachParams = {
 //    searchParams: Promise<{
@@ -51,10 +51,12 @@ const Header = async () => {
                         className="w-[37rem]"
                         trigger={
                            <Fragment>
-                              <BellRing />
-                              <div className="absolute bottom-0 right-0">
-                                 {unreadMessageCount > 0 && <Ping />}
-                              </div>
+                              <Button variant='outline' size='icon' className='relative'>
+                                 <BellIcon />
+                                 {unreadMessageCount > 0 && (<span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' />)}
+
+                                 <span className='sr-only'>Notifications</span>
+                              </Button>
                            </Fragment>}>
                         <NotificationTab data={notifications} userId={user?.id} />
                      </Popover>
@@ -66,6 +68,7 @@ const Header = async () => {
                      lable={user?.name || 'John Doe'}
                      trigger={
                         <div className="flex items-center gap-2">
+                           {/* <span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' /> */}
                            <Avatar name={user?.name || 'John Doe'} photo={user?.avatar || "https://github.com/shadcn.png"} />
                            <span>{user?.name}</span>
                         </div>

@@ -28,7 +28,7 @@ const AcademicInfo = ({ info }: TProps) => {
                   <SunMoon className="size-6" />
                   <span>Periodo</span>
                </div>
-               <span>{shift}</span>
+               <span>{shift.name}</span>
             </li>
             <li className="flex items-center justify-between">
                <div className="flex items-center gap-2">

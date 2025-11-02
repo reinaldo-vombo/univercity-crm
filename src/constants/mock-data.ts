@@ -123,7 +123,7 @@ export const DUMMY_DATA = {
         icon: React.createElement(Calendar),
       },
       {
-        href: `${ROUTES.DASHBOARD}/finance/budgets`,
+        href: `${ROUTES.DASHBOARD}/finance`,
         label: 'Orçamentos',
         icon: React.createElement(Receipt),
       },
@@ -363,15 +363,15 @@ export const DUMMY_DATA = {
     'light',
     'dark',
     'dafault',
-    'dark-dafault',
     'solar-dust',
-    'dark-solar-dust',
     'nature',
     'dark-nature',
     'vitage',
     'dark-vitage',
     'amethyst',
-    'dark-amethyst'
+    'dark-dafault',
+    'dark-solar-dust',
+    'dark-amethyst',
   ],
   StudentType: [
     {

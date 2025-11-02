@@ -7,6 +7,7 @@ import { Button } from './ui/button'
 
 
 const ConnectionBanner = () => {
+
    const isOnline = useOnlineStatus();
    const [visible, setVisible] = useState(false);
 
@@ -30,7 +31,7 @@ const ConnectionBanner = () => {
             className={`fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 py-3 text-white shadow-lg ${isOnline ? 'bg-green-600' : 'bg-red-600'}`}
          >
             <span className='font-medium flex items-center gap-2'>
-               {isOnline ? 'Online' : 'Estas offline'}
+               {isOnline ? 'Online' : 'Nesse momento estas offline'}
             </span>
             <Button type='button'
                className='text-white/80 hover:text-white transition'

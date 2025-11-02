@@ -14,39 +14,39 @@ export default function AdminLoginPage() {
    return (
       <Fragment>
          <div className="col-span-12 relative lg:col-span-6 p-8 rounded-l-lg space-y-10">
+            <div className='flex items-center justify-between'>
+               <div className="rounded-lg p-1 w-fit">
+                  <Image src='/logo.svg' width={70} height={70} alt="Enrollix logo" priority />
+               </div>
+               <DropdownMenu
+                  className="border-none shadow-none"
+                  lable='Idioma'
+                  trigger={
+                     <div className="flex items-center gap-2">
+                        <Globe /> pt
+                     </div>
+                  }
+               >
+                  <p>pt</p>
+                  <p>en</p>
+               </DropdownMenu>
+            </div>
             <motion.div initial={false}
                animate={{ x: isLogin ? "0%" : "-100%" }}
                transition={{ duration: 0.75, ease: "easeInOut" }}
-               className="absolute inset-0 z-10 w-full px-44">
-               <div className='flex items-center justify-between'>
-                  <div className="rounded-lg p-1 w-fit bg-black dark:bg-white">
-                     <Image src='/logo.svg' width={50} height={50} alt="Enrollix logo" priority />
-                  </div>
-                  <DropdownMenu
-                     className="border-none shadow-none"
-                     lable='Idioma'
-                     trigger={
-                        <div className="flex items-center gap-2">
-                           <Globe /> pt
-                        </div>
-                     }
-                  >
-                     <p>pt</p>
-                     <p>en</p>
-                  </DropdownMenu>
-               </div>
-               <div className="flex items-center justify-center space-y-3">
+               className="absolute inset-0 z-10 w-full p-44">
+               <div className="flex flex-col items-center justify-center space-y-3">
                   <h2 className="font-bold text-3xl">Faça o login para continuar</h2>
                   <p>Acesse todas as feramentas em um só lugar</p>
                </div>
                <AdminLogin onChange={setIslogin} />
             </motion.div>
          </div>
-         <div className="col-span-12 relative lg:col-span-6 p-8 rounded-l-lg space-y-10 px-44">
+         <div className="col-span-12 relative lg:col-span-6 rounded-l-lg space-y-10 p-44">
             <motion.div initial={false}
                animate={{ x: isLogin ? "100%" : "0%" }}
                transition={{ duration: 0.75, ease: "easeInOut" }}
-               className="absolute inset-0 z-10 w-full px-44">
+               className="absolute inset-0 z-10 w-full p-44">
                <div className="flex items-center justify-center">
                   <h2 className="font-bold text-3xl">Esqueceu a sua senha</h2>
                </div>

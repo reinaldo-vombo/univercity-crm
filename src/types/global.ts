@@ -69,6 +69,27 @@ export type TCourse = {
   academicDepartment: {
     title: string;
   };
+  courseDisciplines: {
+    discipline: {
+      name: string;
+      CourseDisciplineFaculty: {
+        faculty: {
+          firstName: string;
+          lastName: string;
+          profileImage: string | null;
+        };
+        shift: {
+          name: string;
+        };
+      }[];
+    };
+  } & {
+    id: string;
+    yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
+    courseId: string;
+    disciplineId: string;
+    semesterId: string;
+  }[];
   academicDepartmentId: string;
   price: {
     amount: number;
@@ -99,14 +120,34 @@ export type TCoursePrice = {
   updatedAt: Date;
 };
 export type TDiscipline = {
-  id: string;
+  courseDisciplines: {
+    course: {
+      title: string;
+      shift: {
+        name: string;
+      };
+    };
+    semester: {
+      title: string;
+      year: string;
+    };
+  } & {
+    id: string;
+    yearLevel: '';
+    courseId: string;
+    disciplineId: string;
+    semesterId: string;
+  }[];
+} & {
   name: string;
+  id: string;
   code: string;
-  description: string | null;
-  minimumGradeToDismiss: number;
   createdAt: Date;
   updatedAt: Date;
+  description: string | null;
+  minimumGradeToDismiss: number;
 };
+
 export type TOfferedCourse = {
   id: string;
   academicDepartmentId: string;
@@ -162,6 +203,17 @@ export type TAdmitionExame = {
     updatedAt: Date;
   };
 };
+export type TCalendar = {
+  end: Date;
+  id: string;
+  title: string;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  type: string;
+  location: string | null;
+  start: Date;
+};
 
 export type TDepartemant = {
   id: string;
@@ -170,6 +222,14 @@ export type TDepartemant = {
   updatedAt: Date;
   academicFacultyId: string;
   departmentHeadId: string | null;
+  academicFaculty: {
+    title: string;
+  };
+  _count: {
+    faculties: number;
+    courses: number;
+    students: number;
+  };
   departmentHead: {
     name: string;
     id: string;
@@ -179,6 +239,10 @@ export type TDepartemant = {
 export type TBuilding = {
   id: string;
   title: string;
+  rooms: {
+    roomNumber: string;
+    floor: string;
+  }[];
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -205,7 +269,9 @@ export type TStudent = {
   profileImage: string | null;
   email: string;
   contactNo: string;
-  shift: 'MORNING' | 'AFTERNOON' | 'EVENING';
+  shift: {
+    name: string;
+  };
   gender: string;
   isWoker: boolean;
   yearLevel: string;
@@ -347,6 +413,26 @@ export type TPayment = {
   transactionRef: string;
   approved: boolean;
   paymentType: string;
+};
+
+export type TStudentCause = {
+  academicSemester: {
+    title: string;
+    year: string;
+    isCurrent: boolean;
+  };
+} & {
+  id: string;
+  studentId: string;
+  academicSemesterId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string | null;
+  courseId: string;
+  grade: string | null;
+  point: number | null;
+  totalMarks: number | null;
+  situation: string | null;
 };
 
 export type TMenssage = {

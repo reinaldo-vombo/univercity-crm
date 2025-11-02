@@ -1,4 +1,4 @@
-import { AutoLogoutProvider } from "@/lib/helper/auth/auth-guard";
+
 import SessionWrapper from "./SessionWrapper";
 import { ThemeProvider } from "./theme-provider";
 import { DUMMY_DATA } from "@/constants/mock-data";
@@ -14,9 +14,8 @@ export default function RootProvider({ children }: { children: React.ReactNode }
             enableSystem
             disableTransitionOnChange
             themes={DUMMY_DATA.themes}>
-            <AutoLogoutProvider>
-               {children}
-            </AutoLogoutProvider>
+            {children}
+
          </ThemeProvider>
       </SessionWrapper>
    )

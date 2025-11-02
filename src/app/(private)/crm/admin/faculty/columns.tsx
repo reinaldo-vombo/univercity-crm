@@ -10,7 +10,7 @@ import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global"
 import Avatar from "@/components/shared/avatar"
 import { deleteFaculty } from "@/actions/faculty"
 import UpdateFacultyFrom from "@/components/forms/admin/update/update-falculty"
-import FalcultyDetails from "@/components/admin/container/falculty-details"
+import FalcultyDetails from "@/components/admin/container/falculty/falculty-details"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
 

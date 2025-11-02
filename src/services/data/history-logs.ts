@@ -50,11 +50,7 @@ export const getUserNotifications = async (
 
 export const getUserNotificationsPreference = async (
   userId: string
-): Promise<TNotificationPreference | null> => {
-  if (!userId) {
-    console.error(FLASH_MESSAGE.ID_REQUIRID);
-    return null;
-  }
+): Promise<TNotificationPreference> => {
   try {
     const preferenceSettings = await serverFetch<TNotificationPreference>(
       `/notifications/preferences/${userId}`,
