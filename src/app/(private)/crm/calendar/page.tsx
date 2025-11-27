@@ -4,6 +4,11 @@ import { Suspense } from "react";
 import Breadcrumb from "@/components/shared/breadcrumb";
 import { ROUTES } from "@/constants/mock-data";
 import CalendarSkeleton from "@/components/skeleton/calendar";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+   title: 'Caledario'
+}
 
 export default function EventsPage() {
    return (

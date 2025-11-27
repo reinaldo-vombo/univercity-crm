@@ -8,7 +8,11 @@ import { serverUser } from "@/lib/helper/auth/user";
 import Notification from "@/components/container/notification-settings";
 import ApperenceTab from "@/components/container/apperence-tab";
 import { getUserSeesionLogs, getUserNotificationsPreference } from "@/services/data/history-logs";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+   title: 'Cofigurações'
+}
 
 export default async function SettingsPages() {
    // console.log('params', params);

@@ -35,7 +35,7 @@ export default function SigleStudentPage() {
          <Breadcrumb
             root={ROUTES.DASHBOARD}
             pageUrl={`${ROUTES.DASHBOARD}/admin/student/${student.studentId}`}
-            pageName="Estudantes" name={student.firstName}
+            pageName="Estudante" name={`${student.firstName} ${student.lastName}`}
          />
          <div className="grid grid-cols-12 gap-2 mt-12 mb-10">
             <div className="col-span-4">

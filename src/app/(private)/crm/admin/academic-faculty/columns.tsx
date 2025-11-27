@@ -1,15 +1,16 @@
 // lib/columns/studentColumns.ts
 
-import { ColumnDef } from "@tanstack/react-table"
-import { Pen, Trash } from "lucide-react"
-import SheetModal from "@/components/shared/sheet-modal"
-import AlertModal from "@/components/shared/alert-modal"
-import { toast } from "sonner"
-import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { deleteFaculty } from "@/actions/academic-faculty"
-import { TAcademicFaculty } from "@/types/global"
+import { ColumnDef } from "@tanstack/react-table";
+import { Pen, Trash } from "lucide-react";
+import SheetModal from "@/components/shared/sheet-modal";
+import AlertModal from "@/components/shared/alert-modal";
+import { toast } from "sonner";
+import { FLASH_MESSAGE } from "@/constants/flash-message";
+import { deleteFaculty } from "@/actions/academic-faculty";
+import { TAcademicFaculty } from "@/types/global";
 import UpadateAcademicFaculty from "@/components/forms/admin/update/update-academic-faculty"
-import { handleApiError } from "@/services/error-handler"
+import { handleApiError } from "@/services/error-handler";
+import { formatDate } from "@/lib/helper";
 
 export type AcademicFaculty = {
    id: string;
@@ -29,15 +30,10 @@ export function AcademicFacultyColumns(): ColumnDef<TAcademicFaculty>[] {
       },
       {
          accessorKey: "createdAt",
-         header: "Ano de fundação",
-      },
-      {
-         accessorKey: "faculties",
-         header: "Professors",
-      },
-      {
-         accessorKey: "students",
-         header: "Estudantes",
+         header: "Data de Publicação",
+         cell: ({ row }) => (
+            <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
+         ),
       },
       {
          id: "actions",
@@ -64,9 +60,10 @@ export function AcademicFacultyColumns(): ColumnDef<TAcademicFaculty>[] {
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={`edit-${academic.id}`}
                      title="Atualizar Unidade Academica"
                      description='Formulario para atualizar Unidade Academica'>
-                     <UpadateAcademicFaculty title={academic.title} />
+                     <UpadateAcademicFaculty values={academic} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}

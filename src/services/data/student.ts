@@ -13,6 +13,18 @@ export const getAllStudent = async (): Promise<TStudent[]> => {
     handleApiError(error);
   }
 };
+export const getAllStudentDocList = async (
+  filters: string
+): Promise<Response> => {
+  try {
+    const documentList = await serverFetch<Response>(
+      `/export/student?${filters}`
+    );
+    return documentList;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 export const getSingleStudent = async (
   studentId: string
 ): Promise<TStudent[]> => {

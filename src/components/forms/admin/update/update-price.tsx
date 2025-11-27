@@ -18,17 +18,20 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TPrice } from "@/types/global"
 import { UpdatePriceSchema } from "@/lib/validation/price"
 import { updatePrice } from "@/actions/price"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TProps = {
    defaultValue: TPrice
 }
 const UpdatePriceForm = ({ defaultValue }: TProps) => {
-
+   const { close } = useSheet();
    const form = useForm<z.infer<typeof UpdatePriceSchema>>({
       resolver: zodResolver(UpdatePriceSchema),
       defaultValues: {
          id: defaultValue.id,
          amount: defaultValue.amount || 0,
+         currency: defaultValue.currency,
+         description: defaultValue.description || ''
       }
    })
 
@@ -50,6 +53,7 @@ const UpdatePriceForm = ({ defaultValue }: TProps) => {
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -76,6 +80,22 @@ const UpdatePriceForm = ({ defaultValue }: TProps) => {
                            {...field} />
                      </FormControl>
                      <FormDescription>O preço do curso</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="currency"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Moeda</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="Ex: AOA, EUR, USD"
+                           {...field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

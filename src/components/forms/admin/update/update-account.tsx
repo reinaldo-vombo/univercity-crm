@@ -130,7 +130,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
                   name="contact.phone"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel>Localização</FormLabel>
+                        <FormLabel>Telefone</FormLabel>
                         <FormControl>
                            <Input placeholder="Ex: 923-333-333" {...field} />
                         </FormControl>

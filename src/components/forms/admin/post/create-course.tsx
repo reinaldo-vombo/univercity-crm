@@ -20,12 +20,14 @@ import { addNewCourse } from "@/actions/courses"
 import { TDepartemant } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TProps = {
    departments: TDepartemant[]
 }
 
 const CreateCourseForm = ({ departments }: TProps) => {
+   const { close } = useSheet();
    const departmentOptions = departments.map((department) => ({
       id: department.id,
       label: department.title,
@@ -37,8 +39,8 @@ const CreateCourseForm = ({ departments }: TProps) => {
       defaultValues: {
          title: "",
          code: "",
-         shift: "MORNING",
-         yearLevel: "FIFTH",
+         shiftId: 1,
+         yearLevel: "FIRST",
          durationInYears: 4,
          academicDepartmentId: "",
       }
@@ -60,6 +62,7 @@ const CreateCourseForm = ({ departments }: TProps) => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -143,7 +146,7 @@ const CreateCourseForm = ({ departments }: TProps) => {
             />
             <FormField
                control={form.control}
-               name="shift"
+               name="shiftId"
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Turno</FormLabel>
@@ -154,7 +157,7 @@ const CreateCourseForm = ({ departments }: TProps) => {
                            className="w-full"
                            options={DUMMY_DATA.shifts} />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>EX: Manhã, Tarde, Noite</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -172,7 +175,7 @@ const CreateCourseForm = ({ departments }: TProps) => {
                            className="w-full"
                            options={DUMMY_DATA.yearLevel} />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>Ex: 1ª, 2ª, 3ª, 4ª, 5ª</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

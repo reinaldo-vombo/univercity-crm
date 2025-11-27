@@ -12,7 +12,7 @@ export default function useQueryParam() {
    const removeParam = (key: string) => {
       const params = new URLSearchParams(searchParams.toString());
       params.delete(key)
-      router.replace(`?${params.toString()}`)
+      router.replace(`?${params.toString()}`, { scroll: false })
    }
    const getParam = (key: string) => {
       return searchParams.get(key)

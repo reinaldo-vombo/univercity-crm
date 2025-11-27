@@ -7,7 +7,7 @@ import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
 import { ActionResult } from '../types/api-error';
 import {
-  assignRemoveFacultiesSchema,
+  assignRemoveCoursesZodSchema,
   courseSchema,
   updateCourseSchema,
 } from '../lib/validation/curses';
@@ -15,9 +15,11 @@ import { TCourse } from '../types/global';
 
 export const addNewCourse = validatedActionWithUser(
   courseSchema,
-  async (data): Promise<ActionResult<TCourse>> => {
+  async (data, _, user): Promise<ActionResult<TCourse>> => {
+    console.log(data);
+
     try {
-      const curses = await serverFetch<TCourse>('/course', {
+      const curses = await serverFetch<TCourse>(`/course?name=${user.name}`, {
         method: 'POST',
         body: data,
       });
@@ -48,13 +50,16 @@ export const addNewCourse = validatedActionWithUser(
 );
 export const updateCourse = validatedActionWithUser(
   updateCourseSchema,
-  async (data): Promise<ActionResult<TCourse>> => {
+  async (data, _, user): Promise<ActionResult<TCourse>> => {
     const { id, ...updateData } = data;
     try {
-      const curses = await serverFetch<TCourse>(`/course/${id}`, {
-        method: 'PATCH',
-        body: updateData,
-      });
+      const curses = await serverFetch<TCourse>(
+        `/course/${id}?name=${user.name}`,
+        {
+          method: 'PATCH',
+          body: updateData,
+        }
+      );
 
       revalidateTag('curse');
 
@@ -79,15 +84,54 @@ export const updateCourse = validatedActionWithUser(
   }
 );
 export const assignFaculties = validatedActionWithUser(
-  assignRemoveFacultiesSchema,
+  assignRemoveCoursesZodSchema,
   async (data): Promise<ActionResult<TCourse>> => {
-    const { id, ...updateData } = data;
+    const { courseId } = data;
 
     try {
-      const curses = await serverFetch<TCourse>(`/assign-faculties/${id}`, {
-        method: 'POST',
-        body: updateData.faculties,
-      });
+      const curses = await serverFetch<TCourse>(
+        `/course/assign-faculties/${courseId}`,
+        {
+          method: 'POST',
+          body: { faculties: data.facultys },
+        }
+      );
+
+      revalidateTag('curse');
+
+      return {
+        error: false,
+        data: curses,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+        };
+      }
+
+      return {
+        error: true,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      };
+    }
+  }
+);
+export const removeAssigndFaculties = validatedActionWithUser(
+  assignRemoveCoursesZodSchema,
+  async (data): Promise<ActionResult<TCourse>> => {
+    const { courseId } = data;
+
+    try {
+      const curses = await serverFetch<TCourse>(
+        `/course/remove-faculties/${courseId}`,
+        {
+          method: 'DELETE',
+          body: { faculties: data.facultys },
+        }
+      );
 
       revalidateTag('curse');
 

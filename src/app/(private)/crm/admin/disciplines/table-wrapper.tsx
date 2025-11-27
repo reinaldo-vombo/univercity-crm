@@ -5,22 +5,23 @@ import { getAllCurses } from "@/services/data/couses";
 import { DisciplineTable } from "./client-table";
 import { getAllDiscipline } from "@/services/data/disciplie";
 import { getAllSemester } from "@/services/data/academic";
-import { TSeachParams } from "@/types/global";
+import { getAllFalculty } from "@/services/data/falculty";
 
 
-export async function DisciplineTableServer({ searchParams }: TSeachParams) {
-   const { page, limit, search } = await searchParams;
+export async function DisciplineTableServer() {
+   // const { page, limit, search } = await searchParams;
    // const discipline = await getAllDiscipline()
-   const [discipline, semester, curses] = await Promise.all([
-      getAllDiscipline({
-         page: Number(page) || 1,
-         limit: Number(limit) || 10,
-         search: search || "",
-      }),
+   const [discipline, semester, curses, faculty] = await Promise.all([
+      getAllDiscipline(),
       getAllSemester(),
-      getAllCurses()
+      getAllCurses(),
+      getAllFalculty()
    ])
 
 
-   return <DisciplineTable discipline={discipline} semester={semester} curses={curses} />;
+   return <DisciplineTable
+      discipline={discipline}
+      semester={semester}
+      curses={curses}
+      faculty={faculty} />;
 }

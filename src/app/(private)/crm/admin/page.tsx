@@ -6,6 +6,11 @@ import { UsersTableServer } from "./users/table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
 import { ChartBar, Download, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+   title: 'Dashboard'
+}
 
 export default function AdminDashboard() {
    return (

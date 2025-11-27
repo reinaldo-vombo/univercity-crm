@@ -7,7 +7,11 @@ import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ActionResult } from '../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { facultySchema, updateFacultySchema } from '../lib/validation/faculty';
+import {
+  facultyDisciplineAssignmentSchema,
+  facultySchema,
+  updateFacultySchema,
+} from '../lib/validation/faculty';
 import { saveFile } from '../lib/helper/uploade';
 
 export const addNewFaculty = validatedActionWithUser(
@@ -53,7 +57,7 @@ export const updatedFaculty = validatedActionWithUser(
   async (data): Promise<ActionResult<TFaculty>> => {
     try {
       const { id, ...updateData } = data;
-      const departements = await serverFetch<TFaculty>(`/faculty/${id}`, {
+      const faculty = await serverFetch<TFaculty>(`/faculty/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
@@ -62,7 +66,7 @@ export const updatedFaculty = validatedActionWithUser(
 
       return {
         error: false,
-        data: departements,
+        data: faculty,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -82,24 +86,25 @@ export const updatedFaculty = validatedActionWithUser(
     }
   }
 );
-export const assiFaculty = validatedActionWithUser(
-  updateFacultySchema,
+
+export const assingFacultyToDiscipline = validatedActionWithUser(
+  facultyDisciplineAssignmentSchema,
   async (data): Promise<ActionResult<TFaculty>> => {
     try {
-      const { id, ...updateData } = data;
-      const departements = await serverFetch<TFaculty>(
-        `/assign-discipline/${id}`,
+      const { facultyId, ...updateData } = data;
+      const discipline = await serverFetch<TFaculty>(
+        `/faculty/assign-discipline/${facultyId}`,
         {
-          method: 'PATCH',
+          method: 'POST',
           body: updateData,
         }
       );
 
-      revalidateTag('faculty');
+      revalidateTag('discipline');
 
       return {
         error: false,
-        data: departements,
+        data: discipline,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {

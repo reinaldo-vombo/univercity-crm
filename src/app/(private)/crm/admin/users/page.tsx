@@ -4,6 +4,11 @@ import { ROUTES } from "@/constants/mock-data";
 import { UsersTableServer } from "./table-wrapper";
 import { Suspense } from "react";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+   title: 'Útilizadores'
+}
 
 export default function UsersPages() {
 

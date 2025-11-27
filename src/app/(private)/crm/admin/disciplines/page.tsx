@@ -3,9 +3,13 @@ import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { DisciplineTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
-import { TSeachParams } from "@/types/global";
+import { Metadata } from "next";
 
-export default function DisciplinesPage({ searchParams }: TSeachParams) {
+export const metadata: Metadata = {
+   title: 'Disciplinas Academicas'
+}
+
+export default function DisciplinesPage() {
 
    return (
       <section className="col-span-12">
@@ -16,7 +20,7 @@ export default function DisciplinesPage({ searchParams }: TSeachParams) {
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
             <Suspense fallback={<DataTableSkeleton />}>
-               <DisciplineTableServer searchParams={searchParams} />
+               <DisciplineTableServer />
             </Suspense>
          </div>
       </section>

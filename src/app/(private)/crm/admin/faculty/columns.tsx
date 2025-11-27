@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Eye, Hash, Mail, Moon, Pen, Phone, Sun, Trash } from "lucide-react"
+import { Eye, Hash, Mail, Moon, Pen, Phone, Sun, SunMoon, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -13,10 +13,9 @@ import UpdateFacultyFrom from "@/components/forms/admin/update/update-falculty"
 import FalcultyDetails from "@/components/admin/container/falculty/falculty-details"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
+import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter"
+import { createUniqueId } from "@/lib/helper"
 
-// type TDepartmentWithUser = TDepartemant & {
-//    user?: TUser;
-// };
 
 export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TAcademicFaculty[]): ColumnDef<TFaculty>[] {
 
@@ -53,12 +52,25 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
       },
       {
          accessorKey: "academicDepartment",
-         header: "Departamento",
-         cell: ({ row }) => (
-            <Badge variant="secondary" className="text-xs">
-               {row.getValue("academicDepartment")}
-            </Badge>
+         accessorFn: (row) => row.academicDepartment.id,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Departamento"
+               options={departemants.map((d) => ({
+                  value: d.id,
+                  label: d.title
+               }))}
+            />
          ),
+         cell: ({ row }) => {
+            const department = row.original.academicDepartment;
+            return (
+               <Badge variant="secondary" className="text-xs">
+                  {department.title}
+               </Badge>
+            )
+         },
       },
       {
          accessorKey: "designation",
@@ -84,9 +96,19 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
       },
       {
          accessorKey: "gender",
-         header: "Género",
+         accessorFn: (row) => row.gender,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Género"
+               options={[
+                  { value: "Masculino", label: "Masculino" },
+                  { value: "Feminino", label: "Feminino" },
+               ]}
+            />
+         ),
          cell: ({ row }) => (
-            <Badge className={row.getValue("gender") === 'masculino' ? 'bg-blue-500' : 'bg-pink-500'}>{row.getValue("gender")}</Badge>
+            <Badge className={row.getValue("gender") === 'Masculino' ? 'bg-blue-500' : 'bg-pink-500'}>{row.getValue("gender")}</Badge>
          ),
       },
       {
@@ -101,13 +123,32 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
       },
       {
          accessorKey: "shift",
-         header: "Turno",
-         cell: ({ row }) => (
-            <div className="flex items-center gap-2">
-               {row.getValue("shift") === "MORNING" ? <Sun className="text-yellow-300 size-4" /> : <Moon className="text-blue-500 size-4" />}
-               <span>{row.getValue("shift")}</span>
-            </div>
+         accessorFn: (row) => row.shift.name,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Turno"
+               options={[
+                  { value: "Manhã", label: "Manhã" },
+                  { value: "Tarde", label: "Tarde" },
+                  { value: "Noite", label: "Noite" },
+               ]}
+            />
          ),
+         cell: ({ row }) => {
+            const shift = row.original.shift.name;
+            return (
+               <div className="flex items-center gap-2">
+                  {shift === "Manhã" ?
+                     <Sun className="text-yellow-300 size-4" />
+                     :
+                     shift === "Tarde" ?
+                        <SunMoon className="text-amber-500" />
+                        : <Moon className="text-blue-500 size-4" />}
+                  <span>{shift}</span>
+               </div>
+            )
+         },
       },
       {
          id: "actions",
@@ -129,20 +170,22 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
                   console.error(err);
                }
             };
-
+            const uid = createUniqueId("view");
             return (
                <div className="flex items-center gap-3">
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
-                     className="sm:max-w-4xl"
+                     id={uid}
+                     className="sm:max-w-6xl"
                      title="Detalhes do professore"
-                     description='Informções relecionadass ao professore'>
+                     description='Informções do professore'>
                      <FalcultyDetails data={falculty} />
                   </SheetModal>
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={`edit-${falculty.id}`}
                      className="sm:max-w-md"
                      title="Atualização do professore"
                      description='Formulario de atualização do professore'>

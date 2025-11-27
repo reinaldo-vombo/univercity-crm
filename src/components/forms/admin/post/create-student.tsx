@@ -21,6 +21,7 @@ import { DUMMY_DATA } from "@/constants/mock-data"
 import { studentSchema } from "@/lib/validation/student"
 import Uploader from "@/components/shared/file-upload/uploader"
 import { addNewStudent } from "@/actions/student"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TProps = {
    academicSemester: TSemester[],
@@ -28,7 +29,7 @@ type TProps = {
 }
 
 const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
-
+   const { close } = useSheet()
    const semester = academicSemester.map((semester) => ({
       id: semester.id,
       label: semester.title,
@@ -77,6 +78,7 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

@@ -81,6 +81,7 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={`edit-${semester.id}`}
                      title="Atualizar semester acadêmico"
                      description='Formulário de atualização do semester acadêmico'>
                      <UpdateSemesterForm values={semester} />

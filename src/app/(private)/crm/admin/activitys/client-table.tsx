@@ -1,17 +1,19 @@
 "use client";
 
 import { DataTable } from "@/components/shared/data-table";
-import { TActionHistory } from "@/types/global";
+import { TActionHistory, TUser } from "@/types/global";
 import { AuditColumns } from "./columns";
-import CreateBuildingFrom from "@/components/forms/admin/post/create-building";
 import AlertModal from "@/components/shared/alert-modal";
 import { toast } from "sonner";
 import { deleteAllAudiLog } from "@/actions/activitiys";
 import { FLASH_MESSAGE } from "@/constants/flash-message";
 import { Trash2 } from "lucide-react";
+import { createUniqueId } from "@/lib/helper";
 
 interface Props {
    actionsHistory: TActionHistory[];
+   users: TUser[];
+   loggedUser: any
 }
 const herader = {
    userId: "Id do author",
@@ -19,9 +21,10 @@ const herader = {
    entityType: "Entidade",
    createdAt: "Data"
 }
+const uid = createUniqueId("create");
 
-export function AuditTable({ actionsHistory }: Props) {
-   const columns = AuditColumns();
+export function AuditTable({ actionsHistory, users, loggedUser }: Props) {
+   const columns = AuditColumns(users);
    const handleDeleteAll = async (id: string) => {
       try {
          const res = await deleteAllAudiLog(id);
@@ -37,17 +40,20 @@ export function AuditTable({ actionsHistory }: Props) {
    };
    return (
       <div className="space-y-4">
-         <AlertModal
-            trigger={<div className="flex items-center gap-2">
-               <Trash2 className="h-4 w-4 text-red-500 cursor-pointer" />
-               <b>Limpar todos historicos</b>
-               <b>({actionsHistory.length})</b>
-            </div>}
-            action={() => handleDeleteAll('')} />
+         {loggedUser.role !== 'super_admin' ? null : (
+
+            <AlertModal
+               trigger={<div className="flex items-center gap-2">
+                  <Trash2 className="h-4 w-4 text-red-500 cursor-pointer" />
+                  <b>Limpar todos historicos</b>
+                  <b>({actionsHistory.length})</b>
+               </div>}
+               action={() => handleDeleteAll('')} />
+         )}
          <DataTable
-            actionForm={<CreateBuildingFrom />}
             fileHerderes={herader}
             fileName="Historicos"
+            sheetId={uid}
             modalTitle="Criar Edificio"
             columns={columns}
             data={actionsHistory}

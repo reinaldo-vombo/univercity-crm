@@ -1,3 +1,5 @@
+import { TActionHistory } from '@/types/global';
+
 export function getFirstAndLastName(fullName: string) {
   const nameParts = fullName.trim().split(' ');
   const firstName = nameParts[0];
@@ -96,3 +98,74 @@ export const createQueryString = (
 
   return params.toString();
 };
+export const filterActionHistoryByDate = (
+  data: TActionHistory[],
+  filter: string
+): TActionHistory[] => {
+  const now = new Date();
+  return data.filter((item) => {
+    const createdAt = item.createdAt;
+    console.log('filter', createdAt);
+
+    switch (filter) {
+      case 'today': {
+        const start = new Date(now.setHours(0, 0, 0, 0));
+        const end = new Date(now.setHours(23, 59, 59, 999));
+        return createdAt >= start && createdAt <= end;
+      }
+
+      case 'yesterday': {
+        const yesterday = new Date();
+        yesterday.setDate(now.getDate() - 1);
+        const start = new Date(yesterday.setHours(0, 0, 0, 0));
+        const end = new Date(yesterday.setHours(23, 59, 59, 999));
+        return createdAt >= start && createdAt <= end;
+      }
+
+      case 'this week': {
+        const firstDay = new Date(now);
+        const day = now.getDay();
+        const diff = now.getDate() - day + (day === 0 ? -6 : 1); // segunda-feira
+        firstDay.setDate(diff);
+        firstDay.setHours(0, 0, 0, 0);
+
+        const lastDay = new Date(firstDay);
+        lastDay.setDate(firstDay.getDate() + 6);
+        lastDay.setHours(23, 59, 59, 999);
+
+        return createdAt >= firstDay && createdAt <= lastDay;
+      }
+
+      case 'this month': {
+        const start = new Date(now.getFullYear(), now.getMonth(), 1);
+        const end = new Date(
+          now.getFullYear(),
+          now.getMonth() + 1,
+          0,
+          23,
+          59,
+          59,
+          999
+        );
+        return createdAt >= start && createdAt <= end;
+      }
+
+      default:
+        return true;
+    }
+  });
+};
+export const showYearLevel = (year: string) => {
+  if (year === 'FIRST') return '1º ano';
+  if (year === 'SECOND') return '2º ano';
+  if (year === 'THIRD') return '3º ano';
+  if (year === 'FOURTH') return '5º ano';
+  if (year === 'FIFTH') return '6º ano';
+  //'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH'
+};
+let counter = 0;
+
+export function createUniqueId(prefix: string = 'id') {
+  counter++;
+  return `${prefix}-${counter}`;
+}

@@ -50,7 +50,7 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
          email: defaultValues.email || '',
          profileImage: defaultValues.profileImage,
          designation: defaultValues.designation,
-         shift: defaultValues.shift.name || "Manha",
+         shiftId: defaultValues.shiftId,
          academicDepartmentId: defaultValues.academicDepartmentId,
          academicFacultyId: defaultValues.academicFacultyId,
       }
@@ -223,10 +223,10 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
                />
                <FormField
                   control={form.control}
-                  name="shift"
+                  name="shiftId"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>Turno</FormLabel>
                         <FormControl className="w-full">
                            <Selector
                               placeholder="Selecione o Turno"

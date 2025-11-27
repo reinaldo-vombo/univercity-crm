@@ -1,14 +1,20 @@
-import UpdatedUserForm from '@/components/forms/admin/update/update-user'
+import UpdatedAccountForm from '@/components/forms/admin/update/update-account'
 import Avatar from '@/components/shared/avatar'
+import Breadcrumb from '@/components/shared/breadcrumb'
 import Card from '@/components/shared/card'
 import SheetModal from '@/components/shared/sheet-modal'
-import { Separator } from '@/components/ui/separator'
-import { getFirstAndLastName } from '@/lib/helper'
-import { User } from '@/lib/helper/auth/user'
+import { ROUTES } from '@/constants/mock-data'
+import { createUniqueId, getFirstAndLastName } from '@/lib/helper'
+import { serverUser } from '@/lib/helper/auth/user'
 import { Pencil } from 'lucide-react'
+import { Metadata } from 'next'
 
-export default function ProfilePage() {
-   const user = User()
+export const metadata: Metadata = {
+   title: 'Perfil'
+}
+const uid = createUniqueId("view");
+export default async function ProfilePage() {
+   const user = await serverUser()
    const { firstName, lastName } = getFirstAndLastName(user?.name || '');
 
    if (!user) {
@@ -16,59 +22,64 @@ export default function ProfilePage() {
    }
    return (
       <section className="col-span-12">
-         <Card>
-            <h1 className="text-2xl font-bold">Profile Page</h1>
-            <div className="flex flex-col items-center justify-center h-full mt-4">
-               <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
-                  <div className="flex items-center justify-between">
-                     <div className="flex gap-6 items-center">
-                        <Avatar name={user.name} photo={user.avatar} className="mr-4 size-12" />
-                        <div>
-                           <h4 className="text-lg font-semibold">{user.name || ''}</h4>
-                           <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                              <p className="text-sm ">
-                                 {user.role || ''}
+         <Breadcrumb
+            name="Edificios & Salas"
+            pageName="Edificios & Salas"
+            pageUrl={`${ROUTES.DASHBOARD}/perfil`}
+            root={`${ROUTES.DASHBOARD}/perfil`} />
+         <div className="mt-12">
+            <Card showTitle={false}>
+               <h1 className="text-2xl font-bold">Perfil</h1>
+               <div className="flex flex-col items-center justify-center h-full mt-4">
+                  <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
+                     <div className="flex items-center justify-between">
+                        <div className="flex gap-6 items-center">
+                           <Avatar name={user.name} photo={user.avatar} className="mr-4 size-12" />
+                           <div>
+                              <h4 className="text-lg font-semibold">{user.name}</h4>
+                              <p className="text-sm">
+                                 {user.role}
                               </p>
-                              <Separator orientation="vertical" />
-                              <p>{user.email || ''}</p>
+                              <p>{user.email}</p>
                            </div>
                         </div>
+                        <div>
+                           <SheetModal
+                              side='right'
+                              id={uid}
+                              trigger={<Pencil className='cursor-pointer' />}
+                              title="Editar Perfil"
+                              description='Formulario para Editar Perfil'
+                              className="sm:max-w-lg">
+                              <UpdatedAccountForm defaultValues={user} />
+                           </SheetModal>
+                        </div>
+                     </div>
+                  </div>
+                  <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
+                     <div>
+                        <p className='text-lg font-semibold lg:mb-6'>Informações pessoais</p>
                      </div>
                      <div>
-                        <SheetModal
-                           side='right'
-                           trigger={<Pencil className='cursor-pointer' />}
-                           title="Editar Perfil"
-                           description='Formulario para Editar Perfil'
-                           className="">
-                           <UpdatedUserForm userInf={user} />
-                        </SheetModal>
+                        <p className="mb-2 text-xs leading-normal">Pimero Nome</p>
+                        <b className="text-sm font-medium">{firstName}</b>
+                     </div>
+                     <div>
+                        <p className="mb-2 text-xs leading-normal">Último Nome</p>
+                        <b className="text-sm font-medium ">{lastName}</b>
+                     </div>
+                     <div>
+                        <p className="mb-2 text-xs leading-normal">Email address</p>
+                        <b className="text-sm font-medium ">{user.email}</b>
+                     </div>
+                     <div>
+                        <p className="mb-2 text-xs leading-normal">Phone</p>
+                        <b className="text-sm font-medium ">(+244) {user.contact.phone}</b>
                      </div>
                   </div>
                </div>
-               <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
-                  <div>
-                     <p className='text-lg font-semibold lg:mb-6'>Informações pessoais</p>
-                  </div>
-                  <div>
-                     <p className="mb-2 text-xs leading-normal">Pimero Nome</p>
-                     <b className="text-sm font-medium">{firstName}</b>
-                  </div>
-                  <div>
-                     <p className="mb-2 text-xs leading-normal">Último Nome</p>
-                     <b className="text-sm font-medium ">{lastName}</b>
-                  </div>
-                  <div>
-                     <p className="mb-2 text-xs leading-normal ">Email address</p>
-                     <b className="text-sm font-medium ">{user.email}</b>
-                  </div>
-                  <div>
-                     <p className="mb-2 text-xs leading-normal ">Phone</p>
-                     <b className="text-sm font-medium ">(+244)</b>
-                  </div>
-               </div>
-            </div>
-         </Card>
+            </Card>
+         </div>
 
       </section>
    )

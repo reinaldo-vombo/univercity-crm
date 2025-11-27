@@ -43,7 +43,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 
 ### Admin pages
 
-- [ ] Dashboard/root
+- [x] Dashboard/root
 - [x] All studente pages
 - [x] Sigle studente pages
 - [x] All Teacher pages
@@ -57,7 +57,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] All course price pages
 - [x] All discipline pages
 - [x] Events page
-- [ ] Calendar page
+- [x] Calendar page
 - [x] Error page
 - [x] NotFound page
 - [x] Unauthenticated page
@@ -69,6 +69,10 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Server action
 - [ ] Server action rate limit
 - [x] Data revalidation
+- [x] Audit/Activity logs
+- [x] Dashord with report from CRUDs
+- [x] Notification in App
+- [x] Settigs per User/Notification/Theme
 - [x] Dark mode
 - [x] Color themes
 - [x] Online & Offline status
@@ -80,7 +84,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Assigne faculty to curse
 - [x] Reusible table-table
 - [x] data-table filteres
-- [x] export button to export data as doc type /csv/excel
+- [x] export button to export data as doc type /csv/excel/pdf
 - [x] Update account info
 
 ---

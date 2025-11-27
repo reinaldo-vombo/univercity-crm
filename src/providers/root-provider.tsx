@@ -1,5 +1,6 @@
 
 import SessionWrapper from "./SessionWrapper";
+import { SheetProvider } from "./sheet-provider";
 import { ThemeProvider } from "./theme-provider";
 import { DUMMY_DATA } from "@/constants/mock-data";
 
@@ -14,8 +15,9 @@ export default function RootProvider({ children }: { children: React.ReactNode }
             enableSystem
             disableTransitionOnChange
             themes={DUMMY_DATA.themes}>
-            {children}
-
+            <SheetProvider>
+               {children}
+            </SheetProvider>
          </ThemeProvider>
       </SessionWrapper>
    )

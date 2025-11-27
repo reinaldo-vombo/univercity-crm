@@ -3,9 +3,15 @@ import DataTableSkeleton from "@/components/skeleton/data-table";
 import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { AuditTableServer } from "./table-wrapper";
+import { TSeachParams } from "@/types/global";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+   title: 'Actividades'
+}
 
-export default function AuditLogsPage() {
+export default async function AuditLogsPage({ searchParams }: TSeachParams) {
+   const { take } = await searchParams;
    return (
       <section className="col-span-12">
          <Breadcrumb
@@ -15,7 +21,7 @@ export default function AuditLogsPage() {
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
             <Suspense fallback={<DataTableSkeleton />}>
-               <AuditTableServer />
+               <AuditTableServer searchOptions={take} />
             </Suspense>
          </div>
       </section>

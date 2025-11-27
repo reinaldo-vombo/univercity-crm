@@ -4,6 +4,7 @@ import { DataTable } from "@/components/shared/data-table";
 import { TSemester } from "@/types/global";
 import { AcademicSemesterColumns } from "./columns";
 import CreateSemesterForm from "@/components/forms/admin/post/create-semester";
+import { createUniqueId } from "@/lib/helper";
 
 interface Props {
    semester: TSemester[];
@@ -16,7 +17,7 @@ const herader = {
    startMonth: "Mês inicial",
    endMonth: "Mês de encerramento"
 }
-//academicDepartmentId, courseId, semesterRegistrationId
+const uid = createUniqueId("create");
 export function AcademicSemesterTable({ semester }: Props) {
 
    const columns = AcademicSemesterColumns();
@@ -24,6 +25,7 @@ export function AcademicSemesterTable({ semester }: Props) {
    return <DataTable
       modalTitle="Cria semestre acadêmico"
       fileName="semester"
+      sheetId={uid}
       filterColumn='title'
       fileHerderes={herader}
       columns={columns}

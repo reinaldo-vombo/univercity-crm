@@ -82,6 +82,10 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
       FormDataEntryValue | FormDataEntryValue[]
     > = {};
 
+    // for (const key of formData.keys()) {
+    //   const values = formData.getAll(key);
+    //   formObject[key] = values.length > 1 ? values : values[0];
+    // }
     for (const key of formData.keys()) {
       const values = formData.getAll(key);
       formObject[key] = values.length > 1 ? values : values[0];

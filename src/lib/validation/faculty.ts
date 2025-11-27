@@ -25,7 +25,7 @@ export const facultySchema = z.object({
   academicFacultyId: z.string({
     required_error: 'Únidade acadêmica é obrigatorio',
   }),
-  shift: z.string(),
+  shiftId: z.coerce.number({ required_error: 'Turno é obrigatorio' }),
 });
 
 export const updateFacultySchema = z.object({
@@ -40,22 +40,15 @@ export const updateFacultySchema = z.object({
   designation: z.string(),
   academicDepartmentId: z.string(),
   academicFacultyId: z.string(),
-  shift: z.string(),
+  shiftId: z.coerce.number(),
 });
 
-export const assignRemoveCoursesZodSchema = z.object({
-  courses: z.array(z.string(), {
-    required_error: 'Courses Are Required',
+export const facultyDisciplineAssignmentSchema = z.object({
+  facultyId: z.string().uuid(),
+  disciplineId: z.string({
+    required_error: 'Disciplina é obrigarorio',
   }),
-});
-export const assignDisciplinesZodSchema = z.object({
-  id: z.array(z.string(), {
-    required_error: 'Id doprofessor é obrigatorio',
-  }),
-  disciplineId: z.array(z.string(), {
-    required_error: 'Discipline é obrigatorio',
-  }),
-  shiftId: z.array(z.string(), {
-    required_error: 'Shift é obrigatorio',
+  shiftId: z.coerce.number({
+    required_error: 'Turno é obrigatorios',
   }),
 });

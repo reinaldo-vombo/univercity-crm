@@ -19,12 +19,14 @@ import { roomSchema } from "@/lib/validation/building"
 import { TBuilding } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { addNewRoom } from "@/actions/room"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TProps = {
    buildings: TBuilding[]
 }
 
 const CreateRoomForm = ({ buildings }: TProps) => {
+   const { close } = useSheet()
    const buildingsList = buildings.map((build) => ({
       id: build.id,
       label: build.title,
@@ -54,6 +56,7 @@ const CreateRoomForm = ({ buildings }: TProps) => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

@@ -38,7 +38,7 @@ const AdmitionExameInfo = ({ data }: TAdmitionExameDetailsProps) => {
             </li>
             <li>Fase do exame:
                <div className='rounded-md border p-2 flex gap-2 items-center'>
-                  <List className='text-violet-500 size-4' /> <b>{fase.ordem}</b>
+                  <List className='text-violet-500 size-4' /> <b>{fase.name}</b>
                </div>
             </li>
             <li>Resultado do exame:

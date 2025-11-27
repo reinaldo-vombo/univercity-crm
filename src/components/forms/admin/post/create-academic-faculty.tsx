@@ -19,10 +19,10 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/services/error-handler"
 import { addNewAcademicFaculty } from "@/actions/academic-faculty"
 import { academicFacultyacultySchema } from "@/lib/validation/academicFaculty"
-import useQueryParam from "@/lib/hooks/use-query-param"
+import { useSheet } from "@/providers/sheet-provider"
 
 const CreateAcademicFaculty = () => {
-   const { removeParam } = useQueryParam()
+   const { close } = useSheet();
    const form = useForm<z.infer<typeof academicFacultyacultySchema>>({
       resolver: zodResolver(academicFacultyacultySchema),
       defaultValues: {
@@ -45,7 +45,7 @@ const CreateAcademicFaculty = () => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
-            removeParam("sheet")
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             handleApiError(error);

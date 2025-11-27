@@ -8,6 +8,9 @@ import Image from 'next/image';
 import { DropdownMenu } from '@/components/shared/dropdwon';
 import { Globe } from 'lucide-react';
 
+// export const metadata: Metadata = {
+//    title: 'Entrar'
+// }
 export default function AdminLoginPage() {
    const [isLogin, setIslogin] = useState(true)
 

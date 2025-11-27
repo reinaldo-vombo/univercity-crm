@@ -19,6 +19,7 @@ import { updateRoomSchema } from "@/lib/validation/building"
 import { TBuilding, TRoom } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { updateRoom } from "@/actions/room"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TProps = {
    buildings: TBuilding[]
@@ -26,6 +27,7 @@ type TProps = {
 }
 
 const UpdateRoomForm = ({ buildings, values }: TProps) => {
+   const { close } = useSheet()
    const { buildingId, floor, roomNumber, id } = values;
    const buildingsList = buildings.map((build) => ({
       id: build.id,
@@ -57,6 +59,7 @@ const UpdateRoomForm = ({ buildings, values }: TProps) => {
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

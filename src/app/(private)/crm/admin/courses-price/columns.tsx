@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Pen, Trash } from "lucide-react"
+import { BadgeDollarSign, Currency, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -9,7 +9,8 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TPrice } from "@/types/global"
 import UpdatePriceForm from "@/components/forms/admin/update/update-price"
 import { deletePrice } from "@/actions/price"
-import { formatDate } from "@/lib/helper"
+import { formatCurrency, formatDate } from "@/lib/helper"
+import { Badge } from "@/components/ui/badge"
 
 
 export function PriceColumns(): ColumnDef<TPrice>[] {
@@ -18,11 +19,30 @@ export function PriceColumns(): ColumnDef<TPrice>[] {
       {
          accessorKey: "amount",
          header: "Preço",
+         cell: ({ row }) => {
+            const amount = row.original.amount;
+            return (
+               <div className="flex items-center gap-2">
+                  <BadgeDollarSign className="text-green-500" />
+                  <b>{formatCurrency(amount || 0)}</b>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "currency",
          header: "Moeda",
+         cell: ({ row }) => {
+            const currency = row.original.currency;
+            return (
+               <Badge className="flex items-center text-white bg-red-500 gap-2">
+                  <Currency className="text-green-500 " />
+                  <b>{currency}</b>
+               </Badge>
+            )
+         },
       },
+
       {
          accessorKey: "createdAt",
          header: "Data de  publicação",
@@ -63,8 +83,9 @@ export function PriceColumns(): ColumnDef<TPrice>[] {
                   <SheetModal
                      trigger={<Pen className="h-4 w-4  cursor-pointer" />}
                      side="right"
+                     id={`edit-${credits.id}`}
                      title="Atualizar curso"
-                     description=' Formulario para atualizar o curso'>
+                     description='Formulario para atualizar o curso'>
                      <UpdatePriceForm defaultValue={credits} />
                   </SheetModal>
                   <AlertModal

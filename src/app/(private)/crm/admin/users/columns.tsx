@@ -9,7 +9,7 @@ import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { deleteUser } from "@/actions/users"
 import { User } from "@/lib/helper/auth/user"
-import { formatDate } from "@/lib/helper"
+import { createUniqueId, formatDate } from "@/lib/helper"
 import UpdatedUserForm from "@/components/forms/admin/update/update-user"
 
 export type Users = {
@@ -85,28 +85,30 @@ export function UsersColumns(): ColumnDef<Users>[] {
                   console.error(err);
                }
             };
-
+            const uid = createUniqueId("view");
             return (
                <div className="flex items-center gap-3">
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={uid}
                      className="sm:max-w-md"
                      title={`Detalhes do útilizador ${users.name}`}
                      description="Informações do utilizador">
                      helo
                   </SheetModal>
-                  {logUser?.id === users.id ? null : (
+                  {logUser?.id === users.id || logUser?.role !== 'super_admin' ? null : (
                      <SheetModal
                         trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                         side="right"
+                        id={`edit-${users.id}`}
                         className="sm:max-w-md"
                         title="Atualizar dados do útilizador"
                         description="Formulario de atualização">
                         <UpdatedUserForm userInf={users} />
                      </SheetModal>
                   )}
-                  {logUser?.id === users.id ? null : (
+                  {logUser?.id === users.id || logUser?.role !== 'super_admin' ? null : (
                      <AlertModal
                         trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
                         action={() => handleDelete(users.id)} />

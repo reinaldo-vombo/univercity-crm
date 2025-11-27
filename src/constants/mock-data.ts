@@ -118,7 +118,7 @@ export const DUMMY_DATA = {
         icon: React.createElement(UserPlus2),
       },
       {
-        href: `${ROUTES.DASHBOARD}/events`,
+        href: `${ROUTES.DASHBOARD}/calendar`,
         label: 'Events',
         icon: React.createElement(Calendar),
       },
@@ -205,18 +205,13 @@ export const DUMMY_DATA = {
   sesson: [
     {
       id: '1',
-      label: 'Primavera',
-      value: 'Primavera',
+      label: '1º semestre',
+      value: '1º Semestre',
     },
     {
       id: '2',
-      label: 'Verão',
-      value: 'Verão',
-    },
-    {
-      id: '3',
-      label: 'Outono',
-      value: 'Outono',
+      label: '2º semestre',
+      value: '2º Semestre',
     },
   ],
   months: [
@@ -285,17 +280,17 @@ export const DUMMY_DATA = {
     {
       id: '1',
       label: 'Manhã',
-      value: 'MORNING',
+      value: '1',
     },
     {
       id: '2',
       label: 'Tarde',
-      value: 'AFTERNOON',
+      value: '2',
     },
     {
       id: '3',
       label: 'Noite',
-      value: 'EVENING',
+      value: '3',
     },
   ],
   gender: [
@@ -367,8 +362,8 @@ export const DUMMY_DATA = {
     'nature',
     'dark-nature',
     'vitage',
-    'dark-vitage',
     'amethyst',
+    'dark-vitage',
     'dark-dafault',
     'dark-solar-dust',
     'dark-amethyst',

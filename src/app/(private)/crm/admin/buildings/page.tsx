@@ -3,7 +3,12 @@ import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { BuildingTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+import { Metadata } from "next";
 //diciplinas
+
+export const metadata: Metadata = {
+   title: 'Edificil'
+}
 
 export default function BuildingsPage() {
 

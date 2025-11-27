@@ -19,6 +19,17 @@ export type IQueryParams = {
   sortBy?: string;
   order?: 'asc' | 'desc';
 };
+export type TStudentDocFilter = {
+  format: string;
+  limit: string;
+  gender: string;
+  studentType: string;
+  isActive: string;
+  shiftId: string;
+  academicFacultyId: string;
+  academicDepartmentId: string;
+  yearLevel: string;
+};
 export type TSeachParams = {
   searchParams: Promise<{
     [key: string]: string | string[] | undefined;
@@ -67,47 +78,42 @@ export type TCourse = {
   meta?: TMeta;
   durationInYears: number;
   academicDepartment: {
+    id: string;
     title: string;
   };
+  shift: { name: string };
+  shiftId: number;
+  priceId: string;
+  faculties: {
+    faculty: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      profileImage: string | null;
+    };
+  }[];
   courseDisciplines: {
     discipline: {
+      id: string;
       name: string;
-      CourseDisciplineFaculty: {
-        faculty: {
-          firstName: string;
-          lastName: string;
-          profileImage: string | null;
-        };
-        shift: {
-          name: string;
-        };
-      }[];
     };
-  } & {
     id: string;
     yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
     courseId: string;
     disciplineId: string;
     semesterId: string;
   }[];
+  yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
   academicDepartmentId: string;
   price: {
     amount: number;
     currency: string;
-  };
-  faculties: TFaculty[];
-  offeredCourses?: TOfferedCourse[];
-  studentEnrolledCourses?: TStudentEnrolledCourse[];
-  preRequisiteCourses?: [
-    {
-      courseId: string;
-      isDeleted?: boolean | null;
-    }
-  ];
+  } | null;
 };
 export type TPrice = {
   id: string;
   amount: number;
+  currency: string;
   description?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -120,25 +126,6 @@ export type TCoursePrice = {
   updatedAt: Date;
 };
 export type TDiscipline = {
-  courseDisciplines: {
-    course: {
-      title: string;
-      shift: {
-        name: string;
-      };
-    };
-    semester: {
-      title: string;
-      year: string;
-    };
-  } & {
-    id: string;
-    yearLevel: '';
-    courseId: string;
-    disciplineId: string;
-    semesterId: string;
-  }[];
-} & {
   name: string;
   id: string;
   code: string;
@@ -146,6 +133,16 @@ export type TDiscipline = {
   updatedAt: Date;
   description: string | null;
   minimumGradeToDismiss: number;
+  courses: [
+    {
+      id: string;
+      courseTitle: string;
+      yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
+      shift: string;
+      semester: string;
+      year: string;
+    }
+  ];
 };
 
 export type TOfferedCourse = {
@@ -165,9 +162,6 @@ type TOfferedCourseSection = {
   maxCapacity: number;
   currentlyEnrolledStudent: number;
 };
-type TStudentEnrolledCourse = {
-  id: string;
-};
 
 export type TAdmitionExame = {
   id: string;
@@ -183,25 +177,28 @@ export type TAdmitionExame = {
   passed: boolean;
   fase: {
     name: string;
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    startDate: Date;
-    endDate: Date;
-    ordem: number;
   };
-  payment?: {
+  payment: {
     id: string;
-    paymentRecipt?: string;
+    status: 'APROVE' | 'PENDING' | 'DENIDE';
+    receipt: {
+      id: string;
+      payerIban: string;
+      beneficiaryIban: string;
+      paidAt: Date;
+    } | null;
+    PaymentReference: {
+      id: string;
+      createdAt: Date;
+      updatedAt: Date;
+      message: string;
+      paymentId: string;
+      code: number;
+      reference: string;
+    }[];
     totalAmount: number;
     approved: boolean;
-    paymentType: string;
-    status: string;
-    method: string;
-
-    createdAt: Date;
-    updatedAt: Date;
-  };
+  } | null;
 };
 export type TCalendar = {
   end: Date;
@@ -210,7 +207,7 @@ export type TCalendar = {
   description: string | null;
   createdAt: Date;
   updatedAt: Date;
-  type: string;
+  type: 'EVENTO' | 'SERVICO_ACADEMICO';
   location: string | null;
   start: Date;
 };
@@ -249,10 +246,10 @@ export type TBuilding = {
 
 export type TSemester = {
   id: string;
-  title: string;
+  title: '1 semestre' | '2 semestre';
   createdAt: Date;
   updatedAt: Date;
-  code: string;
+  code: '01' | '02' | '03';
   year: string;
   startMonth: string;
   endMonth: string;
@@ -281,40 +278,17 @@ export type TStudent = {
   presentAddress: string;
   createdAt: Date;
 };
-// export type TFaculty = {
-//   id: string;
-//   facultyId: string;
-//   firstName: string;
-//   middleName: string | null;
-//   lastName: string;
-//   email: string;
-//   contactNo: string;
-//   profileImage: string;
-//   designation: string;
-//   gender: string;
-//   shift: 'MORNING' | 'AFTERNOON' | 'EVENING';
-//   password: string;
-//   academicDepartment: {
-//     title: string;
-//   };
-//   courses: {
-//     facultyId: string;
-//     courseId: string;
-//   }[];
-//   academicFacultyId: string;
-//   academicDepartmentId: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// };
+
 export type TFaculty = {
   academicDepartment: {
+    id: string;
     title: string;
   };
   courses: {
     course: {
+      id: string;
       title: string;
     };
-  } & {
     facultyId: string;
     courseId: string;
   }[];
@@ -337,7 +311,7 @@ export type TFaculty = {
   academicDepartmentId: string;
   createdAt: Date;
   updatedAt: Date;
-  shiftId: string;
+  shiftId: number;
 };
 export type TAuthLogos = {
   id: string;
@@ -397,7 +371,7 @@ export type TActionHistory = {
   action: string;
   entityType: string;
   entityId: string;
-  user: TUser;
+  User: TUser;
 };
 export type TPayment = {
   id: string;

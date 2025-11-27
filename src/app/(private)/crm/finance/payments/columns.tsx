@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Check, Eye, Loader, Pen, X } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
-import { formatCurrency, formatDate } from "@/lib/helper"
+import { createUniqueId, formatCurrency, formatDate } from "@/lib/helper"
 import { Badge } from "@/components/ui/badge"
 import Avatar from "@/components/shared/avatar"
 import { TPayment } from "@/types/global"
@@ -91,6 +91,7 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
          id: "actions",
          header: 'Acção',
          cell: () => {
+            const uid = createUniqueId("view");
             return (
                <div className="flex items-center gap-3">
                   <SheetModal
@@ -103,6 +104,7 @@ export function PaymentColumns(): ColumnDef<TPayment>[] {
                   <SheetModal
                      trigger={<Eye className="h-4 w-4  cursor-pointer" />}
                      side="right"
+                     id={uid}
                      title="Descrição do pagamento"
                      description='Descrição do pagamento'>
                      hello

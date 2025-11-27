@@ -19,6 +19,7 @@ import { updateDepartmentSchema } from "@/lib/validation/departement"
 import { TAcademicFaculty, TUser } from "@/types/global"
 import { updatedDepartemant } from "@/actions/departement"
 import Selector from "@/components/shared/selector"
+import { useSheet } from "@/providers/sheet-provider"
 type TPros = {
    users: TUser[]
    values: {
@@ -30,7 +31,7 @@ type TPros = {
    academicFaculty: TAcademicFaculty[]
 }
 const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
-
+   const { close } = useSheet()
    const admins = users.map(user => ({
       id: user.id,
       label: user.name,
@@ -65,6 +66,7 @@ const UpdatedDepartmentForm = ({ users, academicFaculty, values }: TPros) => {
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

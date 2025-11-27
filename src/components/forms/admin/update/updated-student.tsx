@@ -22,6 +22,7 @@ import { DUMMY_DATA } from "@/constants/mock-data"
 import { updateStudentSchema } from "@/lib/validation/student"
 import Uploader from "@/components/shared/file-upload/uploader"
 import { Switch } from "@/components/ui/switch"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TProps = {
    academicSemester: TSemester[],
@@ -30,7 +31,7 @@ type TProps = {
 }
 
 const UpdatedStudentFrom = ({ academicSemester, courses, defaultValue }: TProps) => {
-
+   const { close } = useSheet()
    const semester = academicSemester.map((semester) => ({
       id: semester.id,
       label: semester.title,
@@ -75,6 +76,7 @@ const UpdatedStudentFrom = ({ academicSemester, courses, defaultValue }: TProps)
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

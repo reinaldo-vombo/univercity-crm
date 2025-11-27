@@ -20,7 +20,7 @@ export const addNewDepartemant = validatedActionWithUser(
   async (data, _, user): Promise<ActionResult<TDepartemant>> => {
     try {
       const departements = await serverFetch<TDepartemant>(
-        `/academic-department?userId=${user.id}&authorName=${user.name}`,
+        `/academic-department?name=${user.name}`,
         {
           method: 'POST',
           body: data,
@@ -57,7 +57,7 @@ export const updatedDepartemant = validatedActionWithUser(
     try {
       const { id, ...updateData } = data;
       const departements = await serverFetch<TDepartemant>(
-        `/academic-department/${id}?userId=${user.id}&authorName=${user.name}`,
+        `/academic-department/${id}?name=${user.name}`,
         {
           method: 'PATCH',
           body: updateData,
@@ -123,7 +123,7 @@ export const deleteDepartment = actionWithUser(
   async (id, user): Promise<ActionResult<TDepartemant>> => {
     try {
       const data = await serverFetch<TDepartemant>(
-        `/academic-department/${id}?userId=${user.id}&authorName=${user.name}`,
+        `/academic-department/${id}?name=${user.name}`,
         {
           method: 'DELETE',
         }

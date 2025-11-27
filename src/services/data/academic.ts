@@ -1,3 +1,4 @@
+import { REVALIDATION } from '@/constants/mock-data';
 import { handleApiError } from '@/services/error-handler';
 import { serverFetch } from '@/services/server-fetch';
 import {
@@ -13,7 +14,13 @@ export const getAllAcademicFaculty = async (): Promise<TAcademicFaculty[]> => {
     const AacademicFaculty = await serverFetch<TAcademicFaculty[]>(
       '/academic-faculty',
       {
-        next: { tags: ['academicFaculty'] },
+        next: {
+          tags: ['academicFaculty'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
       }
     );
     return AacademicFaculty;
@@ -24,7 +31,11 @@ export const getAllAcademicFaculty = async (): Promise<TAcademicFaculty[]> => {
 export const getAllAdmitionExames = async (): Promise<TAdmitionExame[]> => {
   try {
     const exames = await serverFetch<TAdmitionExame[]>('/admission-exame', {
-      next: { tags: ['admitionExame'] },
+      next: {
+        tags: ['admitionExame'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return exames;
   } catch (error) {
@@ -34,7 +45,11 @@ export const getAllAdmitionExames = async (): Promise<TAdmitionExame[]> => {
 export const getAllSemester = async (): Promise<TSemester[]> => {
   try {
     const semester = await serverFetch<TSemester[]>('/academic-semester', {
-      next: { tags: ['semester'] },
+      next: {
+        tags: ['semester'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return semester;
   } catch (error) {
@@ -45,7 +60,11 @@ export const getAllSemester = async (): Promise<TSemester[]> => {
 export const getAllBuilding = async (): Promise<TBuilding[]> => {
   try {
     const building = await serverFetch<TBuilding[]>('/building', {
-      next: { tags: ['building'] },
+      next: {
+        tags: ['building'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return building;
   } catch (error) {
@@ -55,7 +74,11 @@ export const getAllBuilding = async (): Promise<TBuilding[]> => {
 export const getAllRoom = async (): Promise<TRoom[]> => {
   try {
     const rooms = await serverFetch<TRoom[]>('/room', {
-      next: { tags: ['room'] },
+      next: {
+        tags: ['room'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return rooms;
   } catch (error) {

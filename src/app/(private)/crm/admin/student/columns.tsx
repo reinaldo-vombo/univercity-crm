@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Calendar, Eye, Mail, Moon, Pen, Phone, Sun, Trash, User } from "lucide-react"
+import { Calendar, CalendarArrowUp, Eye, Mail, Moon, Pen, Phone, Sun, SunMoon, Trash, User } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -13,7 +13,8 @@ import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
 import StudentDetails from "@/components/admin/container/student-details"
 import UpdatedStudentFrom from "@/components/forms/admin/update/updated-student"
-import { formatDate } from "@/lib/helper"
+import { createUniqueId, formatDate } from "@/lib/helper"
+import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter"
 
 
 
@@ -53,19 +54,37 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
 
       {
          accessorKey: "studentType",
+         accessorFn: (row) => row.studentType ?? null,
          header: ({ column }) => (
-            <DataTableColumnHeaderName column={column} title="Tipo" />
+            <UniversalColumnFilter
+               column={column}
+               title="Tipo de aluno"
+               options={[
+                  { value: "NORMAL", label: "Normal" },
+                  { value: "CADEIRANTE", label: "Cadeirante" },
+                  { value: "BOLSEIRO", label: "Bolseiro" },
+               ]}
+            />
          ),
          cell: ({ row }) => (
             <div className="flex items-center gap-2">
-               <User className="h-4 w-4 text-red-500" />
+               <User className="h-4 w-4 text-violet-500" />
                <span className="truncate max-w-[180px]">{row.getValue("studentType")}</span>
             </div>
          ),
       },
       {
          accessorKey: "isActive",
-         header: "Status",
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Situação"
+               options={[
+                  { value: "true", label: "Activo" },
+                  { value: "false", label: "Inactivo" },
+               ]}
+            />
+         ),
          cell: ({ row }) => (
             <Badge className={row.getValue("isActive") ? 'bg-green-500' : 'bg-red-500'}>
                {row.getValue("isActive")}
@@ -74,19 +93,30 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
       },
       {
          accessorKey: "yearLevel",
-         header: "Nivel",
+         accessorFn: (row) => row.yearLevel ?? null,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Ano curricular"
+               options={[
+                  { value: "FIRST", label: "1º Ano" },
+                  { value: "SECOND", label: "2º Ano" },
+                  { value: "THIRD", label: "3º Ano" },
+                  { value: "FOURTH", label: "4º Ano" },
+                  { value: "FIFTH", label: "5º Ano" },
+               ]}
+            />
+         ),
          cell: ({ row }) => (
             <div className="flex items-center gap-2">
-               <Mail className="h-4 w-4 text-red-500" />
+               <CalendarArrowUp className="h-4 w-4 text-red-500" />
                <span className="truncate max-w-[180px]">{row.getValue("yearLevel")}</span>
             </div>
          ),
       },
       {
          accessorKey: "email",
-         header: ({ column }) => (
-            <DataTableColumnHeaderName column={column} title="Email" />
-         ),
+         header: 'Email',
          cell: ({ row }) => (
             <div className="flex items-center gap-2">
                <Mail className="h-4 w-4 text-red-500" />
@@ -96,7 +126,17 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
       },
       {
          accessorKey: "gender",
-         header: "Género",
+         accessorFn: (row) => row.gender,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Género"
+               options={[
+                  { value: "Masculino", label: "Masculino" },
+                  { value: "Feminino", label: "Feminino" },
+               ]}
+            />
+         ),
          cell: ({ row }) => (
             <Badge className={row.getValue("gender") === 'masculino' ? 'bg-blue-500' : 'bg-pink-500'}>
                {row.getValue("gender")}
@@ -115,13 +155,32 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
       },
       {
          accessorKey: "shift",
-         header: "Turno",
-         cell: ({ row }) => (
-            <div className="flex items-center gap-2">
-               {row.getValue("shift") === "MORNING" ? <Sun className="text-yellow-300 size-4" /> : <Moon className="text-blue-500 size-4" />}
-               <span>{row.getValue("shift")}</span>
-            </div>
+         accessorFn: (row) => row.shift,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Turno"
+               options={[
+                  { value: "Manhã", label: "Manhã" },
+                  { value: "Tarde", label: "Tarde" },
+                  { value: "Noite", label: "Noite" },
+               ]}
+            />
          ),
+         cell: ({ row }) => {
+            const shift = row.original.shift.name
+            return (
+               <div className="flex items-center gap-2">
+                  {shift === "Manha" ?
+                     <Sun className="text-yellow-300 size-4" />
+                     :
+                     shift === "Tarde" ?
+                        <SunMoon className="text-amber-500" />
+                        : <Moon className="text-blue-500 size-4" />}
+                  <span>{shift}</span>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "createdAt",
@@ -154,12 +213,13 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
                   console.error(err);
                }
             };
-
+            const uid = createUniqueId("view");
             return (
                <div className="flex items-center gap-3">
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={`view-${uid}`}
                      className="sm:max-w-md"
                      title="Detalhes do aluno"
                      description='Informções relecionadass ao aluno'>
@@ -168,6 +228,7 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={`edit-${student.id}`}
                      className="sm:max-w-lg"
                      title="Atualização do aluno"
                      description='Formulario de atualização do aluno'>

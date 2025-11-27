@@ -7,7 +7,10 @@ declare module 'next-auth' {
     email: string;
     avatar: string;
     number: number;
-    contact: any;
+    contact: {
+      phone: number;
+      location: string;
+    };
     role: string;
     accessToken: string;
     expiresAt: number;

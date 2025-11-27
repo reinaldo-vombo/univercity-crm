@@ -83,7 +83,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                            placeholder="Ex: Manuel Jose Armando Santos"
                            {...field} />
                      </FormControl>
-                     <FormDescription>O seu nome completo</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -97,7 +97,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                      <FormControl>
                         <Input placeholder="Ex: exemplo@gmail.com" {...field} />
                      </FormControl>
-                     <FormDescription>Seu endereço de email valido</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -107,12 +107,12 @@ const UpdatedUserForm = ({ userInf }: any) => {
                   control={form.control}
                   name="contact.location"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-1/2">
                         <FormLabel>Localização</FormLabel>
                         <FormControl>
                            <Input placeholder="Ex: Angola, luanda" {...field} />
                         </FormControl>
-                        <FormDescription>Sua localidade presencial</FormDescription>
+                        <FormDescription></FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
@@ -121,12 +121,12 @@ const UpdatedUserForm = ({ userInf }: any) => {
                   control={form.control}
                   name="contact.phone"
                   render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Localização</FormLabel>
+                     <FormItem className="w-1/2">
+                        <FormLabel>Telefoe</FormLabel>
                         <FormControl>
                            <Input placeholder="Ex: 923-333-333" {...field} />
                         </FormControl>
-                        <FormDescription>Seu número de telefone valido</FormDescription>
+                        <FormDescription></FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
@@ -147,7 +147,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                            disabled={isAdmin(role)}
                         />
                      </FormControl>
-                     <FormDescription>O cargo ao pertece</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -156,7 +156,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                control={form.control}
                name="avatar"
                render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                      <FormLabel>Avatar</FormLabel>
                      <FormControl>
                         <Uploader field={field} maxFiles={1} />

@@ -1,15 +1,18 @@
 "use client";
 
 import { DataTable } from "@/components/shared/data-table";
-import { TCourse, TDepartemant } from "@/types/global";
+import { TCourse, TDepartemant, TPrice } from "@/types/global";
 import { CoursesColumns } from "./columns";
 import CreateCourseForm from "@/components/forms/admin/post/create-course";
 import { TFaculty } from "../../../../../types/global";
+import { createUniqueId } from "@/lib/helper";
+
 
 interface Props {
    couses: TCourse[];
    departements: TDepartemant[];
-   falculty: TFaculty[]
+   falculty: TFaculty[];
+   prices: TPrice[]
 }
 const herader = {
    title: "Nome do curso",
@@ -21,20 +24,18 @@ const herader = {
    academicDepartment: "Departamento"
 }
 
-export function CoursesTable({ couses, departements, falculty }: Props) {
-   const modifiedCouses = couses.map(course => ({
-      ...course,  // Copy existing fields
-      academicDepartment: course.academicDepartment.title,
-      coursePricing: course.price.amount
-   }));
-   const columns = CoursesColumns(falculty);
+const uid = createUniqueId("create");
+export function CoursesTable({ couses, departements, falculty, prices }: Props) {
+
+   const columns = CoursesColumns(falculty, departements, prices);
 
    return <DataTable
       actionForm={<CreateCourseForm departments={departements} />}
       fileHerderes={herader}
       fileName="Cursos"
+      sheetId={uid}
       modalTitle="Criar Cursos"
       columns={columns}
-      data={modifiedCouses}
+      data={couses}
       filterColumn="title" />;
 }

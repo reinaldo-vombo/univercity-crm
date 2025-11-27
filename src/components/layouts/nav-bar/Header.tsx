@@ -11,8 +11,6 @@ import { getUserNotifications } from "@/services/data/history-logs"
 import NotificationTab from "@/components/container/notification-tab"
 import Popover from "@/components/shared/popover"
 import LanguageSwitcher from "../LanguageSwitcher"
-import { Fragment } from "react"
-import { Button } from "@/components/ui/button"
 //cmeyvtiab0000ukys0s3kak3u
 // type TSeachParams = {
 //    searchParams: Promise<{
@@ -50,14 +48,12 @@ const Header = async () => {
                      <Popover
                         className="w-[37rem]"
                         trigger={
-                           <Fragment>
-                              <Button variant='outline' size='icon' className='relative'>
-                                 <BellIcon />
-                                 {unreadMessageCount > 0 && (<span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' />)}
+                           <div>
+                              <BellIcon />
+                              {unreadMessageCount > 0 && (<span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' />)}
 
-                                 <span className='sr-only'>Notifications</span>
-                              </Button>
-                           </Fragment>}>
+                              <span className='sr-only'>Notifications</span>
+                           </div>}>
                         <NotificationTab data={notifications} userId={user?.id} />
                      </Popover>
 

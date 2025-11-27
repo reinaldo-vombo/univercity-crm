@@ -11,12 +11,15 @@ import { createpriceSchema, UpdatePriceSchema } from '../lib/validation/price';
 
 export const addNewPrice = validatedActionWithUser(
   createpriceSchema,
-  async (data): Promise<ActionResult<TCoursePrice>> => {
+  async (data, _, user): Promise<ActionResult<TCoursePrice>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>('/price', {
-        method: 'POST',
-        body: data,
-      });
+      const curses = await serverFetch<TCoursePrice>(
+        `/prices?name=${user.name}`,
+        {
+          method: 'POST',
+          body: data,
+        }
+      );
 
       revalidateTag('price');
 
@@ -46,7 +49,7 @@ export const updatePrice = validatedActionWithUser(
   UpdatePriceSchema,
   async (data): Promise<ActionResult<TCoursePrice>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>(`/price/${data.id}`, {
+      const curses = await serverFetch<TCoursePrice>(`/prices/${data.id}`, {
         method: 'PATCH',
         body: data,
       });
@@ -78,7 +81,7 @@ export const deletePrice = async (
   id: string
 ): Promise<ActionResult<TCoursePrice>> => {
   try {
-    const data = await serverFetch<TCoursePrice>(`/price/${id}`, {
+    const data = await serverFetch<TCoursePrice>(`/prices/${id}`, {
       method: 'DELETE',
     });
 

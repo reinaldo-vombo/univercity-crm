@@ -16,13 +16,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { forgotPasswordSchema } from "@/lib/validation/admin"
 import SubmitBtn from "@/components/shared/submit-btn"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useTransition } from "react"
+import { FLASH_MESSAGE } from "@/constants/flash-message"
+import { recoverPassword } from "@/actions/auth"
 
 type TProps = {
    onChange: Dispatch<SetStateAction<boolean>>
 }
 
 export default function AdminForgotPassWord({ onChange }: TProps) {
+   const [isPending, startTransition] = useTransition();
    const form = useForm<z.infer<typeof forgotPasswordSchema>>({
       resolver: zodResolver(forgotPasswordSchema),
       defaultValues: {
@@ -31,7 +34,21 @@ export default function AdminForgotPassWord({ onChange }: TProps) {
    })
    async function onSubmit(values: z.infer<typeof forgotPasswordSchema>) {
       const { email } = values;
-      toast.success(email)
+
+      startTransition(async () => {
+         try {
+            const result = await recoverPassword(email);
+            if (result.error) {
+               toast.error(result.message);
+               return;
+            }
+            toast.success('Verifique Sua Caixa de Correio');
+            form.reset();
+         } catch (err) {
+            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            console.error(err);
+         }
+      });
 
    }
 
@@ -55,7 +72,7 @@ export default function AdminForgotPassWord({ onChange }: TProps) {
                )}
             />
 
-            <SubmitBtn label="Enviar" loading={form.formState.isSubmitting} />
+            <SubmitBtn label="Enviar" loading={isPending} />
             <div className="flex justify-center">
                <button type="button" aria-label="login" onClick={() => onChange(true)}>Entrar</button>
             </div>

@@ -1,6 +1,7 @@
 import { TDepartemant } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
+import { REVALIDATION } from '@/constants/mock-data';
 // import { REVALIDATION } from '@/constants/mock-data';
 
 export const getAllDepartments = async (): Promise<TDepartemant[]> => {
@@ -8,7 +9,13 @@ export const getAllDepartments = async (): Promise<TDepartemant[]> => {
     const departements = await serverFetch<TDepartemant[]>(
       '/academic-department',
       {
-        next: { tags: ['departement'] },
+        next: {
+          tags: ['departement'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
       }
     );
     return departements;

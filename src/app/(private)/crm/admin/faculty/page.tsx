@@ -3,7 +3,11 @@ import DataTableSkeleton from "@/components/skeleton/data-table";
 import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { FalcultyTableServer } from "./table-wrapper";
+import { Metadata } from 'next'
 
+export const metadata: Metadata = {
+   title: 'Professores'
+}
 //sm:max-w-sm
 export default function FalcultyPage() {
    return (

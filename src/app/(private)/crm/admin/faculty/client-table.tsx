@@ -4,6 +4,8 @@ import { DataTable } from "@/components/shared/data-table";
 import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global";
 import { FacultyColumns } from "./columns";
 import CreateFacultyFrom from "@/components/forms/admin/post/create-faculty";
+import ExportFacultysListFilterForm from "@/lib/helper/export/faculty-export";
+import { createUniqueId } from "@/lib/helper";
 
 interface Props {
    falcultys: TFaculty[]
@@ -20,31 +22,21 @@ const herader = {
    shift: "Turno",
 }
 
+const uid = createUniqueId("create");
 export function FalcultyTable({ falcultys, departements, academicFaculty }: Props) {
-   const mergedFaculty = falcultys.map((faculty) => {
-      const department = departements.find(
-         (d) => d.id === faculty.academicDepartmentId
-      );
-      const facultyObj = academicFaculty.find(
-         (f) => f.id === faculty.academicFacultyId
-      );
 
-      return {
-         ...faculty,
-         academicDepartment: department?.title ?? null,
-         academicFaculty: facultyObj?.title ?? null,
-      };
-   });
 
    const columns = FacultyColumns(departements, academicFaculty);
 
    return <DataTable
       actionForm={<CreateFacultyFrom departemants={departements} academicFaculty={academicFaculty} />}
       columns={columns}
+      sheetId={uid}
       className="sm:max-w-lg"
+      fileExport={<ExportFacultysListFilterForm />}
       fileHerderes={herader}
       modalTitle="Cadastrar professor"
       fileName="professores"
-      data={mergedFaculty}
+      data={falcultys}
       filterColumn="email" />;
 }

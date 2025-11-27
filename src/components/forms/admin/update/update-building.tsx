@@ -18,11 +18,13 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { addNewBuilding } from "@/actions/building"
 import { updateBuildingSchema } from "@/lib/validation/building"
 import { TBuilding } from "@/types/global"
+import { useSheet } from "@/providers/sheet-provider"
 type TProps = {
    building: TBuilding
 }
 
 const UpdateBuildingFrom = ({ building }: TProps) => {
+   const { close } = useSheet()
    const { id, title } = building
 
    const form = useForm<z.infer<typeof updateBuildingSchema>>({
@@ -47,6 +49,7 @@ const UpdateBuildingFrom = ({ building }: TProps) => {
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

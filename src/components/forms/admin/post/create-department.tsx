@@ -19,6 +19,7 @@ import { departmentSchema } from "@/lib/validation/departement"
 import { TAcademicFaculty, TUser } from "@/types/global"
 import { addNewDepartemant } from "@/actions/departement"
 import Selector from "@/components/shared/selector"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TPros = {
    users: TUser[]
@@ -26,6 +27,7 @@ type TPros = {
 }
 
 const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
+   const { close } = useSheet()
    const admins = users.map(user => ({
       id: user.id,
       label: user.name,
@@ -59,6 +61,7 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

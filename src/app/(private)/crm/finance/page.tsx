@@ -6,8 +6,11 @@ import { Suspense } from "react";
 import { PaymentTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
 import LineChartWrapper from "@/components/admin/wrapper/line-chart-wrapper";
+import { Metadata } from "next";
 
-
+export const metadata: Metadata = {
+   title: 'Finanças'
+}
 export default function BugetsPage() {
    return (
       <section className="col-span-12">

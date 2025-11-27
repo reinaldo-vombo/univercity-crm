@@ -1,7 +1,8 @@
-import { JSX, ReactNode } from 'react';
+import { JSX, ReactNode, ReactSVGElement } from 'react';
 
 export type TSheetProps = {
   children: React.ReactNode;
+  id?: any;
   trigger: ReactNode;
   side: 'top' | 'right' | 'bottom' | 'left';
   className?: string;
@@ -27,8 +28,8 @@ export type TSelectPros = {
   disabled?: boolean;
   className?: string;
   options: {
-    id: string;
-    label: string;
+    id: string | number;
+    label: string | number;
     value: string;
   }[];
   formField: any;
@@ -65,5 +66,10 @@ export type TAlertProps = {
 export type TExportDocProps<T extends object> = {
   data: T[];
   filename?: string;
-  headers?: Partial<Record<keyof T, string>>;
+  // headers?: Record<keyof T, string>;
+  headers?: any;
+};
+export type TPopoverForm = {
+  title: string;
+  icon?: ReactSVGElement;
 };

@@ -14,12 +14,13 @@ export const courseSchema = z.object({
     required_error: 'O ano de duração é obrigatorio',
   }),
   yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']),
-  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']),
+  shiftId: z.coerce.number(),
+  priceId: z.string().optional(),
 });
 export const updateCourseSchema = z.object({
   id: z.string(),
   title: z.string({
-    required_error: 'Titulo é obrigatorio',
+    required_error: 'Nome do Curso é obrigatorio',
   }),
   academicDepartmentId: z.string({
     required_error: 'Departamento acadêmico é obrigatorio',
@@ -30,23 +31,13 @@ export const updateCourseSchema = z.object({
   code: z.string({
     required_error: 'Codigo é obrigatorio',
   }),
-  credits: z.number({
-    required_error: 'Creditos é obrigatorio',
+  yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']),
+  shiftId: z.coerce.number(),
+  priceId: z.string().optional(),
+});
+export const assignRemoveCoursesZodSchema = z.object({
+  courseId: z.string().uuid(),
+  facultys: z.array(z.string(), {
+    required_error: 'Selecione pelo menos um professor',
   }),
-  yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']).optional(),
-  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']).optional(),
 });
-export const assignRemoveFacultiesSchema = z.object({
-  id: z.string(),
-  // faculties: z.array(z.string(), {
-  //   required_error: 'Faculties Are Required',
-  // }),
-  faculties: z.any(),
-  // faculties: z
-  //   .union([z.string(), z.array(z.string())])
-  //   .transform((val) => (typeof val === 'string' ? [val] : val))
-  //   .refine((val) => val.length > 0, {
-  //     message: 'Faculties are required',
-  //   }),
-});
-export type AssignRemoveFaculties = z.infer<typeof assignRemoveFacultiesSchema>;

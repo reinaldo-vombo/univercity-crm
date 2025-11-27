@@ -18,6 +18,7 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { addNewEventCalendar } from "@/actions/calendar"
 import { createEventSchema } from "@/lib/validation/events-calendar"
 import { Calendar } from "@/components/ui/calendar"
+import { Textarea } from "@/components/ui/textarea"
 
 const today = new Date()
 
@@ -29,7 +30,7 @@ const CreateEventFrom = () => {
          title: "",
          start: today,
          end: today,
-         type: '',
+         type: 'EVENTO',
          description: "",
          location: "",
       }
@@ -86,7 +87,7 @@ const CreateEventFrom = () => {
                      name="type"
                      render={({ field }) => (
                         <FormItem>
-                           <FormLabel>Titulo</FormLabel>
+                           <FormLabel>Tipo de Evento</FormLabel>
                            <FormControl>
                               <Input
                                  placeholder="Ex: Evento, Informações"
@@ -102,9 +103,9 @@ const CreateEventFrom = () => {
                      name="description"
                      render={({ field }) => (
                         <FormItem>
-                           <FormLabel>Titulo</FormLabel>
+                           <FormLabel>Descrição</FormLabel>
                            <FormControl>
-                              <Input
+                              <Textarea
                                  placeholder="Ex: Conferia da univercidade"
                                  {...field} />
                            </FormControl>
@@ -130,7 +131,7 @@ const CreateEventFrom = () => {
                      )}
                   />
                </div>
-               <div className="col-span-6 flex items-center">
+               <div className="col-span-6 flex items-center gap-3">
                   <FormField
                      control={form.control}
                      name="start"
@@ -169,7 +170,7 @@ const CreateEventFrom = () => {
             </div>
 
             <SubmitBtn
-               label="Criar"
+               label="Publicar"
                loading={isPending} />
          </form>
       </Form>

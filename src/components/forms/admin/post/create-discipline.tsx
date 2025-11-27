@@ -18,16 +18,17 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { disciplineSchema } from "@/lib/validation/discipline"
 import { addNewDiscipline } from "@/actions/discipline"
 import { generateSlug } from "@/lib/helper"
-import useQueryParam from "@/lib/hooks/use-query-param"
 import { TCourse, TSemester } from "@/types/global"
 import Selector from "@/components/shared/selector"
+import { DUMMY_DATA } from "@/constants/mock-data"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TProps = {
    semesters: TSemester[],
    curses: TCourse[]
 }
 const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
-   const { removeParam } = useQueryParam()
+   const { close } = useSheet()
    const academicSemester = semesters.map(semester => ({
       id: semester.id,
       label: semester.title,
@@ -45,6 +46,7 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
          code: "",
          courseId: "",
          semesterId: "",
+         yearLevel: "FIRST",
          minimumGradeToDismiss: 10
       }
    })
@@ -69,7 +71,7 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
 
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
-            removeParam("sheet")
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -128,10 +130,28 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
                         <Selector
                            className="w-full"
                            options={academicCurses}
-                           placeholder="Recursos Humanos"
+                           placeholder="Recursos Humanos, Ciência da Computação etc..."
                            formField={field} />
                      </FormControl>
-                     <FormDescription>Selecione o director do departamento</FormDescription>
+                     <FormDescription>Selecione o Ano Curricular, 1º, 2º, 3º, 4º...</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="yearLevel"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Ano Corricular</FormLabel>
+                     <FormControl>
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.yearLevel}
+                           placeholder="1º, 2º, 3º, 4º"
+                           formField={field} />
+                     </FormControl>
+                     <FormDescription>Selecione o Ano Curricular, 1º, 2º, 3º, 4º...</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -149,7 +169,7 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
                            placeholder="1ª semestre"
                            formField={field} />
                      </FormControl>
-                     <FormDescription>Selecione o director do departamento</FormDescription>
+                     <FormDescription>Selecione o semestre dessa desciplina</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

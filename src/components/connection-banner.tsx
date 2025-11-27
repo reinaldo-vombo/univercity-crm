@@ -34,6 +34,7 @@ const ConnectionBanner = () => {
                {isOnline ? 'Online' : 'Nesse momento estas offline'}
             </span>
             <Button type='button'
+               aria-label='close banner x icon'
                className='text-white/80 hover:text-white transition'
                onClick={() => setVisible(false)}>
                <X size={18} />

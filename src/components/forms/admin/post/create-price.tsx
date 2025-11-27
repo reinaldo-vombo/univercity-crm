@@ -17,15 +17,16 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { createpriceSchema } from "@/lib/validation/price"
 import { addNewPrice } from "@/actions/price"
-import useQueryParam from "@/lib/hooks/use-query-param"
+import { useSheet } from "@/providers/sheet-provider"
 
 
 const CreateCoursePriceForm = () => {
-   const { removeParam } = useQueryParam()
+   const { close } = useSheet();
    const form = useForm<z.infer<typeof createpriceSchema>>({
       resolver: zodResolver(createpriceSchema),
       defaultValues: {
          amount: 0,
+         currency: 'AOA',
          description: ''
       }
    })
@@ -48,7 +49,7 @@ const CreateCoursePriceForm = () => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
-            removeParam("sheet")
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -82,14 +83,29 @@ const CreateCoursePriceForm = () => {
             />
             <FormField
                control={form.control}
+               name="currency"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Moeda</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="Ex: AOA, EUR, USD"
+                           {...field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
                name="description"
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Descrição</FormLabel>
                      <FormControl>
                         <Input
-                           type="number"
-                           placeholder="Ex: Monografia"
+                           placeholder="Ex: Monografia, Curso de ciência da computação"
                            {...field} />
                      </FormControl>
                      <FormDescription>Opcional</FormDescription>

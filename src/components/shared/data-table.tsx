@@ -23,9 +23,10 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown, File, Plus } from "lucide-react";
 import SheetModal from "./sheet-modal";
 import { TableExport } from "./table-export";
+import Popover from "./popover";
 
 type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];
@@ -34,6 +35,8 @@ type DataTableProps<TData, TValue> = {
    filterColumn?: keyof TData; // e.g., "email"
    actionForm?: React.ReactNode;
    fileName?: string
+   sheetId?: string;
+   fileExport?: React.ReactNode;
    fileHerderes?: any
    modalTitle?: string
 };
@@ -43,8 +46,10 @@ export function DataTable<TValue>({
    data,
    filterColumn,
    actionForm,
+   fileExport,
    fileHerderes,
    fileName,
+   sheetId,
    modalTitle,
    className
 }: DataTableProps<any, TValue>) {
@@ -113,12 +118,18 @@ export function DataTable<TValue>({
                   <SheetModal
                      triggerStyle="border h-[37px] rounded-md cursor-pointer hover:bg-primary"
                      side="right"
+                     id={`create-${sheetId}`}
                      className={className}
                      trigger={<Plus />}
                      title={modalTitle || 'Sheet modal title'}
                   >
                      {actionForm}
                   </SheetModal>
+               )}
+               {fileExport && (
+                  <Popover trigger={<File className="text-red-500" />}>
+                     {fileExport}
+                  </Popover>
                )}
                <TableExport
                   data={data}

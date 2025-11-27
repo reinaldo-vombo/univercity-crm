@@ -11,7 +11,6 @@ import UpdateBuildingFrom from "@/components/forms/admin/update/update-building"
 import { TBuilding } from "@/types/global"
 import { formatDate } from "@/lib/helper"
 
-
 export function BuildingColumns(): ColumnDef<TBuilding>[] {
 
    return [
@@ -58,6 +57,7 @@ export function BuildingColumns(): ColumnDef<TBuilding>[] {
                   <SheetModal
                      trigger={<Pen className="h-4 w-4  cursor-pointer" />}
                      side="right"
+                     id={`edit-${building.id}`}
                      title="Atualizar curso"
                      description=' Formulario para atualizar o curso'>
                      <UpdateBuildingFrom building={building} />

@@ -29,3 +29,15 @@ export const getAllFalculty = async (): Promise<TFaculty[]> => {
     handleApiError(error);
   }
 };
+export const getAllFacultyDocList = async (
+  filters: string
+): Promise<Response> => {
+  try {
+    const documentList = await serverFetch<Response>(
+      `/export/faculty?${filters}`
+    );
+    return documentList;
+  } catch (error) {
+    handleApiError(error);
+  }
+};

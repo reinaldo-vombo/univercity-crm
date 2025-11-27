@@ -64,10 +64,19 @@ export const getUserNotificationsPreference = async (
   }
 };
 export const getAllUserActionHistory = async (
-  options?: string[]
+  options?: Record<string, string | string[] | number | undefined>
 ): Promise<TActionHistory[]> => {
-  console.log(options);
-
+  const queryString = options
+    ? '?' +
+      Object.entries(options)
+        .filter(([, value]) => value !== undefined && value !== null)
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
+        )
+        .join('&')
+    : '';
+  console.log(queryString);
   //userId 'orderBy','entityType','action','from','to','take'
   try {
     const result = await serverFetch<TActionHistory[]>(`/audit`, {

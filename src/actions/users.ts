@@ -117,25 +117,3 @@ export const deleteUser = actionWithUser(
   }
 );
 
-export const recoverPassword = async (
-  data: string
-): Promise<ActionState<null>> => {
-  try {
-    await serverFetch<null>('/recover-password', {
-      method: 'POST',
-      body: data,
-    });
-
-    return {
-      error: false,
-      message: 'Um email foi enviado a sua caixa',
-      data: null,
-    };
-  } catch (err) {
-    return {
-      error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};

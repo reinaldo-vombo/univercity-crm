@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Pen, Plus, Trash } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pen, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 
@@ -33,6 +33,7 @@ import Tooltip from "../shared/tooltip";
 import Avatar from "../shared/avatar";
 import { formatDateTime } from "@/lib/helper";
 import UpdateEventCalendarFrom from "../forms/update/updated-calendar";
+import ExpandableScreenForm from "../shared/expandebal-screen";
 type TProps = {
    subscriptions: TCalendar[]
 }
@@ -115,15 +116,7 @@ function EventCalendar({ subscriptions }: TProps) {
                </motion.h2>
             </div>
 
-            <SheetModal side="bottom" trigger={
-               <div className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Publicar evento
-               </div>}
-               title="Criar evento"
-               description="formulario">
-               <CreateEventFrom />
-            </SheetModal>
+            <ExpandableScreenForm formComponent={<CreateEventFrom />} />
          </div>
          <div className="grid grid-cols-7 gap-2 p-1 bg-muted rounded-lg overflow-hidden">
             <AnimatePresence mode="popLayout" >

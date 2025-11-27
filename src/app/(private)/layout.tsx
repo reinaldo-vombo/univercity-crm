@@ -27,6 +27,7 @@ export default async function CmsLayout({
                   </div>
                </div>
             </main>
+            {/* <SessionChecker /> */}
          </SidebarProvider>
       </div>
    );

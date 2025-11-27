@@ -17,9 +17,10 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { addNewBuilding } from "@/actions/building"
 import { buildingSchema } from "@/lib/validation/building"
+import { useSheet } from "@/providers/sheet-provider"
 
 const CreateBuildingFrom = () => {
-
+   const { close } = useSheet()
    const form = useForm<z.infer<typeof buildingSchema>>({
       resolver: zodResolver(buildingSchema),
       defaultValues: {
@@ -41,6 +42,7 @@ const CreateBuildingFrom = () => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
