@@ -18,16 +18,35 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { disciplineSchema } from "@/lib/validation/discipline"
 import { addNewDiscipline } from "@/actions/discipline"
 import { generateSlug } from "@/lib/helper"
+import { TCourse, TSemester } from "@/types/global"
+import Selector from "@/components/shared/selector"
+import { DUMMY_DATA } from "@/constants/mock-data"
+import { useSheet } from "@/providers/sheet-provider"
 
-const CreateDisciplineForm = () => {
-
+type TProps = {
+   semesters: TSemester[],
+   curses: TCourse[]
+}
+const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
+   const { close } = useSheet()
+   const academicSemester = semesters.map(semester => ({
+      id: semester.id,
+      label: semester.title,
+      value: semester.id,
+   }));
+   const academicCurses = curses.map(curse => ({
+      id: curse.id,
+      label: curse.title,
+      value: curse.id,
+   }));
    const form = useForm<z.infer<typeof disciplineSchema>>({
       resolver: zodResolver(disciplineSchema),
       defaultValues: {
          name: "",
          code: "",
-         credits: 1,
-         description: "",
+         courseId: "",
+         semesterId: "",
+         yearLevel: "FIRST",
          minimumGradeToDismiss: 10
       }
    })
@@ -52,6 +71,7 @@ const CreateDisciplineForm = () => {
 
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -102,6 +122,60 @@ const CreateDisciplineForm = () => {
             />
             <FormField
                control={form.control}
+               name="courseId"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Curso</FormLabel>
+                     <FormControl>
+                        <Selector
+                           className="w-full"
+                           options={academicCurses}
+                           placeholder="Recursos Humanos, Ciência da Computação etc..."
+                           formField={field} />
+                     </FormControl>
+                     <FormDescription>Selecione o Ano Curricular, 1º, 2º, 3º, 4º...</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="yearLevel"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Ano Corricular</FormLabel>
+                     <FormControl>
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.yearLevel}
+                           placeholder="1º, 2º, 3º, 4º"
+                           formField={field} />
+                     </FormControl>
+                     <FormDescription>Selecione o Ano Curricular, 1º, 2º, 3º, 4º...</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="semesterId"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Semestre</FormLabel>
+                     <FormControl>
+                        <Selector
+                           className="w-full"
+                           options={academicSemester}
+                           placeholder="1ª semestre"
+                           formField={field} />
+                     </FormControl>
+                     <FormDescription>Selecione o semestre dessa desciplina</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
                name="minimumGradeToDismiss"
                render={({ field }) => (
                   <FormItem>
@@ -117,23 +191,6 @@ const CreateDisciplineForm = () => {
                   </FormItem>
                )}
             />
-            <FormField
-               control={form.control}
-               name="description"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Descrição</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Descrição"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>Opcional</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-
             <SubmitBtn
                label="Criar"
                loading={isPending} />

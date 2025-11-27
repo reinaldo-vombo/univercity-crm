@@ -11,12 +11,15 @@ import { studentSchema, updateStudentSchema } from '../lib/validation/student';
 
 export const addNewStudent = validatedActionWithUser(
   studentSchema,
-  async (data): Promise<ActionResult<TStudent>> => {
+  async (data, _, user): Promise<ActionResult<TStudent>> => {
     try {
-      const Students = await serverFetch<TStudent>('/student', {
-        method: 'POST',
-        body: data,
-      });
+      const Students = await serverFetch<TStudent>(
+        `/student?userId=${user.id}&name=${user.name}`,
+        {
+          method: 'POST',
+          body: data,
+        }
+      );
 
       revalidateTag('student');
 
@@ -44,13 +47,16 @@ export const addNewStudent = validatedActionWithUser(
 );
 export const updatedStudent = validatedActionWithUser(
   updateStudentSchema,
-  async (data): Promise<ActionResult<TStudent>> => {
+  async (data, _, user): Promise<ActionResult<TStudent>> => {
     try {
       const { id, ...updateData } = data;
-      const departements = await serverFetch<TStudent>(`/student/${id}`, {
-        method: 'PATCH',
-        body: updateData,
-      });
+      const departements = await serverFetch<TStudent>(
+        `/student/${id}?userId=${user.id}&name=${user.name}`,
+        {
+          method: 'PATCH',
+          body: updateData,
+        }
+      );
 
       revalidateTag('student');
 

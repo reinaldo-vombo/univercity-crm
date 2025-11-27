@@ -3,11 +3,11 @@
 import { getFirstAndLastName } from "@/lib/helper";
 import SheetModal from "../shared/sheet-modal";
 import { Briefcase, Pencil, UserCircle } from "lucide-react";
-import UpdatedUserForm from "../forms/admin/update/update-user";
 import { Separator } from "../ui/separator";
 import Avatar from "../shared/avatar";
 import { Checkbox } from "../ui/checkbox";
 import { IUser } from "next-auth";
+import UpdatedAccountForm from "../forms/admin/update/update-account";
 type TProps = {
    user: (IUser & {
       name?: string | null;
@@ -50,7 +50,7 @@ const AccountTab = ({ user }: TProps) => {
                      title="Editar Perfil"
                      description='Editar Perfil'
                      className="">
-                     <UpdatedUserForm userInf={user} />
+                     <UpdatedAccountForm defaultValues={user} />
                   </SheetModal>
                </div>
             </div>
@@ -59,14 +59,14 @@ const AccountTab = ({ user }: TProps) => {
                <UserCircle className='text-slate-200 size-5' />
                <b>Informações pessoais</b>
             </div>
-            <ul className="flex items-center gap-2.5 space-y-6">
+            <ul className="flex items-center gap-2.5">
                <li>Primero nome:
-                  <div className='rounded-md border p-2 flex gap-2 items-center mt-1.5'>
+                  <div className='rounded-md border p-2 flex gap-2 items-center '>
                      <b>{firstName}</b>
                   </div>
                </li>
                <li>Ultimo nome:
-                  <div className='rounded-md border p-2 flex gap-2 items-center mt-1.5'>
+                  <div className='rounded-md border p-2 flex gap-2 items-center'>
                      <b>{lastName}</b>
                   </div>
                </li>

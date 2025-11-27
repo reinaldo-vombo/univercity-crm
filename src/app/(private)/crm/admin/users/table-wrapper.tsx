@@ -1,6 +1,6 @@
 
 import { UsersTable } from "./client-table";
-import { getAllUsers } from "@/lib/helper/db/querys";
+import { getAllUsers } from "@/services/data/user";
 
 
 export async function UsersTableServer() {

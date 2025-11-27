@@ -1,23 +1,17 @@
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import Header from "@/components/layouts/nav-bar/Header";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { ROUTES } from "@/constants/mock-data";
-import { authOptions } from "@/config/auth";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { serverUser } from "@/lib/helper/auth/user";
 
 export default async function CmsLayout({
    children,
 }: Readonly<{
    children: React.ReactNode;
 }>) {
-   const session = await getServerSession(authOptions);
-   const role = session?.user.role;
 
-   if (role !== "admin" && role !== "super_admin" && role !== "student" && role !== "faculty") {
-      // Optionally redirect or render fallback
-      redirect(ROUTES.UNAUTHORIZED);
-   }
+   const currentUser = await serverUser();
+   const role = currentUser?.role as any
+
    return (
       <div>
          <SidebarProvider>
@@ -33,6 +27,7 @@ export default async function CmsLayout({
                   </div>
                </div>
             </main>
+            {/* <SessionChecker /> */}
          </SidebarProvider>
       </div>
    );

@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { addNewEvent } from "@/actions/events"
+import { updatedUser } from "@/actions/users"
 import { changePasswordShema } from "@/lib/validation/user"
 import useShowPassword from "@/lib/hooks/use-show-password"
 import { Eye, EyeClosed } from "lucide-react"
@@ -41,12 +41,12 @@ const ChangePasswordForm = () => {
       });
       startTransition(async () => {
          try {
-            const response = await addNewEvent(formData);
+            const response = await updatedUser(formData);
             if (response.error) {
                toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);

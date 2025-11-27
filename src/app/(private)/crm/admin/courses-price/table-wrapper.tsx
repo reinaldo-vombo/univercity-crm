@@ -1,15 +1,11 @@
 
+import { getAllPrice } from "@/services/data/prices";
 import { CoursesPriceTable } from "./client-table";
-import { getAllCoursePrice, getAllCurses } from "@/lib/helper/db/querys";
 
 
 export async function CoursesPricingTableServer() {
 
-   const [coursePrices, courses] = await Promise.all([
-      getAllCoursePrice(),
-      getAllCurses(),
-   ]);
+   const prices = await getAllPrice()
 
-
-   return <CoursesPriceTable couses={courses} coursePrices={coursePrices} />;
+   return <CoursesPriceTable prices={prices} />;
 }

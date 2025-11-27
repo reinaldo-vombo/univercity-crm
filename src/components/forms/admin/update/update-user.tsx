@@ -21,21 +21,21 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updatedUser } from "@/actions/users"
 import Uploader from "@/components/shared/file-upload/uploader"
-import { useSession } from "next-auth/react"
-
 
 const UpdatedUserForm = ({ userInf }: any) => {
-   const { name, email, role } = userInf;
-   const { data: session, update } = useSession();
+   const { id, name, email, role, contact } = userInf;
    function isAdmin(role: string): boolean {
       return ["admin", "super_admin"].includes(role);
    }
+
    const form = useForm<z.infer<typeof updateSchema>>({
       resolver: zodResolver(updateSchema),
       defaultValues: {
+         id,
          name: name,
          role: role,
          email: email,
+         contact,
          avatar: undefined,
       }
    })
@@ -57,15 +57,6 @@ const UpdatedUserForm = ({ userInf }: any) => {
                toast.error(result.message);
                return;
             }
-            await update({
-               ...session,
-               user: {
-                  ...session?.user,
-                  name: result.data.name,
-                  email: result.data.email,
-                  avatar: result.data.avatar
-               },
-            })
             toast.success(FLASH_MESSAGE.UPDATED);
          } catch (err) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -74,9 +65,13 @@ const UpdatedUserForm = ({ userInf }: any) => {
       });
 
    }
+   const onInvalid = (errors: unknown) => {
+      //This helpe me fix a two week form not submiting god kwon's way bug
+      console.error("Validation Errors:", errors);
+   };
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
+         <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
                name="name"
@@ -85,10 +80,10 @@ const UpdatedUserForm = ({ userInf }: any) => {
                      <FormLabel>Nome do útilizador</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Nome"
+                           placeholder="Ex: Manuel Jose Armando Santos"
                            {...field} />
                      </FormControl>
-                     <FormDescription>Ex: Max paweer</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -100,13 +95,43 @@ const UpdatedUserForm = ({ userInf }: any) => {
                   <FormItem>
                      <FormLabel>Email</FormLabel>
                      <FormControl>
-                        <Input placeholder="e-mail" {...field} />
+                        <Input placeholder="Ex: exemplo@gmail.com" {...field} />
                      </FormControl>
-                     <FormDescription>Ex@gmail.com</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
+            <div className="flex items-center gap-2">
+               <FormField
+                  control={form.control}
+                  name="contact.location"
+                  render={({ field }) => (
+                     <FormItem className="w-1/2">
+                        <FormLabel>Localização</FormLabel>
+                        <FormControl>
+                           <Input placeholder="Ex: Angola, luanda" {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="contact.phone"
+                  render={({ field }) => (
+                     <FormItem className="w-1/2">
+                        <FormLabel>Telefoe</FormLabel>
+                        <FormControl>
+                           <Input placeholder="Ex: 923-333-333" {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
             <FormField
                control={form.control}
                name="role"
@@ -118,11 +143,11 @@ const UpdatedUserForm = ({ userInf }: any) => {
                            options={DUMMY_DATA.roles}
                            className="w-full"
                            formField={field}
-                           placeholder="Cargos"
+                           placeholder="Ex: admin, editor, direitor..."
                            disabled={isAdmin(role)}
                         />
                      </FormControl>
-                     <FormDescription>Ex: admin, editor, direitor...</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -131,7 +156,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                control={form.control}
                name="avatar"
                render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                      <FormLabel>Avatar</FormLabel>
                      <FormControl>
                         <Uploader field={field} maxFiles={1} />

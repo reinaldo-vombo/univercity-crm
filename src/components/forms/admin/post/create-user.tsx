@@ -20,8 +20,10 @@ import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { addNewUser } from "@/actions/users"
+import { useSheet } from "@/providers/sheet-provider"
 
 const CreateUser = () => {
+   const { close } = useSheet()
    const [isPending, startTransition] = useTransition();
    const form = useForm<z.infer<typeof userSchema>>({
       resolver: zodResolver(userSchema),
@@ -46,6 +48,7 @@ const CreateUser = () => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (err) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(err);

@@ -1,0 +1,43 @@
+import { TFaculty } from '@/types/global';
+import { handleApiError } from '../error-handler';
+import { serverFetch } from '../server-fetch';
+import { FLASH_MESSAGE } from '@/constants/flash-message';
+
+export const getSigleFalcultyService = async (
+  facultyId: string
+): Promise<TFaculty[]> => {
+  if (!facultyId) {
+    console.error(FLASH_MESSAGE.ID_REQUIRID);
+    return [];
+  }
+  try {
+    const faculty = await serverFetch<TFaculty[]>(`/faculty/${facultyId}`, {
+      next: { tags: ['faculty_service'] },
+    });
+    return faculty;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getAllFalculty = async (): Promise<TFaculty[]> => {
+  try {
+    const faculty = await serverFetch<TFaculty[]>('/faculty', {
+      next: { tags: ['faculty'] },
+    });
+    return faculty;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getAllFacultyDocList = async (
+  filters: string
+): Promise<Response> => {
+  try {
+    const documentList = await serverFetch<Response>(
+      `/export/faculty?${filters}`
+    );
+    return documentList;
+  } catch (error) {
+    handleApiError(error);
+  }
+};

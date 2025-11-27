@@ -18,21 +18,25 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/services/error-handler"
 import { updateAcademicFaculty } from "@/actions/academic-faculty"
-import { academicFacultyacultySchema } from "@/lib/validation/academicFaculty"
+import { updateAcademicFacultyacultySchema } from "@/lib/validation/academicFaculty"
+import { useSheet } from "@/providers/sheet-provider"
+import { TAcademicFaculty } from "@/types/global"
 
 type TProps = {
-   title: string;
+   values: TAcademicFaculty;
 }
-const UpadateAcademicFaculty = ({ title }: TProps) => {
-
-   const form = useForm<z.infer<typeof academicFacultyacultySchema>>({
-      resolver: zodResolver(academicFacultyacultySchema),
+const UpadateAcademicFaculty = ({ values }: TProps) => {
+   const { id, title } = values;
+   const { close } = useSheet()
+   const form = useForm<z.infer<typeof updateAcademicFacultyacultySchema>>({
+      resolver: zodResolver(updateAcademicFacultyacultySchema),
       defaultValues: {
+         id,
          title,
       }
    })
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof academicFacultyacultySchema>) {
+   async function onSubmit(values: z.infer<typeof updateAcademicFacultyacultySchema>) {
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
@@ -47,6 +51,7 @@ const UpadateAcademicFaculty = ({ title }: TProps) => {
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             handleApiError(error);

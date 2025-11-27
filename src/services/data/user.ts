@@ -1,36 +1,30 @@
-import { TAuthLogos } from '@/types/global';
+import { TUser } from '@/types/global';
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
+import { REVALIDATION } from '@/constants/mock-data';
+import { FLASH_MESSAGE } from '@/constants/flash-message';
 
-export const getSigleUser = async (id: string): Promise<TAuthLogos[]> => {
+export const getAllUsers = async (): Promise<TUser[]> => {
   try {
-    const user = await serverFetch<TAuthLogos[]>(`/users/${id}`, {
-      next: { tags: ['user'] },
-    });
-    return user;
-  } catch (error) {
-    handleApiError(error);
-  }
-};
-export const getAllUsers = async (): Promise<TAuthLogos[]> => {
-  try {
-    const users = await serverFetch<TAuthLogos[]>('/users', {
-      next: { tags: ['users'] },
+    const users = await serverFetch<TUser[]>('/users', {
+      next: { tags: ['user'], revalidate: REVALIDATION.THIRTY_MINUTE },
     });
     return users;
   } catch (error) {
     handleApiError(error);
   }
 };
-export const getUserLogs = async (id?: string): Promise<TAuthLogos[]> => {
-  if (!id) {
+
+export const getSigleUser = async (userId: string): Promise<TUser[]> => {
+  if (!userId) {
+    console.error(FLASH_MESSAGE.ID_REQUIRID);
     return [];
   }
   try {
-    const logs = await serverFetch<TAuthLogos[]>(`/users/logs/${id}`, {
-      next: { tags: ['logs'] },
+    const user = await serverFetch<TUser[]>(`/users/${userId}`, {
+      next: { tags: ['user'] },
     });
-    return logs;
+    return user;
   } catch (error) {
     handleApiError(error);
   }

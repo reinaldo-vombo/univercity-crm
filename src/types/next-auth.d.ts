@@ -1,19 +1,23 @@
-import { DefaultSession } from 'next-auth';
+import { DefaultSession, DefaultUser } from 'next-auth';
 
 declare module 'next-auth' {
-  interface Session {
-    user: IUser & DefaultSession['user'];
-  }
-
-  export interface IUser {
+  export interface IUser extends DefaultUser {
     id: string;
     name: string;
     email: string;
     avatar: string;
     number: number;
+    contact: {
+      phone: number;
+      location: string;
+    };
     role: string;
     accessToken: string;
     expiresAt: number;
+  }
+  interface Session {
+    user?: IUser & DefaultSession['user'];
+    expiresAt: any;
   }
 }
 

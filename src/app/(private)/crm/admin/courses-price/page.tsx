@@ -3,7 +3,11 @@ import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { CoursesPricingTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+import { Metadata } from "next";
 //Preços dos cursos
+export const metadata: Metadata = {
+   title: 'Preços dos Serviços'
+}
 
 export default function DepartmentsPage() {
 

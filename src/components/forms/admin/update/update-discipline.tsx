@@ -19,10 +19,12 @@ import { updateDisciplineSchema } from "@/lib/validation/discipline"
 import { updateDiscipline } from "@/actions/discipline"
 import { TDiscipline } from "@/types/global"
 import { generateSlug } from "@/lib/helper"
+import { useSheet } from "@/providers/sheet-provider"
 type TProps = {
-   values: TDiscipline
+   values: TDiscipline;
 }
 const UpdateDisciplineForm = ({ values }: TProps) => {
+   const { close } = useSheet()
    const { id, code, name, minimumGradeToDismiss } = values;
 
    const form = useForm<z.infer<typeof updateDisciplineSchema>>({
@@ -31,8 +33,6 @@ const UpdateDisciplineForm = ({ values }: TProps) => {
          id,
          name,
          code,
-         credits: 1,
-         description: "",
          minimumGradeToDismiss
       }
    })
@@ -57,6 +57,7 @@ const UpdateDisciplineForm = ({ values }: TProps) => {
 
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -122,23 +123,6 @@ const UpdateDisciplineForm = ({ values }: TProps) => {
                   </FormItem>
                )}
             />
-            <FormField
-               control={form.control}
-               name="description"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Descrição</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Descrição"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>Opcional</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-
             <SubmitBtn
                label="Atualisar"
                loading={isPending} />

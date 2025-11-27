@@ -14,7 +14,7 @@ import { TAlertProps } from "./types"
 const AlertModal = ({ trigger, action }: TAlertProps) => {
    return (
       <AlertDialog>
-         <AlertDialogTrigger>{trigger}</AlertDialogTrigger>
+         <AlertDialogTrigger aria-label="Trash icon">{trigger}</AlertDialogTrigger>
          <AlertDialogContent>
             <AlertDialogHeader>
                <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>

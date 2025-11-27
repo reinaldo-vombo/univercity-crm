@@ -1,6 +1,6 @@
 
+import { getAllBuilding, getAllRoom } from "@/services/data/academic";
 import { RoomTable } from "./client-table";
-import { getAllBuilding, getAllRoom } from "@/lib/helper/db/querys";
 
 
 export async function RoomTableServer() {

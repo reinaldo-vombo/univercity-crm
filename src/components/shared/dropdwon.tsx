@@ -16,14 +16,12 @@ import { LogOut } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { Fragment } from "react"
 
-
-
 export function DropdownMenu({ children, trigger, showLogOut = false, lable, variante = 'outline', className }: DropdownMenuProps) {
 
    return (
       <DropdownMenuPrimitive>
          <DropdownMenuTrigger asChild>
-            <Button className={className} variant={variante}>{trigger}</Button>
+            <Button className={className} variant={variante} aria-label="dropdown trigger button">{trigger}</Button>
          </DropdownMenuTrigger>
          <DropdownMenuContent className="w-56">
             <DropdownMenuLabel className="font-bold">{lable}</DropdownMenuLabel>
@@ -34,7 +32,7 @@ export function DropdownMenu({ children, trigger, showLogOut = false, lable, var
             {showLogOut && (
                <Fragment>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex items-center rounded-md bg-red-800" onClick={() => signOut()}>
+                  <DropdownMenuItem className="flex items-center rounded-md bg-red-800 text-red-500 py-2" onClick={() => signOut({ callbackUrl: '/auth/apanel/login' })}>
                      <LogOut className="text-red-500" />
                      Sair
                   </DropdownMenuItem>

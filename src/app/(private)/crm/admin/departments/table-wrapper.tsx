@@ -1,6 +1,8 @@
 
+import { getAllDepartments } from "@/services/data/department";
 import { DepartmentTable } from "./client-table";
-import { getAllAcademicFaculty, getAllDepartments, getAllUsers } from "@/lib/helper/db/querys";
+import { getAllUsers } from '@/services/data/user'
+import { getAllAcademicFaculty } from "@/services/data/academic";
 
 
 export async function DepartmentTableServer() {

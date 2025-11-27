@@ -1,7 +1,6 @@
 
+import { getAllAdmitionExames } from "@/services/data/academic";
 import { AdmitionExameTable } from "./client-table";
-import { getAllAdmitionExames } from "@/lib/helper/db/querys";
-
 
 export async function AdmitionExameTableServer() {
 

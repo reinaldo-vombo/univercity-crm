@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Eye, Pen, Trash } from "lucide-react"
+import { BadgeDollarSign, Calendar, Eye, ListCollapse, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -9,12 +9,11 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAdmitionExame } from "@/types/global"
 import { Badge } from "@/components/ui/badge"
 import UpdateAdmitionExameForm from "@/components/forms/admin/update/update-admition-exame"
-import AdmitionExameDetails from "@/components/admin/container/admition-exame-details"
+import AdmitionExameDetails from "@/components/admin/container/admition-exame/admition-exame-details"
 import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
-import { FaseColumnFilter } from "@/components/admin/table-filters/Fase-column-filter"
-import { BoolenColumnFilter } from "@/components/admin/table-filters/boolen-column-filter"
 import { deleteAdmitionExame } from "@/actions/admition-exame"
-import { formatDate } from "@/lib/helper"
+import { createUniqueId, formatCurrency, formatDate } from "@/lib/helper"
+import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter"
 
 export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
    return [
@@ -26,11 +25,26 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
       },
       {
          accessorKey: "fase",
-         header: ({ column }) => <FaseColumnFilter column={column} />,
+         accessorFn: (row) => row.fase.name,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Fase Do exame"
+               options={[
+                  { value: "1", label: "1º fase" },
+                  { value: "2", label: "2º fase" },
+                  { value: "3", label: "3º fase" },
+                  { value: "4", label: "4º fase" },
+               ]}
+            />
+         ),
          cell: ({ row }) => {
             const fase = row.original.fase.name;
             return (
-               <span>{fase}</span>
+               <div className="flex items-center gap-3">
+                  <ListCollapse className="text-violet-600" />
+                  <span>{fase}</span>
+               </div>
 
             )
          },
@@ -41,9 +55,12 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
          cell: ({ row }) => {
             const date = row.original.exameDate;
             return (
-               <span>
-                  {formatDate(date)}
-               </span>
+               <div className="flex items-center gap-3">
+                  <Calendar className="text-amber-500" />
+                  <span>
+                     {formatDate(date)}
+                  </span>
+               </div>
             );
          },
       },
@@ -54,10 +71,29 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
       {
          accessorKey: "paymentAmoute",
          header: "Valor pago",
+         cell: ({ row }) => {
+            const price = row.original.paymentAmoute;
+            return (
+               <div className="flex items-center gap-2">
+                  <BadgeDollarSign className="text-green-500" />
+                  <b>{formatCurrency(price || 0)}</b>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "aprovePayment",
-         header: ({ column }) => <BoolenColumnFilter column={column} name="Pagamento" />,
+         accessorFn: (row) => row.aprovePayment,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Status do pagamento"
+               options={[
+                  { value: "true", label: "Confirmado" },
+                  { value: "false", label: "Pendente" },
+               ]}
+            />
+         ),
          cell: ({ row }) => {
             const status = row.original.aprovePayment;
             return (
@@ -69,7 +105,17 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
       },
       {
          accessorKey: "passed",
-         header: ({ column }) => <BoolenColumnFilter column={column} name="Situação" />,
+         accessorFn: (row) => row.passed,
+         header: ({ column }) => (
+            <UniversalColumnFilter
+               column={column}
+               title="Situação"
+               options={[
+                  { value: "true", label: "Aprovado" },
+                  { value: "false", label: "Reprovado" },
+               ]}
+            />
+         ),
          cell: ({ row }) => {
             const status = row.original.passed;
             return (
@@ -106,12 +152,13 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                   console.error(err);
                }
             };
-
+            const uid = createUniqueId("view");
             return (
                <div className="flex items-center gap-3">
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={uid}
                      title="Detalhes do exame de admisão"
                      className="sm:max-w-lg"
                      description='Detalhes do exame de admisão'>
@@ -120,6 +167,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={`edit-${exames.id}`}
                      title="Atualizar exame de admisão"
                      description='Atualizar exame de admisão'>
                      <UpdateAdmitionExameForm values={exames} />

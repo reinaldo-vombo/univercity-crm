@@ -22,11 +22,13 @@ import { Switch } from "@/components/ui/switch"
 import Image from "next/image"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TPros = {
    values: TAdmitionExame
 }
 const UpdateAdmitionExameForm = ({ values }: TPros) => {
+   const { close } = useSheet()
    const reciptUrl = values.paymentRecipt;
 
 
@@ -67,6 +69,7 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);

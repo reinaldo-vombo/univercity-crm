@@ -22,6 +22,7 @@ import { addNewFaculty } from "@/actions/faculty"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import Uploader from "@/components/shared/file-upload/uploader"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useSheet } from "@/providers/sheet-provider"
 
 type TPros = {
    departemants: TDepartemant[]
@@ -29,6 +30,8 @@ type TPros = {
 }
 
 const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
+   const { close } = useSheet();
+
    const academicDepartemant = departemants.map(departemant => ({
       id: departemant.id,
       label: departemant.title,
@@ -50,7 +53,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
          email: "",
          profileImage: "",
          designation: "",
-         shift: "MORNING",
+         shiftId: 1,
          academicDepartmentId: "",
          academicFacultyId: "",
       }
@@ -70,6 +73,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -224,7 +228,7 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
                   />
                   <FormField
                      control={form.control}
-                     name="shift"
+                     name="shiftId"
                      render={({ field }) => (
                         <FormItem className="w-full">
                            <FormLabel>Turno</FormLabel>

@@ -1,6 +1,6 @@
 
+import { getAllSemester } from "@/services/data/academic";
 import { AcademicSemesterTable } from "./client-table";
-import { getAllSemester } from "@/lib/helper/db/querys";
 
 export async function AcademicSemesterTableServer() {
 

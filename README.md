@@ -43,19 +43,21 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 
 ### Admin pages
 
-- [ ] Dashboard/root
-- [ ] All studente pages
+- [x] Dashboard/root
+- [x] All studente pages
+- [x] Sigle studente pages
 - [x] All Teacher pages
 - [x] All departemant pages
 - [x] All Semester pages
 - [x] All curses pages
 - [x] All building pages
-- [ ] All Payment pages
+- [x] All Payment pages
 - [x] All users pages
 - [x] All course pages
 - [x] All course price pages
 - [x] All discipline pages
 - [x] Events page
+- [x] Calendar page
 - [x] Error page
 - [x] NotFound page
 - [x] Unauthenticated page
@@ -67,13 +69,22 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Server action
 - [ ] Server action rate limit
 - [x] Data revalidation
+- [x] Audit/Activity logs
+- [x] Dashord with report from CRUDs
+- [x] Notification in App
+- [x] Settigs per User/Notification/Theme
 - [x] Dark mode
 - [x] Color themes
+- [x] Online & Offline status
+- [x] Send menssage to app
+- [x] Send menssage to sms
+- [x] Send menssage to email
+- [x] Generate payment receipt
 - [x] Assigne user to departament
 - [x] Assigne faculty to curse
 - [x] Reusible table-table
-- [x] Add data-table filteres
-- [x] Create export button to export data as doc type /csv/excel
+- [x] data-table filteres
+- [x] export button to export data as doc type /csv/excel/pdf
 - [x] Update account info
 
 ---
@@ -108,13 +119,16 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [ ] Payment model in Prisma
 - [ ] Add payment entries with status
 - [ ] Filter/search payments
-- [ ] Export reports (CSV or PDF)
+- [x] Export reports (CSV or PDF)
 
 ---
 
 ### ✉️ Email & Notifications
 
 - [ ] Setup Resend or Nodemailer
+- [x] Recive Notification
+- [x] Read Notification
+- [x] Delete Notification
 - [ ] Send email on grade update or fee due
 - [ ] Create reusable email templates
 
@@ -133,7 +147,7 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 
 - [x] Role-based access control
 - [x] Dashboard with stats (students, revenue, attendance)
-- [ ] Logs or recent activity tracker
+- [x] Logs or recent activity tracker
 - [x] Assignd user to departament
 - [x] Create user CRUD
 - [x] Create departement CRUD

@@ -20,11 +20,13 @@ import { handleApiError } from "@/services/error-handler"
 import { TSemester } from "@/types/global"
 import { updateSemesterSchema } from "@/lib/validation/semester"
 import { updatedSemester } from "@/actions/semester"
+import { useSheet } from "@/providers/sheet-provider"
 type Props = {
    values: TSemester
 }
 
 const UpdateSemesterForm = ({ values }: Props) => {
+   const { close } = useSheet()
    const { id, title, code, year, startMonth, endMonth, isCurrent } = values
 
    const form = useForm<z.infer<typeof updateSemesterSchema>>({
@@ -55,6 +57,7 @@ const UpdateSemesterForm = ({ values }: Props) => {
             }
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             handleApiError(error);

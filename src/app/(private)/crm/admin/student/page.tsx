@@ -3,7 +3,11 @@ import DataTableSkeleton from "@/components/skeleton/data-table";
 import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { StudentTableServer } from "./table-wrapper";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+   title: 'Estudantes'
+}
 //sm:max-w-sm
 export default function StudentPage() {
    return (

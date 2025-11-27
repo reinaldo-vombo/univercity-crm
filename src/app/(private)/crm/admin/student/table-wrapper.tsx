@@ -1,8 +1,10 @@
 // app/dashboard/admin/departments/table-wrapper.tsx
 
 
+import { getAllStudent } from "@/services/data/student";
 import { StudentTable } from "./client-table";
-import { getAllCurses, getAllSemester, getAllStudent } from "@/lib/helper/db/querys";
+import { getAllCurses } from "@/services/data/couses";
+import { getAllSemester } from "@/services/data/academic";
 
 
 export async function StudentTableServer() {

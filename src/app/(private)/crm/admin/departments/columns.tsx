@@ -6,40 +6,37 @@ import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TUser } from "@/types/global"
+import { TDepartemant, TUser } from "@/types/global"
 import { AcademicFaculty } from "../academic-faculty/columns"
 import Avatar from "@/components/shared/avatar"
 import { deleteDepartment } from "@/actions/departement"
 import DepartmenteDetails from "@/components/admin/container/departmente-details"
 import UpdatedDepartmentForm from "@/components/forms/admin/update/update-department"
-import { formatDate } from "@/lib/helper"
+import { createUniqueId, formatDate } from "@/lib/helper"
+import { Fragment } from "react"
 
-type TProps = {
-   academicFaculty: string;
-   director: TUser | undefined;
-   id: string;
-   title: string;
-   createdAt?: Date;
-   updatedAt?: Date;
-   academicFacultyId: string;
-   departmentHeadId: string | null;
-}
 
-export function DepartementColumns(users: TUser[], academicFaculty: AcademicFaculty[]): ColumnDef<TProps>[] {
+export function DepartementColumns(users: TUser[], academicFaculty: AcademicFaculty[]): ColumnDef<TDepartemant>[] {
 
    return [
       {
          accessorKey: "avatarUrl",
          header: "Direitor",
          cell: ({ row }) => {
-            const user = row.original.director;
+            const headMaster = row.original.departmentHead;
             return (
                <div className="flex items-center gap-2">
-                  <Avatar
-                     name={user?.name ?? ''}
-                     photo={user?.avatar ?? '/books.jpeg'}
-                     className="size-11" />
-                  <p>{user?.name ?? ''}</p>
+                  {!headMaster ? (
+                     <p>Sem director</p>
+                  ) : (
+                     <Fragment>
+                        <Avatar
+                           name={headMaster?.name ?? ''}
+                           photo={headMaster?.avatar ?? ''}
+                           className="size-11" />
+                        <p>{headMaster?.name ?? ''}</p>
+                     </Fragment>
+                  )}
                </div>
             )
          }
@@ -57,16 +54,19 @@ export function DepartementColumns(users: TUser[], academicFaculty: AcademicFacu
       {
          accessorKey: "academicFaculty",
          header: "Unidade Acadêmica",
-         cell: ({ row }) => (
-            <div className="flex items-center gap-2">
-               <BookAIcon className="h-4 w-4 text-orange-500" />
-               <span className="truncate max-w-[180px]">{row.getValue("academicFaculty")}</span>
-            </div>
-         ),
+         cell: ({ row }) => {
+            const academicFaculty = row.original.academicFaculty.title
+            return (
+               <div className="flex items-center gap-2">
+                  <BookAIcon className="h-4 w-4 text-orange-500" />
+                  <span className="truncate max-w-[180px]">{academicFaculty}</span>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "createdAt",
-         header: "Data de  criação",
+         header: "Data de  publicação",
          cell: ({ row }) => (
             <div className="flex items-center gap-2">
                <Calendar className="h-4 w-4 text-red-500" />
@@ -74,8 +74,6 @@ export function DepartementColumns(users: TUser[], academicFaculty: AcademicFacu
             </div>
          ),
       },
-
-
       {
          id: "actions",
          header: "Acção",
@@ -95,12 +93,14 @@ export function DepartementColumns(users: TUser[], academicFaculty: AcademicFacu
                   console.error(err);
                }
             };
-
+            const uid = createUniqueId("view");
             return (
                <div className="flex items-center gap-3">
                   <SheetModal
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
+                     id={`view-${uid}`}
+                     className="sm:max-w-lg"
                      title="Detalhes do departamento"
                      description='Visualizar detalhes do departamento'>
                      <DepartmenteDetails data={credits} />
@@ -108,6 +108,7 @@ export function DepartementColumns(users: TUser[], academicFaculty: AcademicFacu
                   <SheetModal
                      trigger={<Pen className="h-4 w-4  cursor-pointer" />}
                      side="right"
+                     id={`edit-${credits.id}`}
                      title="Atualizar departamento"
                      description='Formulario para atualizar o departamento'>
                      <UpdatedDepartmentForm academicFaculty={academicFaculty} users={users} values={credits} />

@@ -52,8 +52,9 @@ export function RoomColumns(buldings: TBuilding[]): ColumnDef<TRoom>[] {
                   <SheetModal
                      trigger={<Pen className="h-4 w-4  cursor-pointer" />}
                      side="right"
+                     id={`edit-${room.id}`}
                      title="Atualizar curso"
-                     description=' Formulario para atualizar o curso'>
+                     description='Formulario para atualizar o curso'>
                      <UpdateRoomForm buildings={buldings} values={room} />
                   </SheetModal>
                   <AlertModal

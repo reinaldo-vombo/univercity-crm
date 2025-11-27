@@ -20,6 +20,7 @@ import { addNewSemester } from "@/actions/semester"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { Switch } from "@/components/ui/switch"
+import { useSheet } from "@/providers/sheet-provider"
 
 const startYear = 2000;
 const currentYear = new Date().getFullYear();
@@ -34,11 +35,11 @@ for (let year = startYear; year <= currentYear; year++) {
    });
 }
 const CreateDisciplineForm = () => {
-
+   const { close } = useSheet()
    const form = useForm<z.infer<typeof semesterSchema>>({
       resolver: zodResolver(semesterSchema),
       defaultValues: {
-         title: 'Primavera',
+         title: '1º Semestre',
          code: '01',
          isCurrent: true,
          year: currentYear.toString(),
@@ -61,6 +62,7 @@ const CreateDisciplineForm = () => {
             }
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(error);
@@ -94,7 +96,7 @@ const CreateDisciplineForm = () => {
                name="isCurrent"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel id="semesterStatus">Status</FormLabel>
+                     <FormLabel id="semesterStatus">Status do Semestre</FormLabel>
                      <FormControl>
                         <Switch
                            checked={field.value as boolean}
@@ -102,7 +104,7 @@ const CreateDisciplineForm = () => {
                            id="semesterStatus"
                         />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>Ex: Activo ou Inativo</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -118,7 +120,7 @@ const CreateDisciplineForm = () => {
                            placeholder="Ex: 01/2022"
                            {...field} />
                      </FormControl>
-                     <FormDescription>Ex: 01/2022</FormDescription>
+                     <FormDescription>Ex: 01</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

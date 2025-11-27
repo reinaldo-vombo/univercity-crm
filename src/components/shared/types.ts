@@ -1,7 +1,8 @@
-import { JSX, ReactNode } from 'react';
+import { JSX, ReactNode, ReactSVGElement } from 'react';
 
 export type TSheetProps = {
   children: React.ReactNode;
+  id?: any;
   trigger: ReactNode;
   side: 'top' | 'right' | 'bottom' | 'left';
   className?: string;
@@ -19,7 +20,7 @@ export type TCardProps = {
 
 export type TAvatarProps = {
   name: string;
-  photo: string;
+  photo?: string;
   className?: string;
 };
 export type TSelectPros = {
@@ -27,25 +28,26 @@ export type TSelectPros = {
   disabled?: boolean;
   className?: string;
   options: {
-    id: string;
-    label: string;
+    id: string | number;
+    label: string | number;
     value: string;
   }[];
   formField: any;
 };
 export type TTabsNav = {
-   tabList: {
-      id: string;
-      lable: string;
-      value: string;
-      tabContent: JSX.Element
-      description: string;
-   }[]
-   defaultValue: string
-}
+  tabList: {
+    id: string;
+    lable: string;
+    value: string;
+    tabContent: JSX.Element;
+    description: string;
+  }[];
+  defaultValue: string;
+};
 export type DropdownMenuProps = {
   children: React.ReactNode;
   trigger: React.ReactNode;
+  userId?: string;
   className?: string;
   lable: string;
   showLogOut?: boolean;
@@ -64,5 +66,10 @@ export type TAlertProps = {
 export type TExportDocProps<T extends object> = {
   data: T[];
   filename?: string;
-  headers?: Partial<Record<keyof T, string>>;
+  // headers?: Record<keyof T, string>;
+  headers?: any;
+};
+export type TPopoverForm = {
+  title: string;
+  icon?: ReactSVGElement;
 };

@@ -4,6 +4,7 @@ import { DataTable } from "@/components/shared/data-table";
 import { TCourse, TSemester, TStudent } from "@/types/global";
 import { StudentColumns } from "./columns";
 import CreateStudentFrom from "@/components/forms/admin/post/create-student";
+import { createUniqueId } from "@/lib/helper";
 
 interface Props {
    students: TStudent[]
@@ -22,7 +23,7 @@ const herader = {
    yearLevel: "Ano curricular",
    isActive: "Satutus",
 }
-
+const uid = createUniqueId("create");
 export function StudentTable({ students, academicSemester, courses }: Props) {
 
    const columns = StudentColumns(academicSemester, courses);
@@ -30,6 +31,7 @@ export function StudentTable({ students, academicSemester, courses }: Props) {
    return <DataTable
       actionForm={<CreateStudentFrom academicSemester={academicSemester} courses={courses} />}
       columns={columns}
+      sheetId={uid}
       className="sm:max-w-[38rem]"
       fileHerderes={herader}
       modalTitle="Cadastrar aluno"

@@ -3,7 +3,11 @@ import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { AcademicSemesterTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+   title: 'Semestre Academico'
+}
 //academicDepartmentId, courseId, semesterRegistrationId
 export default function DepartmentsPage() {
 

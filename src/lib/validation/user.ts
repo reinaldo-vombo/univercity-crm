@@ -15,23 +15,38 @@ export const userSchema = z.object({
 });
 export const updateSchema = z.object({
   id: z.string(),
-  name: z.string().min(1),
+  name: z.string().min(1, { message: 'Nome deve conter no minimo 5' }),
   email: z.string().email(),
   role: z.string().optional(),
+  contact: z
+    .object({ phone: z.coerce.number(), location: z.string() })
+    .optional(),
   avatar: z.union([z.string().url(), z.instanceof(File)]).optional(),
 });
 
 export const changePasswordShema = z.object({
   corrent_password: z
     .string({ required_error: 'Senha antinga é obrigatoria' })
-    .min(7, { message: 'Senha deve conter no minimo 7 carateres' })
+    .min(5, { message: 'Senha deve conter no minimo 5 carateres' })
     .max(8),
   new_password: z
     .string({ required_error: 'Nova senha antinga é obrigatoria' })
-    .min(7, { message: 'Senha deve conter no minimo 7 carateres' })
-    .max(8),
+    .min(5, { message: 'Senha deve conter no minimo 5 carateres' })
+    .max(10),
   confirm_password: z
     .string({ required_error: 'Senha de confirmação é obrigatoria' })
-    .min(7, { message: 'Senha deve conter no minimo 7 carateres' })
-    .max(8),
+    .min(5, { message: 'Senha deve conter no minimo 5 carateres' })
+    .max(10),
+});
+export const preferenceShema = z.object({
+  enabled: z.coerce.boolean(),
+  user_action: z.coerce.boolean(),
+  users_logs: z.coerce.boolean(),
+  student_action: z.coerce.boolean(),
+  department_action: z.coerce.boolean(),
+  payment_action: z.coerce.boolean(),
+  course_action: z.coerce.boolean(),
+  events_action: z.coerce.boolean(),
+  calendar_action: z.coerce.boolean(),
+  exames_action: z.coerce.boolean(),
 });

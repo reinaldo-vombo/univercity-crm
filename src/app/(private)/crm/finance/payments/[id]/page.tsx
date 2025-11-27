@@ -10,22 +10,6 @@ const student = {
    id: '123456789',
    firstName: 'Reginalde',
    lastName: 'Baggle',
-   semesterPayment: [
-      {
-         payment: [
-            {
-               paymentType: 'EXPRESS',
-               paymentMethod: 'REFENCE',
-               TotalAmount: 45000,
-               status: 'PAID',
-               approved: true,
-               atendent: 'Maria Sousar',
-               message: 'Pagamento aprovado',
-               createAt: new Date()
-            }
-         ]
-      }
-   ]
 }
 const tabs = [
    {
@@ -52,7 +36,7 @@ export default function StudentSemesterPaymentPage() {
       <section className="col-span-12">
          <Breadcrumb
             root={ROUTES.DASHBOARD}
-            pageUrl={`${ROUTES.DASHBOARD}/finace/payments/${student.id}`}
+            pageUrl={`${ROUTES.DASHBOARD}/finace/payments/${student.firstName}`}
             pageName="Payments" name={student.firstName} />
          <div className="mt-12">
             <TabsNav tabList={tabs} defaultValue={tabs[0].value} />

@@ -4,6 +4,7 @@ import { DataTable } from "@/components/shared/data-table";
 import { TAcademicFaculty, TDepartemant, TUser } from "@/types/global";
 import { DepartementColumns } from "./columns";
 import CreateDepartmentFrom from "@/components/forms/admin/post/create-department";
+import { createUniqueId } from "@/lib/helper";
 
 interface Props {
    departements: TDepartemant[];
@@ -17,16 +18,8 @@ const herader = {
    createdAt: "Data de criação",
 }
 
+const uid = createUniqueId("create");
 export function DepartmentTable({ users, departements, academicFacultys }: Props) {
-
-   const modifiedDepartement = departements.map(departement => {
-      const director = users.find((user) => user.id === departement.departmentHeadId)
-      return academicFacultys.map(academicFaculty => ({
-         ...departement,
-         academicFaculty: academicFaculty.title,
-         director
-      }));
-   }).flat();
 
    const columns = DepartementColumns(users, academicFacultys);
 
@@ -34,8 +27,9 @@ export function DepartmentTable({ users, departements, academicFacultys }: Props
       actionForm={<CreateDepartmentFrom academicFaculty={academicFacultys} users={users} />}
       fileHerderes={herader}
       fileName="Departamentos"
+      sheetId={uid}
       modalTitle="Criar Departamento"
       columns={columns}
-      data={modifiedDepartement}
+      data={departements}
       filterColumn="title" />;
 }

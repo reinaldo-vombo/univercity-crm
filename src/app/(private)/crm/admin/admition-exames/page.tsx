@@ -3,7 +3,11 @@ import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { AdmitionExameTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+   title: 'Exames de Admissão'
+}
 
 export default function DepartmentsPage() {
 

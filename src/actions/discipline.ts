@@ -14,18 +14,21 @@ import {
 
 export const addNewDiscipline = validatedActionWithUser(
   disciplineSchema,
-  async (data): Promise<ActionResult<TDiscipline>> => {
+  async (data, _, user): Promise<ActionResult<TDiscipline>> => {
     try {
-      const curses = await serverFetch<TDiscipline>('/discipline', {
-        method: 'POST',
-        body: data,
-      });
+      const discipline = await serverFetch<TDiscipline>(
+        `/discipline?name=${user.name}`,
+        {
+          method: 'POST',
+          body: data,
+        }
+      );
 
       revalidateTag('discipline');
 
       return {
         error: false,
-        data: curses,
+        data: discipline,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -50,7 +53,7 @@ export const updateDiscipline = validatedActionWithUser(
   async (data): Promise<ActionResult<TDiscipline>> => {
     const { id, ...updateData } = data;
     try {
-      const curses = await serverFetch<TDiscipline>(`/discipline/${id}`, {
+      const discipline = await serverFetch<TDiscipline>(`/discipline/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
@@ -59,7 +62,7 @@ export const updateDiscipline = validatedActionWithUser(
 
       return {
         error: false,
-        data: curses,
+        data: discipline,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {

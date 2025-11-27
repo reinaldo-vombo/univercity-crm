@@ -27,7 +27,7 @@ export const studentSchema = z.object({
   CourseId: z.string({
     required_error: 'Curso é obrigatorio',
   }),
-  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']),
+  shift: z.string(),
 });
 
 export const updateStudentSchema = z.object({
@@ -47,7 +47,7 @@ export const updateStudentSchema = z.object({
   CourseId: z.string({
     required_error: 'Curso é obrigatorio',
   }),
-  shift: z.enum(['MORNING', 'AFTERNOON', 'EVENING']),
+  shift: z.string(),
 });
 
 export const assignRemoveCoursesZodSchema = z.object({

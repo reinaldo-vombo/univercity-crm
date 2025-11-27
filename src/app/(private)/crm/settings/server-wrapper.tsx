@@ -2,11 +2,11 @@ import AccountTab from '@/components/container/account-tab'
 import SecurityTab from '@/components/container/security-tab'
 import { TabsNav } from '@/components/shared/toggle-tabs'
 import { serverUser } from '@/lib/helper/auth/user'
-import { getUserLogs } from '@/services/data/user'
+import { getUserSeesionLogs } from '@/services/data/history-logs'
 
 export default async function ServerWrapper() {
    const currentUser = await serverUser()
-   const currentUserLogs = await getUserLogs(currentUser?.id)
+   const currentUserLogs = await getUserSeesionLogs(currentUser?.id || '')
    const tabs = [
       {
          id: '1',

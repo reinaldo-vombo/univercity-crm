@@ -12,11 +12,13 @@ import {
 import { DUMMY_DATA } from "@/constants/mock-data";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-type SidebarProps = {
-   role: "super_admin" | "admin" | "student" | "faculty";
-};
-export function AppSidebar({ role }: SidebarProps) {
+type TRoles = {
+   role: "super_admin" | "admin" | "student" | "faculty"
+}
+export function AppSidebar({ role }: TRoles) {
+   const pathname = usePathname();
 
    const links = DUMMY_DATA.linksByRole[role ?? "student"];
    return (
@@ -37,7 +39,7 @@ export function AppSidebar({ role }: SidebarProps) {
                   <SidebarMenu>
                      {links.map((item) => (
                         <SidebarMenuItem key={item.label}>
-                           <SidebarMenuButton asChild>
+                           <SidebarMenuButton asChild isActive={pathname === item.href}>
                               <Link href={item.href}>
                                  {item.icon}
                                  <span>{item.label}</span>

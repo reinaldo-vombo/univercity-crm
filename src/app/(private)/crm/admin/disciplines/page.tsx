@@ -3,7 +3,11 @@ import { ROUTES } from "@/constants/mock-data";
 import { Suspense } from "react";
 import { DisciplineTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+   title: 'Disciplinas Academicas'
+}
 
 export default function DisciplinesPage() {
 

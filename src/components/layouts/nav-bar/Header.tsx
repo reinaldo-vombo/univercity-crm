@@ -1,16 +1,26 @@
-'use client'
 
-import { BellRing, Search } from "lucide-react"
+import { BellIcon, Search } from "lucide-react"
 import { Input } from "../../ui/input"
 import ThemeToggle from "./toggle-theme"
 import { DropdownMenu } from "../../shared/dropdwon"
 import Avatar from "../../shared/avatar"
 import UserSetting from "./user-setting"
-import { User } from "@/lib/helper/auth/user"
+import { serverUser } from "@/lib/helper/auth/user"
 import { ThemePopOver } from "./theme-popover"
-
-const Header = () => {
-   const user = User();
+import { getUserNotifications } from "@/services/data/history-logs"
+import NotificationTab from "@/components/container/notification-tab"
+import Popover from "@/components/shared/popover"
+import LanguageSwitcher from "../LanguageSwitcher"
+//cmeyvtiab0000ukys0s3kak3u
+// type TSeachParams = {
+//    searchParams: Promise<{
+//       [key: string]: string | string[] | undefined
+//    }>
+// }
+const Header = async () => {
+   const user = await serverUser();
+   const notifications = await getUserNotifications(user?.id || '')
+   const unreadMessageCount = notifications.filter((notification) => !notification.read).length
 
    return (
       <header className="sticky top-0 flex w-full bg-card">
@@ -31,20 +41,30 @@ const Header = () => {
             </div>
             <div className="w-full items-center justify-between gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none hidden">
                <div className="flex items-center gap-2 2xsm:gap-3">
+                  <LanguageSwitcher />
                   <ThemePopOver />
                   <ThemeToggle />
-                  <DropdownMenu
-                     className="relative flex size-11 items-center justify-center rounded-full border border-border bg-primary-foreground text-gray-500 transition-colors hover:bg-primary"
-                     lable="Notificações"
-                     trigger={<BellRing />}>
-                     notifications
-                  </DropdownMenu>
+                  <div className="relative">
+                     <Popover
+                        className="w-[37rem]"
+                        trigger={
+                           <div>
+                              <BellIcon />
+                              {unreadMessageCount > 0 && (<span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' />)}
+
+                              <span className='sr-only'>Notifications</span>
+                           </div>}>
+                        <NotificationTab data={notifications} userId={user?.id} />
+                     </Popover>
+
+                  </div>
                   <DropdownMenu
                      className="border-none shadow-none"
                      showLogOut={true}
                      lable={user?.name || 'John Doe'}
                      trigger={
                         <div className="flex items-center gap-2">
+                           {/* <span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' /> */}
                            <Avatar name={user?.name || 'John Doe'} photo={user?.avatar || "https://github.com/shadcn.png"} />
                            <span>{user?.name}</span>
                         </div>
