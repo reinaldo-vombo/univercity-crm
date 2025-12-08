@@ -71,7 +71,8 @@ export function UsersColumns(): ColumnDef<Users>[] {
          id: "actions",
          header: 'Acção',
          cell: ({ row }) => {
-            const users = row.original
+            const users = row.original;
+
             const handleDelete = async (id: string) => {
                try {
                   const res = await deleteUser(id)

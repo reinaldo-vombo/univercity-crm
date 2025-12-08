@@ -13,7 +13,6 @@ export default function Error({ error, reset }: TProps) {
   const router = useRouter()
   const reloadWindows = () => {
     startTransition(() => {
-      console.log('relod');
       router.refresh();
       reset()
     })

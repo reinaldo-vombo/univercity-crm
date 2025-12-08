@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Pen, Trash } from "lucide-react"
+import { Calendar1, CalendarArrowDownIcon, CalendarCheck, CalendarDays, Hash, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -19,22 +19,67 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
       {
          accessorKey: "title",
          header: "Periodo",
+         cell: ({ row }) => {
+            const title = row.original.title;
+            return (
+               <div className="flex items-center gap-3">
+                  <CalendarDays className="text-violet-500" />
+                  <b className="truncate max-w-[180px]">{title}</b>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "year",
          header: "Ano corrente",
+         cell: ({ row }) => {
+            const year = row.original.year;
+            return (
+               <div className="flex items-center gap-3">
+                  <Calendar1 className="text-indigo-500" />
+                  <b className="truncate max-w-[180px]">{year}</b>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "code",
          header: "Codigo",
+         cell: ({ row }) => {
+            const code = row.original.code;
+            return (
+               <div className="flex items-center gap-3">
+                  <Hash className="text-amber-500" />
+                  <b className="truncate max-w-[180px]">{code}</b>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "startMonth",
          header: "Mês inicial",
+         cell: ({ row }) => {
+            const startMonth = row.original.startMonth;
+            return (
+               <div className="flex items-center gap-3">
+                  <CalendarCheck className="text-green-500" />
+                  <span className="truncate max-w-[180px]">{startMonth}</span>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "endMonth",
          header: "Mês final",
+         cell: ({ row }) => {
+            const endMonth = row.original.endMonth;
+            return (
+               <div className="flex items-center gap-3">
+                  <CalendarArrowDownIcon className="text-red-500" />
+                  <span className="truncate max-w-[180px]">{endMonth}</span>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "isCurrent",

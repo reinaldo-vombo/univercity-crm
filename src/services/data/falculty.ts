@@ -2,6 +2,7 @@ import { TFaculty } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { REVALIDATION } from '@/constants/mock-data';
 
 export const getSigleFalcultyService = async (
   facultyId: string
@@ -12,7 +13,11 @@ export const getSigleFalcultyService = async (
   }
   try {
     const faculty = await serverFetch<TFaculty[]>(`/faculty/${facultyId}`, {
-      next: { tags: ['faculty_service'] },
+      next: {
+        tags: ['faculty_service'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return faculty;
   } catch (error) {

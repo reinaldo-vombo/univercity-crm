@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import Popover from "../shared/popover";
 import { Globe } from "lucide-react";
+import Image from "next/image";
 
 // Define supported languages with flags
 const LANGUAGES = [
-   { code: "en", label: "English", flag: "🇬🇧" },
-   { code: "pt", label: "Português", flag: "🇵🇹" },
-   { code: "fr", label: "Français", flag: "🇫🇷" },
-   { code: "es", label: "Español", flag: "🇪🇸" },
+   { code: "en", label: "English", flag: "/assets/icons8-great-britain-32.png" },
+   { code: "pt", label: "Português", flag: "/assets/icons8-portugal-32.png" },
 ];
 
 export default function LanguageSwitcher() {
@@ -72,7 +71,8 @@ export default function LanguageSwitcher() {
                   onClick={() => changeLanguage(lang.code)}
                   className={`flex items-center gap-2 p-1 rounded-lg hover:bg-secondary cursor-pointer ${lang.code === selectedLang ? 'bg-secondary' : ''}`}
                >
-                  <span>{lang.flag}</span> {lang.label}
+                  <Image src={lang.flag} width={30} height={30} alt={`${lang.label} flag icon`} />
+                  <b>{lang.label}</b>
                </div>
             ))}
          </Popover>

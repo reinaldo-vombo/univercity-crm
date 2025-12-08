@@ -9,7 +9,7 @@ export default function NotFound() {
    const router = useRouter();
 
    return (
-      <div className="mx-auto h-screen w-full max-w-[242px] my-auto text-center sm:max-w-[562px]">
+      <div className="col-span-12 mx-auto h-screen w-full max-w-[242px] text-center sm:max-w-[562px]">
          <div className="flex flex-col items-center justify-center">
             <h1 className="mb-8 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-2xl">
                Pagina não encontrada
@@ -22,10 +22,11 @@ export default function NotFound() {
             {/* <img src="src/images/error/500-dark.svg" alt="500" className="hidden dark:block"/> */}
 
             <p className="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
-               We can’t seem to find the page you are looking for!
+
+               Não consiguimos achar a pagina que está procurando!
             </p>
 
-            <Button onClick={() => router.push("/")}>Go back home</Button>
+            <Button onClick={() => router.back()}>Voltar</Button>
 
          </div>
       </div>

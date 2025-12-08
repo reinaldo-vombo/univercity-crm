@@ -21,8 +21,23 @@ import { TSemester } from "@/types/global"
 import { updateSemesterSchema } from "@/lib/validation/semester"
 import { updatedSemester } from "@/actions/semester"
 import { useSheet } from "@/providers/sheet-provider"
+import { DUMMY_DATA } from "@/constants/mock-data"
+import Selector from "@/components/shared/selector"
+import { Switch } from "@/components/ui/switch"
 type Props = {
    values: TSemester
+}
+const startYear = 2000;
+const currentYear = new Date().getFullYear();
+
+const yearsArray: any = [];
+
+for (let year = startYear; year <= currentYear; year++) {
+   yearsArray.push({
+      id: year.toString(),      // id as a string (for uniqueness)
+      value: year,              // value as the year itself
+      label: year.toString()    // label as the year (can be customized further)
+   });
 }
 
 const UpdateSemesterForm = ({ values }: Props) => {
@@ -73,13 +88,33 @@ const UpdateSemesterForm = ({ values }: Props) => {
                name="title"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome</FormLabel>
+                     <FormLabel>Temporada</FormLabel>
                      <FormControl>
-                        <Input
-                           placeholder="Ex: Faculdade de Engenharia "
-                           {...field} />
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.sesson}
+                           placeholder="Ex: Verao"
+                           formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="isCurrent"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel id="semesterStatus">Status do Semestre</FormLabel>
+                     <FormControl>
+                        <Switch
+                           checked={field.value as boolean}
+                           onCheckedChange={field.onChange}
+                           id="semesterStatus"
+                        />
+                     </FormControl>
+                     <FormDescription>Ex: Activo ou Inativo, não pode haver 2 semestre activo</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -92,10 +127,10 @@ const UpdateSemesterForm = ({ values }: Props) => {
                      <FormLabel>Codigo</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Ex: FAC-ENG-2022 "
+                           placeholder="Ex: 01"
                            {...field} />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>Ex: 01</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -107,9 +142,11 @@ const UpdateSemesterForm = ({ values }: Props) => {
                   <FormItem>
                      <FormLabel>Ano corrente</FormLabel>
                      <FormControl>
-                        <Input
-                           placeholder="Ex: 2022 "
-                           {...field} />
+                        <Selector
+                           className="w-full"
+                           options={yearsArray}
+                           placeholder="Ex: 2025"
+                           formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -123,9 +160,11 @@ const UpdateSemesterForm = ({ values }: Props) => {
                   <FormItem>
                      <FormLabel>Mês de inicio</FormLabel>
                      <FormControl>
-                        <Input
-                           placeholder="Ex: Janeiro "
-                           {...field} />
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.months}
+                           placeholder="Ex: Março"
+                           formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
@@ -139,15 +178,19 @@ const UpdateSemesterForm = ({ values }: Props) => {
                   <FormItem>
                      <FormLabel>Mês de encerramento</FormLabel>
                      <FormControl>
-                        <Input
-                           placeholder="Ex: Janeiro "
-                           {...field} />
+                        <Selector
+                           className="w-full"
+                           options={DUMMY_DATA.months}
+                           placeholder="Ex: Dezembro"
+                           formField={field} />
                      </FormControl>
                      <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
+
+
             <SubmitBtn
                label="Criar"
                loading={isPending} />

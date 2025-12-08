@@ -26,7 +26,7 @@ const AccountTab = ({ user }: TProps) => {
 
    return (
       <div className='grid grid-cols-12 gap-2'>
-         <div className="col-span-8 space-y-3 pr-5">
+         <div className="col-span-12 lg:col-span-8 space-y-3 pr-5">
             <div className="flex items-center gap-4">
                <div className="flex gap-6 items-center">
                   <Avatar
@@ -48,8 +48,9 @@ const AccountTab = ({ user }: TProps) => {
                      side='right'
                      trigger={<Pencil className='cursor-pointer text-green-500' />}
                      title="Editar Perfil"
+                     id={`view-${user?.id}`}
                      description='Editar Perfil'
-                     className="">
+                     className="sm:max-w-md">
                      <UpdatedAccountForm defaultValues={user} />
                   </SheetModal>
                </div>
@@ -79,12 +80,12 @@ const AccountTab = ({ user }: TProps) => {
                </li>
                <li>Telemovel:
                   <div className='rounded-md border p-2 flex gap-2 items-center mt-1.5'>
-                     <b>(+244) 922 999 999</b>
+                     <b>(+244) {user?.contact?.phone}</b>
                   </div>
                </li>
             </ul>
          </div>
-         <div className="col-span-4 flex gap-5">
+         <div className="col-span-12 lg:col-span-4 flex gap-5">
             <Separator orientation="vertical" />
             <div>
                <div className="flex items-center gap-2 my-4">

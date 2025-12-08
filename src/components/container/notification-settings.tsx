@@ -71,11 +71,11 @@ const Notification = ({ config }: TProps) => {
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
             <div className="grid grid-cols-12 gap-3">
-               <div className='col-span-6'>
+               <div className='col-span-12 lg:col-span-6'>
                   <h2 className='font-bold text-2xl'>Notifição por email</h2>
                   <p className='text-slate-200'>Substancia pode enviar email para qualquer messagem directa</p>
                </div>
-               <div className='col-span-6 space-y-2'>
+               <div className='col-span-12 lg:col-span-6 space-y-2'>
                   <FormField
                      control={form.control}
                      name="enabled"

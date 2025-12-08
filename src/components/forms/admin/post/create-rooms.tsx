@@ -36,9 +36,9 @@ const CreateRoomForm = ({ buildings }: TProps) => {
    const form = useForm<z.infer<typeof roomSchema>>({
       resolver: zodResolver(roomSchema),
       defaultValues: {
-         roomNumber: "",
-         floor: "",
-         buildingId: ""
+         roomNumber: undefined,
+         floor: undefined,
+         buildingId: undefined
       }
    })
    const [isPending, startTransition] = useTransition();

@@ -29,7 +29,7 @@ const FacultyDisciplineAssignmentForm = ({
    const form = useForm<z.infer<typeof facultyDisciplineAssignmentSchema>>({
       resolver: zodResolver(facultyDisciplineAssignmentSchema),
       defaultValues: {
-         facultyId: '',
+         facultyId: undefined,
          disciplineId,
          shiftId: 1
       },

@@ -42,10 +42,10 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
    const form = useForm<z.infer<typeof disciplineSchema>>({
       resolver: zodResolver(disciplineSchema),
       defaultValues: {
-         name: "",
-         code: "",
-         courseId: "",
-         semesterId: "",
+         name: undefined,
+         code: undefined,
+         courseId: undefined,
+         semesterId: undefined,
          yearLevel: "FIRST",
          minimumGradeToDismiss: 10
       }

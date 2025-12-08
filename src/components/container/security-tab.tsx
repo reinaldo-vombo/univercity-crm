@@ -24,7 +24,7 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { changePasswordShema } from "@/lib/validation/user"
 import Image from "next/image"
-import { updatedUser } from "@/actions/users"
+import { updatedUserPassword } from "@/actions/users"
 
 type TProps = {
    sessionHistory: TAuthLogos[]
@@ -60,12 +60,12 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
       });
       startTransition(async () => {
          try {
-            const response = await updatedUser(formData);
+            const response = await updatedUserPassword(formData);
             if (response.error) {
                toast.error(response.message);
                return;
             }
-            toast.success(FLASH_MESSAGE.CREATED);
+            toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
@@ -78,13 +78,12 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
    return (
       <Fragment>
          <div className="grid grid-cols-12 gap-2">
-            <div className="col-span-8 pr-10">
+            <div className="col-span-12 lg:col-span-8 pr-10">
                <div className="flex items-center gap-2 max-w-lg">
                   <Lock className="size-5" />
                   <b>Gerenciar senha</b>
                </div>
                <div>
-
                   <Form {...form}>
                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
                         <FormField
@@ -124,7 +123,7 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
                            />
                            <FormField
                               control={form.control}
-                              name="corrent_password"
+                              name="confirm_password"
                               render={({ field }) => (
                                  <FormItem className="w-full">
                                     <FormLabel>Confirmar senha</FormLabel>
@@ -146,7 +145,7 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
                   </Form>
                </div>
             </div>
-            <div className="col-span-4 flex gap-3">
+            <div className="col-span-12 lg:col-span-4 flex gap-3">
                <Separator orientation="vertical" />
                <div className="space-y-7">
                   <div className="flex items-center justify-center gap-2 max-w-lg">
@@ -232,4 +231,4 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
    )
 }
 
-export default SecurityTab
+export default SecurityTab;

@@ -20,7 +20,13 @@ export const getUserSeesionLogs = async (
     const sessionLogs = await serverFetch<TAuthLogos[]>(
       `/users-session/${userId}`,
       {
-        next: { tags: ['logs'], revalidate: REVALIDATION.ONE_MINUTES },
+        next: {
+          tags: ['logs'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
       }
     );
     return sessionLogs;

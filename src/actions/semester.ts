@@ -9,39 +9,40 @@ import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ActionResult } from '../types/api-error';
 
-export const addNewSemester = validatedActionWithUser(
-  semesterSchema,
-  async (data): Promise<ActionResult<TSemester>> => {
-    try {
-      const semester = await serverFetch<TSemester>('/academic-semester', {
-        method: 'POST',
-        body: data,
-      });
+export const addNewSemester = async (
+  data: any
+): Promise<ActionResult<TSemester>> => {
+  console.log(data);
 
-      revalidateTag('semester');
+  try {
+    const semester = await serverFetch<TSemester>('/academic-semester', {
+      method: 'POST',
+      body: data,
+    });
 
-      return {
-        error: false,
-        data: semester,
-      };
-    } catch (err) {
-      if (err instanceof ApiResponseError) {
-        return {
-          error: true,
-          message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
-        };
-      }
+    revalidateTag('semester');
 
+    return {
+      error: false,
+      data: semester,
+    };
+  } catch (err) {
+    if (err instanceof ApiResponseError) {
       return {
         error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        message: err.message,
+        errorMessages: err.errorMessages,
+        meta: err.meta,
       };
     }
+
+    return {
+      error: true,
+      message:
+        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+    };
   }
-);
+};
 export const updatedSemester = validatedActionWithUser(
   semesterSchema,
   async (data, _, user): Promise<ActionResult<TSemester>> => {

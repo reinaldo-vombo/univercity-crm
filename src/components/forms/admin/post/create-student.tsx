@@ -49,17 +49,17 @@ const CreateStudentFrom = ({ academicSemester, courses }: TProps) => {
    const form = useForm<z.infer<typeof studentSchema>>({
       resolver: zodResolver(studentSchema),
       defaultValues: {
-         firstName: "",
-         middleName: "",
-         lastName: "",
-         contactNo: "",
-         gender: "",
-         email: "",
-         profileImage: "",
+         firstName: undefined,
+         middleName: undefined,
+         lastName: undefined,
+         contactNo: undefined,
+         gender: undefined,
+         email: undefined,
+         profileImage: undefined,
          shift: "MORNING",
-         academicSemesterId: "",
-         academicDepartmentId: "",
-         CourseId: ""
+         academicSemesterId: undefined,
+         academicDepartmentId: undefined,
+         CourseId: undefined
       }
    })
 

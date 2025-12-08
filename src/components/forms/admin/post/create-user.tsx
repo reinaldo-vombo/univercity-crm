@@ -28,9 +28,9 @@ const CreateUser = () => {
    const form = useForm<z.infer<typeof userSchema>>({
       resolver: zodResolver(userSchema),
       defaultValues: {
-         name: "",
+         name: undefined,
          role: "admin",
-         email: '',
+         email: undefined,
       }
    })
 

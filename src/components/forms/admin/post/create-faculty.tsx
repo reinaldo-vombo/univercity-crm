@@ -45,17 +45,17 @@ const CreateFacultyFrom = ({ departemants, academicFaculty }: TPros) => {
    const form = useForm<z.infer<typeof facultySchema>>({
       resolver: zodResolver(facultySchema),
       defaultValues: {
-         firstName: "",
-         middleName: "",
-         lastName: "",
-         contactNo: "",
+         firstName: undefined,
+         middleName: undefined,
+         lastName: undefined,
+         contactNo: undefined,
          gender: "Masculino",
-         email: "",
-         profileImage: "",
-         designation: "",
+         email: undefined,
+         profileImage: undefined,
+         designation: undefined,
          shiftId: 1,
-         academicDepartmentId: "",
-         academicFacultyId: "",
+         academicDepartmentId: undefined,
+         academicFacultyId: undefined,
       }
    })
    const [isPending, startTransition] = useTransition();
