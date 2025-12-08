@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Pen, Trash } from "lucide-react"
+import { Building, Building2Icon, Pen, Tags, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -17,17 +17,33 @@ export function RoomColumns(buldings: TBuilding[]): ColumnDef<TRoom>[] {
       {
          accessorKey: "roomNumber",
          header: "Número da sala",
+         cell: ({ row }) => (
+            <div className="flex items-center gap-2">
+               <Tags className="h-4 w-4 text-green-500" />
+               <span>{row.getValue("roomNumber")}</span>
+            </div>
+         ),
       },
       {
          accessorKey: "floor",
          header: "Andar",
+         cell: ({ row }) => (
+            <div className="flex items-center gap-2">
+               <Building2Icon className="h-4 w-4 text-neutral-500" />
+               <span>{row.getValue("floor")}</span>
+            </div>
+         ),
       },
       {
          accessorKey: "buildingTitle",
          header: "Edificio",
+         cell: ({ row }) => (
+            <div className="flex items-center gap-2">
+               <Building className="h-4 w-4 text-amber-500" />
+               <span>{row.getValue("buildingTitle")}</span>
+            </div>
+         ),
       },
-
-
       {
          id: "actions",
          cell: ({ row }) => {

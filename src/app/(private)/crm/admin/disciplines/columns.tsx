@@ -56,7 +56,7 @@ export function DisciplineColumns(faculty: TFaculty[]): ColumnDef<TDiscipline>[]
          accessorFn: (row) => row.courses?.[0]?.semester ?? null,
          header: ({ column }) => <UniversalColumnFilter
             column={column}
-            title="Ano curricular"
+            title="Semestre academico"
             options={[
                { value: "1 semestre", label: "1º semestre" },
                { value: "2 semestre", label: "2º semestre" },

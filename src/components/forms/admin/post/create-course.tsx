@@ -37,12 +37,12 @@ const CreateCourseForm = ({ departments }: TProps) => {
    const form = useForm<z.infer<typeof courseSchema>>({
       resolver: zodResolver(courseSchema),
       defaultValues: {
-         title: "",
-         code: "",
+         title: undefined,
+         code: undefined,
          shiftId: 1,
          yearLevel: "FIRST",
          durationInYears: 4,
-         academicDepartmentId: "",
+         academicDepartmentId: undefined,
       }
    })
 

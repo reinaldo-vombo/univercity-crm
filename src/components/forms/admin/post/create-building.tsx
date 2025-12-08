@@ -24,7 +24,7 @@ const CreateBuildingFrom = () => {
    const form = useForm<z.infer<typeof buildingSchema>>({
       resolver: zodResolver(buildingSchema),
       defaultValues: {
-         title: "",
+         title: undefined,
       }
    })
    const [isPending, startTransition] = useTransition();

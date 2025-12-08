@@ -141,8 +141,83 @@ export const DUMMY_DATA = {
       },
       {
         href: `${ROUTES.DASHBOARD}/admin/users`,
-        label: 'Manage Users',
+        label: 'Útilizadores',
         icon: React.createElement(User),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/activitys`,
+        label: 'Registo de actividade',
+        icon: React.createElement(Activity),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/academic-faculty`,
+        label: 'Unidade Acadêmica',
+        icon: React.createElement(Book),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/departments`,
+        label: 'Departamentos Acadêmico',
+        icon: React.createElement(Building),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/admition-exames`,
+        label: 'Exames de admisão',
+        icon: React.createElement(Book),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/academic-semester`,
+        label: 'Semestre Acadêmico',
+        icon: React.createElement(BookCheck),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/courses`,
+        label: 'Cursos Acadêmico',
+        icon: React.createElement(BookType),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/courses-price`,
+        label: 'Preços dos curso',
+        icon: React.createElement(Currency),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/disciplines`,
+        label: 'Deciplinas Acadêmico',
+        icon: React.createElement(BookKey),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/buildings`,
+        label: 'Edificios',
+        icon: React.createElement(Building2Icon),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/rooms`,
+        label: 'Salas',
+        icon: React.createElement(AlignHorizontalJustifyEndIcon),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/faculty`,
+        label: 'Professores',
+        icon: React.createElement(UserPlus2),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/admin/student`,
+        label: 'Estudeantes',
+        icon: React.createElement(UserPlus2),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/calendar`,
+        label: 'Events',
+        icon: React.createElement(Calendar),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/finance`,
+        label: 'Orçamentos',
+        icon: React.createElement(Receipt),
+      },
+      {
+        href: `${ROUTES.DASHBOARD}/finance/payments`,
+        label: 'Pagamentos',
+        icon: React.createElement(ReceiptText),
       },
     ],
     student: [
@@ -273,7 +348,7 @@ export const DUMMY_DATA = {
     {
       id: '12',
       label: 'Dezembro',
-      value: 'Dezembro',
+      value: 'Decembro',
     },
   ],
   shifts: [

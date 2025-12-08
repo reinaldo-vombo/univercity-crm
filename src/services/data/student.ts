@@ -2,11 +2,16 @@ import { TStudent } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { REVALIDATION } from '@/constants/mock-data';
 
 export const getAllStudent = async (): Promise<TStudent[]> => {
   try {
     const students = await serverFetch<TStudent[]>('/student', {
-      next: { tags: ['student'] },
+      next: {
+        tags: ['student'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return students;
   } catch (error) {

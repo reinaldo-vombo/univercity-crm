@@ -1,6 +1,7 @@
 import { IQueryParams, TDiscipline } from '@/types/global';
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
+import { REVALIDATION } from '@/constants/mock-data';
 
 export const getAllDiscipline = async (
   query?: IQueryParams
@@ -16,7 +17,11 @@ export const getAllDiscipline = async (
 
     const url = `/discipline${queryString ? `?${queryString}` : ''}`;
     const discipline = await serverFetch<TDiscipline[]>(url, {
-      next: { tags: ['discipline'] },
+      next: {
+        tags: ['discipline'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return discipline;
   } catch (error) {

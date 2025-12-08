@@ -26,7 +26,7 @@ const CreateAcademicFaculty = () => {
    const form = useForm<z.infer<typeof academicFacultyacultySchema>>({
       resolver: zodResolver(academicFacultyacultySchema),
       defaultValues: {
-         title: "",
+         title: undefined,
       }
    })
    const [isPending, startTransition] = useTransition();

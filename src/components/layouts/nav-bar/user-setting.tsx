@@ -20,7 +20,7 @@ const links = [
    },
 ]
 
-const UserSetting = () => {
+const UserSetting = ({ userId }: { userId: string }) => {
 
    return (
       <div>
@@ -28,7 +28,8 @@ const UserSetting = () => {
             {links.map((link) => (
                <li key={link.href}>
                   <Link
-                     href={link.href}
+                     href={link.href === `${process.env.NEXT_PUBLIC_BASE_URL}/crm/profile` ? `${link.href}/${userId}` : link.href
+                     }
                      className='group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium hover:bg-primary-foreground'
                   >
                      {link.icon}

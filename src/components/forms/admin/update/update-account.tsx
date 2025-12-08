@@ -22,12 +22,15 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updatedUser } from "@/actions/users"
 import Uploader from "@/components/shared/file-upload/uploader"
 import { useSession } from "next-auth/react"
+import { useSheet } from "@/providers/sheet-provider"
+import Avatar from "@/components/shared/avatar"
 type TProps = {
    defaultValues: any
 }
 
 const UpdatedAccountForm = ({ defaultValues }: TProps) => {
-   const { name, email, role, contact } = defaultValues;
+   const { id, name, email, role, contact, avatar } = defaultValues;
+   const { close } = useSheet()
    const { data: session, update } = useSession();
    function isAdmin(role: string): boolean {
       return ["admin", "super_admin"].includes(role);
@@ -35,11 +38,15 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
    const form = useForm<z.infer<typeof updateSchema>>({
       resolver: zodResolver(updateSchema),
       defaultValues: {
+         id,
          name: name,
          role: role,
          email: email,
-         contact,
-         avatar: undefined,
+         contact: {
+            location: contact?.location || '',
+            phone: contact?.phone || 0
+         },
+         avatar: avatar || null,
       }
    })
    const [isPending, startTransition] = useTransition();
@@ -70,6 +77,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
                },
             })
             toast.success(FLASH_MESSAGE.UPDATED);
+            close()
          } catch (err) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(err);
@@ -80,6 +88,9 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
+            <div className="flex">
+               <Avatar name={name} photo={avatar} className="size-10 m-auto" />
+            </div>
             <FormField
                control={form.control}
                name="name"

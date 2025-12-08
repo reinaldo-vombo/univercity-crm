@@ -23,7 +23,8 @@ import { updatedUser } from "@/actions/users"
 import Uploader from "@/components/shared/file-upload/uploader"
 
 const UpdatedUserForm = ({ userInf }: any) => {
-   const { id, name, email, role, contact } = userInf;
+   const { id, name, email, role, contact, avatar } = userInf;
+
    function isAdmin(role: string): boolean {
       return ["admin", "super_admin"].includes(role);
    }
@@ -35,10 +36,11 @@ const UpdatedUserForm = ({ userInf }: any) => {
          name: name,
          role: role,
          email: email,
-         contact,
-         avatar: undefined,
+         contact: contact || {},
+         avatar: avatar || null,
       }
    })
+
    const [isPending, startTransition] = useTransition();
 
    async function onSubmit(values: z.infer<typeof updateSchema>) {

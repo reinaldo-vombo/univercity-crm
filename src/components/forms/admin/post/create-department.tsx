@@ -41,9 +41,9 @@ const CreateDepartmentFrom = ({ users, academicFaculty }: TPros) => {
    const form = useForm<z.infer<typeof departmentSchema>>({
       resolver: zodResolver(departmentSchema),
       defaultValues: {
-         title: "",
-         academicFacultyId: "",
-         departmentHeadId: ""
+         title: undefined,
+         academicFacultyId: undefined,
+         departmentHeadId: undefined
       }
    })
    const [isPending, startTransition] = useTransition();

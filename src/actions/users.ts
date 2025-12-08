@@ -4,28 +4,27 @@ import { revalidateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { serverFetch } from '@/services/server-fetch';
 import { TUser } from '../types/global';
+import { validatedActionWithUser } from '../lib/helper/action-helper';
 import {
-  actionWithUser,
-  validatedActionWithUser,
-} from '../lib/helper/action-helper';
-import { updateSchema, userSchema } from '../lib/validation/user';
+  changePasswordShema,
+  updateSchema,
+  userSchema,
+} from '../lib/validation/user';
 import { ActionResult, ActionState } from '../types/api-error';
 import { saveFile } from '../lib/helper/uploade';
 import { ApiResponseError } from '@/services/api-error';
+import { serverUser } from '@/lib/helper/auth/user';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
   async (data, _, user): Promise<ActionResult<TUser>> => {
     try {
-      const member = await serverFetch<TUser>(
-        `/users?userId=${user.id}&authorName=${user.name}`,
-        {
-          method: 'POST',
-          body: data,
-        }
-      );
+      const member = await serverFetch<TUser>(`/users?name=${user.name}`, {
+        method: 'POST',
+        body: data,
+      });
 
-      revalidateTag('users');
+      revalidateTag('user');
 
       return {
         error: false,
@@ -61,14 +60,14 @@ export const updatedUser = validatedActionWithUser(
       data = { ...data, avatar: avatarUrl };
 
       const result = await serverFetch<TUser>(
-        `/users/${data.id}?userId=${user.id}&authorName=${user.name}`,
+        `/users/${data.id}?name=${user.name}`,
         {
-          method: 'PUT',
+          method: 'PATCH',
           body: data,
         }
       );
 
-      revalidateTag('users');
+      revalidateTag('user');
 
       return {
         error: false,
@@ -92,28 +91,69 @@ export const updatedUser = validatedActionWithUser(
     }
   }
 );
-export const deleteUser = actionWithUser(
-  async (id, user): Promise<ActionState<TUser>> => {
+export const updatedUserPassword = validatedActionWithUser(
+  changePasswordShema,
+  async (data, _, user): Promise<ActionResult<TUser>> => {
     try {
-      const dletedUser = await serverFetch<TUser>(
-        `/users/${id}?userId=${user.id}&authorName=${user.name}`,
+      const { confirm_password, new_password } = data;
+
+      if (new_password !== confirm_password) {
+        return {
+          error: true,
+          message: 'As senha não combinam',
+        };
+      }
+      const result = await serverFetch<TUser>(
+        `/users/${user.id}/change-password`,
         {
-          method: 'DELETE',
+          method: 'PATCH',
+          body: data,
         }
       );
 
-      revalidateTag('users');
       return {
         error: false,
-        message: FLASH_MESSAGE.DELETED,
-        data: dletedUser,
+        data: result,
       };
-    } catch (error) {
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error as string,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
   }
 );
+export const deleteUser = async (id: string): Promise<ActionState<TUser>> => {
+  const user = await serverUser();
 
+  try {
+    const dletedUser = await serverFetch<TUser>(
+      `/users/${id}?name=${user?.name}`,
+      {
+        method: 'DELETE',
+      }
+    );
+
+    revalidateTag('user');
+    return {
+      error: false,
+      message: FLASH_MESSAGE.DELETED,
+      data: dletedUser,
+    };
+  } catch (error) {
+    return {
+      error: true,
+      message: error as string,
+    };
+  }
+};

@@ -41,7 +41,7 @@ const CreateDisciplineForm = () => {
       defaultValues: {
          title: '1º Semestre',
          code: '01',
-         isCurrent: true,
+         isCurrent: false,
          year: currentYear.toString(),
          startMonth: 'Abril',
          endMonth: 'Agosto',
@@ -49,13 +49,10 @@ const CreateDisciplineForm = () => {
    })
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof semesterSchema>) {
-      const formData: any = new FormData();
-      Object.entries(values).forEach(([key, value]) => {
-         formData.append(key, value);
-      });
+
       startTransition(async () => {
          try {
-            const response = await addNewSemester(formData);
+            const response = await addNewSemester(values);
             if (response.error) {
                toast.error(response.message);
                return;
@@ -70,6 +67,7 @@ const CreateDisciplineForm = () => {
       });
 
    }
+
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
@@ -100,11 +98,11 @@ const CreateDisciplineForm = () => {
                      <FormControl>
                         <Switch
                            checked={field.value as boolean}
-                           onChange={field.onChange}
+                           onCheckedChange={field.onChange}
                            id="semesterStatus"
                         />
                      </FormControl>
-                     <FormDescription>Ex: Activo ou Inativo</FormDescription>
+                     <FormDescription>Ex: Activo ou Inativo, não pode haver 2 semestre activo</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -117,7 +115,7 @@ const CreateDisciplineForm = () => {
                      <FormLabel>Codigo</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Ex: 01/2022"
+                           placeholder="Ex: 01"
                            {...field} />
                      </FormControl>
                      <FormDescription>Ex: 01</FormDescription>
