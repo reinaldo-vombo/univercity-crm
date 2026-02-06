@@ -11,7 +11,7 @@ import Avatar from "@/components/shared/avatar";
 import { Badge } from "@/components/ui/badge";
 import { deleteAudiLog } from "@/actions/activitiys";
 import { CloseBage, CompleteBage, ProgressBage } from "@/components/shared/bages";
-import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter";
+import { UniversalColumnFilter } from "@/components/table-filters/column-filter";
 
 
 export function AuditColumns(users: TUser[]): ColumnDef<TActionHistory>[] {

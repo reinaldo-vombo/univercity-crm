@@ -7,10 +7,13 @@ import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TSemester, } from "@/types/global"
-import UpdateSemesterForm from "@/components/forms/admin/update/update-semester"
 import { deleteSemester } from "@/actions/semester"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/lib/helper"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdateSemesterForm = dynamic(() => import("@/components/forms/admin/update/update-semester"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 
 export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {

@@ -30,7 +30,7 @@ export type TSelectPros = {
   options: {
     id: string | number;
     label: string | number;
-    value: string;
+    value: any;
   }[];
   formField: any;
 };
@@ -61,6 +61,8 @@ export type DropdownMenuProps = {
 };
 export type TAlertProps = {
   trigger: any;
+  disabled?: boolean;
+  description?: string;
   action: () => void;
 };
 export type TExportDocProps<T extends object> = {

@@ -1,16 +1,19 @@
 "use client";
 
 import { DataTable } from "@/components/shared/data-table";
-import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global";
+import { TCourse, TDepartemant, TFaculty } from "@/types/global";
 import { FacultyColumns } from "./columns";
-import CreateFacultyFrom from "@/components/forms/admin/post/create-faculty";
 import ExportFacultysListFilterForm from "@/lib/helper/export/faculty-export";
 import { createUniqueId } from "@/lib/helper";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const CreateFacultyFrom = dynamic(() => import("@/components/forms/admin/post/create-faculty"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    falcultys: TFaculty[]
    departements: TDepartemant[];
-   academicFaculty: TAcademicFaculty[];
+   courses: TCourse[]
 }
 const herader = {
    firstName: "Primero nome",
@@ -23,13 +26,13 @@ const herader = {
 }
 
 const uid = createUniqueId("create");
-export function FalcultyTable({ falcultys, departements, academicFaculty }: Props) {
+export function FalcultyTable({ falcultys, departements, courses }: Props) {
 
 
-   const columns = FacultyColumns(departements, academicFaculty);
+   const columns = FacultyColumns(departements, courses);
 
    return <DataTable
-      actionForm={<CreateFacultyFrom departemants={departements} academicFaculty={academicFaculty} />}
+      actionForm={<CreateFacultyFrom departemants={departements} courses={courses} />}
       columns={columns}
       sheetId={uid}
       className="sm:max-w-lg"

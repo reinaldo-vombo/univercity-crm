@@ -1,7 +1,7 @@
 import { TPrice } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
-import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
 
 export const getAllPrice = async (): Promise<TPrice[]> => {
   try {

@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from "react";
 import Card from "@/components/shared/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ROUTES } from "@/constants/mock-data";
+import { ROUTES } from "@/constants/routes"
 import { User } from "lucide-react";
 import Link from "next/link";
 

@@ -3,10 +3,10 @@ import Avatar from '@/components/shared/avatar'
 import Breadcrumb from '@/components/shared/breadcrumb'
 import Card from '@/components/shared/card'
 import SheetModal from '@/components/shared/sheet-modal'
-import { ROUTES } from '@/constants/mock-data'
+import { ROUTES } from '@/constants/routes'
 import { createUniqueId, getFirstAndLastName } from '@/lib/helper'
 import { serverUser } from '@/lib/helper/auth/user'
-import { Pencil } from 'lucide-react'
+import { Pencil, Star } from 'lucide-react'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -23,8 +23,8 @@ export default async function ProfilePage() {
    return (
       <section className="col-span-12">
          <Breadcrumb
-            name="Edificios & Salas"
-            pageName="Edificios & Salas"
+            name={user.name}
+            pageName="Perfil"
             pageUrl={`${ROUTES.DASHBOARD}/perfil`}
             root={`${ROUTES.DASHBOARD}/perfil`} />
          <div className="mt-12">
@@ -34,13 +34,13 @@ export default async function ProfilePage() {
                   <div className='p-5 w-full mb-6 border rounded-2xl lg:p-6'>
                      <div className="flex items-center justify-between">
                         <div className="flex gap-6 items-center">
-                           <Avatar name={user.name} photo={user.avatar} className="mr-4 size-12" />
+                           <Avatar name={user.name} photo={user.avatar} className="mr-4 size-16" />
                            <div>
                               <h4 className="text-lg font-semibold">{user.name}</h4>
-                              <p className="text-sm">
+                              <b className="flex items-center gap-2">
+                                 <Star className='text-amber-500' />
                                  {user.role}
-                              </p>
-                              <p>{user.email}</p>
+                              </b>
                            </div>
                         </div>
                         <div>
@@ -74,7 +74,7 @@ export default async function ProfilePage() {
                      </div>
                      <div>
                         <p className="mb-2 text-xs leading-normal">Phone</p>
-                        <b className="text-sm font-medium ">(+244) {user.contact.phone}</b>
+                        <b className="text-sm font-medium ">(+244) {user.contact?.phone}</b>
                      </div>
                   </div>
                </div>

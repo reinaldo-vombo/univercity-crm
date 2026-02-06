@@ -2,7 +2,7 @@ import { TStudent } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
 
 export const getAllStudent = async (): Promise<TStudent[]> => {
   try {

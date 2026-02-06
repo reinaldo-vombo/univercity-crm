@@ -1,12 +1,13 @@
 "use client";
 
 import { DataTable } from "@/components/shared/data-table";
-import { TCourse, TDepartemant, TPrice } from "@/types/global";
+import { TCourse, TDepartemant, TPrice, TFaculty } from "@/types/global";
 import { CoursesColumns } from "./columns";
-import CreateCourseForm from "@/components/forms/admin/post/create-course";
-import { TFaculty } from "../../../../../types/global";
 import { createUniqueId } from "@/lib/helper";
-
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const CreateCourseForm = dynamic(() => import("@/components/forms/admin/post/create-course"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    couses: TCourse[];

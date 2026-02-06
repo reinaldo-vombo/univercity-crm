@@ -1,7 +1,7 @@
 import { IQueryParams, TDiscipline } from '@/types/global';
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
-import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
 
 export const getAllDiscipline = async (
   query?: IQueryParams

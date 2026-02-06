@@ -10,11 +10,14 @@ import { TCourse, TSemester, TStudent } from "@/types/global"
 import Avatar from "@/components/shared/avatar"
 import { deleteFaculty } from "@/actions/faculty"
 import { Badge } from "@/components/ui/badge"
-import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
-import StudentDetails from "@/components/admin/container/student-details"
-import UpdatedStudentFrom from "@/components/forms/admin/update/updated-student"
+import { DataTableColumnHeaderName } from "@/components/table-filters/name-filter"
+import StudentDetails from "@/components/admin/container/student/student-details"
 import { createUniqueId, formatDate } from "@/lib/helper"
-import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter"
+import { UniversalColumnFilter } from "@/components/table-filters/column-filter"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdatedStudentFrom = dynamic(() => import("@/components/forms/admin/update/updated-student"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 
 

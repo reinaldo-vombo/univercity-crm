@@ -1,12 +1,14 @@
-import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
 import { handleApiError } from '@/services/error-handler';
 import { serverFetch } from '@/services/server-fetch';
 import {
   TAcademicFaculty,
   TAdmitionExame,
+  TAdmitionExameFase,
   TBuilding,
   TRoom,
   TSemester,
+  TSemesterRegistration,
 } from '@/types/global';
 
 export const getAllAcademicFaculty = async (): Promise<TAcademicFaculty[]> => {
@@ -42,6 +44,27 @@ export const getAllAdmitionExames = async (): Promise<TAdmitionExame[]> => {
     handleApiError(error);
   }
 };
+export const getAllAdmitionExamesFase = async (): Promise<
+  TAdmitionExameFase[]
+> => {
+  try {
+    const exames = await serverFetch<TAdmitionExameFase[]>(
+      '/admission-exame/fases',
+      {
+        next: {
+          tags: ['admitionExameFase'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
+      }
+    );
+    return exames;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 export const getAllSemester = async (): Promise<TSemester[]> => {
   try {
     const semester = await serverFetch<TSemester[]>('/academic-semester', {
@@ -51,6 +74,27 @@ export const getAllSemester = async (): Promise<TSemester[]> => {
           process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
       },
     });
+    return semester;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getAllSemesterRegistration = async (): Promise<
+  TSemesterRegistration[]
+> => {
+  try {
+    const semester = await serverFetch<TSemesterRegistration[]>(
+      '/semester-registration',
+      {
+        next: {
+          tags: ['semester-registration'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
+      }
+    );
     return semester;
   } catch (error) {
     handleApiError(error);

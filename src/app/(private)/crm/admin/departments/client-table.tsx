@@ -3,8 +3,11 @@
 import { DataTable } from "@/components/shared/data-table";
 import { TAcademicFaculty, TDepartemant, TUser } from "@/types/global";
 import { DepartementColumns } from "./columns";
-import CreateDepartmentFrom from "@/components/forms/admin/post/create-department";
 import { createUniqueId } from "@/lib/helper";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const CreateDepartmentFrom = dynamic(() => import("@/components/forms/admin/post/create-department"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    departements: TDepartemant[];

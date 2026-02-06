@@ -21,12 +21,14 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updatedUser } from "@/actions/users"
 import Uploader from "@/components/shared/file-upload/uploader"
+import { useSheet } from "@/providers/sheet-provider"
 
 const UpdatedUserForm = ({ userInf }: any) => {
    const { id, name, email, role, contact, avatar } = userInf;
+   const { close } = useSheet()
 
    function isAdmin(role: string): boolean {
-      return ["admin", "super_admin"].includes(role);
+      return ["manager", "admin"].includes(role);
    }
 
    const form = useForm<z.infer<typeof updateSchema>>({
@@ -60,6 +62,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                return;
             }
             toast.success(FLASH_MESSAGE.UPDATED);
+            close()
          } catch (err) {
             toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
             console.error(err);

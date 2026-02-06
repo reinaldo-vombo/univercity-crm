@@ -12,8 +12,6 @@ import { ActionResult } from '../types/api-error';
 export const addNewSemester = async (
   data: any
 ): Promise<ActionResult<TSemester>> => {
-  console.log(data);
-
   try {
     const semester = await serverFetch<TSemester>('/academic-semester', {
       method: 'POST',
@@ -43,6 +41,7 @@ export const addNewSemester = async (
     };
   }
 };
+
 export const updatedSemester = validatedActionWithUser(
   semesterSchema,
   async (data, _, user): Promise<ActionResult<TSemester>> => {

@@ -1,5 +1,7 @@
 // lib/types/action-result.ts
 
+import { TSemesterRegistrationStatus, TYearLevel } from './enum';
+
 export type TUser = {
   id: string;
   name: string;
@@ -57,12 +59,15 @@ export type TAcademicFaculty = {
 };
 
 export type TRoom = {
-  id: string;
+  id: number;
   createdAt: Date;
   updatedAt: Date;
   roomNumber: string;
   floor: string;
   buildingId: string;
+  building: {
+    title: string;
+  };
 };
 type TMeta = {
   total: number;
@@ -74,15 +79,12 @@ type TMeta = {
 export type TCourse = {
   id: string;
   title: string;
-  code: string;
   meta?: TMeta;
   durationInYears: number;
   academicDepartment: {
     id: string;
     title: string;
   };
-  shift: { name: string };
-  shiftId: number;
   priceId: string;
   faculties: {
     faculty: {
@@ -98,17 +100,27 @@ export type TCourse = {
       name: string;
     };
     id: string;
-    yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
     courseId: string;
+    yearLevel: TYearLevel;
     disciplineId: string;
     semesterId: string;
   }[];
-  yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
+  CourseShift: {
+    shift: {
+      id: number;
+      name: string;
+    };
+  }[];
+
   academicDepartmentId: string;
   price: {
     amount: number;
     currency: string;
   } | null;
+};
+
+export type TSection = {
+  id: string;
 };
 export type TPrice = {
   id: string;
@@ -128,41 +140,126 @@ export type TCoursePrice = {
 export type TDiscipline = {
   name: string;
   id: string;
-  code: string;
   createdAt: Date;
   updatedAt: Date;
-  description: string | null;
-  minimumGradeToDismiss: number;
+  suspendGrade: number;
   courses: [
     {
       id: string;
       courseTitle: string;
-      yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
+      courseId: string;
+      yearLevel: TYearLevel;
       shift: string;
       semester: string;
+      semesterId: string;
       year: string;
-    }
+    },
   ];
 };
 
 export type TOfferedCourse = {
   id: string;
-  academicDepartmentId: string;
-  courseId: string;
+  academicDepartment: {
+    id: string;
+    title: string;
+  };
+  course: {
+    id: string;
+    title: string;
+  };
+  OfferedCourseDiscipline: [
+    {
+      id: string;
+      discipline: { id: string; name: string };
+      disciplineId: string;
+      offeredCourseId: string;
+    },
+  ];
+  semesterRegistration: {
+    academicSemester: {
+      id: string;
+      title: string;
+      year: string;
+    };
+    status: TSemesterRegistrationStatus;
+    id: string;
+    createdAt: Date;
+    academicSemesterId: string;
+    updateAt: Date;
+    startDate: Date;
+    endDate: Date;
+  };
   semesterRegistrationId: string;
+  academicDepartmentId: string;
   offeredCourseSections: TOfferedCourseSection[];
 };
-type TOfferedCourseSection = {
+export type TOfferedCourseSection = {
   id: string;
   semesterRegistrationId: string;
   createdAt: Date;
   updatedAt: Date;
   title: string;
+  shiftId: number;
   offeredCourseId: string;
   maxCapacity: number;
   currentlyEnrolledStudent: number;
+  offeredCourse: {
+    OfferedCourseDiscipline: {
+      discipline: {
+        id: string;
+        name: string;
+      };
+    }[];
+    semesterRegistration: {
+      academicSemester: {
+        title: string;
+      };
+    };
+  };
 };
 
+type TWeek = {
+  id: string;
+  startTime: string;
+  endTime: string;
+  room: string;
+  disciplineId: string;
+  discipline: {
+    id: string;
+    name: string;
+  };
+  faculty: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profileImage: null;
+  };
+};
+
+export type TClassShedule = {
+  id: string;
+  offeredCourseSectionId: string;
+  title: string;
+  shift: {
+    name: string;
+    id: number;
+  };
+  yearLevel: TYearLevel;
+  semester: {
+    id: string;
+    isCurrent: boolean;
+    title: string;
+  };
+  scheduleGrid: {
+    SEGUNDA: [TWeek];
+    TERCA: [TWeek];
+    QUARTA: [TWeek];
+    QUINTA: [TWeek];
+    SEXTA: [TWeek];
+    SABADO: [TWeek];
+    DOMINGO: [TWeek];
+  };
+};
 export type TAdmitionExame = {
   id: string;
   applicantName: string;
@@ -199,6 +296,24 @@ export type TAdmitionExame = {
     totalAmount: number;
     approved: boolean;
   } | null;
+};
+export type TAdmitionExameFase = {
+  name: string;
+  id: number;
+  buildingId: number | undefined;
+  startDate: Date;
+  endDate: Date;
+  ordem: number;
+  duoDate: Date | undefined;
+  roomId: number | undefined;
+  building: {
+    title: string;
+  };
+  room: {
+    roomNumber: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 };
 export type TCalendar = {
   end: Date;
@@ -237,6 +352,7 @@ export type TBuilding = {
   id: string;
   title: string;
   rooms: {
+    id: string;
     roomNumber: string;
     floor: string;
   }[];
@@ -254,6 +370,15 @@ export type TSemester = {
   startMonth: string;
   endMonth: string;
   isCurrent: boolean;
+};
+export type TSemesterRegistration = {
+  id: string;
+  status: 'UPCOMING' | 'ONGOING' | 'ENDED';
+  startDate: Date;
+  endDate: Date;
+  academicSemesterId: string;
+  createdAt: Date;
+  updateAt: Date;
 };
 
 export type TStudent = {
@@ -312,6 +437,27 @@ export type TFaculty = {
   createdAt: Date;
   updatedAt: Date;
   shiftId: number;
+};
+export type TFacultyDisciplines = {
+  id: string;
+  faculty: {
+    id: string;
+    firstName: string;
+    middleName: string | null;
+    lastName: string;
+    profileImage: string | null;
+  };
+  discipline: {
+    name: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    suspendGrade: number;
+  };
+  facultyId: string;
+  createdAt: Date;
+  disciplineId: string;
+  offeredCourseSectionId: string;
 };
 export type TAuthLogos = {
   id: string;

@@ -2,13 +2,16 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { TFaculty } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { TFaculty, TFacultyDisciplines } from '../types/global';
+import {
+  validatedActionWithUser,
+  validatedActionWithUserJson,
+} from '../lib/helper/action-helper';
 import { ActionResult } from '../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
-  facultyDisciplineAssignmentSchema,
+  assignFacultyToSectionDisciplinesSchema,
   facultySchema,
   updateFacultySchema,
 } from '../lib/validation/faculty';
@@ -52,7 +55,7 @@ export const addNewFaculty = validatedActionWithUser(
     }
   }
 );
-export const updatedFaculty = validatedActionWithUser(
+export const updatedFaculty = validatedActionWithUserJson(
   updateFacultySchema,
   async (data): Promise<ActionResult<TFaculty>> => {
     try {
@@ -87,20 +90,21 @@ export const updatedFaculty = validatedActionWithUser(
   }
 );
 
-export const assingFacultyToDiscipline = validatedActionWithUser(
-  facultyDisciplineAssignmentSchema,
-  async (data): Promise<ActionResult<TFaculty>> => {
+export const assingFacultyToDiscipline = validatedActionWithUserJson(
+  assignFacultyToSectionDisciplinesSchema,
+  async (data): Promise<ActionResult<TFacultyDisciplines>> => {
     try {
-      const { facultyId, ...updateData } = data;
-      const discipline = await serverFetch<TFaculty>(
-        `/faculty/assign-discipline/${facultyId}`,
+      const { offeredCourseSectionId, assignments } = data;
+
+      const discipline = await serverFetch<TFacultyDisciplines>(
+        `/faculty/assign-discipline/${offeredCourseSectionId}`,
         {
           method: 'POST',
-          body: updateData,
+          body: { assignments },
         }
       );
 
-      revalidateTag('discipline');
+      // revalidateTag('discipline');
 
       return {
         error: false,

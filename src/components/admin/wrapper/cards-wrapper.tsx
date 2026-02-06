@@ -21,7 +21,7 @@ export default async function ActivityLogsWrapper() {
       <div className="space-y-5">
          <span> <b>{activitys.length}</b> novas atualizações</span>
          <Separator />
-         <ScrollArea className="h-[380px]">
+         <ScrollArea className="h-[450px]">
             <div className="flex flex-col gap-3.5">
                {activitys.length > 0 ? activitys.map((log, index) => index < 10 && (
                   <div key={log.id} className="space-y-2">

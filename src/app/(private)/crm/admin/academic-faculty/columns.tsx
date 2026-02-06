@@ -8,9 +8,12 @@ import { toast } from "sonner";
 import { FLASH_MESSAGE } from "@/constants/flash-message";
 import { deleteFaculty } from "@/actions/academic-faculty";
 import { TAcademicFaculty } from "@/types/global";
-import UpadateAcademicFaculty from "@/components/forms/admin/update/update-academic-faculty"
 import { handleApiError } from "@/services/error-handler";
 import { formatDate } from "@/lib/helper";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpadateAcademicFaculty = dynamic(() => import("@/components/forms/admin/update/update-academic-faculty"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 export type AcademicFaculty = {
    id: string;

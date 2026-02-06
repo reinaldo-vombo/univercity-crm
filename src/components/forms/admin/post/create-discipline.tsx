@@ -1,6 +1,6 @@
 import * as z from "zod"
 import { toast } from "sonner"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
    Form,
@@ -15,13 +15,13 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { disciplineSchema } from "@/lib/validation/discipline"
+import { bulkDisciplineSchema, } from "@/lib/validation/discipline"
 import { addNewDiscipline } from "@/actions/discipline"
-import { generateSlug } from "@/lib/helper"
 import { TCourse, TSemester } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useSheet } from "@/providers/sheet-provider"
+import { Button } from "@/components/ui/button"
 
 type TProps = {
    semesters: TSemester[],
@@ -39,25 +39,38 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
       label: curse.title,
       value: curse.id,
    }));
-   const form = useForm<z.infer<typeof disciplineSchema>>({
-      resolver: zodResolver(disciplineSchema),
+   const form = useForm<z.infer<typeof bulkDisciplineSchema>>({
+      resolver: zodResolver(bulkDisciplineSchema),
       defaultValues: {
-         name: undefined,
-         code: undefined,
-         courseId: undefined,
-         semesterId: undefined,
-         yearLevel: "FIRST",
-         minimumGradeToDismiss: 10
+         courseId: '',
+         semesterId: '',
+         disciplines: [
+            { name: "", yearLevel: "FIRST", suspendGrade: 10 },
+         ],
       }
    })
 
+
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof disciplineSchema>) {
+   async function onSubmit(values: z.infer<typeof bulkDisciplineSchema>) {
 
       const formData: any = new FormData();
 
       Object.entries(values).forEach(([key, value]) => {
-         formData.append(key, value);
+         // 👇 arrays de objetos
+         if (Array.isArray(value) && typeof value[0] === "object") {
+            formData.append(key, JSON.stringify(value));
+            return;
+         }
+
+         // 👇 arrays simples (string, number, etc)
+         if (Array.isArray(value)) {
+            value.forEach((v) => formData.append(key, String(v)));
+            return;
+         }
+
+         // 👇 valores simples
+         formData.append(key, String(value));
       });
 
       startTransition(async () => {
@@ -79,121 +92,126 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
       });
 
    }
+   const { fields, append, remove } = useFieldArray({
+      control: form.control,
+      name: "disciplines",
+   });
+   const onInvalid = (errors: unknown) => {
+      //This helpe me fix a two week form not submiting god kwon's way bug
+      console.error("Validation Errors:", errors);
+   };
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
-            <FormField
-               control={form.control}
-               name="name"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Nome</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Ex: Matematica, Eletronica"
-                           {...field}
-                           onChange={(e) => {
-                              field.onChange(e);
-                              form.setValue('code', generateSlug(e.target.value))
-                           }}
-                        />
-                     </FormControl>
-                     <FormDescription>Nome da disciplina</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="code"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Codigo</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Ex: MT-01"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>Codigo do da disciplina</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="courseId"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Curso</FormLabel>
-                     <FormControl>
-                        <Selector
-                           className="w-full"
-                           options={academicCurses}
-                           placeholder="Recursos Humanos, Ciência da Computação etc..."
-                           formField={field} />
-                     </FormControl>
-                     <FormDescription>Selecione o Ano Curricular, 1º, 2º, 3º, 4º...</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="yearLevel"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Ano Corricular</FormLabel>
-                     <FormControl>
-                        <Selector
-                           className="w-full"
-                           options={DUMMY_DATA.yearLevel}
-                           placeholder="1º, 2º, 3º, 4º"
-                           formField={field} />
-                     </FormControl>
-                     <FormDescription>Selecione o Ano Curricular, 1º, 2º, 3º, 4º...</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="semesterId"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Semestre</FormLabel>
-                     <FormControl>
-                        <Selector
-                           className="w-full"
-                           options={academicSemester}
-                           placeholder="1ª semestre"
-                           formField={field} />
-                     </FormControl>
-                     <FormDescription>Selecione o semestre dessa desciplina</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="minimumGradeToDismiss"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Nota de dispenção</FormLabel>
-                     <FormControl>
-                        <Input
-                           type="number"
-                           placeholder="EX: 10, 15, 14"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>O valor de dispenção</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <SubmitBtn
-               label="Criar"
-               loading={isPending} />
+         <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+            {fields.map((field, index) => (
+               <div key={field.id} className="space-y-6">
+                  <div className="flex items-center justify-between gap-2 flex-col md:flex-row">
+                     <FormField
+                        control={form.control}
+                        name={`disciplines.${index}.name`}
+                        render={({ field }) => (
+                           <FormItem className="w-full">
+                              <FormLabel>Disciplina</FormLabel>
+                              <FormControl>
+                                 <Input placeholder="Algoritmos" {...field} />
+                              </FormControl>
+                              <FormDescription></FormDescription>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name={`disciplines.${index}.yearLevel`}
+                        render={({ field }) => (
+                           <FormItem className="w-full">
+                              <FormLabel>Ano</FormLabel>
+                              <Selector
+                                 className="w-full"
+                                 formField={field}
+                                 options={DUMMY_DATA.yearLevel}
+                                 placeholder="Ano" />
+                              <FormDescription></FormDescription>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                  </div>
+                  <FormField
+                     control={form.control}
+                     name={`disciplines.${index}.suspendGrade`}
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Nota mínima</FormLabel>
+                           <FormControl>
+                              <Input type="number" {...field} />
+                           </FormControl>
+                           <FormDescription>Nota de suspenção</FormDescription>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+                  <div className="flex flex-col items-center gap-2 sm:flex-row">
+                     <FormField
+                        control={form.control}
+                        name='courseId'
+                        render={({ field }) => (
+                           <FormItem className="w-full">
+                              <FormLabel>Curso academico</FormLabel>
+                              <Selector
+                                 className="w-full"
+                                 formField={field}
+                                 options={academicCurses}
+                                 placeholder="Curso academicos" />
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name='semesterId'
+                        render={({ field }) => (
+                           <FormItem className="w-full">
+                              <FormLabel>Semestre academico</FormLabel>
+                              <Selector
+                                 className="w-full"
+                                 formField={field}
+                                 options={academicSemester}
+                                 placeholder="Curso academicos" />
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                  </div>
+
+                  {/* Remover */}
+                  <div className="flex items-end">
+                     <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => remove(index)}
+                     >
+                        Remover
+                     </Button>
+                  </div>
+               </div>
+            ))}
+
+            {/* Ações */}
+            <div className="flex gap-4">
+               <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() =>
+                     append({ name: "", yearLevel: "FIRST", suspendGrade: 10 })
+                  }
+               >
+                  + Adicionar disciplina
+               </Button>
+
+            </div>
+            <SubmitBtn label="Criar" loading={isPending} />
          </form>
       </Form>
    )

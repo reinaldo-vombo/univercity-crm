@@ -1,12 +1,12 @@
 import Breadcrumb from '@/components/shared/breadcrumb'
-import { ROUTES } from '@/constants/mock-data'
+import { ROUTES } from '@/constants/routes'
 import React, { Suspense } from 'react'
 import { CurseTableServer } from './table-wrapper'
 import DataTableSkeleton from '@/components/skeleton/data-table'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-   title: 'Unidade Academica'
+   title: 'Unidades Academicas'
 }
 export default function AcademicFacultyPage() {
 

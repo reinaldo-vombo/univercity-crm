@@ -1,5 +1,5 @@
 // lib/columns/studentColumns.ts
-
+import dynamic from "next/dynamic"
 import { ColumnDef } from "@tanstack/react-table"
 import { BadgeCheckIcon, Calendar1, Eye, Mail, Pen, Trash } from "lucide-react"
 import Avatar from "@/components/shared/avatar"
@@ -10,7 +10,9 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { deleteUser } from "@/actions/users"
 import { User } from "@/lib/helper/auth/user"
 import { createUniqueId, formatDate } from "@/lib/helper"
-import UpdatedUserForm from "@/components/forms/admin/update/update-user"
+import FormLoading from "@/components/skeleton/form"
+const UpdatedUserForm = dynamic(() => import("@/components/forms/admin/update/update-user"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 export type Users = {
    id: string

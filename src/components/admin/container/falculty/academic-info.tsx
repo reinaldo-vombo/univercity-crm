@@ -5,7 +5,7 @@ type TProps = {
    info: TFaculty
 }
 const AcademicInfo = ({ info }: TProps) => {
-   const { academicDepartment, shift, contactNo, designation, email, courses } = info;
+   const { academicDepartment, contactNo, email } = info;
    const department: any = academicDepartment.title
    return (
       <div className="col-span-6 space-y-4">
@@ -22,14 +22,13 @@ const AcademicInfo = ({ info }: TProps) => {
                   <PersonStanding className="size-6" />
                   <span>Cargo</span>
                </div>
-               <span>{designation}</span>
             </li>
             <li className="flex items-center justify-between">
                <div className="flex items-center gap-2">
                   <SunMoon className="size-6" />
                   <span>Periodo</span>
                </div>
-               <span>{shift.name}</span>
+
             </li>
             <li className="flex items-center justify-between">
                <div className="flex items-center gap-2">
@@ -53,9 +52,7 @@ const AcademicInfo = ({ info }: TProps) => {
                   <Building className="size-6" />
                   <span>Cursos</span>
                </div>
-               {courses.length > 0 ? courses.map((course) => (
-                  <b key={course.courseId}>{course.course.title}</b>
-               )) : (<b>Ainda Não Foi Atribuido A Um Curso</b>)}
+
                <span></span>
             </li>
          </ul>

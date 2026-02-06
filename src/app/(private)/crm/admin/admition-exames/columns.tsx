@@ -8,12 +8,15 @@ import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAdmitionExame } from "@/types/global"
 import { Badge } from "@/components/ui/badge"
-import UpdateAdmitionExameForm from "@/components/forms/admin/update/update-admition-exame"
 import AdmitionExameDetails from "@/components/admin/container/admition-exame/admition-exame-details"
-import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
+import { DataTableColumnHeaderName } from "@/components/table-filters/name-filter"
 import { deleteAdmitionExame } from "@/actions/admition-exame"
 import { createUniqueId, formatCurrency, formatDate } from "@/lib/helper"
-import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter"
+import { UniversalColumnFilter } from "@/components/table-filters/column-filter"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdateAdmitionExameForm = dynamic(() => import("@/components/forms/admin/update/update-admition-exame"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
    return [

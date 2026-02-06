@@ -15,6 +15,7 @@ const eslintConfig = [
     rules: {
       'no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off', // Disable the restriction on 'any' type
+      'jsx-a11y/alt-text': 'off',
       // Don't break build on unused variables
     },
   },

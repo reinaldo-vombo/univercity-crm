@@ -3,7 +3,10 @@
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  validatedActionWithUser,
+  validatedActionWithUserJson,
+} from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
 import { ActionResult } from '../types/api-error';
 import {
@@ -13,11 +16,9 @@ import {
 } from '../lib/validation/curses';
 import { TCourse } from '../types/global';
 
-export const addNewCourse = validatedActionWithUser(
+export const addNewCourse = validatedActionWithUserJson(
   courseSchema,
   async (data, _, user): Promise<ActionResult<TCourse>> => {
-    console.log(data);
-
     try {
       const curses = await serverFetch<TCourse>(`/course?name=${user.name}`, {
         method: 'POST',

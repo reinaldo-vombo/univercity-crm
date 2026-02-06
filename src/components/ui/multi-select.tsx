@@ -68,7 +68,7 @@ interface MultiSelectProps
       /** The text to display for the option. */
       label: string;
       /** The unique value associated with the option. */
-      value: string;
+      value: any;
       /** Optional icon component to display alongside the option. */
       icon?: React.ComponentType<{ className?: string }>;
       /** Optional image component to display alongside the option. */
@@ -79,13 +79,14 @@ interface MultiSelectProps
     * Callback function triggered when the selected values change.
     * Receives an array of the new selected values.
     */
-   onValueChange?: (value: string[]) => void;
+   onValueChange?: (value: string[] | number[]) => void;
    field: {
-      onChange: (tags: string[]) => void;
+      onChange: (tags: string[] | number[]) => void;
    }
 
    /** The default selected values when the component mounts. */
-   defaultValue?: string[];
+   // defaultValue?: string[] | string[];
+   defaultValue?: any[];
 
    /**
     * Placeholder text to be displayed when no values are selected.

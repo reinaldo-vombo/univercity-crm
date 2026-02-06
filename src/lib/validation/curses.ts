@@ -1,21 +1,23 @@
 import { z } from 'zod';
 
 export const courseSchema = z.object({
-  title: z.string({
-    required_error: 'Titulo é obrigatorio',
-  }),
-  code: z.string({
-    required_error: 'Codigo é obrigatorio',
-  }),
-  academicDepartmentId: z.string({
-    required_error: 'Departamento acadêmico é obrigatorio',
-  }),
+  title: z
+    .string({
+      required_error: 'Titulo é obrigatorio',
+    })
+    .min(1, { message: 'Titulo é obrigatorio' }),
+  academicDepartmentId: z
+    .string({
+      required_error: 'Departamento acadêmico é obrigatorio',
+    })
+    .min(1, { message: 'Departamento é obrigatorio' }),
   durationInYears: z.coerce.number({
     required_error: 'O ano de duração é obrigatorio',
   }),
-  yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']),
-  shiftId: z.coerce.number(),
   priceId: z.string().optional(),
+  shiftIds: z
+    .array(z.coerce.number())
+    .min(1, { message: 'Selecione os turnos' }),
 });
 export const updateCourseSchema = z.object({
   id: z.string(),
@@ -28,12 +30,10 @@ export const updateCourseSchema = z.object({
   durationInYears: z.coerce.number({
     required_error: 'O ano de duração é obrigatorio',
   }),
-  code: z.string({
-    required_error: 'Codigo é obrigatorio',
-  }),
-  yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']),
-  shiftId: z.coerce.number(),
   priceId: z.string().optional(),
+  shiftIds: z
+    .array(z.coerce.number())
+    .min(1, { message: 'Selecione os turnos' }),
 });
 export const assignRemoveCoursesZodSchema = z.object({
   courseId: z.string().uuid(),

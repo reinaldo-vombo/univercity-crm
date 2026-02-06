@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/shared/breadcrumb";
-import { ROUTES } from "@/constants/mock-data";
+import { ROUTES } from "@/constants/routes"
 import { Suspense } from "react";
 import { BuildingTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
@@ -7,7 +7,7 @@ import { Metadata } from "next";
 //diciplinas
 
 export const metadata: Metadata = {
-   title: 'Edificil'
+   title: 'Edificíls'
 }
 
 export default function BuildingsPage() {

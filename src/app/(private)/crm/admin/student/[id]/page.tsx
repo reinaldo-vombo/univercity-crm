@@ -9,7 +9,7 @@ import Ping from "@/components/shared/ping";
 import SheetModal from "@/components/shared/sheet-modal";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ROUTES } from "@/constants/mock-data";
+import { ROUTES } from "@/constants/routes"
 import { formatCurrency } from "@/lib/helper";
 import { ArrowLeft, MessageCircle, Pen } from "lucide-react";
 

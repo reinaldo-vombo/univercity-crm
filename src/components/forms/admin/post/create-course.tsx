@@ -21,6 +21,7 @@ import { TDepartemant } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useSheet } from "@/providers/sheet-provider"
+import { MultiSelect } from "@/components/ui/multi-select"
 
 type TProps = {
    departments: TDepartemant[]
@@ -37,11 +38,9 @@ const CreateCourseForm = ({ departments }: TProps) => {
    const form = useForm<z.infer<typeof courseSchema>>({
       resolver: zodResolver(courseSchema),
       defaultValues: {
-         title: undefined,
-         code: undefined,
-         shiftId: 1,
-         yearLevel: "FIRST",
+         title: '',
          durationInYears: 4,
+         shiftIds: [],
          academicDepartmentId: undefined,
       }
    })
@@ -51,7 +50,11 @@ const CreateCourseForm = ({ departments }: TProps) => {
 
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
-         formData.append(key, value);
+         if (Array.isArray(value)) {
+            value.forEach((v) => formData.append(key, v));
+         } else {
+            formData.append(key, value as any);
+         }
       });
       startTransition(async () => {
          try {
@@ -95,6 +98,29 @@ const CreateCourseForm = ({ departments }: TProps) => {
             />
             <FormField
                control={form.control}
+               name="shiftIds"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Turnos</FormLabel>
+                     <FormControl>
+                        <MultiSelect
+                           modalPopover={true}
+                           field={field}
+                           options={DUMMY_DATA.shiftsNumber}
+                           defaultValue={field.value}
+                           placeholder="Selecione as desciplinas"
+                           variant="inverted"
+                           animation={2}
+                           maxCount={10}
+                        />
+                     </FormControl>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
                name="durationInYears"
                render={({ field }) => (
                   <FormItem>
@@ -124,58 +150,6 @@ const CreateCourseForm = ({ departments }: TProps) => {
                            formField={field} />
                      </FormControl>
                      <FormDescription>O departamento ao qual o curso pertence</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="code"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Codigo</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Ex: MAT101 "
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>O codigo do curso</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="shiftId"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Turno</FormLabel>
-                     <FormControl>
-                        <Selector
-                           placeholder="EX: Manhã, Tarde, Noite"
-                           formField={field}
-                           className="w-full"
-                           options={DUMMY_DATA.shifts} />
-                     </FormControl>
-                     <FormDescription>EX: Manhã, Tarde, Noite</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="yearLevel"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Nivel do curso</FormLabel>
-                     <FormControl>
-                        <Selector
-                           formField={field}
-                           placeholder="EX: primero ano, segundo ano"
-                           className="w-full"
-                           options={DUMMY_DATA.yearLevel} />
-                     </FormControl>
-                     <FormDescription>Ex: 1ª, 2ª, 3ª, 4ª, 5ª</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

@@ -1,5 +1,6 @@
 // lib/columns/studentColumns.ts
 
+import { Fragment } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { BookAIcon, Building, Calendar, Eye, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
@@ -11,9 +12,11 @@ import { AcademicFaculty } from "../academic-faculty/columns"
 import Avatar from "@/components/shared/avatar"
 import { deleteDepartment } from "@/actions/departement"
 import DepartmenteDetails from "@/components/admin/container/departmente-details"
-import UpdatedDepartmentForm from "@/components/forms/admin/update/update-department"
 import { createUniqueId, formatDate } from "@/lib/helper"
-import { Fragment } from "react"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdatedDepartmentForm = dynamic(() => import("@/components/forms/admin/update/update-department"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 
 export function DepartementColumns(users: TUser[], academicFaculty: AcademicFaculty[]): ColumnDef<TDepartemant>[] {

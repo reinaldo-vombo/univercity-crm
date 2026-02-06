@@ -20,7 +20,7 @@ import { adminSchema } from "@/lib/validation/admin"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { Dispatch, SetStateAction, useState } from "react"
-import { ROUTES } from "@/constants/mock-data"
+import { ROUTES } from "@/constants/routes"
 import { Eye, EyeClosed } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -40,14 +40,10 @@ export default function AdminLogin({ onChange }: TProps) {
    })
    async function onSubmit(values: z.infer<typeof adminSchema>) {
       const { email, password } = values;
-
-      const userType = "admin";
-      const identifier = email;
       try {
          const res = await signIn("credentials", {
             redirect: false,
-            user_type: userType,
-            identifier,
+            email,
             password,
          });
 

@@ -19,7 +19,10 @@ export const updateSchema = z.object({
   email: z.string().email({ message: 'Email é obrigatorio' }),
   role: z.string().optional(),
   contact: z
-    .object({ phone: z.coerce.number(), location: z.string() })
+    .object({
+      phone: z.coerce.number().optional(),
+      location: z.string().optional(),
+    })
     .optional(),
   avatar: z
     .union([z.string().url(), z.instanceof(File)])

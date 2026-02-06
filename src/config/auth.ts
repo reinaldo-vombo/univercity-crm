@@ -1,7 +1,6 @@
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
-import { END_POINTS } from '@/constants/mock-data';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { logUserActivitys } from '@/actions/activitiys';
 
@@ -18,51 +17,22 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Sign in',
       credentials: {
-        user_type: { label: 'User Type', type: 'text' },
-        identifier: { label: 'ID or Email', type: 'text' },
+        email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (
-          !credentials ||
-          !credentials.user_type ||
-          !credentials.identifier ||
-          !credentials.password
-        ) {
+        if (!credentials || !credentials.email || !credentials.password) {
           return null;
         }
 
         const baseUrl = process.env.API_BASE_URL;
+        const body = {
+          email: credentials.email,
+          password: credentials.password,
+        };
 
-        let endpoint = '';
-        let body: any = {};
-        switch (credentials.user_type) {
-          case 'admin':
-            endpoint = END_POINTS.ADMIN;
-            body = {
-              email: credentials.identifier,
-              password: credentials.password,
-            };
-            break;
-          case 'faculty':
-            endpoint = END_POINTS.FACULTY;
-            body = {
-              facultyId: credentials.identifier,
-              password: credentials.password,
-            };
-            break;
-          case 'student':
-            endpoint = END_POINTS.STUDENTE;
-            body = {
-              studentId: credentials.identifier,
-              password: credentials.password,
-            };
-            break;
-          default:
-            return null;
-        }
         try {
-          const res = await fetch(`${baseUrl}${endpoint}`, {
+          const res = await fetch(`${baseUrl}/auth/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -149,9 +119,6 @@ export const authOptions: NextAuthOptions = {
           contact: user.contact,
           accessToken: user.accessToken,
           expiresAt: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60,
-          ...(user.role === 'admin' && { department: user.department }),
-          ...(user.role === 'student' && { studentId: user.studentId }),
-          ...(user.role === 'faculty' && { facultyId: user.facultyId }),
         };
       }
 
@@ -175,9 +142,6 @@ export const authOptions: NextAuthOptions = {
           avatar: token.avatar,
           contact: token.contact,
           accessToken: token.accessToken,
-          ...(token.role === 'admin' && { department: token.department }),
-          ...(token.role === 'student' && { class_id: token.class_id }),
-          ...(token.role === 'faculty' && { subjects: token.subjects }),
         },
         expiresAt: token.expiresAt,
       };

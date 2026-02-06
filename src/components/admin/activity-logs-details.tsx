@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import ActivityLogsWrapper from "./wrapper/cards-wrapper";
 import Link from "next/link";
-import { ROUTES } from "@/constants/mock-data";
+import { ROUTES } from "@/constants/routes"
 import ListItemsSkeleton from "../skeleton/list-items";
-import FilterActivictys from "./container/filter-activictys";
 import { Separator } from "../ui/separator";
 
 const ActivityLogsDetails = () => {
@@ -12,7 +11,6 @@ const ActivityLogsDetails = () => {
       <div className="bg-card rounded-lg p-4">
          <span className="font-semibold">Últimas Actividades</span>
          <div className="bg-card rounded-md p-2">
-            <FilterActivictys />
             <Suspense fallback={<ListItemsSkeleton />}>
                <ActivityLogsWrapper />
             </Suspense>

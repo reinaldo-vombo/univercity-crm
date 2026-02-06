@@ -14,9 +14,6 @@ type TProps = {
             lastName: string;
             profileImage: string | null;
          };
-         shift: {
-            name: string;
-         };
       }[];
    } & {
       id: string;

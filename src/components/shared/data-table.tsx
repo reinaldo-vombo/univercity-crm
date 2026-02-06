@@ -27,11 +27,14 @@ import { ChevronDown, File, Plus } from "lucide-react";
 import SheetModal from "./sheet-modal";
 import { TableExport } from "./table-export";
 import Popover from "./popover";
+import { DataTableToolbar } from "../table-filters/toolbar";
 
 type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];
    data: object[];
    className?: string
+
+   //toolbar
    filterColumn?: keyof TData; // e.g., "email"
    actionForm?: React.ReactNode;
    fileName?: string
@@ -39,11 +42,20 @@ type DataTableProps<TData, TValue> = {
    fileExport?: React.ReactNode;
    fileHerderes?: any
    modalTitle?: string
+   // Bulk action
+   onDeleteMany?: (ids: string[]) => Promise<any>;
+   onUpdateMany?: (ids: number[]) => void;
+   canDelete?: boolean;
+   canUpdate?: boolean;
 };
 
 export function DataTable<TValue>({
    columns,
    data,
+   canDelete,
+   canUpdate,
+   onDeleteMany,
+   onUpdateMany,
    filterColumn,
    actionForm,
    fileExport,
@@ -68,6 +80,7 @@ export function DataTable<TValue>({
          columnVisibility,
          rowSelection,
       },
+      enableRowSelection: true,
       onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
       onColumnVisibilityChange: setColumnVisibility,
@@ -80,10 +93,17 @@ export function DataTable<TValue>({
 
    return (
       <div className="w-full space-y-4">
+         <DataTableToolbar
+            table={table}
+            canDelete={canDelete}
+            canUpdate={canUpdate}
+            onDeleteMany={onDeleteMany}
+            onUpdateMany={onUpdateMany}
+         />
          <div className="flex items-center justify-between gap-2">
             {filterColumn && (
                <Input
-                  placeholder={`Filter by ${String(filterColumn)}...`}
+                  placeholder={`Filtrar por ${String(filterColumn)}...`}
                   value={(table.getColumn(filterColumn as string)?.getFilterValue() as string) ?? ""}
                   onChange={(e) =>
                      table.getColumn(filterColumn as string)?.setFilterValue(e.target.value)

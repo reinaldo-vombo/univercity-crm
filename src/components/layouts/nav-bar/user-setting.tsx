@@ -1,4 +1,4 @@
-import { ROUTES } from '@/constants/mock-data'
+import { ROUTES } from '@/constants/routes'
 import { Info, Settings, User } from 'lucide-react'
 import Link from 'next/link'
 
@@ -20,7 +20,7 @@ const links = [
    },
 ]
 
-const UserSetting = ({ userId }: { userId: string }) => {
+const UserSetting = () => {
 
    return (
       <div>
@@ -28,8 +28,7 @@ const UserSetting = ({ userId }: { userId: string }) => {
             {links.map((link) => (
                <li key={link.href}>
                   <Link
-                     href={link.href === `${process.env.NEXT_PUBLIC_BASE_URL}/crm/profile` ? `${link.href}/${userId}` : link.href
-                     }
+                     href={link.href}
                      className='group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium hover:bg-primary-foreground'
                   >
                      {link.icon}

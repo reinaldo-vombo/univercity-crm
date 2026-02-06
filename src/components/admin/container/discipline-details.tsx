@@ -9,7 +9,7 @@ type TProps = {
 }
 
 const DisciplineDetails = ({ data }: TProps) => {
-   const { name, code, minimumGradeToDismiss, courses } = data;
+   const { name, suspendGrade, courses } = data;
    return (
       <div>
          <div className="border rounded-lg p-4 mb-6 flex items-center justify-between">
@@ -26,12 +26,12 @@ const DisciplineDetails = ({ data }: TProps) => {
                <ul className="space-y-2">
                   <li>Codigo:
                      <div className='rounded-md border p-2 flex gap-2 items-center'>
-                        <Hash className='text-orange-500 size-4' /><b>{code}</b>
+                        <Hash className='text-orange-500 size-4' /><b>hello</b>
                      </div>
                   </li>
                   <li>Nota de dispenção:
                      <div className='rounded-md border p-2 flex gap-2 items-center'>
-                        <BookDown className='text-fuchsia-500 size-4' /><b>{minimumGradeToDismiss || 'Não atriudo'}</b>
+                        <BookDown className='text-fuchsia-500 size-4' /><b>{suspendGrade || 'Não atriudo'}</b>
                      </div>
                   </li>
                </ul>

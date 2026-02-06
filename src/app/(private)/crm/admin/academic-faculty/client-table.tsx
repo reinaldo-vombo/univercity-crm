@@ -1,9 +1,12 @@
 "use client";
 
-import CreateAcademicFacultyForm from "@/components/forms/admin/post/create-academic-faculty";
 import { AcademicFacultyColumns, AcademicFaculty } from "./columns";
 import { DataTable } from "@/components/shared/data-table";
 import { createUniqueId } from "@/lib/helper";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const CreateAcademicFacultyForm = dynamic(() => import("@/components/forms/admin/post/create-academic-faculty"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    data: AcademicFaculty[];

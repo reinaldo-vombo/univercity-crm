@@ -4,7 +4,7 @@ import Avatar from "../shared/avatar"
 import { Check, Mail, Pen, Phone, Pin, StarsIcon, Trash } from "lucide-react"
 import { Button } from "../ui/button"
 import Breadcrumb from "../shared/breadcrumb"
-import { ROUTES } from "@/constants/mock-data"
+import { ROUTES } from "@/constants/routes"
 import { getSigleUser } from "@/services/data/user"
 
 

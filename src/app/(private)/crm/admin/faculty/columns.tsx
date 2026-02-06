@@ -1,23 +1,26 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Eye, Hash, Mail, Moon, Pen, Phone, Sun, SunMoon, Trash } from "lucide-react"
+import { Eye, Hash, Mail, Pen, Phone, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global"
+import { TDepartemant, TFaculty } from "@/types/global"
 import Avatar from "@/components/shared/avatar"
 import { deleteFaculty } from "@/actions/faculty"
-import UpdateFacultyFrom from "@/components/forms/admin/update/update-falculty"
 import FalcultyDetails from "@/components/admin/container/falculty/falculty-details"
 import { Badge } from "@/components/ui/badge"
-import { DataTableColumnHeaderName } from "@/components/admin/table-filters/name-filter"
-import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter"
+import { DataTableColumnHeaderName } from "@/components/table-filters/name-filter"
+import { UniversalColumnFilter } from "@/components/table-filters/column-filter"
 import { createUniqueId } from "@/lib/helper"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdateFacultyFrom = dynamic(() => import("@/components/forms/admin/update/update-falculty"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 
-export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TAcademicFaculty[]): ColumnDef<TFaculty>[] {
+export function FacultyColumns(departemants: TDepartemant[], courses: any): ColumnDef<TFaculty>[] {
 
    return [
       {
@@ -27,7 +30,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
          ),
          cell: ({ row }) => {
             const faculty = row.original;
-            const fullName = `${faculty.firstName} ${faculty.middleName} ${faculty.lastName}`
+            const fullName = `${faculty.firstName} ${faculty.middleName || ''} ${faculty.lastName}`
             const name = `${faculty.firstName} ${faculty.lastName}`
             return (
                <div className="flex items-center gap-2">
@@ -73,16 +76,6 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
          },
       },
       {
-         accessorKey: "designation",
-         header: "Designação",
-         cell: ({ row }) => (
-            <Badge variant="secondary" className="text-xs">
-               {row.getValue("designation")}
-            </Badge>
-         ),
-      },
-
-      {
          accessorKey: "email",
          header: ({ column }) => (
             <DataTableColumnHeaderName column={column} title="Email" />
@@ -121,35 +114,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
             </div>
          ),
       },
-      {
-         accessorKey: "shift",
-         accessorFn: (row) => row.shift.name,
-         header: ({ column }) => (
-            <UniversalColumnFilter
-               column={column}
-               title="Turno"
-               options={[
-                  { value: "Manhã", label: "Manhã" },
-                  { value: "Tarde", label: "Tarde" },
-                  { value: "Noite", label: "Noite" },
-               ]}
-            />
-         ),
-         cell: ({ row }) => {
-            const shift = row.original.shift.name;
-            return (
-               <div className="flex items-center gap-2">
-                  {shift === "Manhã" ?
-                     <Sun className="text-yellow-300 size-4" />
-                     :
-                     shift === "Tarde" ?
-                        <SunMoon className="text-amber-500" />
-                        : <Moon className="text-blue-500 size-4" />}
-                  <span>{shift}</span>
-               </div>
-            )
-         },
-      },
+
       {
          id: "actions",
          header: "Acção",
@@ -189,7 +154,7 @@ export function FacultyColumns(departemants: TDepartemant[], academicFaculty: TA
                      className="sm:max-w-md"
                      title="Atualização do professore"
                      description='Formulario de atualização do professore'>
-                     <UpdateFacultyFrom departemants={departemants} academicFaculty={academicFaculty} defaultValues={falculty} />
+                     <UpdateFacultyFrom departemants={departemants} defaultValues={falculty} courses={courses} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
