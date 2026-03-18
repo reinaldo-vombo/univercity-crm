@@ -5,29 +5,25 @@ import { DataTable } from "@/components/shared/data-table";
 import { createUniqueId } from "@/lib/helper";
 import FormLoading from "@/components/skeleton/form"
 import dynamic from "next/dynamic"
+import { TPrice } from "@/types/global";
 const CreateAcademicFacultyForm = dynamic(() => import("@/components/forms/admin/post/create-academic-faculty"),
    { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    data: AcademicFaculty[];
+   prices: TPrice[]
 }
-const herader = {
-   id: "ID",
-   title: "Full Name",
-   createdAt: "Email",
-}
+
 const uid = createUniqueId("create");
 
-export function AcademicFacultyTable({ data }: Props) {
-   const columns = AcademicFacultyColumns();
+export function AcademicFacultyTable({ data, prices }: Props) {
+   const columns = AcademicFacultyColumns(prices);
 
    return <DataTable
       columns={columns}
-      fileHerderes={herader}
       sheetId={uid}
       modalTitle="Unidade Acadêmica"
       actionForm={<CreateAcademicFacultyForm />}
-      fileName="unidade-academica"
       data={data}
       filterColumn="title"
    />;

@@ -53,7 +53,7 @@ export const addNewFaculty = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updatedFaculty = validatedActionWithUserJson(
   updateFacultySchema,
@@ -87,7 +87,7 @@ export const updatedFaculty = validatedActionWithUserJson(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 
 export const assingFacultyToDiscipline = validatedActionWithUserJson(
@@ -97,11 +97,11 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
       const { offeredCourseSectionId, assignments } = data;
 
       const discipline = await serverFetch<TFacultyDisciplines>(
-        `/faculty/assign-discipline/${offeredCourseSectionId}`,
+        `/faculty/assign-faculty-to-section/${offeredCourseSectionId}`,
         {
           method: 'POST',
           body: { assignments },
-        }
+        },
       );
 
       // revalidateTag('discipline');
@@ -126,11 +126,11 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 
 export const deleteFaculty = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TFaculty>> => {
   try {
     const data = await serverFetch<TFaculty>(`/faculty/${id}`, {

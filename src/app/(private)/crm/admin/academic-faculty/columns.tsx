@@ -7,7 +7,7 @@ import AlertModal from "@/components/shared/alert-modal";
 import { toast } from "sonner";
 import { FLASH_MESSAGE } from "@/constants/flash-message";
 import { deleteFaculty } from "@/actions/academic-faculty";
-import { TAcademicFaculty } from "@/types/global";
+import { TAcademicFaculty, TPrice } from "@/types/global";
 import { handleApiError } from "@/services/error-handler";
 import { formatDate } from "@/lib/helper";
 import FormLoading from "@/components/skeleton/form"
@@ -24,9 +24,8 @@ export type AcademicFaculty = {
    students: number;
 }
 
-export function AcademicFacultyColumns(): ColumnDef<TAcademicFaculty>[] {
+export function AcademicFacultyColumns(prices: TPrice[]): ColumnDef<TAcademicFaculty>[] {
    return [
-
       {
          accessorKey: "title",
          header: "Titulo",
@@ -66,7 +65,7 @@ export function AcademicFacultyColumns(): ColumnDef<TAcademicFaculty>[] {
                      id={`edit-${academic.id}`}
                      title="Atualizar Unidade Academica"
                      description='Formulario para atualizar Unidade Academica'>
-                     <UpadateAcademicFaculty values={academic} />
+                     <UpadateAcademicFaculty values={academic} prices={prices} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}

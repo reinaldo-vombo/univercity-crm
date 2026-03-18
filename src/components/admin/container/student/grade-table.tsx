@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react"
 import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { GradesDocument } from "@/components/container/receipt/grades-document";
+import { GradesDocument } from "@/components/export/pdfs/grades-document";
 
 const GRADES = [
    { id: 1, descipline: 'Programação IV', value: 10, mac: 10, cpf: 9, cae: 8, exa: 7.5, cfe: 6, rec: 10 },

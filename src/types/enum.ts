@@ -8,3 +8,24 @@ export type TDaysOfWeek =
   | 'SABADO'
   | 'DOMINGO';
 export type TSemesterRegistrationStatus = 'UPCOMING' | 'ONGOING' | 'ENDED';
+export type TPaymentStatus = 'PAID' | 'PENDING' | 'OVERDUE';
+export type TStatus = 'APROVE' | 'PENDING' | 'DENIDE';
+export type TPaymentMethod = 'INVOICE' | 'EXPRESS';
+export type TRegistrationStatus = 'CONFIRMED' | 'WAITING_LIST' | 'CANCELLED';
+export type TStudentType = 'NORMAL' | 'CADEIRANTE' | 'BOLSEIRO';
+export type TMarkStatus =
+  | 'DISPENSADO'
+  | 'ADMITIDO'
+  | 'APROVADO'
+  | 'RECURSO'
+  | 'ESPECIAL'
+  | 'REPROVADO'
+  | 'PENDENTE';
+export type DayOfWeek =
+  | 'SEGUNDA'
+  | 'TERCA'
+  | 'QUARTA'
+  | 'QUINTA'
+  | 'SEXTA'
+  | 'SABADO'
+  | 'DOMINGO';

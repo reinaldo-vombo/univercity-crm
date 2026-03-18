@@ -1,44 +1,31 @@
 'use client'
-import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { createQueryString } from "@/lib/helper"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react"
 
-const MESSAGE_TYPE = ['system', 'sms', 'mail']
+const MESSAGE_TYPE = ['WhatsApp', 'System', 'SMS', 'Mail']
 const MessageSender = () => {
-   const router = useRouter();
-   const pathname = usePathname();
-   const searchParams = useSearchParams();
-   const query = searchParams.get('type');
-   const generateQueryString = useCallback(
-      (name: string, value: string) => createQueryString(searchParams, name, value),
-      [searchParams]
-   );
-   const onChange = (queryName: string, queryValue: string) => {
-      router.push(pathname + '?' + generateQueryString(queryName, queryValue), { scroll: false })
+   const [chanelType, setChanelType] = useState<string | null>(null)
+   const onChange = (type: string) => {
+      setChanelType(type)
    }
+   const isSelected = chanelType === null ? true : false
    return (
       <div className="space-y-6">
          <p>Selecione o canal de menssagem</p>
          <div className="flex items-center gap-4">
             {MESSAGE_TYPE.map((type) => (
-               <Button variant={query === type ? 'secondary' : 'ghost'}
-                  onClick={() => onChange('type', type)} key={type}>{type}</Button>
+               <Button variant='default' className={`${chanelType === 'WhatsApp' ? 'bg-green-500' : chanelType === 'System' ? 'bg-primary' : 'bg-red-500'}`}
+                  onClick={() => onChange(type)} key={type}>{type}</Button>
             ))}
          </div>
          <ScrollArea className="h-24">
-            message
+            <div className="p-1 rounded-t-full rounded-bl-full w-fit bg-primary text-white">
+               hello
+            </div>
          </ScrollArea>
-         <Input className="h-9" placeholder="Escreva a menssagem" />
-         {/* <div className="grid w-full gap-3">
-            <Label htmlFor="message-2">Your Message</Label>
-            <Textarea placeholder="Type your message here." id="message-2" />
-            <p className="text-muted-foreground text-sm">
-               Your message will be copied to the support team.
-            </p>
-         </div> */}
+         <Textarea placeholder="Escreva a mensagem" disabled={isSelected} />
       </div>
    )
 }

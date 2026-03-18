@@ -23,9 +23,8 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronDown, File, Plus } from "lucide-react";
+import { ChevronDown, Download, Plus } from "lucide-react";
 import SheetModal from "./sheet-modal";
-import { TableExport } from "./table-export";
 import Popover from "./popover";
 import { DataTableToolbar } from "../table-filters/toolbar";
 
@@ -59,8 +58,6 @@ export function DataTable<TValue>({
    filterColumn,
    actionForm,
    fileExport,
-   fileHerderes,
-   fileName,
    sheetId,
    modalTitle,
    className
@@ -147,15 +144,10 @@ export function DataTable<TValue>({
                   </SheetModal>
                )}
                {fileExport && (
-                  <Popover trigger={<File className="text-red-500" />}>
+                  <Popover trigger={<Download className="h-4 w-4" />}>
                      {fileExport}
                   </Popover>
                )}
-               <TableExport
-                  data={data}
-                  filename={fileName}
-                  headers={fileHerderes}
-               />
             </div>
          </div>
 

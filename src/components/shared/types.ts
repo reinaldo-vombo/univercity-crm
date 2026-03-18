@@ -9,6 +9,7 @@ export type TSheetProps = {
   triggerStyle?: string;
   title: string;
   description?: string;
+  url?: string;
 };
 
 export type TCardProps = {

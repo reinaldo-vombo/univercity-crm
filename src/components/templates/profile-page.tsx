@@ -67,10 +67,10 @@ const UserProfilePage = async ({ id }: { id: any }) => {
                                  </Button>
                                  <div className="space-y-2">
                                     <h3 className="font-bold">{log.action}</h3>
-                                    {log.User && (
+                                    {log.user && (
                                        <div className="flex items-center gap-4">
-                                          <Avatar name={log.User.name} photo={log.User.avatar} className="size-12" />
-                                          <span className="line-clamp-1">{log.User.name}</span>
+                                          <Avatar name={log.user.name} photo={log.user.avatar} className="size-12" />
+                                          <span className="line-clamp-1">{log.user.name}</span>
                                        </div>
                                     )}
                                  </div>

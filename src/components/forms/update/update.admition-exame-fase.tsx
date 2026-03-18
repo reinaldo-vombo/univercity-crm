@@ -44,7 +44,6 @@ const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
          startDate
       }
    })
-   console.log(form.getValues());
 
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof updateAdmitionExameFaseSchema>) {

@@ -213,11 +213,6 @@ export const DUMMY_DATA = {
     'nature',
     'dark-nature',
     'vitage',
-    'amethyst',
-    'dark-vitage',
-    'dark-dafault',
-    'dark-solar-dust',
-    'dark-amethyst',
   ],
   StudentType: [
     {

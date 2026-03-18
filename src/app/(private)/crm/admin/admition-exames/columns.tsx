@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { BadgeDollarSign, Calendar, Eye, ListCollapse, Pen, Trash } from "lucide-react"
+import { BadgeDollarSign, Calendar, Eye, ListCollapse, Pen, Trash, User } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -9,7 +9,6 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TAdmitionExame } from "@/types/global"
 import { Badge } from "@/components/ui/badge"
 import AdmitionExameDetails from "@/components/admin/container/admition-exame/admition-exame-details"
-import { DataTableColumnHeaderName } from "@/components/table-filters/name-filter"
 import { deleteAdmitionExame } from "@/actions/admition-exame"
 import { createUniqueId, formatCurrency, formatDate } from "@/lib/helper"
 import { UniversalColumnFilter } from "@/components/table-filters/column-filter"
@@ -21,10 +20,21 @@ const UpdateAdmitionExameForm = dynamic(() => import("@/components/forms/admin/u
 export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
    return [
       {
-         accessorKey: "applicantName",
-         header: ({ column }) => (
-            <DataTableColumnHeaderName column={column} title="Nome" />
-         ),
+         accessorKey: "firstName",
+         header: 'Nome Completo',
+         cell: ({ row }) => {
+            const firstName = row.original.firstName;
+            const middleName = row.original.middleName || '';
+            const lastName = row.original.lastName;
+            return (
+               <div className="flex items-center gap-3">
+                  <User className="text-green-500" />
+                  <span>
+                     {`${firstName} ${middleName} ${lastName}`}
+                  </span>
+               </div>
+            );
+         },
       },
       {
          accessorKey: "fase",
@@ -85,28 +95,6 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
          },
       },
       {
-         accessorKey: "aprovePayment",
-         accessorFn: (row) => row.aprovePayment,
-         header: ({ column }) => (
-            <UniversalColumnFilter
-               column={column}
-               title="Status do pagamento"
-               options={[
-                  { value: "true", label: "Confirmado" },
-                  { value: "false", label: "Pendente" },
-               ]}
-            />
-         ),
-         cell: ({ row }) => {
-            const status = row.original.aprovePayment;
-            return (
-               <Badge className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
-                  {status ? 'Confirmado' : 'Pendente'}
-               </Badge>
-            );
-         },
-      },
-      {
          accessorKey: "passed",
          accessorFn: (row) => row.passed,
          header: ({ column }) => (
@@ -163,7 +151,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                      side="right"
                      id={uid}
                      title="Detalhes do exame de admisão"
-                     className="sm:max-w-lg"
+                     className="sm:max-w-5xl"
                      description='Detalhes do exame de admisão'>
                      <AdmitionExameDetails data={exames} />
                   </SheetModal>

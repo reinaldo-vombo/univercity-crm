@@ -1,17 +1,15 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Trash } from "lucide-react";
-import AlertModal from "@/components/shared/alert-modal";
-import { toast } from "sonner";
-import { FLASH_MESSAGE } from "@/constants/flash-message";
+import { Eye } from "lucide-react";
 import { TActionHistory, TUser } from "@/types/global";
 import { formatDate, formatTimeAgo } from "@/lib/helper";
 import Avatar from "@/components/shared/avatar";
 import { Badge } from "@/components/ui/badge";
-import { deleteAudiLog } from "@/actions/activitiys";
 import { CloseBage, CompleteBage, ProgressBage } from "@/components/shared/bages";
 import { UniversalColumnFilter } from "@/components/table-filters/column-filter";
+import SheetModal from "@/components/shared/sheet-modal";
+import AuditDetails from "@/components/admin/container/audit-details";
 
 
 export function AuditColumns(users: TUser[]): ColumnDef<TActionHistory>[] {
@@ -31,7 +29,7 @@ export function AuditColumns(users: TUser[]): ColumnDef<TActionHistory>[] {
             />
          ),
          cell: ({ row }) => {
-            const user = row.original?.User;
+            const user = row.original?.user;
 
             return (
                <>
@@ -108,25 +106,17 @@ export function AuditColumns(users: TUser[]): ColumnDef<TActionHistory>[] {
          header: 'Acção',
          cell: ({ row }) => {
             const audit = row.original
-
-            const handleDelete = async (id: string) => {
-               try {
-                  const res = await deleteAudiLog(id);
-                  if (res.error) {
-                     toast.warning(res.message)
-                  }
-                  toast.success(FLASH_MESSAGE.DELETED);
-                  // Optionally refresh UI or mutate local state
-               } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
-                  console.error(err);
-               }
-            };
             return (
                <div className="flex items-center gap-3">
-                  <AlertModal
-                     trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
-                     action={() => handleDelete(audit.id)} />
+                  <SheetModal
+                     trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
+                     side="right"
+                     id={`vew-${audit.id}`}
+                     title="Detalhes do Registro"
+                     className="sm:max-w-lg"
+                     description='Decrição do Registro'>
+                     <AuditDetails audit={audit} />
+                  </SheetModal>
                </div>
             )
          },

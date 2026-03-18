@@ -1,6 +1,9 @@
 
-import { PaymentTable } from "./client-table";
+// import { PaymentTable } from "./client-table";
 
 export function PaymentTableServer() {
-   return <PaymentTable />;
+   return (
+      <h2>heelo</h2>
+      // <PaymentTable />
+   );
 }

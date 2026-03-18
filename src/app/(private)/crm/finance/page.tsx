@@ -1,13 +1,12 @@
 import Breadcrumb from '@/components/shared/breadcrumb'
-import DataTableSkeleton from '@/components/skeleton/data-table'
 import { Metadata } from 'next'
 import React, { Suspense } from 'react'
-import { PaymentTableServer } from './table-wrapper'
 import { ROUTES } from '@/constants/routes'
-import BudgetCards from '@/components/layouts/cards/budget'
+import { TuitionDashboard } from '@/components/admin/wrapper/tuition-dashboard-wrapper'
+import TuitionDashboardSkeleton from '@/components/skeleton/tuition-dashboard-skeleton'
 
 export const metadata: Metadata = {
-   title: 'Finanças'
+   title: 'Finanças - Todos Pagamentos de propina'
 }
 export default function FinancePage() {
    return (
@@ -18,11 +17,9 @@ export default function FinancePage() {
             pageUrl={`${ROUTES.DASHBOARD}/finance`}
             root={`${ROUTES.DASHBOARD}`} />
          <div className="mt-12 space-y-7">
-            <div>
-               <BudgetCards />
-            </div>
-            <Suspense fallback={<DataTableSkeleton />}>
-               <PaymentTableServer />
+
+            <Suspense fallback={<TuitionDashboardSkeleton />}>
+               <TuitionDashboard />
             </Suspense>
          </div>
       </section>

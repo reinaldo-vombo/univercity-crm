@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Download, Loader } from "lucide-react";
-import { getAllStudentDocList } from "@/services/data/student";
-import { toast } from "sonner";
+import { Label } from "@/components/ui/label"
+
 //admition-exame
 export default function ExportFacultysListFilterForm() {
    const [filters, setFilters] = useState({
@@ -15,37 +12,36 @@ export default function ExportFacultysListFilterForm() {
       limit: "500",
       academicDepartmentId: "",
    });
-   const [loading, setLoading] = useState(false);
 
    const handleChange = (key: string, value: string) => {
       setFilters((prev) => ({ ...prev, [key]: value }));
    };
 
-   const handleExport = async () => {
-      setLoading(true)
-      const query = new URLSearchParams(
-         Object.entries(filters).filter(([, v]) => v !== "")
-      ).toString();
+   // const handleExport = async () => {
+   //    setLoading(true)
+   //    const query = new URLSearchParams(
+   //       Object.entries(filters).filter(([, v]) => v !== "")
+   //    ).toString();
 
-      const response = await getAllStudentDocList(query);
-      if (!response.ok) {
-         toast.error("Erro ao exportar!");
-         setLoading(false)
-         return;
-      }
-      toast.success('Lista Expordata')
-      setLoading(false)
+   //    const response = await getAllStudentDocList(query);
+   //    if (!response.ok) {
+   //       toast.error("Erro ao exportar!");
+   //       setLoading(false)
+   //       return;
+   //    }
+   //    toast.success('Lista Expordata')
+   //    setLoading(false)
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `facultys.${filters.format}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-   };
+   //    const blob = await response.blob();
+   //    const url = window.URL.createObjectURL(blob);
+   //    const a = document.createElement("a");
+   //    a.href = url;
+   //    a.download = `facultys.${filters.format}`;
+   //    document.body.appendChild(a);
+   //    a.click();
+   //    a.remove();
+   //    window.URL.revokeObjectURL(url);
+   // };
 
    return (
       <div className="p-4 w-[280px] space-y-4">
@@ -90,7 +86,7 @@ export default function ExportFacultysListFilterForm() {
          </div>
 
 
-         <Button onClick={handleExport} className="w-full mt-2">
+         {/* <Button className="w-full mt-2">
             {loading ? (
                <>
                   <Loader className="w-4 h-4 mr-2 animate-spin" />
@@ -102,7 +98,7 @@ export default function ExportFacultysListFilterForm() {
                   Exportar
                </>
             )}
-         </Button>
+         </Button> */}
       </div>
    );
 }

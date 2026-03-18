@@ -1,131 +1,120 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Eye, Pen } from "lucide-react"
+import { Eye } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
-import { createUniqueId, formatCurrency, formatDate } from "@/lib/helper"
+import { createUniqueId, formatCurrency } from "@/lib/helper"
 import Avatar from "@/components/shared/avatar"
-import { TPayment } from "@/types/global"
-import InvoicePreview from "@/components/container/receipt/invoice-preview"
-import { CloseBage, CompleteBage } from "@/components/shared/bages"
-import { paymentStatusBage } from "@/constants/status"
+import { StudentDebtDetail } from "@/components/admin/container/student/student-debt-detail"
+import { Badge } from "@/components/ui/badge"
+import { StudentBreakdown } from "@/types/global"
 
-export function PaymentColumns(): ColumnDef<TPayment>[] {
+function debtStatusBadge(totalPending: number, totalLateFee: number) {
+   if (totalPending === 0)
+      return <Badge variant="default">Regularizado</Badge>
+   if (totalLateFee > 0)
+      return <Badge variant="destructive">Em atraso</Badge>
+   return <Badge variant="outline">Pendente</Badge>
+}
+
+export function StudentDebtColumns(): ColumnDef<StudentBreakdown>[] {
    return [
       {
-         accessorKey: "paymentId",
-         header: "Id",
+         accessorKey: "student",
+         header: "ID",
+         cell: ({ row }) => (
+            <span className="text-muted-foreground text-sm">
+               {row.original.student.studentId}
+            </span>
+         ),
       },
       {
-         accessorKey: "transactionRef",
-         header: "Referencia",
-      },
-      {
-         accessorKey: "TotalAmount",
-         header: "Valor pago",
+         accessorKey: "student.name",
+         header: "Aluno",
          cell: ({ row }) => {
-            const amount = row.original.TotalAmount;
+            const { name } = row.original.student
             return (
-               <b>{formatCurrency(amount)}</b>
-            );
+               <div className="flex items-center gap-2">
+                  <Avatar name={name} photo="" />
+                  <span className="font-medium">{name}</span>
+               </div>
+            )
          },
       },
       {
-         accessorKey: "extraAmount",
-         header: "Creditos",
+         accessorKey: "totalPaid",
+         header: "Total pago",
+         cell: ({ row }) => (
+            <b>{formatCurrency(row.original.totalPaid)}</b>
+         ),
+      },
+      {
+         accessorKey: "totalPending",
+         header: "Total pendente",
          cell: ({ row }) => {
-            const amount = row.original.extraAmount;
+            const amount = row.original.totalPending
             return (
-               <b>{formatCurrency(amount)}</b>
-            );
+               <b className={amount > 0 ? "text-destructive" : ""}>
+                  {formatCurrency(amount)}
+               </b>
+            )
+         },
+      },
+      {
+         accessorKey: "totalLateFee",
+         header: "Multa de atraso",
+         cell: ({ row }) => {
+            const amount = row.original.totalLateFee
+            return amount > 0
+               ? <b className="text-orange-500">{formatCurrency(amount)}</b>
+               : <span className="text-muted-foreground">—</span>
          },
       },
       {
          accessorKey: "status",
-         header: "Status",
+         header: "Estado",
          cell: ({ row }) => {
-            const status = row.original.status;
+            const { totalPending, totalLateFee } = row.original
+            return debtStatusBadge(totalPending, totalLateFee)
+         },
+      },
+      {
+         accessorKey: "monthlyPayments",
+         header: "Meses em dívida",
+         cell: ({ row }) => {
+            const pending = row.original.monthlyPayments.filter(
+               (m) => m.status === "PENDING" || m.status === "OVERDUE"
+            )
+            if (pending.length === 0)
+               return <span className="text-muted-foreground text-sm">Nenhum</span>
             return (
-               <div>
-                  {paymentStatusBage(status)}
+               <div className="flex flex-wrap gap-1">
+                  {pending.map((m) => (
+                     <Badge key={m.monthName} variant="outline" className="text-xs">
+                        {m.monthName.slice(0, 3)}
+                     </Badge>
+                  ))}
                </div>
-            );
+            )
          },
-      },
-      {
-         accessorKey: "paymentType",
-         header: "Tipo de Pagamento",
-      },
-      {
-         accessorKey: "entity",
-         cell: ({ row }) => {
-            const user = row.original.entity;
-            return (
-               <div className="flex items-center gap-2">
-                  <Avatar name={user} photo="/figure-1.png" />
-                  <b>{user}</b>
-               </div>
-            );
-         },
-      },
-
-      {
-         accessorKey: "atendent",
-         header: "Responsavel",
-         cell: ({ row }) => {
-            const user = row.original.atendent;
-            return (
-               <div className="flex items-center gap-2">
-                  <Avatar name={user} photo="/default.jpeg" />
-                  <b>{user}</b>
-               </div>
-            );
-         },
-      },
-      {
-         accessorKey: "approved",
-         header: "Situação",
-         cell: ({ row }) => {
-            const status = row.original.approved;
-            return (
-               <>
-                  {status ? <CompleteBage /> : <CloseBage />}
-               </>
-            );
-         },
-      },
-      {
-         accessorKey: "createdAt",
-         header: "Data de  publicação",
-         cell: ({ row }) => (
-            <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
-         ),
       },
       {
          id: "actions",
-         header: 'Acção',
-         cell: () => {
-            const uid = createUniqueId("view");
+         header: "Acção",
+         cell: ({ row }) => {
+            const student = row.original
+            const uid = createUniqueId("student-debt")
             return (
-               <div className="flex items-center gap-3">
-                  <SheetModal
-                     trigger={<Pen className="h-4 w-4  cursor-pointer" />}
-                     side="right"
-                     title="Atualizar curso"
-                     description=' Formulario para atualizar o curso'>
-                     hellot
-                  </SheetModal>
-                  <SheetModal
-                     trigger={<Eye className="h-4 w-4  cursor-pointer" />}
-                     side="right"
-                     id={uid}
-                     className="sm:max-w-lg"
-                     title="Descrição do pagamento"
-                     description='Descrição do pagamento'>
-                     <InvoicePreview />
-                  </SheetModal>
-
-               </div>
+               <SheetModal
+                  trigger={<Eye className="h-4 w-4 cursor-pointer" />}
+                  side="right"
+                  id={uid}
+                  className="sm:max-w-2xl"
+                  title={student.student.name}
+                  description="Detalhe de pagamentos por mês"
+               >
+                  <StudentDebtDetail data={student} />
+               </SheetModal>
             )
          },
       },

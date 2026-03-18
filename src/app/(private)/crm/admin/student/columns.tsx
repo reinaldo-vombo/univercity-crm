@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Calendar, CalendarArrowUp, Eye, Mail, Moon, Pen, Phone, Sun, SunMoon, Trash, User } from "lucide-react"
+import { Calendar, CalendarArrowUp, Eye, Mail, Pen, Phone, Trash, User } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -12,7 +12,7 @@ import { deleteFaculty } from "@/actions/faculty"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeaderName } from "@/components/table-filters/name-filter"
 import StudentDetails from "@/components/admin/container/student/student-details"
-import { createUniqueId, formatDate } from "@/lib/helper"
+import { createUniqueId, formatDate, showYearLevel } from "@/lib/helper"
 import { UniversalColumnFilter } from "@/components/table-filters/column-filter"
 import FormLoading from "@/components/skeleton/form"
 import dynamic from "next/dynamic"
@@ -32,7 +32,7 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
             const name = `${faculty.firstName} ${faculty.lastName}`
 
             return (
-               <Avatar name={name || '/default-img-1.jpeg'} photo={faculty?.profileImage || ''} className="size-11" />
+               <Avatar name={name} photo={faculty?.profileImage || ''} className="size-11" />
             );
          },
          enableSorting: false,
@@ -88,11 +88,14 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
                ]}
             />
          ),
-         cell: ({ row }) => (
-            <Badge className={row.getValue("isActive") ? 'bg-green-500' : 'bg-red-500'}>
-               {row.getValue("isActive")}
-            </Badge>
-         ),
+         cell: ({ row }) => {
+            const isActive = row.original.isActive
+            return (
+               <Badge className={isActive ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}>
+                  {isActive ? 'Activo' : 'Inactivo'}
+               </Badge>
+            )
+         },
       },
       {
          accessorKey: "yearLevel",
@@ -110,12 +113,16 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
                ]}
             />
          ),
-         cell: ({ row }) => (
-            <div className="flex items-center gap-2">
-               <CalendarArrowUp className="h-4 w-4 text-red-500" />
-               <span className="truncate max-w-[180px]">{row.getValue("yearLevel")}</span>
-            </div>
-         ),
+         cell: ({ row }) => {
+            const year = row.original.yearLevel;
+
+            return (
+               <div className="flex items-center gap-2">
+                  <CalendarArrowUp className="h-4 w-4 text-red-500" />
+                  <span className="truncate max-w-[180px]">{showYearLevel(year)}</span>
+               </div>
+            )
+         },
       },
       {
          accessorKey: "email",
@@ -157,39 +164,10 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
          ),
       },
       {
-         accessorKey: "shift",
-         accessorFn: (row) => row.shift,
-         header: ({ column }) => (
-            <UniversalColumnFilter
-               column={column}
-               title="Turno"
-               options={[
-                  { value: "Manhã", label: "Manhã" },
-                  { value: "Tarde", label: "Tarde" },
-                  { value: "Noite", label: "Noite" },
-               ]}
-            />
-         ),
-         cell: ({ row }) => {
-            const shift = row.original.shift.name
-            return (
-               <div className="flex items-center gap-2">
-                  {shift === "Manha" ?
-                     <Sun className="text-yellow-300 size-4" />
-                     :
-                     shift === "Tarde" ?
-                        <SunMoon className="text-amber-500" />
-                        : <Moon className="text-blue-500 size-4" />}
-                  <span>{shift}</span>
-               </div>
-            )
-         },
-      },
-      {
          accessorKey: "createdAt",
          header: "Data de cadastro",
          cell: ({ row }) => (
-            <div>
+            <div className="flex items-center gap-2">
                <Calendar className="h-4 w-4 text-yellow-500" />
                <b className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</b>
             </div>
@@ -200,7 +178,8 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
          id: "actions",
          header: 'Acção',
          cell: ({ row }) => {
-            const student = row.original
+            const student = row.original;
+            const name = `${student.firstName} ${student.lastName}`
 
             const handleDelete = async (id: string) => {
                try {
@@ -224,7 +203,8 @@ export function StudentColumns(academicSemester: TSemester[], courses: TCourse[]
                      side="right"
                      id={`view-${uid}`}
                      className="sm:max-w-md"
-                     title="Detalhes do aluno"
+                     title={`${name} - Detalhes`}
+                     url={`crm/admin/student/${student.id}`}
                      description='Informções relecionadass ao aluno'>
                      <StudentDetails data={student} />
                   </SheetModal>

@@ -3,25 +3,23 @@ import DataTableSkeleton from "@/components/skeleton/data-table";
 import { ROUTES } from "@/constants/routes"
 import { Suspense } from "react";
 import { AuditTableServer } from "./table-wrapper";
-import { TSeachParams } from "@/types/global";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-   title: 'Actividades'
+   title: 'Registro de Actividades'
 }
 
-export default async function AuditLogsPage({ searchParams }: TSeachParams) {
-   const { take } = await searchParams;
+export default async function AuditLogsPage() {
    return (
       <section className="col-span-12">
          <Breadcrumb
-            name="Actividades"
-            pageName="Actividades"
+            name="Registro de Actividadess"
+            pageName="Registro de Actividades"
             pageUrl={`${ROUTES.DASHBOARD}/admin/activitys`}
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
             <Suspense fallback={<DataTableSkeleton />}>
-               <AuditTableServer searchOptions={take} />
+               <AuditTableServer />
             </Suspense>
          </div>
       </section>

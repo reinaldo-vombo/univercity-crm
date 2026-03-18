@@ -6,4 +6,5 @@ export const academicFacultyacultySchema = z.object({
 export const updateAcademicFacultyacultySchema = z.object({
   id: z.string(),
   title: z.string().min(1),
+  priceId: z.string().optional(),
 });

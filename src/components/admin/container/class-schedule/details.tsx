@@ -8,6 +8,9 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { TClassShedule } from "@/types/global";
+import { PDFExporter } from "@/components/shared/pdf-button-exporter";
+import { SchedulePDF } from "@/lib/helper/export/schedule-pdf";
+import { showYearLevel } from "@/lib/helper";
 
 type Props = {
    data: TClassShedule;
@@ -37,13 +40,16 @@ export const TimetableGrid = ({ data, onDelete }: Props) => {
 
    return (
       <div className="space-y-6">
-         <div>
+         <div className="space-y-5">
             <h2 className="text-lg font-semibold">
-               {data.title} — {data.shift.name} ({data.yearLevel})
+               {data.title} — {data.shift.name} - {showYearLevel(data.yearLevel)}
             </h2>
             <p className="text-sm text-muted-foreground">
                Semestre: {data.semester.title}
             </p>
+            <PDFExporter document={<SchedulePDF data={data} />}
+               fileName={`horario-${data.title}.pdf`}
+               label="Exportar Horário" />
          </div>
 
          {daysOrder.map((day) => {

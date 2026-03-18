@@ -18,7 +18,7 @@ const Card = ({ children, lable, description, showTitle = true }: Props) => {
       <CardBody>
          <CardHeader>
             {showTitle && <CardTitle>{lable || 'card title'}</CardTitle>}
-            <CardDescription className="sr-only">{description || 'Card description'}</CardDescription>
+            {description && <CardDescription>{description}</CardDescription>}
          </CardHeader>
          <CardContent>
             {children}

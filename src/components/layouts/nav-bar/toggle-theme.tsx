@@ -9,14 +9,16 @@ const ThemeToggle = () => {
    const { setTheme, theme, resolvedTheme } = useTheme();
 
    const toggleTheme = () => {
-      const baseTheme = theme?.replace("dark-", "") ?? "light";
-      const isCurrentlyDark =
-         resolvedTheme === "dark" || theme?.startsWith("dark");
+      const root = document.documentElement;
+      const isCurrentlyDark = root.classList.contains("dark");
 
       if (isCurrentlyDark) {
-         setTheme(baseTheme);
+         root.classList.remove("dark");
+         // next-themes: pode usar sistema ou "light"
+         setTheme("light");
       } else {
-         setTheme(`dark-${baseTheme}`);
+         root.classList.add("dark");
+         setTheme("dark");
       }
    };
 

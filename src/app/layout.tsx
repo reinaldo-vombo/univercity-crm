@@ -17,10 +17,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt" suppressHydrationWarning>
-      {/* <head>
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <meta name="theme-color" content="#ffffff" />
-      </head> */}
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >

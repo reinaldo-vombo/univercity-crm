@@ -26,17 +26,7 @@ export const LINKS_BY_ROLE = {
     {
       href: `/crm/admin`,
       label: 'Admin Dashboard',
-      icon: React.createElement(Home),
-    },
-    {
-      href: `/crm/admin/users`,
-      label: 'Útilizadores',
-      icon: React.createElement(User),
-    },
-    {
-      href: `/crm/admin/activitys`,
-      label: 'Registo de actividade',
-      icon: React.createElement(Activity),
+      icon: React.createElement(Home, { className: 'text-neutral-500' }),
     },
     {
       href: `/crm/admin/academic-faculty`,
@@ -209,11 +199,6 @@ export const LINKS_BY_ROLE = {
       href: `/crm/finance`,
       label: 'Orçamentos',
       icon: React.createElement(Receipt),
-    },
-    {
-      href: `/crm/finance/payments`,
-      label: 'Pagamentos',
-      icon: React.createElement(ReceiptText),
     },
   ],
   manager: [

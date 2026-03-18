@@ -24,8 +24,6 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [x] Set-up next-auth config
 - [x] Create custom login page
 - [x] Create login for user/admin
-- [ ] Create login for student
-- [ ] Create login for teacher
 - [x] Create recover password page
 - [x] Protect routes using middlwere
 
@@ -70,31 +68,19 @@ A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**,
 - [ ] Server action rate limit
 - [x] Data revalidation
 - [x] Audit/Activity logs
-- [x] Dashord with report from CRUDs
 - [x] Notification in App
 - [x] Settigs per User/Notification/Theme
 - [x] Dark mode
 - [x] Color themes
 - [x] Online & Offline status
 - [x] Send menssage to app
-- [x] Send menssage to sms
-- [x] Send menssage to email
 - [x] Generate payment receipt
 - [x] Assigne user to departament
 - [x] Assigne faculty to curse
 - [x] Reusible table-table
 - [x] data-table filteres
-- [x] export button to export data as doc type /csv/excel/pdf
+- [x] export button to export data as doc type pdf
 - [x] Update account info
-
----
-
-### 🧑‍🎓 Student Module
-
-- [ ] Student model in Prisma
-- [ ] CRUD pages for students
-- [ ] View student profile and history
-- [ ] Associate students with courses
 
 ---
 

@@ -18,7 +18,7 @@ export const generateSlug = (text: string) => {
 
 export function formatDate(
   date: string | Date | number,
-  format: string = 'YYYY-MM-DD'
+  format: string = 'YYYY-MM-DD',
 ): string {
   const options: Intl.DateTimeFormatOptions = {};
 
@@ -85,7 +85,7 @@ export const formatCurrency = (price: number) => {
 export const createQueryString = (
   searchParams: URLSearchParams,
   name: string,
-  value: string
+  value: string,
 ): string => {
   const params = new URLSearchParams(searchParams.toString());
 
@@ -100,7 +100,7 @@ export const createQueryString = (
 };
 export const filterActionHistoryByDate = (
   data: TActionHistory[],
-  filter: string
+  filter: string,
 ): TActionHistory[] => {
   const now = new Date();
   return data.filter((item) => {
@@ -145,7 +145,7 @@ export const filterActionHistoryByDate = (
           23,
           59,
           59,
-          999
+          999,
         );
         return createdAt >= start && createdAt <= end;
       }
@@ -154,6 +154,30 @@ export const filterActionHistoryByDate = (
         return true;
     }
   });
+};
+export const getInitials = (title: string): string => {
+  const ignore = [
+    'da',
+    'de',
+    'do',
+    'das',
+    'dos',
+    'e',
+    'a',
+    'o',
+    'Da',
+    'De',
+    'Do',
+    'E',
+    'A',
+    'O',
+  ];
+  return title
+    .split(' ')
+    .filter((words) => !ignore.includes(words))
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
 };
 export const showYearLevel = (year: string) => {
   if (year === 'FIRST') return '1º ano';
