@@ -1,5 +1,6 @@
 
-import { getAllAcademicFaculty } from "@/services/data/academic";
+
+import { getAllCurses } from "@/services/data/couses";
 import { FalcultyTable } from "./client-table";
 import { getAllDepartments } from "@/services/data/department";
 import { getAllFalculty } from "@/services/data/falculty";
@@ -7,14 +8,14 @@ import { getAllFalculty } from "@/services/data/falculty";
 
 export async function FalcultyTableServer() {
 
-   const [departements, falcultys, academicFaculty] = await Promise.all([
+   const [departements, falcultys, courses] = await Promise.all([
       getAllDepartments(),
       getAllFalculty(),
-      getAllAcademicFaculty(),
+      getAllCurses()
    ]);
 
    return <FalcultyTable
       falcultys={falcultys}
-      departements={departements}
-      academicFaculty={academicFaculty} />;
+      courses={courses}
+      departements={departements} />;
 }

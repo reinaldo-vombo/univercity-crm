@@ -16,11 +16,12 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import Selector from "@/components/shared/selector"
-import { DUMMY_DATA } from "@/constants/mock-data"
 import { updateCourseSchema } from "@/lib/validation/curses"
 import { updateCourse } from "@/actions/courses"
 import { TCourse, TDepartemant, TPrice } from "@/types/global"
 import { useSheet } from "@/providers/sheet-provider"
+import { MultiSelect } from "@/components/ui/multi-select"
+import { DUMMY_DATA } from "@/constants/mock-data"
 
 type TProps = {
    values: TCourse;
@@ -30,26 +31,31 @@ type TProps = {
 
 const UpdateCourseForm = ({ values, departments, prices }: TProps) => {
    const { close } = useSheet()
-   const { id, title, code, durationInYears, yearLevel, academicDepartmentId, priceId, shiftId, } = values;
+   const { id, title, durationInYears, academicDepartmentId, priceId, CourseShift } = values;
+   const ids = CourseShift.map((item) => (
+      item.shift.id
+   ))
 
    const form = useForm<z.infer<typeof updateCourseSchema>>({
       resolver: zodResolver(updateCourseSchema),
       defaultValues: {
          id,
          title,
-         academicDepartmentId,
          durationInYears,
+         academicDepartmentId,
          priceId,
-         shiftId,
-         yearLevel,
-         code,
+         shiftIds: ids
       }
    })
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof updateCourseSchema>) {
       const formData: any = new FormData();
       Object.entries(values).forEach(([key, value]) => {
-         formData.append(key, value);
+         if (Array.isArray(value)) {
+            value.forEach((v) => formData.append(key, v));
+         } else {
+            formData.append(key, value as any);
+         }
       });
       startTransition(async () => {
          try {
@@ -78,9 +84,13 @@ const UpdateCourseForm = ({ values, departments, prices }: TProps) => {
       label: price.amount,
       value: price.id
    }))
+   const onInvalid = (errors: unknown) => {
+      //This helpe me fix a two week form not submiting god kwon's way bug
+      console.error("Validation Errors:", errors);
+   };
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
+         <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
                name="title"
@@ -93,6 +103,29 @@ const UpdateCourseForm = ({ values, departments, prices }: TProps) => {
                            {...field} />
                      </FormControl>
                      <FormDescription>O nome do curso</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="shiftIds"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Turnos</FormLabel>
+                     <FormControl>
+                        <MultiSelect
+                           modalPopover={true}
+                           field={field}
+                           options={DUMMY_DATA.shiftsNumber}
+                           defaultValue={field.value}
+                           placeholder="Selecione as desciplinas"
+                           variant="inverted"
+                           animation={2}
+                           maxCount={10}
+                        />
+                     </FormControl>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -132,40 +165,7 @@ const UpdateCourseForm = ({ values, departments, prices }: TProps) => {
                   </FormItem>
                )}
             />
-            <FormField
-               control={form.control}
-               name="code"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Codigo</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Ex: MAT101 "
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>O codigo do curso</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="shiftId"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Turno</FormLabel>
-                     <FormControl>
-                        <Selector
-                           placeholder="EX: Manhã, Tarde, Noite"
-                           formField={field}
-                           className="w-full"
-                           options={DUMMY_DATA.shifts} />
-                     </FormControl>
-                     <FormDescription>EX: Manhã, Tarde, Noite</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+
             <FormField
                control={form.control}
                name="priceId"
@@ -180,24 +180,6 @@ const UpdateCourseForm = ({ values, departments, prices }: TProps) => {
                            options={priceList} />
                      </FormControl>
                      <FormDescription>Propia do curso</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="yearLevel"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Nivel do curso</FormLabel>
-                     <FormControl>
-                        <Selector
-                           formField={field}
-                           placeholder="EX: primero ano, segundo ano"
-                           className="w-full"
-                           options={DUMMY_DATA.yearLevel} />
-                     </FormControl>
-                     <FormDescription>Ex: 1ª, 2ª, 3ª, 4ª, 5ª</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

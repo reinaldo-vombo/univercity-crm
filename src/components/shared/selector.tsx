@@ -4,7 +4,6 @@ import { TSelectPros } from './types';
 
 const Selector = ({ className, options, placeholder, formField, disabled = false }: TSelectPros) => {
 
-
    return (
       <Select onValueChange={(value) => {
          formField.onChange(value);

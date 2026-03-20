@@ -9,18 +9,19 @@ import {
    SidebarMenuButton,
    SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { DUMMY_DATA } from "@/constants/mock-data";
+import { LINKS_BY_ROLE } from "@/constants/nav-links";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 type TRoles = {
-   role: "super_admin" | "admin" | "student" | "faculty"
+   role: "super_admin" | "admin" | "manager"
 }
 export function AppSidebar({ role }: TRoles) {
+
    const pathname = usePathname();
 
-   const links = DUMMY_DATA.linksByRole[role ?? "student"];
+   const links = LINKS_BY_ROLE[role];
    return (
       <Sidebar>
          <SidebarContent>

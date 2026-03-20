@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/shared/breadcrumb";
-import { ROUTES } from "@/constants/mock-data";
+import { ROUTES } from "@/constants/routes"
 import { Suspense } from "react";
 import { RoomTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";

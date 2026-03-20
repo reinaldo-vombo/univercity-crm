@@ -1,6 +1,6 @@
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
-import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
 import {
   TActionHistory,
   TAuthLogos,
@@ -10,7 +10,7 @@ import {
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const getUserSeesionLogs = async (
-  userId: string
+  userId: string,
 ): Promise<TAuthLogos[]> => {
   if (!userId) {
     console.error(FLASH_MESSAGE.ID_REQUIRID);
@@ -27,7 +27,7 @@ export const getUserSeesionLogs = async (
               ? REVALIDATION.FIVE_MINUTES
               : 0,
         },
-      }
+      },
     );
     return sessionLogs;
   } catch (error) {
@@ -35,7 +35,7 @@ export const getUserSeesionLogs = async (
   }
 };
 export const getUserNotifications = async (
-  userId: string
+  userId: string,
 ): Promise<TNotification[]> => {
   if (!userId) {
     console.error(FLASH_MESSAGE.ID_REQUIRID);
@@ -46,7 +46,7 @@ export const getUserNotifications = async (
       `/notifications/${userId}`,
       {
         next: { tags: ['notification'], revalidate: REVALIDATION.ONE_MINUTES },
-      }
+      },
     );
     return notifications;
   } catch (error) {
@@ -55,35 +55,21 @@ export const getUserNotifications = async (
 };
 
 export const getUserNotificationsPreference = async (
-  userId: string
+  userId: string,
 ): Promise<TNotificationPreference> => {
   try {
     const preferenceSettings = await serverFetch<TNotificationPreference>(
       `/notifications/preferences/${userId}`,
       {
         next: { tags: ['preference'], revalidate: REVALIDATION.ONE_MINUTES },
-      }
+      },
     );
     return preferenceSettings;
   } catch (error) {
     handleApiError(error);
   }
 };
-export const getAllUserActionHistory = async (
-  options?: Record<string, string | string[] | number | undefined>
-): Promise<TActionHistory[]> => {
-  const queryString = options
-    ? '?' +
-      Object.entries(options)
-        .filter(([, value]) => value !== undefined && value !== null)
-        .map(
-          ([key, value]) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
-        )
-        .join('&')
-    : '';
-  console.log(queryString);
-  //userId 'orderBy','entityType','action','from','to','take'
+export const getAllUserActionHistory = async (): Promise<TActionHistory[]> => {
   try {
     const result = await serverFetch<TActionHistory[]>(`/audit`, {
       next: { tags: ['actionHistory'] },

@@ -51,11 +51,10 @@ const UpdatedStudentFrom = ({ academicSemester, courses, defaultValue }: TProps)
          middleName: defaultValue.middleName,
          lastName: defaultValue.lastName,
          contactNo: defaultValue.contactNo,
-         isWoker: defaultValue.isWoker,
+         isWoker: defaultValue.isWorker,
          studentType: defaultValue.studentType,
          email: defaultValue.email,
          profileImage: "",
-         shift: defaultValue.shift.name,
          academicSemesterId: '',
          CourseId: ''
       }

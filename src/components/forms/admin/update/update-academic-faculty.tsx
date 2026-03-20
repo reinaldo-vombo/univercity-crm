@@ -20,12 +20,14 @@ import { handleApiError } from "@/services/error-handler"
 import { updateAcademicFaculty } from "@/actions/academic-faculty"
 import { updateAcademicFacultyacultySchema } from "@/lib/validation/academicFaculty"
 import { useSheet } from "@/providers/sheet-provider"
-import { TAcademicFaculty } from "@/types/global"
+import { TAcademicFaculty, TPrice } from "@/types/global"
+import Selector from "@/components/shared/selector"
 
 type TProps = {
    values: TAcademicFaculty;
+   prices: TPrice[]
 }
-const UpadateAcademicFaculty = ({ values }: TProps) => {
+const UpadateAcademicFaculty = ({ values, prices }: TProps) => {
    const { id, title } = values;
    const { close } = useSheet()
    const form = useForm<z.infer<typeof updateAcademicFacultyacultySchema>>({
@@ -33,6 +35,7 @@ const UpadateAcademicFaculty = ({ values }: TProps) => {
       defaultValues: {
          id,
          title,
+         priceId: ''
       }
    })
    const [isPending, startTransition] = useTransition();
@@ -59,6 +62,11 @@ const UpadateAcademicFaculty = ({ values }: TProps) => {
       });
 
    }
+   const pricesList = prices.map(price => ({
+      id: price.id,
+      label: price.amount,
+      value: price.id,
+   }));
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
@@ -74,6 +82,25 @@ const UpadateAcademicFaculty = ({ values }: TProps) => {
                            {...field} />
                      </FormControl>
                      <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="priceId"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Preços</FormLabel>
+                     <FormControl className="w-full">
+                        <Selector
+                           options={pricesList}
+                           placeholder="Selecione um Membro"
+                           formField={field}
+                           className="w-full"
+                        />
+                     </FormControl>
+                     <FormDescription>Preços dos Exames de Admisão</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

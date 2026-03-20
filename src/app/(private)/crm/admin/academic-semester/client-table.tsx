@@ -3,8 +3,11 @@
 import { DataTable } from "@/components/shared/data-table";
 import { TSemester } from "@/types/global";
 import { AcademicSemesterColumns } from "./columns";
-import CreateSemesterForm from "@/components/forms/admin/post/create-semester";
 import { createUniqueId } from "@/lib/helper";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const CreateSemesterForm = dynamic(() => import("@/components/forms/admin/post/create-semester"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    semester: TSemester[];

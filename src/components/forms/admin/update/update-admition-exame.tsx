@@ -19,7 +19,6 @@ import { TAdmitionExame } from "@/types/global"
 import { admitionExameSchema } from "@/lib/validation/adnition-exame"
 import { updateAdmitionExame } from "@/actions/admition-exame"
 import { Switch } from "@/components/ui/switch"
-import Image from "next/image"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useSheet } from "@/providers/sheet-provider"
@@ -29,15 +28,14 @@ type TPros = {
 }
 const UpdateAdmitionExameForm = ({ values }: TPros) => {
    const { close } = useSheet()
-   const reciptUrl = values.paymentRecipt;
-
 
    const form = useForm<z.infer<typeof admitionExameSchema>>({
       resolver: zodResolver(admitionExameSchema),
       defaultValues: {
          id: values.id,
-         applicantName: values.applicantName,
-         aprovePayment: values.aprovePayment,
+         firstName: values.firstName,
+         middleName: values.middleName,
+         lastName: values.lastName,
          exameResults: values.exameResults,
          passed: values.passed,
          paymentAmoute: 45000,
@@ -84,68 +82,41 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-6 py-7">
-            <FormField
-               control={form.control}
-               name="applicantName"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Nome do aplicante</FormLabel>
-                     <FormControl>
-                        <Input
-                           disabled
-                           placeholder="Nome"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="paymentAmoute"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Valor pago</FormLabel>
-                     <FormControl>
-                        <Input
-                           disabled
-                           placeholder="EX: 45000, 35000, 50000"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription></FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <div className="space-y-4">
-               <Image
-                  src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/${reciptUrl}`}
-                  alt="recipt"
-                  className="rounded-md"
-                  width={500}
-                  height={500}
-               />
+            <div className="flex items-center gap-2">
                <FormField
                   control={form.control}
-                  name="aprovePayment"
+                  name="firstName"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel id="aprovePayment">Estatus do pagamento</FormLabel>
+                        <FormLabel>Primero Nome</FormLabel>
                         <FormControl>
-                           <Switch
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                              id="aprovePayment"
-                           />
+                           <Input
+                              placeholder="EX: Paulo"
+                              {...field} />
                         </FormControl>
-                        <FormDescription>Aprovação do pagamento</FormDescription>
+                        <FormDescription></FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
                />
-
+               <FormField
+                  control={form.control}
+                  name="middleName"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Nome do Meio</FormLabel>
+                        <FormControl>
+                           <Input
+                              placeholder="EX: Manuel Dos Santos"
+                              {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
             </div>
+
             <FormField
                control={form.control}
                name="exameResults"

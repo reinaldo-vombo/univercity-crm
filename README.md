@@ -1,189 +1,234 @@
-# 🎓 University CMS
+<div align="center">
 
-A content management system built with **Next.js**, **shadcn-ui**, **NextAuth**, and **Tailwind CSS** to manage university data such as students, courses, grades, and more.
+<img src="/logo.svg" alt="Enrollix" width="80" />
 
----
+# Enrollix
 
-## ✅ Project Checklist
+### Sistema de Gestão Académica · Painel Administrativo
 
-### ⚙️ Initial Setup
+Construído com **Next.js 14**, **shadcn/ui**, **NextAuth**, **Prisma**, **React Email** e **Tailwind CSS** — tudo o que uma instituição de ensino precisa numa única plataforma.
 
-- [x] Create Next.js project with TypeScript
-- [x] Setup Tailwind CSS
-- [x] Setup shadcn-ui
-- [x] Create `.env` with necessary secrets and DB connection
-- [x] Create `.env.ts` with zod for client and server env
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma)](https://prisma.io)
+[![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-components-black?style=flat-square)](https://ui.shadcn.com)
 
----
-
-### 🔐 Authentication (NextAuth)
-
-- [x] Install NextAuth
-- [x] Setup API route `/api/auth/[...nextauth].ts`
-- [x] Add providers (e.g., Credentials, Google)
-- [x] Set-up next-auth config
-- [x] Create custom login page
-- [x] Create login for user/admin
-- [ ] Create login for student
-- [ ] Create login for teacher
-- [x] Create recover password page
-- [x] Protect routes using middlwere
+</div>
 
 ---
 
-### 🌐 Fetch Configuration
+## 👀 Demo
 
-- [x] Create global fetch with base URL
-- [x] Add token interceptor
-- [x] Handle API errors globally
+<img src="/screenshot/screenshot-1773503516499.png" alt="Dashboard Enrollix" width="100%" style="border-radius: 8px;" />
 
----
+<br />
 
-### 🧩 Layouts & Structure
-
-### Admin pages
-
-- [x] Dashboard/root
-- [x] All studente pages
-- [x] Sigle studente pages
-- [x] All Teacher pages
-- [x] All departemant pages
-- [x] All Semester pages
-- [x] All curses pages
-- [x] All building pages
-- [x] All Payment pages
-- [x] All users pages
-- [x] All course pages
-- [x] All course price pages
-- [x] All discipline pages
-- [x] Events page
-- [x] Calendar page
-- [x] Error page
-- [x] NotFound page
-- [x] Unauthenticated page
+<img src="/screenshot/screenshot-1773501304955.png" alt="Painel de Alunos" width="100%" style="border-radius: 8px;" />
 
 ---
 
-### ⚙️ Features & Function
+## 🚀 O que é o Enrollix?
 
-- [x] Server action
-- [ ] Server action rate limit
-- [x] Data revalidation
-- [x] Audit/Activity logs
-- [x] Dashord with report from CRUDs
-- [x] Notification in App
-- [x] Settigs per User/Notification/Theme
-- [x] Dark mode
-- [x] Color themes
-- [x] Online & Offline status
-- [x] Send menssage to app
-- [x] Send menssage to sms
-- [x] Send menssage to email
-- [x] Generate payment receipt
-- [x] Assigne user to departament
-- [x] Assigne faculty to curse
-- [x] Reusible table-table
-- [x] data-table filteres
-- [x] export button to export data as doc type /csv/excel/pdf
-- [x] Update account info
+O **Enrollix** é uma plataforma de gestão académica completa pensada para instituições de ensino superior. Gere alunos, docentes, cursos, propinas, pautas e muito mais — tudo num painel limpo e moderno.
+
+Tem três painéis distintos:
+
+| Painel                  | Descrição                                        |
+| ----------------------- | ------------------------------------------------ |
+| 🛠️ **Enrollix Admin**   | Secretaria, gestão institucional e configurações |
+| 🎓 **Enrollix Campus**  | Portal do estudante                              |
+| 👨‍🏫 **Enrollix Faculty** | Portal do docente                                |
 
 ---
 
-### 🧑‍🎓 Student Module
+## ✨ Funcionalidades principais
 
-- [ ] Student model in Prisma
-- [ ] CRUD pages for students
-- [ ] View student profile and history
-- [ ] Associate students with courses
-
----
-
-### 📚 Courses & Disciplines
-
-- [ ] Course model and seed data
-- [ ] Discipline model linked to courses
-- [ ] Create UI to manage disciplines
-
----
-
-### 🧾 Grades & Attendance
-
-- [ ] Grade model with student/course relationship
-- [ ] Form to add/update grades
-- [ ] Record attendance and view reports
+- 🔐 Autenticação com **NextAuth** (Credentials + Google)
+- 👥 Controlo de acesso por **roles** (admin, docente, aluno)
+- 📊 Dashboard com métricas de alunos, receita e actividade
+- 🧾 Gestão de **propinas** com recibos em PDF
+- 📋 **Pautas académicas** com AC, testes, exame, recurso e especial
+- 🔔 Sistema de **notificações** in-app
+- 🌙 **Dark mode** + temas de cor personalizáveis
+- 📁 Upload de ficheiros via **Cloudinary**
+- 📤 Exportação de dados em **PDF / CSV**
+- 🌐 Estado online/offline em tempo real
+- 🏫 Configurações institucionais com regras académicas e financeiras
+- 📝 Logs de auditoria e actividade recente
 
 ---
 
-### 💳 Payment Management
+## 🗂 Estrutura do projecto
 
-- [ ] Payment model in Prisma
-- [ ] Add payment entries with status
-- [ ] Filter/search payments
-- [x] Export reports (CSV or PDF)
-
----
-
-### ✉️ Email & Notifications
-
-- [ ] Setup Resend or Nodemailer
-- [x] Recive Notification
-- [x] Read Notification
-- [x] Delete Notification
-- [ ] Send email on grade update or fee due
-- [ ] Create reusable email templates
+```
+/app                  → páginas e rotas (Next.js App Router)
+/components           → componentes reutilizáveis
+/config               → configurações da app
+/constants            → constantes globais
+/env                  → variáveis de ambiente com validação Zod
+/lib                  → utilitários, helpers e instâncias
+/providers            → providers React (theme, session, etc.)
+/services             → camada de serviços e chamadas à API
+/types                → tipos e interfaces TypeScript
+```
 
 ---
 
-### 📁 File Uploads (Optional)
+## ⚙️ Instalação
 
-- [x] Setup file upload (e.g., FilePond, Dropzone)
-- [x] Setup cloudinary
-- [x] Store uploaded files securely
-- [ ] Link documents to student profiles
+```bash
+# 1. Clona o repositório
+git clone https://github.com/teu-user/enrollix.git
+cd enrollix
 
----
+# 2. Instala as dependências
+npm install
 
-### 🧠 Admin Features
+# 3. Copia o ficheiro de ambiente
+cp .env.example .env.local
 
-- [x] Role-based access control
-- [x] Dashboard with stats (students, revenue, attendance)
-- [x] Logs or recent activity tracker
-- [x] Assignd user to departament
-- [x] Create user CRUD
-- [x] Create departement CRUD
-- [x] Create academic faucluty CRUD
-- [x] Create semester CRUD
-- [x] Create curses pricing CRUD
-- [x] Create curses CRUD
-- [x] Create discipline CRUD
-- [x] Create buildind CRUD
-- [x] Create events CRUD
+
+# 4. Arranca o servidor
+npm run dev
+```
 
 ---
 
-### 🧪 Testing & Validation
+## 🔑 Variáveis de ambiente
 
-- [x] Add form validation with Zod/Yup
-- [ ] Write unit tests for API routes and utilities
-- [ ] Basic UI testing with Playwright or Cypress
+```bash
+# Servidor
+NODE_ENV=development
+API_BASE_URL=http://localhost:3001
+NEXTAUTH_SECRET=supersecret
+NEXTAUTH_URL=http://localhost:3000
+CLOUDINARY_CLOUD_NAME=xxx
+CLOUDINARY_API_KEY=xxx
+CLOUDINARY_API_SECRET=xxx
+
+# Cliente
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_NAME="Enrollix · Sistema de Gestão Académica"
+NEXT_PUBLIC_ASSETS_URL=http://localhost:3000/assets
+```
 
 ---
+
+## ✅ Checklist do projecto
+
+### ⚙️ Setup inicial
+
+- [x] Projecto Next.js com TypeScript
+- [x] Tailwind CSS
+- [x] shadcn/ui
+- [x] `.env` com validação Zod (server + client separados)
+- [ ] Setup Resend
+
+### 🔐 Autenticação
+
+- [x] NextAuth instalado e configurado
+- [x] Providers (Credentials + Google)
+- [x] Página de login personalizada
+- [x] Login admin e utilizador
+- [x] Página de recuperação de password
+- [x] Protecção de rotas via middleware
+
+### 🌐 Fetch & API
+
+- [x] Fetch global com base URL
+- [x] Interceptor de token
+- [x] Tratamento global de erros
+
+### 🧩 Páginas admin
+
+- [x] Dashboard
+- [x] Alunos (listagem + detalhe)
+- [x] Docentes
+- [x] Departamentos
+- [x] Semestres
+- [x] Cursos e disciplinas
+- [x] Edifícios
+- [x] Pagamentos
+- [x] Utilizadores
+- [x] Preçários
+- [x] Páginas de erro, 404 e não autenticado
+
+### ⚙️ Funcionalidades
+
+- [x] Server actions
+- [x] Revalidação de dados
+- [x] Logs de auditoria
+- [x] Notificações in-app
+- [x] Configurações por utilizador (notificações, tema)
+- [x] Dark mode + temas de cor
+- [x] Estado online/offline
+- [x] Envio de mensagens na app
+- [x] Geração de recibos de pagamento
+- [x] Atribuição de utilizadores a departamentos
+- [x] DataTable reutilizável com filtros
+- [x] Exportação de dados (PDF/CSV)
+- [x] Actualização de conta
+- [ ] Rate limit em server actions
+
+### 🧾 Pautas e notas
+
+- [ ] Modelo de notas com relação aluno/curso
+- [ ] Formulário para lançar/actualizar notas
+- [ ] Registo e relatório de presenças
+
+### 💳 Pagamentos
+
+- [x] Analytics de pagamentos
+- [x] Lançamento de pagamentos com estado
+- [x] Filtros e pesquisa
+- [x] Exportação de relatórios
+
+### ✉️ Email & Notificações
+
+- [x] Receber, ler e eliminar notificações
+- [ ] Setup Resend / Nodemailer
+- [ ] Envio de email por actualização de nota ou propina em atraso
+- [ ] Templates de email reutilizáveis
+
+### 📁 Uploads
+
+- [x] Upload de ficheiros (Dropzone)
+- [x] Cloudinary configurado
+- [x] Armazenamento seguro de ficheiros
+- [ ] Associar documentos ao perfil do aluno
+
+### 🧪 Testes
+
+- [x] Validação de formulários com Zod
+- [ ] Testes unitários para rotas e utilitários
+- [ ] Testes de UI com Playwright ou Cypress
 
 ### 🚀 Deployment
 
-- [ ] Prepare for deployment (env, build)
-- [ ] Deploy to Vercel / Railway / Render
-- [ ] Seed production DB with safe dummy data
+- [ ] Preparação para produção
+- [ ] Deploy (Vercel / Railway / Render)
+- [ ] Seed da base de dados de produção
 
 ---
 
-## 🗂 Folder Structure
+## 🛠 Stack tecnológica
 
-/app
-/components
-/config
-/constants
-/lib
-/providers
-/services
-/types
+| Tecnologia                               | Uso                              |
+| ---------------------------------------- | -------------------------------- |
+| [Next.js 14](https://nextjs.org)         | Framework principal (App Router) |
+| [TypeScript](https://typescriptlang.org) | Tipagem estática                 |
+| [Tailwind CSS](https://tailwindcss.com)  | Estilização                      |
+| [shadcn/ui](https://ui.shadcn.com)       | Componentes de UI                |
+| [NextAuth](https://next-auth.js.org)     | Autenticação                     |
+| [Prisma](https://prisma.io)              | ORM e base de dados              |
+| [Zod](https://zod.dev)                   | Validação de schemas             |
+| [Cloudinary](https://cloudinary.com)     | Upload de ficheiros              |
+| [React Email](https://react.email)       | Templates de email               |
+| [Resend](https://resend.com)             | Envio de emails                  |
+
+---
+
+## 📄 Licença
+
+MIT © Enrollix — feito com ☕ e muito `console.log`

@@ -3,8 +3,11 @@
 import { DataTable } from "@/components/shared/data-table";
 import { TCourse, TSemester, TStudent } from "@/types/global";
 import { StudentColumns } from "./columns";
-import CreateStudentFrom from "@/components/forms/admin/post/create-student";
 import { createUniqueId } from "@/lib/helper";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const CreateStudentFrom = dynamic(() => import("@/components/forms/admin/post/create-student"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    students: TStudent[]

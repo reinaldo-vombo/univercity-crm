@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/shared/breadcrumb";
 import DataTableSkeleton from "@/components/skeleton/data-table";
-import { ROUTES } from "@/constants/mock-data";
+import { ROUTES } from "@/constants/routes"
 import { Suspense } from "react";
 import { StudentTableServer } from "./table-wrapper";
 import { Metadata } from "next";

@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Skeleton } from "../ui/skeleton"
 
 export default function DataTableSkeleton() {
    return (
@@ -8,33 +9,33 @@ export default function DataTableSkeleton() {
                <TableHeader>
                   <TableRow>
                      <TableHead className="w-[100px]">
-                        <div className="h-4 bg-muted rounded animate-pulse" />
+                        <Skeleton className="h-4 rounded" />
                      </TableHead>
-                     <TableHead>
-                        <div className="h-4 bg-muted rounded animate-pulse" />
+                     <TableHead className="w-[100px]">
+                        <Skeleton className="h-4 rounded" />
                      </TableHead>
-                     <TableHead>
-                        <div className="h-4 bg-muted rounded animate-pulse" />
+                     <TableHead className="w-[100px]">
+                        <Skeleton className="h-4 rounded" />
                      </TableHead>
-                     <TableHead className="text-right">
-                        <div className="h-4 bg-muted rounded animate-pulse ml-auto w-16" />
+                     <TableHead className="text-right w-[100px]">
+                        <Skeleton className="h-4 rounded ml-auto w-16" />
                      </TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
-                  {Array.from({ length: 4 }).map((_, index) => (
+                  {Array.from({ length: 6 }).map((_, index) => (
                      <TableRow key={index}>
                         <TableCell>
-                           <div className="h-4 bg-muted rounded animate-pulse w-20" />
+                           <Skeleton className="h-4 rounded w-20" />
                         </TableCell>
                         <TableCell>
-                           <div className="h-4 bg-muted rounded animate-pulse w-32" />
+                           <Skeleton className="h-4 rounded w-32" />
                         </TableCell>
                         <TableCell>
-                           <div className="h-4 bg-muted rounded animate-pulse w-24" />
+                           <Skeleton className="h-4 rounded w-24" />
                         </TableCell>
                         <TableCell className="text-right">
-                           <div className="h-4 bg-muted rounded animate-pulse w-16 ml-auto" />
+                           <Skeleton className="h-4 rounded w-16 ml-auto" />
                         </TableCell>
                      </TableRow>
                   ))}

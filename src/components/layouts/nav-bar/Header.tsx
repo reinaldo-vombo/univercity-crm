@@ -70,7 +70,7 @@ const Header = async () => {
                         </div>
                      }
                   >
-                     <UserSetting userId={user?.id || ''} />
+                     <UserSetting />
                   </DropdownMenu>
                </div>
             </div>

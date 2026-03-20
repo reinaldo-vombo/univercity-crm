@@ -7,9 +7,12 @@ import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { deleteBuilding } from "@/actions/building"
-import UpdateBuildingFrom from "@/components/forms/admin/update/update-building"
 import { TBuilding } from "@/types/global"
 import { formatDate } from "@/lib/helper"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdateBuildingFrom = dynamic(() => import("@/components/forms/admin/update/update-building"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 export function BuildingColumns(): ColumnDef<TBuilding>[] {
 

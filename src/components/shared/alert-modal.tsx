@@ -11,19 +11,19 @@ import {
 } from "@/components/ui/alert-dialog"
 import { TAlertProps } from "./types"
 
-const AlertModal = ({ trigger, action }: TAlertProps) => {
+const AlertModal = ({ trigger, action, description, disabled = false }: TAlertProps) => {
    return (
       <AlertDialog>
-         <AlertDialogTrigger aria-label="Trash icon">{trigger}</AlertDialogTrigger>
+         <AlertDialogTrigger disabled={disabled} className="cursor-pointer disabled:cursor-default" aria-label="Botão de excluir">{trigger}</AlertDialogTrigger>
          <AlertDialogContent>
             <AlertDialogHeader>
                <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
                <AlertDialogDescription>
-                  Esta ação não pode ser desfeita. e removerá seus dados do servidore.
+                  {description ? description : 'Esta ação não pode ser desfeita. e removerá seus dados do servidore.'}
                </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-               <AlertDialogCancel>Cancel</AlertDialogCancel>
+               <AlertDialogCancel className="bg-red-500">Cancel</AlertDialogCancel>
                <AlertDialogAction onClick={action}>Continue</AlertDialogAction>
             </AlertDialogFooter>
          </AlertDialogContent>

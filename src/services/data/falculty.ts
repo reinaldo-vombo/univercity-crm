@@ -1,8 +1,8 @@
-import { TFaculty } from '@/types/global';
+import { TFaculty, TFacultyDisciplines } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
 
 export const getSigleFalcultyService = async (
   facultyId: string
@@ -27,7 +27,11 @@ export const getSigleFalcultyService = async (
 export const getAllFalculty = async (): Promise<TFaculty[]> => {
   try {
     const faculty = await serverFetch<TFaculty[]>('/faculty', {
-      next: { tags: ['faculty'] },
+      next: {
+        tags: ['faculty'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
     });
     return faculty;
   } catch (error) {
@@ -42,6 +46,32 @@ export const getAllFacultyDocList = async (
       `/export/faculty?${filters}`
     );
     return documentList;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getAllFacultyDiscipline = async (
+  offeredCourseSectionId: string
+): Promise<TFacultyDisciplines> => {
+  try {
+    const disciplines = await serverFetch<TFacultyDisciplines>(
+      `/assign-discipline/${offeredCourseSectionId}`
+    );
+    return disciplines;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getFacultyCourses = async (): Promise<any> => {
+  try {
+    const services = await serverFetch<any>(`/my-courses`, {
+      next: {
+        tags: ['courses-service'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
+      },
+    });
+    return services;
   } catch (error) {
     handleApiError(error);
   }

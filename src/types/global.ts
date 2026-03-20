@@ -1,5 +1,19 @@
 // lib/types/action-result.ts
 
+import {
+  TCourseTransfer,
+  TDocumentType,
+  TMarkStatus,
+  TPaymentMethod,
+  TPaymentStatus,
+  TRegistrationStatus,
+  TSemesterRegistrationStatus,
+  TStatus,
+  TStudentType,
+  TTransferGradePolicy,
+  TYearLevel,
+} from './enum';
+
 export type TUser = {
   id: string;
   name: string;
@@ -57,12 +71,15 @@ export type TAcademicFaculty = {
 };
 
 export type TRoom = {
-  id: string;
+  id: number;
   createdAt: Date;
   updatedAt: Date;
   roomNumber: string;
   floor: string;
   buildingId: string;
+  building: {
+    title: string;
+  };
 };
 type TMeta = {
   total: number;
@@ -74,15 +91,12 @@ type TMeta = {
 export type TCourse = {
   id: string;
   title: string;
-  code: string;
   meta?: TMeta;
   durationInYears: number;
   academicDepartment: {
     id: string;
     title: string;
   };
-  shift: { name: string };
-  shiftId: number;
   priceId: string;
   faculties: {
     faculty: {
@@ -98,18 +112,25 @@ export type TCourse = {
       name: string;
     };
     id: string;
-    yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
     courseId: string;
+    yearLevel: TYearLevel;
     disciplineId: string;
     semesterId: string;
   }[];
-  yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
+  CourseShift: {
+    shift: {
+      id: number;
+      name: string;
+    };
+  }[];
+
   academicDepartmentId: string;
   price: {
     amount: number;
     currency: string;
   } | null;
 };
+
 export type TPrice = {
   id: string;
   amount: number;
@@ -128,77 +149,245 @@ export type TCoursePrice = {
 export type TDiscipline = {
   name: string;
   id: string;
-  code: string;
   createdAt: Date;
   updatedAt: Date;
-  description: string | null;
-  minimumGradeToDismiss: number;
+  suspendGrade: number;
+  faculty: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profileImage: null;
+    section: string;
+  } | null;
   courses: [
     {
       id: string;
       courseTitle: string;
-      yearLevel: 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' | 'FIFTH';
-      shift: string;
-      semester: string;
+      department: string;
+      courseId: string;
+      yearLevel: TYearLevel;
+      semesterNumber: number;
+      semesterId: string;
       year: string;
-    }
+    },
   ];
 };
 
 export type TOfferedCourse = {
   id: string;
-  academicDepartmentId: string;
-  courseId: string;
+  academicDepartment: {
+    id: string;
+    title: string;
+  };
+  course: {
+    id: string;
+    title: string;
+  };
+  OfferedCourseDiscipline: [
+    {
+      id: string;
+      discipline: { id: string; name: string };
+      disciplineId: string;
+      offeredCourseId: string;
+    },
+  ];
+  semesterRegistration: {
+    academicSemester: {
+      id: string;
+      title: string;
+      year: string;
+    };
+    status: TSemesterRegistrationStatus;
+    id: string;
+    createdAt: Date;
+    academicSemesterId: string;
+    updateAt: Date;
+    startDate: Date;
+    endDate: Date;
+  };
   semesterRegistrationId: string;
+  academicDepartmentId: string;
   offeredCourseSections: TOfferedCourseSection[];
 };
-type TOfferedCourseSection = {
+export type TOfferedCourseSection = {
   id: string;
   semesterRegistrationId: string;
   createdAt: Date;
   updatedAt: Date;
   title: string;
+  shiftId: number;
   offeredCourseId: string;
   maxCapacity: number;
   currentlyEnrolledStudent: number;
+  offeredCourse: {
+    OfferedCourseDiscipline: {
+      discipline: {
+        id: string;
+        name: string;
+      };
+    }[];
+    semesterRegistration: {
+      academicSemester: {
+        title: string;
+      };
+    };
+  };
 };
 
+type TWeek = {
+  id: string;
+  startTime: string;
+  endTime: string;
+  room: string;
+  disciplineId: string;
+  discipline: {
+    id: string;
+    name: string;
+  };
+  faculty: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profileImage: null;
+  };
+};
+
+export type TClassShedule = {
+  id: string;
+  offeredCourseSectionId: string;
+  department: string;
+  course: string;
+  title: string;
+  shift: {
+    name: string;
+    id: number;
+  };
+  yearLevel: TYearLevel;
+  semester: {
+    id: string;
+    isCurrent: boolean;
+    title: string;
+  };
+  scheduleGrid: {
+    SEGUNDA: [TWeek];
+    TERCA: [TWeek];
+    QUARTA: [TWeek];
+    QUINTA: [TWeek];
+    SEXTA: [TWeek];
+    SABADO: [TWeek];
+    DOMINGO: [TWeek];
+  };
+};
+export type TExamePayment = {
+  id: string;
+  canditateId: string;
+  totalAmount: number;
+  extraAmount: number;
+  currency: string;
+  status: TStatus;
+  method: TPaymentMethod;
+  transactionRef: string | null;
+  payerName: string | null;
+  payerIban: string | null;
+  payerBank: string | null;
+  universityBankAccountId: null;
+  createdAt: Date;
+  updatedAt: Date;
+  paidAt: Date | null;
+  ReceiptUrl: string | null;
+  universityBankAccount: TUniversityBankAccount | null;
+  paymentItems: [
+    {
+      id: string;
+      amount: number;
+      description: string;
+      entityType: string;
+    },
+  ];
+};
 export type TAdmitionExame = {
   id: string;
-  applicantName: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  exameId: string;
+  status: TRegistrationStatus;
   paymentRecipt: string;
   exameDate: Date;
   document: string;
+  building: string | null;
+  room: string | null;
   phoneNumber: string;
+  academicFalcultyId: string;
   email: string;
   paymentAmoute: number;
-  aprovePayment: boolean;
   exameResults: number;
   passed: boolean;
   fase: {
     name: string;
   };
-  payment: {
+  ExamePayment: TExamePayment[];
+};
+export type TUniversityBankAccount = {
+  id: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  iban: string;
+  swift: number | null;
+  entityCode: number | null;
+};
+export type TTrasition = {
+  id: string;
+  createdAt: Date;
+  student: {
     id: string;
-    status: 'APROVE' | 'PENDING' | 'DENIDE';
-    receipt: {
-      id: string;
-      payerIban: string;
-      beneficiaryIban: string;
-      paidAt: Date;
-    } | null;
-    PaymentReference: {
-      id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      message: string;
-      paymentId: string;
-      code: number;
-      reference: string;
-    }[];
-    totalAmount: number;
-    approved: boolean;
-  } | null;
+    firstName: string;
+    middleName: string | null;
+    lastName: string;
+    profileImage: string | null;
+  };
+  currency: string;
+  totalAmount: number;
+  extraAmount: number;
+  method: TPaymentMethod;
+  payerName: string | null;
+  payerIban: string | null;
+  payerBank: string | null;
+  paidAt: Date | null;
+  ReceiptUrl: string | null;
+};
+export type TBankAccountAnalitycs = {
+  id: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  iban: string;
+  isActive: boolean;
+  totalReceived: number;
+  totalTransactions: number;
+  transactions: TTrasition[] | null;
+};
+export type TAdmitionExameFase = {
+  name: string;
+  id: number;
+  buildingId: number | undefined;
+  startDate: Date;
+  endDate: Date;
+  ordem: number;
+  duoDate: Date | undefined;
+  roomId: number | undefined;
+  building: {
+    title: string;
+  };
+  room: {
+    roomNumber: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 };
 export type TCalendar = {
   end: Date;
@@ -237,6 +426,7 @@ export type TBuilding = {
   id: string;
   title: string;
   rooms: {
+    id: string;
     roomNumber: string;
     floor: string;
   }[];
@@ -255,28 +445,125 @@ export type TSemester = {
   endMonth: string;
   isCurrent: boolean;
 };
+export type TSemesterRegistration = {
+  id: string;
+  status: 'UPCOMING' | 'ONGOING' | 'ENDED';
+  startDate: Date;
+  endDate: Date;
+  academicSemesterId: string;
+  createdAt: Date;
+  updateAt: Date;
+};
 
 export type TStudent = {
   id: string;
   firstName: string;
   studentId: string;
-  studentType: string;
+  studentType: TStudentType;
   middleName: string;
   lastName: string;
   profileImage: string | null;
   email: string;
   contactNo: string;
-  shift: {
-    name: string;
-  };
   gender: string;
-  isWoker: boolean;
-  yearLevel: string;
+  isWorker: boolean;
+  yearLevel: TYearLevel;
+  status: string;
   isActive: boolean;
-  gradeDeclarationFile: string;
-  biFile: string;
-  presentAddress: string;
+  address: string;
   createdAt: Date;
+};
+export type TStudentCourse = {
+  student: {
+    name: string;
+    yearLevel: string;
+    status: string;
+    section: string;
+    shift: string;
+    faculty: string;
+    department: string;
+  };
+  semester: {
+    title: string;
+    year: number;
+  };
+  summary: {
+    totalCourses: number;
+    approved: number;
+    failed: number;
+    pending: number;
+    inResit: number;
+    exempt: number;
+    semesterAverage: number;
+  };
+  courses: {
+    status: string;
+    course: {
+      title: string;
+    };
+    section: {
+      title: string;
+      shift: string;
+      capacity: number;
+      enrolled: number;
+      price: {
+        amount: number;
+      };
+    };
+    disciplines: {
+      name: string;
+      suspendGrade: number;
+    }[];
+    marks: {
+      acAverage: number;
+      firstTest: number;
+      secondTest: number;
+      totalMarks: number;
+    };
+    markStatus: string;
+  }[];
+};
+type TDay = {
+  disciplines: string[];
+  class: {
+    dayOfWeek: string;
+    startTime: string;
+    endTime: string;
+    room: number;
+    floor: number;
+    building: string;
+    faculty: string;
+  };
+};
+
+export type TStudentSchedule = {
+  semester: {
+    title: string;
+    year: number;
+  };
+  course: {
+    title: string;
+  };
+  section: string;
+  shift: string;
+  schedule: {
+    id: string;
+    disciplines: string[];
+    class: {
+      dayOfWeek: string;
+      startTime: string;
+      endTime: string;
+      room: number;
+      floor: number;
+      building: string;
+      faculty: string;
+    };
+  }[];
+  byDay: {
+    MONDAY: TDay[];
+    WEDNESDAY: TDay[];
+    FRIDAY: TDay[];
+  };
 };
 
 export type TFaculty = {
@@ -312,6 +599,27 @@ export type TFaculty = {
   createdAt: Date;
   updatedAt: Date;
   shiftId: number;
+};
+export type TFacultyDisciplines = {
+  id: string;
+  faculty: {
+    id: string;
+    firstName: string;
+    middleName: string | null;
+    lastName: string;
+    profileImage: string | null;
+  };
+  discipline: {
+    name: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    suspendGrade: number;
+  };
+  facultyId: string;
+  createdAt: Date;
+  disciplineId: string;
+  offeredCourseSectionId: string;
 };
 export type TAuthLogos = {
   id: string;
@@ -371,22 +679,87 @@ export type TActionHistory = {
   action: string;
   entityType: string;
   entityId: string;
-  User: TUser;
+  newData: any;
+  oldData?: any;
+  user: TUser;
 };
+type TPaymentItems = {
+  id: string;
+  amount: number;
+  description: string;
+  entityType: string;
+};
+
 export type TPayment = {
   id: string;
-  atendent: string;
-  method: string;
+  canditateId?: string;
+  studentId?: string;
+  totalAmount: number | null;
+  extraAmount: number | null;
+  currency: string;
+  status: TStatus;
+  method: TPaymentMethod;
+  transactionRef: string;
+  payerName: string | null;
+  payerIban: string | null;
+  payerBank: string | null;
+  universityBankAccountId: string;
   createdAt: Date;
   updatedAt: Date;
-  status: string;
-  currency: string;
-  entity: string;
-  TotalAmount: number;
-  extraAmount: number;
-  transactionRef: string;
-  approved: boolean;
-  paymentType: string;
+  paidAt: Date | null;
+  ReceiptUrl: string | null;
+  student: {
+    id: string;
+    studentType: TStudentType;
+    firstName: string;
+    middleName: string | null;
+    profileImage: string | null;
+    isActive: boolean;
+  };
+  paymentItems: TPaymentItems[];
+  universityBankAccount: TUniversityBankAccount;
+};
+export type TUniversityConfig = {
+  // id: number;
+  maxFailedSubjectsToProgress: number;
+  maxSubjectsInResit: number;
+  maxSubjectsInSpecialExam: number;
+  maxExamAttemptsTotal: number;
+  maxExamAttemptsPerYear: number;
+  allowRetryOnlyIfFailed: boolean;
+  allowOptionalCourses: boolean;
+  blockEnrollmentOnDebt: boolean;
+  autoCreateSemesterRegistration: boolean;
+  autoAssignDisciplines: boolean;
+  autoConfirmStudents: boolean;
+  allowCourseTransfer: boolean;
+  allowShiftTransfer: boolean;
+  courseTransferRequiresApproval: boolean;
+  courseTransferHasCost: boolean;
+  courseTransferFee: number;
+  courseTransferPeriod: TCourseTransfer;
+  courseTransferKeepGrades: TTransferGradePolicy;
+  minimumPassingGrade: number;
+  resitRegistrationEnd: any;
+  resitRegistrationStart: any;
+  monthlyPaymentDueDay: number;
+  blockEnrollmentIfDebt: boolean;
+  maxSubjectsPerSemester: number;
+  allowSpecialExamOnlyForFinalYear: boolean;
+  blockIfPendingResult: boolean;
+  gradeSubmissionUpdate: boolean;
+  // createdAt?: Date;
+  // updatedAt?: Date;
+};
+export type TAcademicService = {
+  id: string;
+  title: string;
+  priceId: string;
+  price: {
+    amount: number;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TStudentCause = {
@@ -408,7 +781,211 @@ export type TStudentCause = {
   totalMarks: number | null;
   situation: string | null;
 };
+export type TGlobalAnalitics = {
+  year: number;
+  summary: {
+    totalGenerated: number;
+    totalCollected: number;
+    totalPending: number;
+    totalOverdue: number;
+    totalLateFee: number;
+    totalTuition: number;
+    totalOptional: number;
+    totalRetake: number;
+    totalStudents: number;
+    studentsInDebt: number;
+    collectionRate: number;
+  };
+  monthlyBreakdown: {
+    month: number;
+    monthName: string;
+    totalGenerated: number;
+    totalCollected: number;
+    totalPending: number;
+    totalLateFee: number;
+    totalTuition: number;
+    totalOptional: number;
+    totalRetake: number;
+    studentsCount: number;
+    studentsInDebt: number;
+  }[];
+  revenueBySource: {
+    source: string;
+    total: number;
+    percentage: number;
+  }[];
+  semesterBreakdown: {
+    semesterTitle: string;
+    totalGenerated: number;
+    totalCollected: number;
+    totalPending: number;
+    totalLateFee: number;
+    studentsCount: number;
+    collectionRate: number;
+  }[];
+};
 
+export type MonthlyPayment = {
+  monthName: string;
+  amount: number;
+  lateFee: number;
+  status: TPaymentStatus;
+};
+
+export type StudentBreakdown = {
+  student: { name: string; studentId: string };
+  totalPaid: number;
+  totalPending: number;
+  totalLateFee: number;
+  monthlyPayments: MonthlyPayment[];
+};
+
+export type TuitionSemester = {
+  semester: { title: string; year: string };
+  summary: {
+    totalAmount: number;
+    totalBase: number;
+    totalLateFee: number;
+    totalOptional: number;
+    totalPaid: number;
+    totalPending: number;
+    totalStudents: number;
+    averagePerStudent: number;
+    uniqueStudentsInDebt: number;
+    collectionRate: number;
+  };
+  byStatus: Record<TPaymentStatus, { count: number; total: number }>;
+  monthlyBreakdown: {
+    month: number;
+    monthName: string;
+    year: number;
+    totalAmount: number;
+    baseAmount: number;
+    lateFee: number;
+    optionalAmount: number;
+    paid: number;
+    pending: number;
+    count: number;
+  }[];
+  studentBreakdown: StudentBreakdown[];
+};
+export type TMarkSheetRow = {
+  disciplineName: string;
+  suspendGrade: number;
+  ac: number[];
+  acAverage: number;
+  firstTest: number | null;
+  secondTest: number | null;
+  exam: number | null;
+  examAverage: number | null;
+  retake: number | null;
+  retakeAverage: number | null;
+  specialExam: number | null;
+  finalRetakeAvg: number | null;
+  totalMarks: number | null;
+  status: TMarkStatus;
+};
+
+export type TMarkSheet = {
+  student: {
+    id: string;
+    name: string;
+    profileImage: string;
+    studentId: string;
+  };
+  semester: {
+    id: string;
+    title: '1º Semestre' | '2º Semestre';
+    year: number;
+  };
+  summary: {
+    total: number;
+    approved: number;
+    failed: number;
+    pending: number;
+    inResit: number;
+    inSpecial: number;
+    semesterAverage: number;
+  };
+  sheet: TMarkSheetRow[];
+};
+
+export type TRequest = {
+  id: string;
+  type: string;
+  status: string;
+  reason: string;
+  adminNote: string | null;
+  createdAt: string;
+  student: {
+    studentId: string;
+    name: string;
+    profileImage: string | null;
+  };
+  semester: {
+    title: string;
+    year: string;
+  };
+  details: {
+    from: string;
+    to: string;
+  };
+};
+export type TSemesterHistory = {
+  id: string;
+  studentId: string;
+  academicSemesterId: string;
+  sectionTitle: string;
+  yearLevel: string;
+  nextSectionTitle: string;
+  promotedToYear: string;
+  totalDisciplines: number;
+  approvedDisciplines: number;
+  failedDisciplines: number;
+  exemptDisciplines: number;
+  semesterAverage: number;
+  cumulativeAverage: number;
+  status: string;
+  statusReason: null;
+  blockedByDebt: boolean;
+  createdAt: string;
+  academicSemester: {
+    id: string;
+    title: string;
+    year: number;
+    isCurrent: boolean;
+  };
+  disciplineRecords: TDisciplineRecords[];
+};
+
+type TDisciplineRecords = {
+  id: string;
+  disciplineName: string;
+  suspendGrade: number;
+  ac: number[];
+  acAverage: number;
+  firstTest: number;
+  secondTest: number;
+  exam: number | null;
+  examAverage: number | null;
+  retake: number | null;
+  retakeAverage: number | null;
+  specialExam: number | null;
+  finalRetakeAvg: number | null;
+  totalMarks: number;
+  result: string;
+};
+export type TStudentDocuments = {
+  id: string;
+  type: TDocumentType;
+  status: 'APPROVED' | 'REJECTED';
+  studentId: string;
+  rejectedReason: string | null;
+  fileUrl: string;
+  uploadedAt: Date;
+  reviewedAt: Date | null;
+  reviewedBy: string | null;
+};
 export type TMenssage = {
   id: string;
   type: string;

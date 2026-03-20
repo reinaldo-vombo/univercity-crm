@@ -3,17 +3,20 @@
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  validatedActionWithUser,
+  validatedActionWithUserJson,
+} from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
 import { ActionResult } from '../types/api-error';
 import { TDiscipline } from '../types/global';
 import {
-  disciplineSchema,
+  bulkDisciplineSchema,
   updateDisciplineSchema,
 } from '../lib/validation/discipline';
 
-export const addNewDiscipline = validatedActionWithUser(
-  disciplineSchema,
+export const addNewDiscipline = validatedActionWithUserJson(
+  bulkDisciplineSchema,
   async (data, _, user): Promise<ActionResult<TDiscipline>> => {
     try {
       const discipline = await serverFetch<TDiscipline>(

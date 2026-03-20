@@ -9,95 +9,58 @@ import {
    CardTitle,
 
 } from "@/components/ui/card"
-import { ArrowDownWideNarrow, ArrowUpNarrowWide } from "lucide-react"
+import { formatCurrency } from "@/lib/helper"
+import { getRevenueSourceWithYoY } from "@/lib/helper/chart-mappers"
+import { TGlobalAnalitics } from "@/types/global"
+import { Minus, TrendingDown, TrendingUp } from "lucide-react"
 
-export function SectionCards() {
+type TProps = {
+   data: TGlobalAnalitics[]
+}
+
+export function SectionCards({ data }: TProps) {
+   const year = new Date().getFullYear()
+   const cards = getRevenueSourceWithYoY(data, year)
+
    return (
       <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-         <Card className="@container/card">
-            <CardHeader>
-               <CardDescription>Total Alunos</CardDescription>
-               <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                  $1,250.00
-               </CardTitle>
-               <CardAction>
-                  <Badge variant="outline">
-                     <ArrowUpNarrowWide />
-                     +12.5%
-                  </Badge>
-               </CardAction>
-            </CardHeader>
-            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-               <div className="line-clamp-1 flex gap-2 font-medium">
-                  Trending up this month <ArrowUpNarrowWide className="size-4" />
-               </div>
-               <div className="text-muted-foreground">
-                  Visitors for the last 6 months
-               </div>
-            </CardFooter>
-         </Card>
-         <Card className="@container/card">
-            <CardHeader>
-               <CardDescription>Total De Professores</CardDescription>
-               <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                  1,234
-               </CardTitle>
-               <CardAction>
-                  <Badge variant="outline">
-                     <ArrowDownWideNarrow />
-                     -20%
-                  </Badge>
-               </CardAction>
-            </CardHeader>
-            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-               <div className="line-clamp-1 flex gap-2 font-medium">
-                  Down 20% this period <ArrowDownWideNarrow className="size-4" />
-               </div>
-               <div className="text-muted-foreground">
-                  Acquisition needs attention
-               </div>
-            </CardFooter>
-         </Card>
-         <Card className="@container/card">
-            <CardHeader>
-               <CardDescription>Total De cursos</CardDescription>
-               <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                  45,678
-               </CardTitle>
-               <CardAction>
-                  <Badge variant="outline">
-                     <ArrowDownWideNarrow />
-                     +12.5%
-                  </Badge>
-               </CardAction>
-            </CardHeader>
-            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-               <div className="line-clamp-1 flex gap-2 font-medium">
-                  Strong user retention <ArrowDownWideNarrow className="size-4" />
-               </div>
-               <div className="text-muted-foreground">Engagement exceed targets</div>
-            </CardFooter>
-         </Card>
-         <Card className="@container/card">
-            <CardHeader>
-               <CardDescription>Cobrança de taxas</CardDescription>
-               <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                  4.5%
-               </CardTitle>
-               <CardAction>
-                  <Badge variant="outline">
-                     <ArrowDownWideNarrow />
-                     +4.5%
-                  </Badge>
-               </CardAction>
-            </CardHeader>
-            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-               <div className="line-clamp-1 flex gap-2 font-medium">
-                  Steady performance increase <ArrowDownWideNarrow className="size-4" />
-               </div>
-               <div className="text-muted-foreground">Meets growth projections</div>
-            </CardFooter>
-         </Card>
+         {cards.map((item) => {
+            const isUp = item.yoy !== null && item.yoy > 0
+            const isDown = item.yoy !== null && item.yoy < 0
+            const Icon = isUp ? TrendingUp : isDown ? TrendingDown : Minus
+
+            return (
+               <Card className="@container/card" key={item.source}>
+                  <CardHeader>
+                     <CardDescription>{item.source}</CardDescription>
+                     <CardTitle className="text-[1rem] font-semibold tabular-nums @[250px]/card:text-[1rem]">
+                        {formatCurrency(item.total)}
+                     </CardTitle>
+                     <CardAction>
+                        {item.yoy !== null ? (
+                           <Badge variant="outline">
+                              <Icon className={`size-3 ${isUp ? 'text-green-500' : isDown ? 'text-red-500' : 'text-amber-400'}`} />
+                              {item.yoy > 0 ? "+" : ""}{item.yoy}% vs {year - 1}
+                           </Badge>
+                        ) : (
+                           <Badge variant="outline">Sem dados anteriores</Badge>
+                        )}
+                     </CardAction>
+                  </CardHeader>
+                  <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                     <div className="line-clamp-1 flex gap-2 font-medium">
+                        <Icon className={`size-4 ${isUp ? 'text-green-500' : isDown ? 'text-red-500' : 'text-amber-400'}`} />
+                        {isUp && `Cresceu ${item.yoy}% face a ${year - 1}`}
+                        {isDown && `Caiu ${Math.abs(item.yoy!)}% face a ${year - 1}`}
+                        {!isUp && !isDown && "Sem variação anual"}
+                     </div>
+                     <div className="text-muted-foreground">
+                        {formatCurrency(item.previousTotal || 0)} cobrado · taxa {item.yoy}%
+                     </div>
+                  </CardFooter>
+               </Card>
+            )
+         })}
       </div>
    )
 }

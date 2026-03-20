@@ -27,5 +27,5 @@ export function AdmitionExameTable({ exames, }: Props) {
       fileName="exame-de-admisao"
       columns={columns}
       data={exames}
-      filterColumn="applicantName" />;
+      filterColumn="firstName" />;
 }

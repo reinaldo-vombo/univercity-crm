@@ -1,12 +1,12 @@
 
 import Breadcrumb from "@/components/shared/breadcrumb";
-import { ROUTES } from "@/constants/mock-data";
-import SecurityTab from "@/components/container/security-tab";
-import AccountTab from "@/components/container/account-tab";
+import { ROUTES } from "@/constants/routes"
+import SecurityTab from "@/components/templates/settings/security-tab";
+import AccountTab from "@/components/templates/settings/account-tab";
 import { TabsNav } from "@/components/shared/toggle-tabs";
 import { serverUser } from "@/lib/helper/auth/user";
-import Notification from "@/components/container/notification-settings";
-import ApperenceTab from "@/components/container/apperence-tab";
+import Notification from "@/components/templates/settings/notification-settings";
+import ApperenceTab from "@/components/templates/settings/apperence-tab";
 import { getUserSeesionLogs, getUserNotificationsPreference } from "@/services/data/history-logs";
 import { Metadata } from "next";
 

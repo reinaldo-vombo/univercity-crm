@@ -1,10 +1,9 @@
 import { CONTENT } from '@/constants/site-contentent';
 import { Metadata } from 'next';
-// import { clientEnv } from '@/config/env';
 
 const {
   NEXT_PUBLIC_BASE_URL,
-  NEXT_PUBLIC_SITE_NAME,
+  NEXT_APP_SITE_NAME,
   NEXT_PUBLIC_TWITTER_CREATOR,
   NEXT_PUBLIC_AUTHOR_SITE,
   NEXT_PUBLIC_AUTHOR_NAME,
@@ -16,8 +15,8 @@ const baseUrl = NEXT_PUBLIC_BASE_URL
 
 export const commonMetadata: Metadata = {
   title: {
-    default: NEXT_PUBLIC_SITE_NAME || 'Enrollix',
-    template: `%s | ${NEXT_PUBLIC_SITE_NAME || 'Enrollix'}`,
+    default: NEXT_APP_SITE_NAME || 'Enrollix',
+    template: `%s | ${NEXT_APP_SITE_NAME || 'Enrollix'}`,
   },
   icons: [{ rel: 'icon', url: CONTENT.metadata.favicon }],
   description: CONTENT.metadata.description,
@@ -32,7 +31,7 @@ export const commonMetadata: Metadata = {
     },
   ],
   openGraph: {
-    title: NEXT_PUBLIC_SITE_NAME,
+    title: NEXT_APP_SITE_NAME,
     description: CONTENT.metadata.description,
     url: 'https://crm.university.edu',
     siteName: NEXT_PUBLIC_AUTHOR_SITE,

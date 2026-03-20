@@ -2,9 +2,12 @@
 
 import { DataTable } from "@/components/shared/data-table";
 import { DisciplineColumns } from "./columns";
-import CreateDisciplineForm from "@/components/forms/admin/post/create-discipline";
-import { TCourse, TDiscipline, TFaculty, TSemester } from "@/types/global";
+import { TCourse, TDiscipline, TFaculty, TOfferedCourseSection, TSemesterRegistration } from "@/types/global";
 import { createUniqueId } from "@/lib/helper";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const CreateDisciplineForm = dynamic(() => import("@/components/forms/admin/post/create-discipline"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 
 const herader = {
@@ -15,24 +18,26 @@ const herader = {
    createdAt: "Data"
 }
 type TProps = {
-   discipline: TDiscipline[]
-   semester: TSemester[],
+   disciplines: TDiscipline[]
+   semesterRegistration: TSemesterRegistration[],
    curses: TCourse[]
    faculty: TFaculty[]
+   offeredCourseSection: TOfferedCourseSection[]
 }
 const uid = createUniqueId("create");
 
-export function DisciplineTable({ discipline, curses, semester, faculty }: TProps) {
+export function DisciplineTable({ disciplines, curses, semesterRegistration, faculty, offeredCourseSection }: TProps) {
 
-   const columns = DisciplineColumns(faculty);
+   const columns = DisciplineColumns({ faculty, curses, semesterRegistration, disciplines, offeredCourseSection });
 
    return <DataTable
-      actionForm={<CreateDisciplineForm curses={curses} semesters={semester} />}
+      actionForm={<CreateDisciplineForm curses={curses} semesterRegistration={semesterRegistration} />}
       columns={columns}
       sheetId={uid}
+      className="sm:max-w-lg"
       fileHerderes={herader}
       modalTitle="Criar disciplina"
       fileName="disciplina"
-      data={discipline}
+      data={disciplines}
       filterColumn="name" />;
 }

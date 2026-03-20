@@ -3,9 +3,9 @@ import { NextResponse, NextRequest } from 'next/server';
 
 // 🔐 Mapeamento de papéis permitidos por rota
 const ROUTE_ROLE_MAP: Record<string, string[]> = {
-  '/crm': ['maneger', 'accounte', 'admin', 'super_admin'],
-  '/crm/admin': ['admin', 'super_admin'],
-  '/crm/teacher': ['teacher'],
+  '/crm': ['manager', 'accounte', 'admin', 'super_admin'],
+  '/crm/admin': ['admin', 'super_admin', 'editor'],
+  '/crm/management': ['manager', 'editor'],
 };
 
 export async function middleware(req: NextRequest) {
@@ -35,7 +35,7 @@ export async function middleware(req: NextRequest) {
   });
 
   if (!token) {
-    return NextResponse.redirect(new URL('/auth/apanel/login', req.url));
+    return NextResponse.redirect(new URL('/auth/login', req.url));
   }
 
   const role = token.user?.role || token.role;
@@ -46,7 +46,12 @@ export async function middleware(req: NextRequest) {
 
   // 4️⃣ Verifica permissão da role
   if (!allowedRoles.includes(role)) {
-    return NextResponse.redirect(new URL('/unauthorized', req.url));
+    return NextResponse.redirect(
+      new URL(
+        `${role === 'editor' ? '/crm/management' : '/unauthorized'}`,
+        req.url
+      )
+    );
   }
 
   // 5️⃣ Autorizado

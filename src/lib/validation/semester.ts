@@ -1,4 +1,4 @@
-import { months } from '@/constants/mock-data';
+import { months } from '@/constants/schedule';
 import * as z from 'zod';
 
 export const semesterSchema = z.object({

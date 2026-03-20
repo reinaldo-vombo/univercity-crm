@@ -8,7 +8,10 @@ import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { TBuilding, TRoom } from "@/types/global"
 import { deleteRoom } from "@/actions/room"
-import UpdateRoomForm from "@/components/forms/admin/update/update-room"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdateRoomForm = dynamic(() => import("@/components/forms/admin/update/update-room"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 
 export function RoomColumns(buldings: TBuilding[]): ColumnDef<TRoom>[] {
@@ -37,19 +40,22 @@ export function RoomColumns(buldings: TBuilding[]): ColumnDef<TRoom>[] {
       {
          accessorKey: "buildingTitle",
          header: "Edificio",
-         cell: ({ row }) => (
-            <div className="flex items-center gap-2">
-               <Building className="h-4 w-4 text-amber-500" />
-               <span>{row.getValue("buildingTitle")}</span>
-            </div>
-         ),
+         cell: ({ row }) => {
+            const building = row.original.building.title
+            return (
+               <div className="flex items-center gap-2">
+                  <Building className="h-4 w-4 text-amber-500" />
+                  <span>{building}</span>
+               </div>
+            )
+         },
       },
       {
          id: "actions",
          cell: ({ row }) => {
             const room = row.original
 
-            const handleDelete = async (id: string) => {
+            const handleDelete = async (id: number) => {
                try {
                   const res = await deleteRoom(id);
                   if (res.error) {

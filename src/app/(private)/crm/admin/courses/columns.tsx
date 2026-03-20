@@ -1,19 +1,20 @@
 // lib/columns/studentColumns.ts
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge, BadgeDollarSign, BookA, Building, Eye, Link2Icon, Moon, Pen, Sun, SunMoon, Trash } from "lucide-react"
+import { BookA, Building, Eye, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal";
 import AlertModal from "@/components/shared/alert-modal";
 import { toast } from "sonner";
 import { FLASH_MESSAGE } from "@/constants/flash-message";
 import { TCourse, TDepartemant, TPrice } from "@/types/global";
 import { deleteCourse } from "@/actions/courses";
-import UpdateCourseForm from "@/components/forms/admin/update/update-couses";
 import CourseDetails from "@/components/admin/container/course/course-details";
-import AssignFacultiesForm from "@/components/forms/admin/update/assign-faculties";
 import { TFaculty } from "@/types/global";
-import { createUniqueId, formatCurrency, formatDate } from "@/lib/helper";
-import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter";
-
+import { createUniqueId, formatDate } from "@/lib/helper";
+import { UniversalColumnFilter } from "@/components/table-filters/column-filter";
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdateCourseForm = dynamic(() => import("@/components/forms/admin/update/update-couses"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 export function CoursesColumns(falculty: TFaculty[], departments: TDepartemant[], prices: TPrice[]): ColumnDef<TCourse>[] {
 
@@ -28,49 +29,6 @@ export function CoursesColumns(falculty: TFaculty[], departments: TDepartemant[]
                <div className="flex items-center gap-2">
                   <BookA className="text-indigo-500" />
                   <span>{title}</span>
-               </div>
-            )
-         },
-      },
-      {
-         accessorKey: "code",
-         accessorFn: (row) => row.code,
-         header: "Codigo",
-         cell: ({ row }) => {
-            const code = row.original.code;
-            return (
-               <div className="flex items-center gap-2">
-                  <Badge className="text-purple-500" />
-                  <span>{code}</span>
-               </div>
-            )
-         },
-      },
-      {
-         accessorKey: "shift",
-         accessorFn: (row) => row.shift.name,
-         header: ({ column }) => (
-            <UniversalColumnFilter
-               column={column}
-               title="Turno"
-               options={[
-                  { value: "Manhã", label: "Manhã" },
-                  { value: "Tarde", label: "Tarde" },
-                  { value: "Noite", label: "Noite" },
-               ]}
-            />
-         ),
-         cell: ({ row }) => {
-            const shift = row.original.shift.name;
-            return (
-               <div className="flex items-center gap-2">
-                  {shift === "Manhã" ?
-                     <Sun className="text-yellow-300" />
-                     :
-                     shift === "Tarde" ?
-                        <SunMoon className="text-amber-500" />
-                        : <Moon className="text-blue-500" />}
-                  <span>{shift}</span>
                </div>
             )
          },
@@ -94,19 +52,6 @@ export function CoursesColumns(falculty: TFaculty[], departments: TDepartemant[]
                <div className="flex items-center gap-2">
                   <Building className="text-green-500" />
                   <span>{departament.title}</span>
-               </div>
-            )
-         },
-      },
-      {
-         accessorKey: "price",
-         header: "Mensalidade",
-         cell: ({ row }) => {
-            const price = row.original.price;
-            return (
-               <div className="flex items-center gap-2">
-                  <BadgeDollarSign className="text-green-500" />
-                  <b>{formatCurrency(price?.amount || 0)}</b>
                </div>
             )
          },
@@ -139,8 +84,6 @@ export function CoursesColumns(falculty: TFaculty[], departments: TDepartemant[]
                }
             };
             const uid = createUniqueId("view");
-            const uid1 = createUniqueId("atribut");
-            const uid2 = createUniqueId("assign");
 
             return (
                <div className="flex items-center gap-3">
@@ -161,24 +104,7 @@ export function CoursesColumns(falculty: TFaculty[], departments: TDepartemant[]
                      description='Formulario para atualizar o curso'>
                      <UpdateCourseForm values={credits} departments={departments} prices={prices} />
                   </SheetModal>
-                  <SheetModal
-                     trigger={<Link2Icon className="h-4 w-4  cursor-pointer text-purple-500" />}
-                     side="left"
-                     id={`atribut-${uid1}`}
-                     className="sm:max-w-lg"
-                     title="Atribuir Professores ao curso"
-                     description=' Formulario para Atribuir Professores ao curso'>
-                     <AssignFacultiesForm falculty={falculty} values={credits} />
-                  </SheetModal>
-                  <SheetModal
-                     trigger={<Link2Icon className="h-4 w-4  cursor-pointer text-red-500" />}
-                     side="left"
-                     id={`assign-${uid2}`}
-                     className="sm:max-w-lg"
-                     title="Remover Professores do curso"
-                     description='Formulario para remover Professores do curso'>
-                     <AssignFacultiesForm falculty={falculty} values={credits} />
-                  </SheetModal>
+
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
                      action={() => handleDelete(credits.id)} />

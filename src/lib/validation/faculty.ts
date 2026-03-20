@@ -16,16 +16,12 @@ export const facultySchema = z.object({
   gender: z.string({
     required_error: 'Genero é obrigatorio',
   }),
-  designation: z.string({
-    required_error: 'Designation is required',
-  }),
-  academicDepartmentId: z.string({
-    required_error: 'Departamento é obrigatorio',
-  }),
-  academicFacultyId: z.string({
-    required_error: 'Únidade acadêmica é obrigatorio',
-  }),
-  shiftId: z.coerce.number({ required_error: 'Turno é obrigatorio' }),
+  academicDepartmentId: z
+    .string()
+    .min(1, { message: 'Departamento é obrigatorio' }),
+  coursedIds: z.array(
+    z.string().min(1, { message: 'Selecione ao menos um curso' })
+  ),
 });
 
 export const updateFacultySchema = z.object({
@@ -37,10 +33,10 @@ export const updateFacultySchema = z.object({
   email: z.string(),
   contactNo: z.string(),
   gender: z.string(),
-  designation: z.string(),
+  coursedIds: z.array(
+    z.string().min(1, { message: 'Selecione ao menos um curso' })
+  ),
   academicDepartmentId: z.string(),
-  academicFacultyId: z.string(),
-  shiftId: z.coerce.number(),
 });
 
 export const facultyDisciplineAssignmentSchema = z.object({
@@ -51,4 +47,13 @@ export const facultyDisciplineAssignmentSchema = z.object({
   shiftId: z.coerce.number({
     required_error: 'Turno é obrigatorios',
   }),
+});
+export const assignFacultyToSectionDisciplinesSchema = z.object({
+  offeredCourseSectionId: z.string().min(1, { message: 'Turma é obrigatorio' }),
+  assignments: z.array(
+    z.object({
+      disciplineId: z.string().min(1, { message: 'Disciplina é obrigatorio' }),
+      facultyId: z.string().min(1, { message: 'Professor é obrigatorio' }),
+    })
+  ),
 });

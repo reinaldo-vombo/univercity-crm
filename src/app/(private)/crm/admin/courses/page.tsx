@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/shared/breadcrumb";
-import { ROUTES } from "@/constants/mock-data";
+import { ROUTES } from "@/constants/routes"
 import { Suspense } from "react";
 import { CoursesTableServer } from "./table-wrapper";
 import DataTableSkeleton from "@/components/skeleton/data-table";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
    title: 'Cursos Academicos'
 }
 
-export default function DepartmentsPage() {
+export default function CoursesPage() {
 
    return (
       <section className="col-span-12">

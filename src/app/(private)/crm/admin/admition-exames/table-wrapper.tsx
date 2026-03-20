@@ -6,5 +6,5 @@ export async function AdmitionExameTableServer() {
 
    const exames = await getAllAdmitionExames()
 
-   return <AdmitionExameTable exames={exames} />;
+   return (<AdmitionExameTable exames={exames} />);
 }

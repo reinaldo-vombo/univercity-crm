@@ -1,250 +1,4 @@
-import React from 'react';
-import {
-  Book,
-  Building,
-  Home,
-  Inbox,
-  User,
-  BookCheck,
-  BookType,
-  Currency,
-  BookKey,
-  Building2Icon,
-  AlignHorizontalJustifyEndIcon,
-  UserPlus2,
-  Calendar,
-  Receipt,
-  ReceiptText,
-  Activity,
-} from 'lucide-react';
-export const END_POINTS = {
-  ADMIN: '/auth/login',
-  STUDENTE: '/student/login',
-  FACULTY: '/faculty/login',
-};
-export const REVALIDATION = {
-  ONE_MINUTES: 60,
-  FIVE_MINUTES: 5 * 60,
-  TEN_MINUTES: 10 * 60,
-  FIFTEEN_MINUTES: 15 * 60,
-  TWENTY_MINUTES: 20 * 60,
-  THIRTY_MINUTE: 30 * 60,
-  ONE_HOUR: 60 * 60,
-};
-export const ROUTES = {
-  DASHBOARD: '/crm',
-  ADMIN_DASHBORD: '/crm/admin',
-  UNAUTHORIZED: '/unauthorized',
-  LOGIN_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/login`,
-  RECOVER_PASSWORD_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/recover-password`,
-  RESET_PASSWORD_APANEL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/apanel/reset-password`,
-  LOGIN_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/login`,
-  RECOVER_PASSWORD_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/recover-password`,
-  RESET_PASSWORD_STUDENT: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/student/reset-password`,
-  ACCOUNT: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/profile`,
-  SETTINGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/settings`,
-};
 export const DUMMY_DATA = {
-  linksByRole: {
-    super_admin: [
-      {
-        href: `${ROUTES.DASHBOARD}/admin`,
-        label: 'Admin Dashboard',
-        icon: React.createElement(Home),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/users`,
-        label: 'Útilizadores',
-        icon: React.createElement(User),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/activitys`,
-        label: 'Registo de actividade',
-        icon: React.createElement(Activity),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/academic-faculty`,
-        label: 'Unidade Acadêmica',
-        icon: React.createElement(Book),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/departments`,
-        label: 'Departamentos Acadêmico',
-        icon: React.createElement(Building),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/admition-exames`,
-        label: 'Exames de admisão',
-        icon: React.createElement(Book),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/academic-semester`,
-        label: 'Semestre Acadêmico',
-        icon: React.createElement(BookCheck),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/courses`,
-        label: 'Cursos Acadêmico',
-        icon: React.createElement(BookType),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/courses-price`,
-        label: 'Preços dos curso',
-        icon: React.createElement(Currency),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/disciplines`,
-        label: 'Deciplinas Acadêmico',
-        icon: React.createElement(BookKey),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/buildings`,
-        label: 'Edificios',
-        icon: React.createElement(Building2Icon),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/rooms`,
-        label: 'Salas',
-        icon: React.createElement(AlignHorizontalJustifyEndIcon),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/faculty`,
-        label: 'Professores',
-        icon: React.createElement(UserPlus2),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/student`,
-        label: 'Estudeantes',
-        icon: React.createElement(UserPlus2),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/calendar`,
-        label: 'Events',
-        icon: React.createElement(Calendar),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/finance`,
-        label: 'Orçamentos',
-        icon: React.createElement(Receipt),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/finance/payments`,
-        label: 'Pagamentos',
-        icon: React.createElement(ReceiptText),
-      },
-    ],
-    admin: [
-      {
-        href: `${ROUTES.DASHBOARD}/admin`,
-        label: 'Admin Dashboard',
-        icon: React.createElement(Home),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/users`,
-        label: 'Útilizadores',
-        icon: React.createElement(User),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/activitys`,
-        label: 'Registo de actividade',
-        icon: React.createElement(Activity),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/academic-faculty`,
-        label: 'Unidade Acadêmica',
-        icon: React.createElement(Book),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/departments`,
-        label: 'Departamentos Acadêmico',
-        icon: React.createElement(Building),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/admition-exames`,
-        label: 'Exames de admisão',
-        icon: React.createElement(Book),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/academic-semester`,
-        label: 'Semestre Acadêmico',
-        icon: React.createElement(BookCheck),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/courses`,
-        label: 'Cursos Acadêmico',
-        icon: React.createElement(BookType),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/courses-price`,
-        label: 'Preços dos curso',
-        icon: React.createElement(Currency),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/disciplines`,
-        label: 'Deciplinas Acadêmico',
-        icon: React.createElement(BookKey),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/buildings`,
-        label: 'Edificios',
-        icon: React.createElement(Building2Icon),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/rooms`,
-        label: 'Salas',
-        icon: React.createElement(AlignHorizontalJustifyEndIcon),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/faculty`,
-        label: 'Professores',
-        icon: React.createElement(UserPlus2),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/admin/student`,
-        label: 'Estudeantes',
-        icon: React.createElement(UserPlus2),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/calendar`,
-        label: 'Events',
-        icon: React.createElement(Calendar),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/finance`,
-        label: 'Orçamentos',
-        icon: React.createElement(Receipt),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/finance/payments`,
-        label: 'Pagamentos',
-        icon: React.createElement(ReceiptText),
-      },
-    ],
-    student: [
-      {
-        href: `${ROUTES.DASHBOARD}/student`,
-        label: 'Student Dashboard',
-        icon: React.createElement(Home),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/student/courses`,
-        label: 'My Courses',
-        icon: React.createElement(Inbox),
-      },
-    ],
-    faculty: [
-      {
-        href: `${ROUTES.DASHBOARD}/faculty`,
-        label: 'Faculty Dashboard',
-        icon: React.createElement(Home),
-      },
-      {
-        href: `${ROUTES.DASHBOARD}/faculty/classes`,
-        label: 'Manage Classes',
-        icon: React.createElement(Inbox),
-      },
-    ],
-  },
   roles: [
     {
       id: '1',
@@ -265,6 +19,11 @@ export const DUMMY_DATA = {
       id: '4',
       label: 'Editor',
       value: 'editor',
+    },
+    {
+      id: '4',
+      label: 'Gerente',
+      value: 'manager',
     },
     {
       id: '5',
@@ -368,6 +127,23 @@ export const DUMMY_DATA = {
       value: '3',
     },
   ],
+  shiftsNumber: [
+    {
+      id: '1',
+      label: 'Manhã',
+      value: 1,
+    },
+    {
+      id: '2',
+      label: 'Tarde',
+      value: 2,
+    },
+    {
+      id: '3',
+      label: 'Noite',
+      value: 3,
+    },
+  ],
   gender: [
     {
       id: '1',
@@ -437,11 +213,6 @@ export const DUMMY_DATA = {
     'nature',
     'dark-nature',
     'vitage',
-    'amethyst',
-    'dark-vitage',
-    'dark-dafault',
-    'dark-solar-dust',
-    'dark-amethyst',
   ],
   StudentType: [
     {
@@ -514,19 +285,4 @@ export const NOTIFICATION_TYPES = [
     description:
       'Notifica-me sobre todas publicações e atualizações dos exames',
   },
-] as const;
-
-export const months = [
-  'Janeiro',
-  'Fevereiro',
-  'Março',
-  'Abril',
-  'Maio',
-  'Junho',
-  'Julhio ',
-  'Agosto',
-  'Setembro',
-  'Outubro',
-  'Novembro',
-  'Decembro',
 ] as const;

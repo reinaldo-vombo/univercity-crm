@@ -1,20 +1,30 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { BookA, BookCheck, BookDashed, Calendar, Eye, Hash, Link, Moon, Pen, Sun, SunMoon, Trash } from "lucide-react"
+import { BookA, BookCheck, BookDashed, Calendar, Eye, Link, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TDiscipline, TFaculty } from "@/types/global"
+import { TCourse, TDiscipline, TFaculty, TOfferedCourseSection, TSemesterRegistration } from "@/types/global"
 import { deleteDiscipline } from "@/actions/discipline"
-import UpdateDisciplineForm from "@/components/forms/admin/update/update-discipline"
 import { createUniqueId, showYearLevel } from "@/lib/helper"
 import FacultyDisciplineAssignmentForm from "@/components/forms/admin/post/assing-faculty-dicipline"
 import DisciplineDetails from "@/components/admin/container/discipline-details"
-import { UniversalColumnFilter } from "@/components/admin/table-filters/column-filter"
+import { UniversalColumnFilter } from "@/components/table-filters/column-filter"
+import FormLoading from "@/components/skeleton/form"
+import dynamic from "next/dynamic"
+const UpdateDisciplineForm = dynamic(() => import("@/components/forms/admin/update/update-discipline"),
+   { ssr: false, loading: () => <FormLoading /> })
 
-export function DisciplineColumns(faculty: TFaculty[]): ColumnDef<TDiscipline>[] {
+type TProps = {
+   faculty: TFaculty[];
+   semesterRegistration: TSemesterRegistration[],
+   curses: TCourse[]
+   disciplines: TDiscipline[]
+   offeredCourseSection: TOfferedCourseSection[]
+}
+export function DisciplineColumns({ curses, faculty, semesterRegistration, disciplines, offeredCourseSection }: TProps): ColumnDef<TDiscipline>[] {
 
    return [
       {
@@ -53,13 +63,13 @@ export function DisciplineColumns(faculty: TFaculty[]): ColumnDef<TDiscipline>[]
       },
       {
          accessorKey: "semester",
-         accessorFn: (row) => row.courses?.[0]?.semester ?? null,
+         accessorFn: (row) => row.courses?.[0]?.semesterNumber ?? null,
          header: ({ column }) => <UniversalColumnFilter
             column={column}
             title="Semestre academico"
             options={[
-               { value: "1 semestre", label: "1º semestre" },
-               { value: "2 semestre", label: "2º semestre" },
+               { value: "1", label: "1º semestre" },
+               { value: "2", label: "2º semestre" },
             ]}
          />,
          cell: ({ row }) => {
@@ -71,12 +81,14 @@ export function DisciplineColumns(faculty: TFaculty[]): ColumnDef<TDiscipline>[]
                   </div>
                )
             }
-            const title = row.original.courses[0]?.semester;
+
+            const title = row.original.courses[0]?.semesterNumber;
+
             const year = row.original.courses[0]?.year;
             return (
                <div className="flex items-center gap-3">
                   <BookA className="text-indigo-500" />
-                  <b>{title}</b> -
+                  <b>{title === 1 ? '1º Semestre' : '2º Semestre'}</b>
                   <b>{year}</b>
                </div>
             )
@@ -116,56 +128,7 @@ export function DisciplineColumns(faculty: TFaculty[]): ColumnDef<TDiscipline>[]
             )
          }
       },
-      {
-         accessorKey: "shift",
-         accessorFn: (row) => row.courses[0].shift,
-         header: ({ column }) => (
-            <UniversalColumnFilter
-               column={column}
-               title="Turno"
-               options={[
-                  { value: "Manhã", label: "Manhã" },
-                  { value: "Tarde", label: "Tarde" },
-                  { value: "Noite", label: "Noite" },
-               ]}
-            />
-         ),
-         cell: ({ row }) => {
-            if (!row.original.courses) {
-               return (
-                  <div className="flex items-center gap-3">
-                     <Sun className="text-purple-500" />
-                     <b>Sem Turno</b>
-                  </div>
-               )
-            }
-            const shift = row.original.courses[0]?.shift;
-            return (
-               <div className="flex items-center gap-2">
-                  {shift === "Manha" ?
-                     <Sun className="text-yellow-300 size-4" />
-                     :
-                     shift === "Tarde" ?
-                        <SunMoon className="text-amber-500" />
-                        : <Moon className="text-blue-500 size-4" />}
-                  <span>{shift}</span>
-               </div>
-            )
-         }
-      },
-      {
-         accessorKey: "code",
-         header: "Codigo",
-         cell: ({ row }) => {
-            const code = row.original.code;
-            return (
-               <div className="flex items-center gap-3">
-                  <Hash className="text-amber-500" />
-                  <b>{code}</b>
-               </div>
-            )
-         }
-      },
+
       {
          id: "actions",
          cell: ({ row }) => {
@@ -203,15 +166,16 @@ export function DisciplineColumns(faculty: TFaculty[]): ColumnDef<TDiscipline>[]
                      id={`edit-${discipline.id}`}
                      title="Atualizar disciplina"
                      description='Formulario de atualização'>
-                     <UpdateDisciplineForm values={discipline} />
+                     <UpdateDisciplineForm values={discipline} curses={curses} semesterRegistration={semesterRegistration} />
                   </SheetModal>
                   <SheetModal
                      trigger={<Link className="h-4 w-4 text-purple-500 cursor-pointer" />}
                      side="right"
+                     className="sm:max-w-lg"
                      id={`atribut-${uid1}`}
                      title="Atribuir Professor a Disciplina"
                      description='Formulario para atribuir a disciplina a um professor'>
-                     <FacultyDisciplineAssignmentForm disciplineId={discipline.id} facultys={faculty} />
+                     <FacultyDisciplineAssignmentForm offeredCourseSection={offeredCourseSection} disciplines={disciplines} facultys={faculty} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}

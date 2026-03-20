@@ -1,8 +1,8 @@
-import { TStudent } from '@/types/global';
+import { TMarkSheet, TStudent, TStudentCourse } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
 
 export const getAllStudent = async (): Promise<TStudent[]> => {
   try {
@@ -18,12 +18,76 @@ export const getAllStudent = async (): Promise<TStudent[]> => {
     handleApiError(error);
   }
 };
+export const getStudentMarks = async (
+  studentId: string,
+  academicSemesterId: string,
+): Promise<TMarkSheet[]> => {
+  try {
+    const marks = await serverFetch<TMarkSheet[]>(
+      `/student/${studentId}/${academicSemesterId}`,
+      {
+        next: {
+          tags: ['student-marks'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
+      },
+    );
+    return marks;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getStudentCourseInfo = async (
+  studentId: string,
+): Promise<TStudentCourse> => {
+  try {
+    const marks = await serverFetch<TStudentCourse>(
+      `/my-courses/${studentId}`,
+      {
+        next: {
+          tags: ['student-course-info'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
+      },
+    );
+    return marks;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getStudentCourseSchedules = async (
+  studentId: string,
+): Promise<TStudent[]> => {
+  try {
+    const marks = await serverFetch<TStudent[]>(
+      `/my-course-schedules/${studentId}`,
+      {
+        next: {
+          tags: ['student-course-info'],
+          revalidate:
+            process.env.NODE_ENV === 'production'
+              ? REVALIDATION.FIVE_MINUTES
+              : 0,
+        },
+      },
+    );
+    return marks;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 export const getAllStudentDocList = async (
-  filters: string
+  filters: () => string,
 ): Promise<Response> => {
   try {
     const documentList = await serverFetch<Response>(
-      `/export/student?${filters}`
+      `/export/student?${filters}`,
     );
     return documentList;
   } catch (error) {
@@ -31,7 +95,7 @@ export const getAllStudentDocList = async (
   }
 };
 export const getSingleStudent = async (
-  studentId: string
+  studentId: string,
 ): Promise<TStudent[]> => {
   if (!studentId) {
     console.error(FLASH_MESSAGE.ID_REQUIRID);
@@ -47,7 +111,7 @@ export const getSingleStudent = async (
   }
 };
 export const getStudentCouse = async (
-  studentId: string
+  studentId: string,
 ): Promise<TStudent[]> => {
   if (!studentId) {
     console.error(FLASH_MESSAGE.ID_REQUIRID);
@@ -55,7 +119,7 @@ export const getStudentCouse = async (
   }
   try {
     const student = await serverFetch<TStudent[]>(`/my-courses/${studentId}`, {
-      next: { tags: ['student'] },
+      next: { tags: ['student-course'] },
     });
     return student;
   } catch (error) {

@@ -6,8 +6,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Download } from "lucide-react";
-import { getAllStudentDocList } from "@/services/data/student";
-import { toast } from "sonner";
+// import { getAllStudentDocList } from "@/services/data/student";
+// import { toast } from "sonner";
 
 export default function ExportStudentListFilterForm() {
    const [filters, setFilters] = useState({
@@ -25,27 +25,27 @@ export default function ExportStudentListFilterForm() {
       setFilters((prev) => ({ ...prev, [key]: value }));
    };
 
-   const handleExport = async () => {
-      const query = new URLSearchParams(
-         Object.entries(filters).filter(([, v]) => v !== "")
-      ).toString();
+   // const handleExport = async () => {
+   //    const query = new URLSearchParams(
+   //       Object.entries(filters).filter(([, v]) => v !== "")
+   //    ).toString();
 
-      const response = await getAllStudentDocList(query);
-      if (!response.ok) {
-         toast.error("Erro ao exportar!");
-         return;
-      }
+   //    const response = await getAllStudentDocList(query);
+   //    if (!response.ok) {
+   //       toast.error("Erro ao exportar!");
+   //       return;
+   //    }
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `students.${filters.format}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-   };
+   //    const blob = await response.blob();
+   //    const url = window.URL.createObjectURL(blob);
+   //    const a = document.createElement("a");
+   //    a.href = url;
+   //    a.download = `students.${filters.format}`;
+   //    document.body.appendChild(a);
+   //    a.click();
+   //    a.remove();
+   //    window.URL.revokeObjectURL(url);
+   // };
 
    return (
       <div className="p-4 w-[280px] space-y-4">
@@ -184,7 +184,7 @@ export default function ExportStudentListFilterForm() {
             </RadioGroup>
          </div>
 
-         <Button onClick={handleExport} className="w-full mt-2">
+         <Button className="w-full mt-2">
             <Download className="w-4 h-4 mr-2" />
             Exportar
          </Button>

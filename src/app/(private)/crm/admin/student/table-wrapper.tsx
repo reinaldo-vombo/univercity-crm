@@ -1,16 +1,15 @@
-// app/dashboard/admin/departments/table-wrapper.tsx
-
-
-import { getAllStudent } from "@/services/data/student";
+// import { getAllStudent } from "@/services/data/student";
 import { StudentTable } from "./client-table";
 import { getAllCurses } from "@/services/data/couses";
 import { getAllSemester } from "@/services/data/academic";
+import { getMockStudents } from "@/constants/data/student";
 
 
 export async function StudentTableServer() {
 
    const [students, courses, academicSemester] = await Promise.all([
-      getAllStudent(),
+      // getAllStudent(),
+      getMockStudents(),
       getAllCurses(),
       getAllSemester(),
    ]);

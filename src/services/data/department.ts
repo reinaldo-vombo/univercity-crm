@@ -1,8 +1,8 @@
 import { TDepartemant } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
-import { REVALIDATION } from '@/constants/mock-data';
-// import { REVALIDATION } from '@/constants/mock-data';
+import { REVALIDATION } from '@/constants/relalidation';
+// import { REVALIDATION } from '@/constants/relalidation';;
 
 export const getAllDepartments = async (): Promise<TDepartemant[]> => {
   try {

@@ -10,7 +10,7 @@ type TProps = {
 const PersenalInfo = ({ info }: TProps) => {
    const { firstName, middleName, lastName, profileImage, facultyId } = info;
    const name = `${firstName} ${lastName}`;
-   const fullName = `${firstName} ${middleName} ${lastName}`
+   const fullName = `${firstName} ${middleName || ''} ${lastName}`
    return (
       <div className="bg-card rounded-md p-5 col-span-6">
          <div className="space-y-4 ">

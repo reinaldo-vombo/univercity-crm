@@ -6,7 +6,7 @@ import { commonMetadata } from "@/lib/metadata";
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import RootProvider from "@/providers/root-provider";
-import ConnectionBanner from "@/components/connection-banner";
+// import ConnectionBanner from "@/components/connection-banner";
 
 export const metadata = commonMetadata
 
@@ -17,14 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt" suppressHydrationWarning>
-      {/* <head>
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <meta name="theme-color" content="#ffffff" />
-      </head> */}
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >
-        <ConnectionBanner />
+        {/* <ConnectionBanner /> */}
         <RootProvider>
           {children}
         </RootProvider>

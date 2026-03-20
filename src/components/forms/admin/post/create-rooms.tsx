@@ -36,7 +36,8 @@ const CreateRoomForm = ({ buildings }: TProps) => {
    const form = useForm<z.infer<typeof roomSchema>>({
       resolver: zodResolver(roomSchema),
       defaultValues: {
-         roomNumber: undefined,
+         startRoom: undefined,
+         endRoom: undefined,
          floor: undefined,
          buildingId: undefined
       }
@@ -73,16 +74,19 @@ const CreateRoomForm = ({ buildings }: TProps) => {
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8 py-10">
             <FormField
                control={form.control}
-               name="roomNumber"
+               name="buildingId"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Número da Sala</FormLabel>
+                     <FormLabel>Prédio</FormLabel>
                      <FormControl>
-                        <Input
-                           placeholder="EX: P001, 01, 200"
-                           {...field} />
+                        <Selector
+                           formField={field}
+                           options={buildingsList}
+                           placeholder="Selecione o edificio"
+                           className="w-full"
+                        />
                      </FormControl>
-                     <FormDescription></FormDescription>
+                     <FormDescription>Selecione o edificio no qual a sala pertence</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -105,23 +109,40 @@ const CreateRoomForm = ({ buildings }: TProps) => {
             />
             <FormField
                control={form.control}
-               name="buildingId"
+               name="startRoom"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Edificio</FormLabel>
+                     <FormLabel>Sala inicial</FormLabel>
                      <FormControl>
-                        <Selector
-                           formField={field}
-                           options={buildingsList}
-                           placeholder="Selecione o edificio"
-                           className="w-full"
-                        />
+                        <Input
+                           placeholder="EX: 1, 10, 30"
+                           {...field} />
                      </FormControl>
-                     <FormDescription>Selecione o edificio no qual a sala pertence</FormDescription>
+                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
             />
+            <FormField
+               control={form.control}
+               name="endRoom"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Sala final</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="EX: 1, 10, 30"
+                           type="number"
+                           min={1}
+                           {...field} />
+                     </FormControl>
+                     <FormDescription></FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+
+
             <SubmitBtn
                label="Criar"
                loading={isPending} />

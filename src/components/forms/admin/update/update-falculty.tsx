@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TAcademicFaculty, TDepartemant, TFaculty } from "@/types/global"
+import { TCourse, TDepartemant, TFaculty } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { updateFacultySchema } from "@/lib/validation/faculty"
 import { updatedFaculty } from "@/actions/faculty"
@@ -25,23 +25,24 @@ import Uploader from "@/components/shared/file-upload/uploader"
 type TPros = {
    defaultValues: TFaculty
    departemants: TDepartemant[]
-   academicFaculty: TAcademicFaculty[]
+   courses: TCourse[]
 }
 
-const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPros) => {
+const UpdateFacultyFrom = ({ defaultValues, departemants, courses }: TPros) => {
    const academicDepartemant = departemants.map(departemant => ({
       id: departemant.id,
       label: departemant.title,
       value: departemant.id,
    }));
-   const academicFacultys = academicFaculty.map((faculty) => ({
-      id: faculty.id,
-      label: faculty.title,
-      value: faculty.id,
+   const academicCourses = courses.map(course => ({
+      id: course.id,
+      label: course.title,
+      value: course.id,
    }));
    const form = useForm<z.infer<typeof updateFacultySchema>>({
       resolver: zodResolver(updateFacultySchema),
       defaultValues: {
+         id: defaultValues.id,
          firstName: defaultValues.firstName,
          middleName: defaultValues.middleName || "",
          lastName: defaultValues.lastName,
@@ -49,10 +50,8 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
          gender: defaultValues.gender,
          email: defaultValues.email || '',
          profileImage: defaultValues.profileImage,
-         designation: defaultValues.designation,
-         shiftId: defaultValues.shiftId,
          academicDepartmentId: defaultValues.academicDepartmentId,
-         academicFacultyId: defaultValues.academicFacultyId,
+         coursedIds: undefined
       }
    })
    const [isPending, startTransition] = useTransition();
@@ -105,7 +104,7 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
                   control={form.control}
                   name="firstName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-1/2">
                         <FormLabel>Primero nome</FormLabel>
                         <FormControl>
                            <Input
@@ -139,7 +138,7 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
                   control={form.control}
                   name="lastName"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-1/2">
                         <FormLabel>Último nome</FormLabel>
                         <FormControl>
                            <Input
@@ -155,9 +154,9 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
                   control={form.control}
                   name="gender"
                   render={({ field }) => (
-                     <FormItem>
+                     <FormItem className="w-1/2">
                         <FormLabel>Génro</FormLabel>
-                        <FormControl className="w-full">
+                        <FormControl>
                            <Selector
                               placeholder="Selecione o génro"
                               className="w-full"
@@ -204,42 +203,6 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
                   )}
                />
             </div>
-            <div className="flex items-center gap-2">
-               <FormField
-                  control={form.control}
-                  name="designation"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Designação</FormLabel>
-                        <FormControl>
-                           <Input
-                              placeholder="EX: Professor"
-                              {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-               <FormField
-                  control={form.control}
-                  name="shiftId"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Turno</FormLabel>
-                        <FormControl className="w-full">
-                           <Selector
-                              placeholder="Selecione o Turno"
-                              className="w-full"
-                              formField={field}
-                              options={DUMMY_DATA.shifts} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-            </div>
             <FormField
                control={form.control}
                name="academicDepartmentId"
@@ -260,17 +223,18 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, academicFaculty }: TPr
             />
             <FormField
                control={form.control}
-               name="academicFacultyId"
+               name="coursedIds"
                render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Unidade Acadêmica</FormLabel>
+                  <FormItem className="mb-6">
+                     <FormLabel>Cursos</FormLabel>
                      <FormControl>
                         <Selector
                            className="w-full"
-                           options={academicFacultys}
-                           placeholder="Ex: Faculdade de Engenharia" formField={field} />
+                           options={academicCourses}
+                           placeholder="Selecione os cursos"
+                           formField={field} />
                      </FormControl>
-                     <FormDescription>Selecione a unidade ao qual o professor pertence</FormDescription>
+                     <FormDescription>Selecione os ao qual o professor pertence</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

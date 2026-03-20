@@ -9,6 +9,7 @@ export type TSheetProps = {
   triggerStyle?: string;
   title: string;
   description?: string;
+  url?: string;
 };
 
 export type TCardProps = {
@@ -30,7 +31,7 @@ export type TSelectPros = {
   options: {
     id: string | number;
     label: string | number;
-    value: string;
+    value: any;
   }[];
   formField: any;
 };
@@ -61,6 +62,8 @@ export type DropdownMenuProps = {
 };
 export type TAlertProps = {
   trigger: any;
+  disabled?: boolean;
+  description?: string;
   action: () => void;
 };
 export type TExportDocProps<T extends object> = {
