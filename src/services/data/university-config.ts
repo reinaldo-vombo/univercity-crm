@@ -1,11 +1,11 @@
 import { REVALIDATION } from '@/constants/relalidation';
 import { serverFetch } from '../server-fetch';
-import { TAcademicService, TUniversityRules } from '@/types/global';
+import { TAcademicService, TUniversityConfig } from '@/types/global';
 import { handleApiError } from '../error-handler';
 
-export const getUniversityRules = async (): Promise<TUniversityRules> => {
+export const getUniversityRules = async (): Promise<TUniversityConfig> => {
   try {
-    const accounts = await serverFetch<TUniversityRules>('/university', {
+    const accounts = await serverFetch<TUniversityConfig>('/university', {
       next: {
         tags: ['university'],
         revalidate:

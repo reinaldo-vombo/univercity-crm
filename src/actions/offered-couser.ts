@@ -6,7 +6,7 @@ import {
   validatedActionWithUserJson,
 } from '@/lib/helper/action-helper';
 import {
-  createOfferedCourseBatchSchema,
+  autoGenerateOfferedSchema,
   updateOfferedCourseZodSchema,
 } from '@/lib/validation/offered-course';
 import { ApiResponseError } from '@/services/api-error';
@@ -16,13 +16,16 @@ import { TOfferedCourse } from '@/types/global';
 import { revalidateTag } from 'next/cache';
 
 export const addNewOfferedCourse = validatedActionWithUserJson(
-  createOfferedCourseBatchSchema,
+  autoGenerateOfferedSchema,
   async (data): Promise<ActionResult<TOfferedCourse>> => {
     try {
-      const course = await serverFetch<TOfferedCourse>('/offered-course', {
-        method: 'POST',
-        body: data,
-      });
+      const course = await serverFetch<TOfferedCourse>(
+        `/offered-course/auto-generate/${data.semesterRegistrationId}`,
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
 
       revalidateTag('offered-course');
 

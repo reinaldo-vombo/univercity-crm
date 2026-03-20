@@ -110,7 +110,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
          cell: ({ row }) => {
             const status = row.original.passed;
             return (
-               <Badge className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
+               <Badge className={`${status ? 'bg-green-500' : 'bg-red-500'} rounded-full text-white`}>
                   {status ? 'Apto' : 'Não apto'}
                </Badge>
             );
@@ -150,17 +150,17 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                      trigger={<Eye className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
                      id={uid}
-                     title="Detalhes do exame de admisão"
+                     title="Registro De Exame De Acesso"
                      className="sm:max-w-5xl"
-                     description='Detalhes do exame de admisão'>
+                     description='Detalhes do  Regstro do Exame de Acesso'>
                      <AdmitionExameDetails data={exames} />
                   </SheetModal>
                   <SheetModal
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
                      id={`edit-${exames.id}`}
-                     title="Atualizar exame de admisão"
-                     description='Atualizar exame de admisão'>
+                     title="Registro De Exame De Acesso"
+                     description='Formulario de Atualização do Exame de Acesso'>
                      <UpdateAdmitionExameForm values={exames} />
                   </SheetModal>
                   <AlertModal

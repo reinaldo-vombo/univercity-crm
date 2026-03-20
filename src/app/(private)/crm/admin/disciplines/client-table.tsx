@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/shared/data-table";
 import { DisciplineColumns } from "./columns";
-import { TCourse, TDiscipline, TFaculty, TOfferedCourseSection, TSemester } from "@/types/global";
+import { TCourse, TDiscipline, TFaculty, TOfferedCourseSection, TSemesterRegistration } from "@/types/global";
 import { createUniqueId } from "@/lib/helper";
 import FormLoading from "@/components/skeleton/form"
 import dynamic from "next/dynamic"
@@ -19,19 +19,19 @@ const herader = {
 }
 type TProps = {
    disciplines: TDiscipline[]
-   semester: TSemester[],
+   semesterRegistration: TSemesterRegistration[],
    curses: TCourse[]
    faculty: TFaculty[]
    offeredCourseSection: TOfferedCourseSection[]
 }
 const uid = createUniqueId("create");
 
-export function DisciplineTable({ disciplines, curses, semester, faculty, offeredCourseSection }: TProps) {
+export function DisciplineTable({ disciplines, curses, semesterRegistration, faculty, offeredCourseSection }: TProps) {
 
-   const columns = DisciplineColumns({ faculty, curses, semester, disciplines, offeredCourseSection });
+   const columns = DisciplineColumns({ faculty, curses, semesterRegistration, disciplines, offeredCourseSection });
 
    return <DataTable
-      actionForm={<CreateDisciplineForm curses={curses} semesters={semester} />}
+      actionForm={<CreateDisciplineForm curses={curses} semesterRegistration={semesterRegistration} />}
       columns={columns}
       sheetId={uid}
       className="sm:max-w-lg"

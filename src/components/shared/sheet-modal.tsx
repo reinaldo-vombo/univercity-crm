@@ -43,9 +43,11 @@ const SheetModal = ({ children, trigger, description, url, className, id, side, 
                 </div>
                 {title}
               </div>
-              <div>
-                <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/${url}`}>Ver mais</Link>
-              </div>
+              {url && (
+                <div>
+                  <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/${url}`}>Ver mais</Link>
+                </div>
+              )}
             </SheetTitle>
             <SheetDescription>
               {description || null}

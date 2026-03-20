@@ -6,7 +6,7 @@ import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TCourse, TDiscipline, TFaculty, TOfferedCourseSection, TSemester } from "@/types/global"
+import { TCourse, TDiscipline, TFaculty, TOfferedCourseSection, TSemesterRegistration } from "@/types/global"
 import { deleteDiscipline } from "@/actions/discipline"
 import { createUniqueId, showYearLevel } from "@/lib/helper"
 import FacultyDisciplineAssignmentForm from "@/components/forms/admin/post/assing-faculty-dicipline"
@@ -19,12 +19,12 @@ const UpdateDisciplineForm = dynamic(() => import("@/components/forms/admin/upda
 
 type TProps = {
    faculty: TFaculty[];
-   semester: TSemester[],
+   semesterRegistration: TSemesterRegistration[],
    curses: TCourse[]
    disciplines: TDiscipline[]
    offeredCourseSection: TOfferedCourseSection[]
 }
-export function DisciplineColumns({ curses, faculty, semester, disciplines, offeredCourseSection }: TProps): ColumnDef<TDiscipline>[] {
+export function DisciplineColumns({ curses, faculty, semesterRegistration, disciplines, offeredCourseSection }: TProps): ColumnDef<TDiscipline>[] {
 
    return [
       {
@@ -63,13 +63,13 @@ export function DisciplineColumns({ curses, faculty, semester, disciplines, offe
       },
       {
          accessorKey: "semester",
-         accessorFn: (row) => row.courses?.[0]?.semester ?? null,
+         accessorFn: (row) => row.courses?.[0]?.semesterNumber ?? null,
          header: ({ column }) => <UniversalColumnFilter
             column={column}
             title="Semestre academico"
             options={[
-               { value: "1ºsemestre", label: "1º semestre" },
-               { value: "2ºsemestre", label: "2º semestre" },
+               { value: "1", label: "1º semestre" },
+               { value: "2", label: "2º semestre" },
             ]}
          />,
          cell: ({ row }) => {
@@ -81,12 +81,14 @@ export function DisciplineColumns({ curses, faculty, semester, disciplines, offe
                   </div>
                )
             }
-            const title = row.original.courses[0]?.semester;
+
+            const title = row.original.courses[0]?.semesterNumber;
+
             const year = row.original.courses[0]?.year;
             return (
                <div className="flex items-center gap-3">
                   <BookA className="text-indigo-500" />
-                  <b>{title}</b> -
+                  <b>{title === 1 ? '1º Semestre' : '2º Semestre'}</b>
                   <b>{year}</b>
                </div>
             )
@@ -164,7 +166,7 @@ export function DisciplineColumns({ curses, faculty, semester, disciplines, offe
                      id={`edit-${discipline.id}`}
                      title="Atualizar disciplina"
                      description='Formulario de atualização'>
-                     <UpdateDisciplineForm values={discipline} curses={curses} semesters={semester} />
+                     <UpdateDisciplineForm values={discipline} curses={curses} semesterRegistration={semesterRegistration} />
                   </SheetModal>
                   <SheetModal
                      trigger={<Link className="h-4 w-4 text-purple-500 cursor-pointer" />}

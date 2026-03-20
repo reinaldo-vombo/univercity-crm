@@ -60,7 +60,7 @@ const DisciplineDetails = ({ data }: TProps) => {
             {courses.length > 0 ? courses.map((course) => (
                <ul key={course.id} className='space-y-3'>
                   <li>Nome: <b>{course.courseTitle}</b></li>
-                  <li>Semestre: <b>{course.semester} - {course.year}</b></li>
+                  {/* <li>Semestre: <b>{course.semester} - {course.year}</b></li> */}
 
                   <li>Ano Curricular: <b>{showYearLevel(course.yearLevel)}</b></li>
                </ul>

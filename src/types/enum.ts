@@ -29,3 +29,17 @@ export type DayOfWeek =
   | 'SEXTA'
   | 'SABADO'
   | 'DOMINGO';
+export type TDocumentType =
+  | 'BI'
+  | 'GRADE_DECLARATION'
+  | 'CERTIFICATE'
+  | 'PAYMENT_RECEIPT'
+  | 'OTHER';
+export type TCourseTransfer =
+  | 'END_OF_SEMESTER'
+  | 'ENROLLMENT_PERIOD'
+  | 'ANYTIME';
+export type TTransferGradePolicy =
+  | 'LOSE_ALL'
+  | 'KEEP_EQUIVALENTS'
+  | 'ADMIN_DECIDES';

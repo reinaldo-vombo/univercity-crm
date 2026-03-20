@@ -49,7 +49,11 @@ export const updateStudentSchema = z.object({
   }),
   shift: z.string(),
 });
-
+export const reviewDocumentZodSchema = z.object({
+  documentId: z.string().optional(),
+  rejectedReason: z.string().optional(),
+  decision: z.enum(['APPROVED', 'REJECTED']),
+});
 export const assignRemoveCoursesZodSchema = z.object({
   body: z.object({
     courses: z.array(z.string(), {

@@ -11,7 +11,7 @@ const CreditCard = () => {
          </div>
          <div className="number-container">
             <label className="input-label" htmlFor="cardNumber">CARD NUMBER</label>
-            <input className="inputstyle" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" name="cardNumber" type="text" />
+            <input className="inputstyle" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" type="text" />
          </div>
          <div className="name-date-cvv-container">
             <div className="name-wrapper">

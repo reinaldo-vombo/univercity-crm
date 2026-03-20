@@ -7,7 +7,7 @@ import { TabsNav } from "@/components/shared/toggle-tabs";
 import MessageSender from "@/components/container/messages/message-sender";
 import { ROUTES } from "@/constants/routes"
 import { formatCurrency, showYearLevel } from "@/lib/helper";
-import { getSigleMockStudents, getStudentCourseSchedules, studentCoursesService } from "@/constants/data/student";
+import { getSigleMockStudents, getStudentCourseSchedules, getStudentDocuments, getStudentSemesterHistory, studentCoursesService } from "@/constants/data/student";
 import { MessageCircle, Pen } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import DocumentsPreview from "./documents-preview";
@@ -16,13 +16,19 @@ import MarkSheetWrapper from "../../wrapper/markSheet-wrapper";
 import SchedulePreview from "./shedule-preview";
 import { TSeachParams } from "@/types/global";
 import DataTabelCards from "@/components/skeleton/data-tabel-cards";
+import { StudentProgressTimeline } from "./progress-timeline";
+import { getAllRequests } from "@/constants/data/secretary";
+import { RequestskSheetTable } from "@/app/(private)/crm/admin/general-secretary/client-table";
 
 const PagePreview = async ({ searchParams }: TSeachParams) => {
-   const [student, info, schedule, { year, semester }] = await Promise.all([
+   const { year, semester, id, } = await searchParams
+   const [student, info, schedule, history, reuests, documents] = await Promise.all([
       getSigleMockStudents(),
       studentCoursesService(),
       getStudentCourseSchedules(),
-      searchParams
+      getStudentSemesterHistory(id as string),
+      getAllRequests(),
+      getStudentDocuments()
    ])
 
    const currentSemesters: any = semester;
@@ -32,7 +38,7 @@ const PagePreview = async ({ searchParams }: TSeachParams) => {
          id: '1',
          lable: 'Documentos',
          value: 'documentos',
-         tabContent: <DocumentsPreview />,
+         tabContent: <DocumentsPreview data={documents} />,
          description: 'Documentos do aluno'
       },
       {
@@ -55,13 +61,20 @@ const PagePreview = async ({ searchParams }: TSeachParams) => {
          id: '5',
          lable: 'Pedidos',
          value: 'pedidos',
-         tabContent: <p>Pedidos</p>,
+         tabContent: <RequestskSheetTable data={reuests} />,
          description: 'Pedidos'
+      },
+      {
+         id: '5d',
+         lable: 'Historico de progressão',
+         value: 'history',
+         tabContent: <StudentProgressTimeline history={history} />,
+         description: 'Historico de progressão do aluno'
       },
       {
          id: '6',
          lable: 'Permissões',
-         value: 'pedidos',
+         value: 'permition',
          tabContent: <p>Pedidos</p>,
          description: 'Gerencie as permissões do aluno'
       },
@@ -113,7 +126,7 @@ const PagePreview = async ({ searchParams }: TSeachParams) => {
                      hello
                   </SheetModal>
                </div>
-               <div className="border rounded-2xl bg-secondary  p-4 mb-4">
+               <div className="border rounded-2xl bg-card  p-4 mb-4">
                   <h2 className="text-3xl font-bold mb-7">Informações do curso</h2>
                   <ul className="space-y-3">
                      <li><span className="text-neutral-500">Curso:</span> {course.course.title}</li>

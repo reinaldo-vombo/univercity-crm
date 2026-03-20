@@ -72,7 +72,7 @@ const CreateSemesterRegistrationForm = ({ semesters }: TProps) => {
                         <Selector
                            className="w-full"
                            options={academicSemesters}
-                           placeholder="Ex: Verao"
+                           placeholder="Ex: 1º Semestre, 2ºSemestre"
                            formField={field} />
                      </FormControl>
                      <FormMessage />

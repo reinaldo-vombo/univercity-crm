@@ -6,7 +6,7 @@ import { OfferedCourseColumns } from "./columns";
 import { createUniqueId } from "@/lib/helper";
 import FormLoading from "@/components/skeleton/form"
 import dynamic from "next/dynamic"
-const CreateOfferedCourseForm = dynamic(() => import("@/components/forms/admin/post/offered-course"),
+const CreateOfferedCourseForm = dynamic(() => import("@/components/forms/admin/post/auto-generate-offered"),
    { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
@@ -37,11 +37,6 @@ export function OfferedCourseTable({ offeredCourse, course, departments, discipl
       columns={columns}
       className="sm:max-w-2xl"
       data={offeredCourse}
-      actionForm={<CreateOfferedCourseForm
-         curses={course}
-         departments={departments}
-         disciplines={disciplines}
-         semesterRegistration={semesterRegistration}
-      />}
+      actionForm={<CreateOfferedCourseForm semesterRegistration={semesterRegistration} />}
    />;
 }

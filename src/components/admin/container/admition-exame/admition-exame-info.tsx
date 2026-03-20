@@ -48,29 +48,28 @@ const AdmitionExameInfo = ({ data }: TAdmitionExameDetailsProps) => {
             <ul className="space-y-4">
                <li className='space-x-4'>
                   <span className='text-neutral-500'>Resultado:</span>
-                  <Badge className={exameResults >= 10 ? 'bg-green-500' : 'bg-red-500'}>{exameResults || 'Pendente'}</Badge>
+                  <Badge className={exameResults >= 10 ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}>{exameResults || 'Pendente'}</Badge>
                </li>
                <li className='space-x-4'>
                   <span className='text-neutral-500'>Localização</span>
                   <b>{building} - {room}</b>
                </li>
-               <li>Registro:
+               <li className='space-x-4'>
+                  <span className='text-neutral-500'>Registro:</span>
                   <Badge className={status ? 'bg-green-500' : 'bg-red-500'}>
                      <b>{status}</b>
                   </Badge>
                </li>
             </ul>
-
          </div>
-         <Separator />
-         <div className='grid grid-cols-2 gap-2'>
-            <div>
-               <p>Em Caso de Algum</p>
+         <Separator className='my-4' />
+         <div className="relative group mt-6 space-y-4">
+            <p>Documentos Enviar:</p>
+            <div className="grid grid-cols-12 gap-4">
+               <div className="col-span-6 rounded-md border border-dashed shadow space-y-4">
+                  <iframe src={document || '/agradecimento.pdf'} width={'100%'} height={500}></iframe>
+               </div>
             </div>
-         </div>
-         <div className="relative group mt-6">
-            <p>Bilhete de indentidade:</p>
-            <iframe src={document || '/agradecimento.pdf'} width={500} height={500}></iframe>
 
          </div>
       </ScrollArea>

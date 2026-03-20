@@ -17,16 +17,28 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateDisciplineSchema } from "@/lib/validation/discipline"
 import { updateDiscipline } from "@/actions/discipline"
-import { TCourse, TDiscipline, TSemester } from "@/types/global"
+import { TCourse, TDiscipline, TSemesterRegistration } from "@/types/global"
 import { useSheet } from "@/providers/sheet-provider"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 type TProps = {
    values: TDiscipline;
-   semesters: TSemester[],
+   semesterRegistration: TSemesterRegistration[],
    curses: TCourse[]
 }
-const UpdateDisciplineForm = ({ values, curses, semesters }: TProps) => {
+const SEMESTER_NUMBER = [
+   {
+      id: '1',
+      label: '1º Semestre',
+      value: 1,
+   },
+   {
+      id: '2',
+      label: '3º Semestre',
+      value: 2,
+   },
+]
+const UpdateDisciplineForm = ({ values, curses, semesterRegistration }: TProps) => {
    const { close } = useSheet()
    const { id, courses, name, suspendGrade, } = values;
    const course = courses[0]
@@ -39,7 +51,7 @@ const UpdateDisciplineForm = ({ values, curses, semesters }: TProps) => {
          suspendGrade: suspendGrade || 10,
          yearLevel: course.yearLevel || 'FIRST',
          courseId: course.courseId,
-         semesterId: course.semesterId,
+         semesterNumber: 0,
          courseDisciplineId: course.id
       }
    })
@@ -73,10 +85,10 @@ const UpdateDisciplineForm = ({ values, curses, semesters }: TProps) => {
 
    }
 
-   const academicSemester = semesters.map(semester => ({
-      id: semester.id,
-      label: semester.title,
-      value: semester.id,
+   const semesterRegistrations = semesterRegistration.map(registratin => ({
+      id: registratin.id,
+      label: registratin.status,
+      value: registratin.id,
    }));
    const academicCurses = curses.map(curse => ({
       id: curse.id,
@@ -150,20 +162,35 @@ const UpdateDisciplineForm = ({ values, curses, semesters }: TProps) => {
                />
                <FormField
                   control={form.control}
-                  name='semesterId'
+                  name='semesterNumber'
                   render={({ field }) => (
                      <FormItem className="w-full">
                         <FormLabel>Semestre academico</FormLabel>
                         <Selector
                            className="w-full"
                            formField={field}
-                           options={academicSemester}
+                           options={SEMESTER_NUMBER}
                            placeholder="Curso academicos" />
                         <FormMessage />
                      </FormItem>
                   )}
                />
             </div>
+            <FormField
+               control={form.control}
+               name='semesterRegistrationId'
+               render={({ field }) => (
+                  <FormItem className="w-full">
+                     <FormLabel>Registro semestral</FormLabel>
+                     <Selector
+                        className="w-full"
+                        formField={field}
+                        options={semesterRegistrations}
+                        placeholder="Curso academicos" />
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
             <SubmitBtn
                label="Atualisar"
                loading={isPending} />

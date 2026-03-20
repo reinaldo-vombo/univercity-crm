@@ -17,22 +17,34 @@ import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { bulkDisciplineSchema, } from "@/lib/validation/discipline"
 import { addNewDiscipline } from "@/actions/discipline"
-import { TCourse, TSemester } from "@/types/global"
+import { TCourse, TSemesterRegistration } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useSheet } from "@/providers/sheet-provider"
 import { Button } from "@/components/ui/button"
 
 type TProps = {
-   semesters: TSemester[],
+   semesterRegistration: TSemesterRegistration[],
    curses: TCourse[]
 }
-const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
+const SEMESTER_NUMBER = [
+   {
+      id: '1',
+      label: '1º Semestre',
+      value: 1,
+   },
+   {
+      id: '2',
+      label: '3º Semestre',
+      value: 2,
+   },
+]
+const CreateDisciplineForm = ({ semesterRegistration, curses }: TProps) => {
    const { close } = useSheet()
-   const academicSemester = semesters.map(semester => ({
-      id: semester.id,
-      label: semester.title,
-      value: semester.id,
+   const semesterRegistrations = semesterRegistration.map(registration => ({
+      id: registration.id,
+      label: registration.status,
+      value: registration.id,
    }));
    const academicCurses = curses.map(curse => ({
       id: curse.id,
@@ -43,7 +55,7 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
       resolver: zodResolver(bulkDisciplineSchema),
       defaultValues: {
          courseId: '',
-         semesterId: '',
+         semesterNumber: 0,
          disciplines: [
             { name: "", yearLevel: "FIRST", suspendGrade: 10 },
          ],
@@ -170,20 +182,35 @@ const CreateDisciplineForm = ({ semesters, curses }: TProps) => {
                      />
                      <FormField
                         control={form.control}
-                        name='semesterId'
+                        name='semesterNumber'
                         render={({ field }) => (
                            <FormItem className="w-full">
                               <FormLabel>Semestre academico</FormLabel>
                               <Selector
                                  className="w-full"
                                  formField={field}
-                                 options={academicSemester}
+                                 options={SEMESTER_NUMBER}
                                  placeholder="Curso academicos" />
                               <FormMessage />
                            </FormItem>
                         )}
                      />
                   </div>
+                  <FormField
+                     control={form.control}
+                     name='semesterRegistrationId'
+                     render={({ field }) => (
+                        <FormItem className="w-full">
+                           <FormLabel>Registro semestral</FormLabel>
+                           <Selector
+                              className="w-full"
+                              formField={field}
+                              options={semesterRegistrations}
+                              placeholder="Curso academicos" />
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
 
                   {/* Remover */}
                   <div className="flex items-end">

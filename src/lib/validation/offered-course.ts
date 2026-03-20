@@ -45,19 +45,24 @@ export const updateOfferedCourseSectionZodSchema = z.object({
   shiftId: z.coerce.number(),
   yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']).optional(),
 });
-const defaultPricePerShiftSchema = z.record(z.coerce.number().min(0));
+const defaultPricePerShiftSchema = z
+  .record(z.coerce.number().min(0))
+  .optional();
 
 export const offeredCourseItemSchema = z.object({
-  courseId: z.string().uuid('Curso inválido'),
+  courseId: z.string().uuid('Curso inválido').optional(),
   yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH']),
   disciplineIds: z
     .array(z.string())
     .min(1, 'Selecione pelo menos uma disciplina'),
   defaultPricePerShift: defaultPricePerShiftSchema,
 });
-
+export const autoGenerateOfferedSchema = z.object({
+  maxCapacity: z.coerce.number().optional(),
+  semesterRegistrationId: z.string().min(1, 'Registro semestral obrigatorio'),
+});
 export const createOfferedCourseBatchSchema = z.object({
-  academicDepartmentId: z.string().uuid({ message: 'Id invalido' }),
+  academicDepartmentId: z.string(),
   semesterRegistrationId: z.string().uuid({ message: 'Id invalido' }),
   maxCapacity: z.coerce.number(),
   items: z

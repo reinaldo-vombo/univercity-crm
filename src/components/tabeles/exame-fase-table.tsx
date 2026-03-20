@@ -25,6 +25,7 @@ const now = new Date()
 const ExameFaseTable = ({ data, buildings }: TProps) => {
 
    const handleDelete = async (id: number) => {
+
       try {
          const res = await deleteAdmitionExameFase(id);
          if (res.error) {
@@ -106,6 +107,7 @@ const ExameFaseTable = ({ data, buildings }: TProps) => {
                               trigger={<PenBoxIcon className="h-4 w-4 text-green-500" />}
                               side="right"
                               id={`edit-${fase.id}`}
+                              className="sm:max-w-4xl"
                               title="Atualizar curso"
                               description='Formulario para atualizar o curso'>
                               <UpdateAdmitionExameFase building={buildings} defaultValues={fase} />

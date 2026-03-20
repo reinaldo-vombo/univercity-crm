@@ -13,7 +13,6 @@ import {
   UserPlus2,
   Calendar,
   Receipt,
-  ReceiptText,
   Activity,
   BookCopy,
   Archive,
@@ -104,19 +103,9 @@ export const LINKS_BY_ROLE = {
       icon: React.createElement(UserPlus2),
     },
     {
-      href: `/crm/management/calendar`,
-      label: 'Events',
-      icon: React.createElement(Calendar),
-    },
-    {
       href: `/crm/finance`,
       label: 'Orçamentos',
       icon: React.createElement(Receipt),
-    },
-    {
-      href: `/crm/finance/payments`,
-      label: 'Pagamentos',
-      icon: React.createElement(ReceiptText),
     },
   ],
   admin: [

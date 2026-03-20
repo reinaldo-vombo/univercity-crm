@@ -1,6 +1,8 @@
 // lib/types/action-result.ts
 
 import {
+  TCourseTransfer,
+  TDocumentType,
   TMarkStatus,
   TPaymentMethod,
   TPaymentStatus,
@@ -8,6 +10,7 @@ import {
   TSemesterRegistrationStatus,
   TStatus,
   TStudentType,
+  TTransferGradePolicy,
   TYearLevel,
 } from './enum';
 
@@ -163,7 +166,7 @@ export type TDiscipline = {
       department: string;
       courseId: string;
       yearLevel: TYearLevel;
-      semester: string;
+      semesterNumber: number;
       semesterId: string;
       year: string;
     },
@@ -716,23 +719,37 @@ export type TPayment = {
   paymentItems: TPaymentItems[];
   universityBankAccount: TUniversityBankAccount;
 };
-export type TUniversityRules = {
-  id: number;
+export type TUniversityConfig = {
+  // id: number;
   maxFailedSubjectsToProgress: number;
   maxSubjectsInResit: number;
   maxSubjectsInSpecialExam: number;
   maxExamAttemptsTotal: number;
   maxExamAttemptsPerYear: number;
   allowRetryOnlyIfFailed: boolean;
+  allowOptionalCourses: boolean;
+  blockEnrollmentOnDebt: boolean;
+  autoCreateSemesterRegistration: boolean;
+  autoAssignDisciplines: boolean;
+  autoConfirmStudents: boolean;
+  allowCourseTransfer: boolean;
+  allowShiftTransfer: boolean;
+  courseTransferRequiresApproval: boolean;
+  courseTransferHasCost: boolean;
+  courseTransferFee: number;
+  courseTransferPeriod: TCourseTransfer;
+  courseTransferKeepGrades: TTransferGradePolicy;
   minimumPassingGrade: number;
+  resitRegistrationEnd: any;
+  resitRegistrationStart: any;
   monthlyPaymentDueDay: number;
   blockEnrollmentIfDebt: boolean;
   maxSubjectsPerSemester: number;
   allowSpecialExamOnlyForFinalYear: boolean;
   blockIfPendingResult: boolean;
   gradeSubmissionUpdate: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  // createdAt?: Date;
+  // updatedAt?: Date;
 };
 export type TAcademicService = {
   id: string;
@@ -914,7 +931,61 @@ export type TRequest = {
     to: string;
   };
 };
+export type TSemesterHistory = {
+  id: string;
+  studentId: string;
+  academicSemesterId: string;
+  sectionTitle: string;
+  yearLevel: string;
+  nextSectionTitle: string;
+  promotedToYear: string;
+  totalDisciplines: number;
+  approvedDisciplines: number;
+  failedDisciplines: number;
+  exemptDisciplines: number;
+  semesterAverage: number;
+  cumulativeAverage: number;
+  status: string;
+  statusReason: null;
+  blockedByDebt: boolean;
+  createdAt: string;
+  academicSemester: {
+    id: string;
+    title: string;
+    year: number;
+    isCurrent: boolean;
+  };
+  disciplineRecords: TDisciplineRecords[];
+};
 
+type TDisciplineRecords = {
+  id: string;
+  disciplineName: string;
+  suspendGrade: number;
+  ac: number[];
+  acAverage: number;
+  firstTest: number;
+  secondTest: number;
+  exam: number | null;
+  examAverage: number | null;
+  retake: number | null;
+  retakeAverage: number | null;
+  specialExam: number | null;
+  finalRetakeAvg: number | null;
+  totalMarks: number;
+  result: string;
+};
+export type TStudentDocuments = {
+  id: string;
+  type: TDocumentType;
+  status: 'APPROVED' | 'REJECTED';
+  studentId: string;
+  rejectedReason: string | null;
+  fileUrl: string;
+  uploadedAt: Date;
+  reviewedAt: Date | null;
+  reviewedBy: string | null;
+};
 export type TMenssage = {
   id: string;
   type: string;

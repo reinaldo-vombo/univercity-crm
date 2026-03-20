@@ -2,24 +2,25 @@
 
 import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
-import { TStudent } from '../types/global';
+import { TStudent, TStudentDocuments } from '../types/global';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ActionResult } from '../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { studentSchema, updateStudentSchema } from '../lib/validation/student';
+import {
+  reviewDocumentZodSchema,
+  studentSchema,
+  updateStudentSchema,
+} from '../lib/validation/student';
 
 export const addNewStudent = validatedActionWithUser(
   studentSchema,
-  async (data, _, user): Promise<ActionResult<TStudent>> => {
+  async (data): Promise<ActionResult<TStudent>> => {
     try {
-      const Students = await serverFetch<TStudent>(
-        `/student?userId=${user.id}&name=${user.name}`,
-        {
-          method: 'POST',
-          body: data,
-        }
-      );
+      const Students = await serverFetch<TStudent>(`/student`, {
+        method: 'POST',
+        body: data,
+      });
 
       revalidateTag('student');
 
@@ -43,20 +44,17 @@ export const addNewStudent = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updatedStudent = validatedActionWithUser(
   updateStudentSchema,
-  async (data, _, user): Promise<ActionResult<TStudent>> => {
+  async (data): Promise<ActionResult<TStudent>> => {
     try {
       const { id, ...updateData } = data;
-      const departements = await serverFetch<TStudent>(
-        `/student/${id}?userId=${user.id}&name=${user.name}`,
-        {
-          method: 'PATCH',
-          body: updateData,
-        }
-      );
+      const departements = await serverFetch<TStudent>(`/student/${id}`, {
+        method: 'PATCH',
+        body: updateData,
+      });
 
       revalidateTag('student');
 
@@ -80,11 +78,48 @@ export const updatedStudent = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
+);
+export const updatedStudentDocuments = validatedActionWithUser(
+  reviewDocumentZodSchema,
+  async (data): Promise<ActionResult<TStudentDocuments>> => {
+    try {
+      const { documentId, ...updateData } = data;
+      const departements = await serverFetch<TStudentDocuments>(
+        `/student/documents/${documentId}`,
+        {
+          method: 'PATCH',
+          body: updateData,
+        },
+      );
+
+      revalidateTag('student-docs');
+
+      return {
+        error: false,
+        data: departements,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
+      }
+
+      return {
+        error: true,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      };
+    }
+  },
 );
 
 export const deleteStudent = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TStudent>> => {
   try {
     const data = await serverFetch<TStudent>(`/student/${id}`, {

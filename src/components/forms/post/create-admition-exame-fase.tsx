@@ -35,6 +35,9 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
       defaultValues: {
          name: '',
          ordem: 0,
+         buildingId: undefined,
+         roomId: 0,
+         duoDate: new Date(),
          endDate: today,
          startDate: today
       }
@@ -49,7 +52,7 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
          try {
             const response = await createAdmitionExameFase(formData);
             if (response.error) {
-               toast.error(response.message);
+               toast.warning(response.message);
                return;
             }
             toast.success(FLASH_MESSAGE.CREATED);
@@ -65,6 +68,13 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
    const buildings = building.map(b => ({
       id: b.id,
       label: b.title,
+      value: b.id,
+   }));
+   const rooms = building.map(b => b.rooms)
+
+   const roomslist = rooms.flat().map(b => ({
+      id: b.id,
+      label: b.roomNumber,
       value: b.id,
    }));
    const onInvalid = (errors: unknown) => {
@@ -103,6 +113,46 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
                               {...field} />
                         </FormControl>
                         <FormDescription>ordem do da fase, use formato como 1, ou 001, 01</FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <div className="flex flex-col md:flex-row items-center gap-3 mt-6">
+               <FormField
+                  control={form.control}
+                  name="buildingId"
+                  render={({ field }) => (
+                     <FormItem className="w-1/2">
+                        <FormLabel>Predio</FormLabel>
+                        <FormControl>
+                           <Selector
+                              options={buildings}
+                              formField={field}
+                              className="w-full"
+                              placeholder="Predio"
+                           />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="roomId"
+                  render={({ field }) => (
+                     <FormItem className="w-1/2">
+                        <FormLabel>Sala</FormLabel>
+                        <FormControl>
+                           <Selector
+                              options={roomslist}
+                              formField={field}
+                              className="w-full"
+                              placeholder="Predio"
+                           />
+                        </FormControl>
+                        <FormDescription></FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
@@ -154,24 +204,6 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-               <FormField
-                  control={form.control}
-                  name="buildingId"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Predio</FormLabel>
-                        <FormControl>
-                           <Selector
-                              options={buildings}
-                              formField={field}
-                              placeholder="Predio"
-                           />
                         </FormControl>
                         <FormDescription></FormDescription>
                         <FormMessage />
