@@ -6,14 +6,10 @@ import { Briefcase, Pencil, UserCircle } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import Avatar from "../../shared/avatar";
 import { Checkbox } from "../../ui/checkbox";
-import { IUser } from "next-auth";
 import UpdatedAccountForm from "../../forms/admin/update/update-account";
+import { TUser } from "@/types/global";
 type TProps = {
-   user: (IUser & {
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-   }) | undefined
+   user: TUser | undefined
 }
 
 const permition = ['view', 'create', 'edite', 'delete'];

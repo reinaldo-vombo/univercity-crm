@@ -33,12 +33,20 @@ export function AuditColumns(users: TUser[]): ColumnDef<TActionHistory>[] {
 
             return (
                <>
-                  {user && (
+                  {user ? (
                      <div className="flex items-center gap-2">
                         <Avatar name={user.name} photo={user.avatar} />
                         <div className="space-y-2">
                            <b>{user.name}</b>
                            <p className="text-slate-200">{user.email}</p>
+                        </div>
+                     </div>
+                  ) : (
+                     <div className="flex items-center gap-2">
+                        <Avatar name='Sistema' photo='/logo.svg' />
+                        <div className="space-y-2">
+                           <b>Sistema</b>
+                           <p className="text-slate-200">sistema@gmail.com</p>
                         </div>
                      </div>
                   )}

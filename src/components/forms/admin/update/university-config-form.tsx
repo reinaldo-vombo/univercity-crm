@@ -11,7 +11,7 @@ import { PaymentsTab } from "@/components/admin/container/settings/payments-tab"
 import { EnrollmentTab } from "@/components/admin/container/settings/enrollment-tab"
 import { TransfersTab } from "@/components/admin/container/settings/transfers-tab"
 import { TUniversityConfig } from "@/types/global"
-import { universityConfigSchema } from "@/lib/validation/univercity"
+import { universityConfigSchema } from "@/lib/validation/university-conf"
 import { z } from "zod"
 
 

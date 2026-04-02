@@ -15,8 +15,14 @@ import { DropdownMenuProps } from "./types"
 import { LogOut } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { Fragment } from "react"
+import { closeSession } from "@/actions/activitiys"
 
 export function DropdownMenu({ children, trigger, showLogOut = false, lable, variante = 'outline', className }: DropdownMenuProps) {
+
+   const endSession = async () => {
+      signOut({ callbackUrl: '/auth/apanel/login' })
+      await closeSession()
+   }
 
    return (
       <DropdownMenuPrimitive>
@@ -32,7 +38,7 @@ export function DropdownMenu({ children, trigger, showLogOut = false, lable, var
             {showLogOut && (
                <Fragment>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex items-center rounded-md bg-red-800 text-red-500 py-2" onClick={() => signOut({ callbackUrl: '/auth/apanel/login' })}>
+                  <DropdownMenuItem className="flex items-center rounded-md bg-red-800 text-red-500 py-2" onClick={() => endSession()}>
                      <LogOut className="text-red-500" />
                      Sair
                   </DropdownMenuItem>

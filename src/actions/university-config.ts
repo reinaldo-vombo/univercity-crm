@@ -10,7 +10,7 @@ import { ApiResponseError } from '@/services/api-error';
 import {
   academicServiceZodShema,
   updateAcademicServiceZodShema,
-} from '@/lib/validation/university-conf';
+} from '@/lib/validation/secretary';
 
 export const addAcademicService = validatedActionWithUser(
   academicServiceZodShema,

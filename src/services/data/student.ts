@@ -1,7 +1,6 @@
 import { TMarkSheet, TStudent, TStudentCourse } from '@/types/global';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
-import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { REVALIDATION } from '@/constants/relalidation';
 
 export const getAllStudent = async (): Promise<TStudent[]> => {
@@ -97,13 +96,13 @@ export const getAllStudentDocList = async (
 export const getSingleStudent = async (
   studentId: string,
 ): Promise<TStudent[]> => {
-  if (!studentId) {
-    console.error(FLASH_MESSAGE.ID_REQUIRID);
-    return [];
-  }
   try {
     const student = await serverFetch<TStudent[]>(`/student/${studentId}`, {
-      next: { tags: ['student'] },
+      next: {
+        tags: ['student'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
+      },
     });
     return student;
   } catch (error) {
@@ -113,13 +112,13 @@ export const getSingleStudent = async (
 export const getStudentCouse = async (
   studentId: string,
 ): Promise<TStudent[]> => {
-  if (!studentId) {
-    console.error(FLASH_MESSAGE.ID_REQUIRID);
-    return [];
-  }
   try {
     const student = await serverFetch<TStudent[]>(`/my-courses/${studentId}`, {
-      next: { tags: ['student-course'] },
+      next: {
+        tags: ['student-course'],
+        revalidate:
+          process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
+      },
     });
     return student;
   } catch (error) {

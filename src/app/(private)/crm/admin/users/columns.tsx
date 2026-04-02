@@ -11,18 +11,11 @@ import { deleteUser } from "@/actions/users"
 import { User } from "@/lib/helper/auth/user"
 import { createUniqueId, formatDate } from "@/lib/helper"
 import FormLoading from "@/components/skeleton/form"
+import { TUser } from "@/types/global"
 const UpdatedUserForm = dynamic(() => import("@/components/forms/admin/update/update-user"),
    { ssr: false, loading: () => <FormLoading /> })
 
-export type Users = {
-   id: string
-   name: string
-   email: string
-   role: string
-   avatar: string
-}
-
-export function UsersColumns(): ColumnDef<Users>[] {
+export function UsersColumns(): ColumnDef<TUser>[] {
    const logUser = User()
    return [
       {

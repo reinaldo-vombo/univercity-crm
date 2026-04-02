@@ -1,11 +1,12 @@
 "use client";
 
 import CreateUser from "@/components/forms/admin/post/create-user";
-import { Users, UsersColumns } from "./columns";
+import { UsersColumns } from "./columns";
+import { TUser } from "@/types/global"
 import { DataTable } from "@/components/shared/data-table";
 
 interface Props {
-   data: Users[];
+   data: TUser[];
 }
 
 const herader = {

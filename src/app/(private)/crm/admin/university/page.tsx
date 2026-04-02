@@ -10,24 +10,24 @@ import { serverEnv } from '@/config/env/server'
 export const metadata: Metadata = {
    title: 'Regras da Universidade'
 }
+const tabs = [
+   {
+      id: '1',
+      lable: 'Regras da Instituição',
+      value: 'rules',
+      tabContent: <RulesWrapper />,
+      description: 'Gerencia as Regras da Instituição'
+   },
+   {
+      id: '2',
+      lable: 'Serviços Academicos',
+      value: 'service',
+      tabContent: <ServiceWrapper />,
+      description: 'Gerencia os Serviços Academicos'
+   },
+]
 export default function UniversityConfigPage() {
    const universityName = serverEnv.UNIVERCITY_NAME
-   const tabs = [
-      {
-         id: '1',
-         lable: 'Regras da Instituição',
-         value: 'rules',
-         tabContent: <RulesWrapper />,
-         description: 'Gerencia as Regras da Instituição'
-      },
-      {
-         id: '2',
-         lable: 'Serviços Academicos',
-         value: 'service',
-         tabContent: <ServiceWrapper />,
-         description: 'Gerencia os Serviços Academicos'
-      },
-   ]
    return (
       <section className="col-span-12">
          <Breadcrumb

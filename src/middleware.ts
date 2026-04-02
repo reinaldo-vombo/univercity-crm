@@ -38,7 +38,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/auth/login', req.url));
   }
 
-  const role = token.user?.role || token.role;
+  const role = token.role || token.role;
 
   if (!role) {
     return NextResponse.redirect(new URL('/unauthorized', req.url));
@@ -49,8 +49,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `${role === 'editor' ? '/crm/management' : '/unauthorized'}`,
-        req.url
-      )
+        req.url,
+      ),
     );
   }
 

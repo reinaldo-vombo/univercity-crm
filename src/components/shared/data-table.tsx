@@ -32,10 +32,12 @@ type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];
    data: object[];
    className?: string
+   sheetClass?: string
 
    //toolbar
    filterColumn?: keyof TData; // e.g., "email"
    actionForm?: React.ReactNode;
+   actionModal?: React.ReactElement;
    fileName?: string
    sheetId?: string;
    fileExport?: React.ReactNode;
@@ -58,9 +60,11 @@ export function DataTable<TValue>({
    filterColumn,
    actionForm,
    fileExport,
+   actionModal,
    sheetId,
    modalTitle,
-   className
+   className,
+   sheetClass
 }: DataTableProps<any, TValue>) {
 
    const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -92,6 +96,9 @@ export function DataTable<TValue>({
       <div className="w-full space-y-4">
          <DataTableToolbar
             table={table}
+            actionModal={actionModal}
+            title="opticional"
+            sheetClass={sheetClass}
             canDelete={canDelete}
             canUpdate={canUpdate}
             onDeleteMany={onDeleteMany}

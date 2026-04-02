@@ -17,7 +17,7 @@ type ServerFetchOptions = {
 
 export async function serverFetch<T>(
   endpoint: string,
-  options: ServerFetchOptions = {}
+  options: ServerFetchOptions = {},
 ): Promise<T> {
   try {
     const session = await getServerSession(authOptions);
@@ -48,7 +48,7 @@ export async function serverFetch<T>(
         json?.message || 'Request failed',
         json?.errorMessages,
         json?.meta,
-        json?.stack
+        json?.stack,
       );
     }
 

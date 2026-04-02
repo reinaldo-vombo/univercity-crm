@@ -11,15 +11,12 @@ import { createpriceSchema, UpdatePriceSchema } from '../lib/validation/price';
 
 export const addNewPrice = validatedActionWithUser(
   createpriceSchema,
-  async (data, _, user): Promise<ActionResult<TCoursePrice>> => {
+  async (data): Promise<ActionResult<TCoursePrice>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>(
-        `/prices?name=${user.name}`,
-        {
-          method: 'POST',
-          body: data,
-        }
-      );
+      const curses = await serverFetch<TCoursePrice>(`/prices`, {
+        method: 'POST',
+        body: data,
+      });
 
       revalidateTag('price');
 
@@ -43,7 +40,7 @@ export const addNewPrice = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updatePrice = validatedActionWithUser(
   UpdatePriceSchema,
@@ -74,11 +71,11 @@ export const updatePrice = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 
 export const deletePrice = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TCoursePrice>> => {
   try {
     const data = await serverFetch<TCoursePrice>(`/prices/${id}`, {

@@ -1,7 +1,7 @@
 'use client'
 import { Fragment } from "react"
-import * as z from "zod"
-import { Clock, Lock, MailOpen, MapPin, PhoneIncoming, ShieldCheck } from "lucide-react"
+import z from "zod"
+import { Clock, Lock, MailOpen, MapPin, ShieldCheck, Smartphone, Trash } from "lucide-react"
 import { Separator } from "../../ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { TAuthLogos } from "@/types/global"
@@ -25,6 +25,8 @@ import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { changePasswordShema } from "@/lib/validation/user"
 import Image from "next/image"
 import { updatedUserPassword } from "@/actions/users"
+import AlertModal from "@/components/shared/alert-modal"
+import { deleteUserActivitys } from "@/actions/activitiys"
 
 type TProps = {
    sessionHistory: TAuthLogos[]
@@ -156,10 +158,22 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
                   </div> */}
                   <div className="flex gap-4">
                      <div className="flex gap-4 w-3xs">
-                        <PhoneIncoming className="size-5 text-blue-400" />
+                        {/* <PhoneIncoming className="size-5 text-blue-400" /> */}
+                        <Smartphone />
                         <div className="space-y-3">
-                           <b>Número de telefone</b>
-                           <p className="text-slate-200 text-xs">Receba seu codigo de no seu telemovel</p>
+                           <b>Push Notification</b>
+                           <p className="text-slate-200 text-xs">Receba notificações no seu telefone</p>
+                        </div>
+                     </div>
+                     <Switch />
+                  </div>
+                  <div className="flex gap-4">
+                     <div className="flex gap-4 w-3xs">
+                        {/* <PhoneIncoming className="size-5 text-blue-400" /> */}
+                        <Smartphone />
+                        <div className="space-y-3">
+                           <b>Notificação in App</b>
+                           <p className="text-slate-200 text-xs">Receba notificações no aplicativo</p>
                         </div>
                      </div>
                      <Switch />
@@ -169,7 +183,7 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
                         <MailOpen className="size-5 text-red-400" />
                         <div className="space-y-3">
                            <b>Email</b>
-                           <p className="text-slate-200 text-xs">Use email para receber seu codigo</p>
+                           <p className="text-slate-200 text-xs">Receba notificações no seu telefone</p>
                         </div>
                      </div>
                      <Switch />
@@ -223,6 +237,9 @@ const SecurityTab = ({ sessionHistory }: TProps) => {
                      <b>{formatDate(session.timestamp)}</b>
                      <b>{formatTimeAgo(session.timestamp)}</b>
                      <b className={session.isActive ? 'text-green-500' : 'text-red-500'}>{session.isActive ? 'Activo' : 'Inativo'}</b>
+                     <AlertModal
+                        trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
+                        action={() => deleteUserActivitys(session.id)} />
                   </div>
                </div>
             ))}

@@ -9,7 +9,6 @@ import { ApiResponseError } from '@/services/api-error';
 import { ActionResult, ActionState } from '../types/api-error';
 import { serverFetch } from '@/services/server-fetch';
 import {
-  TActionHistory,
   TAuthLogos,
   TNotification,
   TNotificationPreference,
@@ -17,8 +16,12 @@ import {
 import { revalidateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import { UAParser } from 'ua-parser-js';
+import { serverUser } from '@/lib/helper/auth/user';
 
-export const logUserActivitys = async (id: string) => {
+export const logUserActivitys = async (
+  userId: string,
+  refreshToken: string,
+) => {
   const headersList = await headers();
 
   const forwardedFor = headersList.get('x-forwarded-for');
@@ -30,10 +33,11 @@ export const logUserActivitys = async (id: string) => {
 
   const timestamp = new Date();
   const data = {
-    userId: id,
+    userId,
     ip,
     browser,
     os,
+    refreshToken,
     deviceType: device,
     timestamp,
     isActive: true,
@@ -60,14 +64,35 @@ export const logUserActivitys = async (id: string) => {
     };
   }
 };
-export const logoutUserActivitys = actionWithUser(async (id, user) => {
+export const deleteUserActivitys = async (id: string) => {
   try {
-    await serverFetch(`/users-session`, {
-      method: 'PUT',
-      body: {
-        id,
-        userId: user?.id,
-      },
+    await serverFetch(`/users-session/${id}`, {
+      method: 'DELETE',
+    });
+    revalidateTag('logs');
+  } catch (err) {
+    if (err instanceof ApiResponseError) {
+      return {
+        error: true,
+        message: err.message,
+        errorMessages: err.errorMessages,
+        meta: err.meta,
+      };
+    }
+
+    return {
+      error: true,
+      message:
+        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+    };
+  }
+};
+export const closeSession = async () => {
+  try {
+    const user = await serverUser();
+    await serverFetch(`/users-session/logout/${user?.id}`, {
+      method: 'PATCH',
+      body: user?.refreshToken,
     });
   } catch (err) {
     if (err instanceof ApiResponseError) {
@@ -85,10 +110,10 @@ export const logoutUserActivitys = actionWithUser(async (id, user) => {
         err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
     };
   }
-});
-export const marknotificationAsRead = async (id: string) => {
+};
+export const marknotificationAsRead = async (id: string, userId: string) => {
   try {
-    await serverFetch(`/notifications/${id}/read`, {
+    await serverFetch(`/notifications/${id}/read/${userId}`, {
       method: 'PATCH',
       body: null,
     });
@@ -110,9 +135,9 @@ export const marknotificationAsRead = async (id: string) => {
     };
   }
 };
-export const markAllNotificationAsRead = async (id: string) => {
+export const markAllNotificationAsRead = async () => {
   try {
-    await serverFetch(`/notifications/${id}/read/all`, {
+    await serverFetch(`/notifications/read-all`, {
       method: 'PATCH',
       body: null,
     });
@@ -151,7 +176,7 @@ export const createNotificationPreference = validatedActionWithUser(
         {
           method: 'POST',
           body: newBody,
-        }
+        },
       );
 
       revalidateTag('preference');
@@ -176,57 +201,9 @@ export const createNotificationPreference = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 
-export const deleteAudiLog = actionWithUser(
-  async (id, user): Promise<ActionState<TActionHistory>> => {
-    try {
-      const log = await serverFetch<TActionHistory>(
-        `/audit/${id}?authorName=${user.name}&userId=${user.id}`,
-        {
-          method: 'DELETE',
-        }
-      );
-
-      revalidateTag('actionHistory');
-      return {
-        error: false,
-        message: FLASH_MESSAGE.DELETED,
-        data: log,
-      };
-    } catch (error) {
-      return {
-        error: true,
-        message: error as string,
-      };
-    }
-  }
-);
-export const deleteAllAudiLog = actionWithUser(
-  async (id, user): Promise<ActionState<TActionHistory>> => {
-    try {
-      const log = await serverFetch<TActionHistory>(
-        `/audit/all?userId=${user.id}&authorName=${user.name}`,
-        {
-          method: 'DELETE',
-        }
-      );
-
-      revalidateTag('actionHistory');
-      return {
-        error: false,
-        message: FLASH_MESSAGE.DELETED,
-        data: log,
-      };
-    } catch (error) {
-      return {
-        error: true,
-        message: error as string,
-      };
-    }
-  }
-);
 export const deleteNotification = actionWithUser(
   async (id, user): Promise<ActionState<TNotification>> => {
     try {
@@ -247,7 +224,7 @@ export const deleteNotification = actionWithUser(
         message: error as string,
       };
     }
-  }
+  },
 );
 export const deleteAllNotification = async (): Promise<
   ActionState<TNotification>
@@ -270,28 +247,3 @@ export const deleteAllNotification = async (): Promise<
     };
   }
 };
-
-export const deleteAllUserNotification = actionWithUser(
-  async (id, user): Promise<ActionState<TNotification>> => {
-    try {
-      const log = await serverFetch<TNotification>(
-        `/notifications/all/${user.id}`,
-        {
-          method: 'DELETE',
-        }
-      );
-
-      revalidateTag('notification');
-      return {
-        error: false,
-        message: FLASH_MESSAGE.DELETED,
-        data: log,
-      };
-    } catch (error) {
-      return {
-        error: true,
-        message: error as string,
-      };
-    }
-  }
-);

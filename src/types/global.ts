@@ -18,7 +18,7 @@ export type TUser = {
   id: string;
   name: string;
   email: string;
-  avatar: string;
+  avatar?: string | undefined;
   role: string;
   contact: {
     phone: number;
@@ -641,8 +641,30 @@ export type TAuthLogos = {
   isActive: boolean;
 };
 export type TNotification = {
+  notifications: {
+    id: string;
+    type: string;
+    title: string;
+    message: string;
+    userId: string;
+    metadata: {
+      message: string;
+      authorId: string;
+      description: string;
+      url: string;
+    };
+    read: boolean;
+    recipientType: 'USER';
+    facultyId: null;
+    studentId: null;
+    createdAt: Date;
+  }[];
+  unreadCount: number;
+};
+export type TNotify = {
   id: string;
   type: string;
+  title: string;
   message: string;
   userId: string;
   metadata: {
@@ -652,6 +674,9 @@ export type TNotification = {
     url: string;
   };
   read: boolean;
+  recipientType: 'USER';
+  facultyId: null;
+  studentId: null;
   createdAt: Date;
 };
 
@@ -755,6 +780,7 @@ export type TAcademicService = {
   id: string;
   title: string;
   priceId: string;
+  type: string;
   price: {
     amount: number;
   };
@@ -931,6 +957,21 @@ export type TRequest = {
     to: string;
   };
 };
+export type TUactiveStudents = {
+  id: string;
+  academicSemester: {
+    id: string;
+    title: string;
+  };
+  academicDepartment: {
+    id: string;
+    title: string;
+  };
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  profileImage: string | null;
+};
 export type TSemesterHistory = {
   id: string;
   studentId: string;
@@ -985,6 +1026,137 @@ export type TStudentDocuments = {
   uploadedAt: Date;
   reviewedAt: Date | null;
   reviewedBy: string | null;
+};
+export type TLockedAccount = {
+  name: string;
+  id: string;
+  email: string;
+  failedLoginAttempts: number;
+  lockedUntil: Date | null;
+  lastLoginAt: Date | null;
+  role: string;
+};
+export type TExames = {
+  id: string;
+  status: TPaymentStatus;
+  student: {
+    id: string;
+    studentId: string;
+    name: string;
+    profileImage: string | null;
+  };
+  discipline: {
+    name: string;
+    id: string;
+  };
+  course: {
+    id: string;
+    title: string;
+  };
+  semester: {
+    id: string;
+    title: string;
+    year: string;
+  };
+  section: {
+    id: string;
+    title: string;
+    shift: string;
+  };
+  location: {
+    building: string;
+    room: string;
+    floor: string;
+  };
+  date: Date;
+  time: string;
+  payment: TPaymentStatus;
+};
+export type TExameStatemant = {
+  id: string;
+  academicSemester: string;
+  course: string;
+  discipline: string;
+  faculty: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profileImage: string | null;
+  };
+  documentUrl: string;
+  type: 'RETAKE' | 'ESPECIAL_EXAME';
+};
+export type TRetakeAta = {
+  discipline: {
+    name: string;
+    id: string;
+  };
+  semester: {
+    id: string;
+    title: string;
+    year: number;
+  };
+  retakes: {
+    number: number;
+    studentId: string;
+    name: string;
+    section: string;
+    shift: string;
+    date: Date;
+    time: string;
+    location: {
+      building: string;
+      room: string;
+      floor: string | null;
+    };
+  }[];
+};
+export type Semester = {
+  id: string;
+  title: string;
+  year: number;
+};
+export type Location = {
+  building: string;
+  room: string;
+  floor: number | null;
+};
+export type AtaStudent = {
+  number: number;
+  studentId: string;
+  name: string;
+  date: string;
+  time: string;
+  location: Location;
+};
+export type AtaSection = {
+  section: {
+    id: string;
+    title: string;
+    shift: string;
+  };
+  course: {
+    title: string;
+  };
+  department: {
+    id: string;
+    title: string;
+  };
+  students: AtaStudent[];
+};
+export type TAtaDiscipline = {
+  name: string;
+  id: string;
+};
+export type RetakeSectionItem = {
+  id: string;
+  title: string;
+  shift: string;
+};
+export type RetakeAtaResponse = {
+  discipline: TAtaDiscipline;
+  semester: Semester | null;
+  sections: AtaSection[];
 };
 export type TMenssage = {
   id: string;

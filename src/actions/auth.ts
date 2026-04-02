@@ -8,7 +8,7 @@ import { serverFetch } from '@/services/server-fetch';
 import { ActionResult, ActionState } from '@/types/api-error';
 
 export const recoverPassword = async (
-  data: string
+  data: string,
 ): Promise<ActionState<null>> => {
   try {
     await serverFetch<null>('/auth/recover-password', {
@@ -33,8 +33,6 @@ export const recoverPassword = async (
 export const resetPassword = validatedAction(
   resetPasswordSchema,
   async (data): Promise<ActionResult<null>> => {
-    console.log(data);
-
     try {
       await serverFetch<null>('/auth/reset-password', {
         method: 'POST',
@@ -61,5 +59,33 @@ export const resetPassword = validatedAction(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
+export const unlockAccount = async (userId: string) => {
+  try {
+    await serverFetch<null>(`/auth/unlock/${userId}`, {
+      method: 'POST',
+      body: null,
+    });
+
+    return {
+      error: false,
+      data: null,
+    };
+  } catch (err) {
+    if (err instanceof ApiResponseError) {
+      return {
+        error: true,
+        message: err.message,
+        errorMessages: err.errorMessages,
+        meta: err.meta,
+      };
+    }
+
+    return {
+      error: true,
+      message:
+        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+    };
+  }
+};

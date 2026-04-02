@@ -7,6 +7,8 @@ import { getUserSeesionLogs } from '@/services/data/history-logs'
 export default async function ServerWrapper() {
    const currentUser = await serverUser()
    const currentUserLogs = await getUserSeesionLogs(currentUser?.id || '')
+   // console.log(currentUserLogs);
+
    const tabs = [
       {
          id: '1',

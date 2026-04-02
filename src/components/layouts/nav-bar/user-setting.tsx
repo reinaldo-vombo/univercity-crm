@@ -1,12 +1,12 @@
 import { ROUTES } from '@/constants/routes'
-import { Activity, Building2, CreditCard, Info, Settings, User, Users2 } from 'lucide-react'
+import { Activity, Building2, CreditCard, Home, Info, Settings, Users2 } from 'lucide-react'
 import Link from 'next/link'
 
 const links = [
    {
-      href: ROUTES.ACCOUNT,
-      label: "Minha conta",
-      icon: <User />
+      href: ROUTES.SECRETARY,
+      label: "Secretaria",
+      icon: <Home />
    },
    {
       href: ROUTES.USERS,
