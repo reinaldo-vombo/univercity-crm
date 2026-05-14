@@ -1,29 +1,24 @@
 import { IQueryParams, TDiscipline } from '@/types/global';
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
-import { REVALIDATION } from '@/constants/relalidation';
+import { cacheLife, cacheTag } from 'next/cache';
+import { getUserToken } from '@/lib/helper/auth/user';
 
 export const getAllDiscipline = async (
-  query?: IQueryParams
+  query?: IQueryParams,
 ): Promise<TDiscipline[]> => {
-  try {
-    const queryString = new URLSearchParams(
-      Object.entries(query || {}).reduce((acc, [key, value]) => {
-        if (value !== undefined && value !== null && value !== '')
-          acc[key] = String(value);
-        return acc;
-      }, {} as Record<string, string>)
-    ).toString();
+  console.log(query);
 
-    const url = `/discipline${queryString ? `?${queryString}` : ''}`;
-    const discipline = await serverFetch<TDiscipline[]>(url, {
-      next: {
-        tags: ['discipline'],
-        revalidate:
-          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
-      },
-    });
-    return discipline;
+  try {
+    const token = await getUserToken();
+    const getDiscipline = async () => {
+      'use cache';
+      cacheTag('disciplines');
+      cacheLife('hours');
+      return serverFetch<TDiscipline[]>('/discipline', {}, token);
+    };
+
+    return getDiscipline();
   } catch (error) {
     handleApiError(error);
   }

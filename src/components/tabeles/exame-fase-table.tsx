@@ -39,15 +39,15 @@ const ExameFaseTable = ({ data, buildings }: TProps) => {
          console.error(err);
       }
    };
-   const faseStatus = (faseDate: Date) => {
-      const isActive = now > faseDate
+   const faseStatus = (faseDate: Date | string) => {
+      const isClosed = now > new Date(faseDate);
 
-      if (isActive === false) {
-         return <CloseBage title="Encerrado" />
-      } else {
-         return <CompleteBage title="Decorrendo" />
-      }
-   }
+      return isClosed ? (
+         <CloseBage title="Encerrado" />
+      ) : (
+         <CompleteBage title="Decorrendo" />
+      );
+   };
    return (
       <div>
          <Table>

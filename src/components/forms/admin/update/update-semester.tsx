@@ -56,15 +56,15 @@ const UpdateSemesterForm = ({ values }: Props) => {
          isCurrent: isCurrent,
       }
    })
+
+
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof updateSemesterSchema>) {
-      const formData: any = new FormData();
-      Object.entries(values).forEach(([key, value]) => {
-         formData.append(key, value);
-      });
+
       startTransition(async () => {
          try {
-            const response = await updatedSemester(formData);
+
+            const response = await updatedSemester(values);
 
             if (response.error) {
                toast.warning(response.message);

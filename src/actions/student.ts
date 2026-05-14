@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TStudent, TStudentDocuments } from '../types/global';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ActionResult } from '../types/api-error';
@@ -17,12 +17,12 @@ export const addNewStudent = validatedActionWithUser(
   studentSchema,
   async (data): Promise<ActionResult<TStudent>> => {
     try {
-      const Students = await serverFetch<TStudent>(`/student`, {
+      const Students = await serverActionFetch<TStudent>(`/student`, {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('student');
+      updateTag('student');
 
       return {
         error: false,
@@ -51,12 +51,12 @@ export const updatedStudent = validatedActionWithUser(
   async (data): Promise<ActionResult<TStudent>> => {
     try {
       const { id, ...updateData } = data;
-      const departements = await serverFetch<TStudent>(`/student/${id}`, {
+      const departements = await serverActionFetch<TStudent>(`/student/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
 
-      revalidateTag('student');
+      updateTag('student');
 
       return {
         error: false,
@@ -85,7 +85,7 @@ export const updatedStudentDocuments = validatedActionWithUser(
   async (data): Promise<ActionResult<TStudentDocuments>> => {
     try {
       const { documentId, ...updateData } = data;
-      const departements = await serverFetch<TStudentDocuments>(
+      const departements = await serverActionFetch<TStudentDocuments>(
         `/student/documents/${documentId}`,
         {
           method: 'PATCH',
@@ -93,7 +93,7 @@ export const updatedStudentDocuments = validatedActionWithUser(
         },
       );
 
-      revalidateTag('student-docs');
+      updateTag('student-docs');
 
       return {
         error: false,
@@ -122,11 +122,11 @@ export const deleteStudent = async (
   id: string,
 ): Promise<ActionResult<TStudent>> => {
   try {
-    const data = await serverFetch<TStudent>(`/student/${id}`, {
+    const data = await serverActionFetch<TStudent>(`/student/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('student');
+    updateTag('student');
     return {
       error: false,
       data,

@@ -1,9 +1,11 @@
 // lib/fetch/server-fetch.ts
 
+// import { getServerSession } from 'next-auth';
+// import { authOptions } from '@/config/auth';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/config/auth';
 import { ApiResponseError } from './api-error';
 import { handleApiError } from './error-handler';
+import { authOptions } from '@/config/auth';
 
 const baseURL = process.env.API_BASE_URL;
 
@@ -18,9 +20,10 @@ type ServerFetchOptions = {
 export async function serverFetch<T>(
   endpoint: string,
   options: ServerFetchOptions = {},
+  accessToken: string | undefined,
 ): Promise<T> {
   try {
-    const session = await getServerSession(authOptions);
+    // const session = await getServerSession(authOptions);
     const isFormData = options.body instanceof FormData;
     const headers: Record<string, string> = {
       ...(options.headers ?? {}),
@@ -29,8 +32,8 @@ export async function serverFetch<T>(
       headers['Content-Type'] = 'application/json';
     }
 
-    if (session?.user?.accessToken) {
-      headers['Authorization'] = `Bearer ${session.user.accessToken}`;
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
     const response = await fetch(`${baseURL}${endpoint}`, {
@@ -55,6 +58,47 @@ export async function serverFetch<T>(
     return json.data as T;
   } catch (error) {
     handleApiError(error);
-    throw error;
+  }
+}
+export async function serverActionFetch<T>(
+  endpoint: string,
+  options: ServerFetchOptions = {},
+): Promise<T> {
+  try {
+    const session = await getServerSession(authOptions);
+    const isFormData = options.body instanceof FormData;
+    const headers: Record<string, string> = {
+      ...(options.headers ?? {}),
+    };
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    if (session?.user?.accessToken) {
+      headers['Authorization'] = `Bearer ${session?.user?.accessToken}`;
+    }
+
+    const response = await fetch(`${baseURL}${endpoint}`, {
+      method: options.method || 'GET',
+      body: options.body ? JSON.stringify(options.body) : undefined,
+      headers,
+      next: options.next,
+      cache: options.cache,
+    });
+    const json = await response.json();
+
+    if (!response.ok || json?.success === false) {
+      throw new ApiResponseError(
+        response.status,
+        json?.message || 'Request failed',
+        json?.errorMessages,
+        json?.meta,
+        json?.stack,
+      );
+    }
+
+    return json.data as T;
+  } catch (error) {
+    handleApiError(error);
   }
 }

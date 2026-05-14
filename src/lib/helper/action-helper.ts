@@ -13,14 +13,14 @@ export type ActionState = {
 // Generic type for actions with schema validation (no auth)
 type ValidatedActionFn<S extends z.ZodTypeAny, R> = (
   data: z.infer<S>,
-  formData: FormData
+  formData: FormData,
 ) => Promise<R>;
 
 // Generic type for actions with schema + authenticated user
 type ValidatedUserActionFn<S extends z.ZodTypeAny, R> = (
   data: z.infer<S>,
   formData: FormData,
-  user: TUser
+  user: TUser,
 ) => Promise<R>;
 
 type TUserIdAction<R> = (id: string, user: TUser) => Promise<R>;
@@ -30,7 +30,7 @@ type TUserIdAction<R> = (id: string, user: TUser) => Promise<R>;
  */
 export function validatedAction<S extends z.ZodTypeAny, R>(
   schema: S,
-  actionFn: ValidatedActionFn<S, R>
+  actionFn: ValidatedActionFn<S, R>,
 ) {
   return async (prevState: ActionState, formData: FormData): Promise<R> => {
     const parsed = schema.safeParse(Object.fromEntries(formData.entries()));
@@ -64,7 +64,7 @@ export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
 }
 export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
   schema: S,
-  actionFn: ValidatedUserActionFn<S, R>
+  actionFn: ValidatedUserActionFn<S, R>,
 ) {
   return async (formData: FormData): Promise<R> => {
     const session = await getServerSession(authOptions);
@@ -81,11 +81,6 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
       string,
       FormDataEntryValue | FormDataEntryValue[]
     > = {};
-
-    // for (const key of formData.keys()) {
-    //   const values = formData.getAll(key);
-    //   formObject[key] = values.length > 1 ? values : values[0];
-    // }
     for (const key of formData.keys()) {
       const values = formData.getAll(key);
       formObject[key] = values.length > 1 ? values : values[0];
@@ -165,7 +160,7 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
 // }
 export function validatedActionWithUserJson<S extends z.ZodTypeAny, R>(
   schema: S,
-  actionFn: ValidatedUserActionFn<S, R>
+  actionFn: ValidatedUserActionFn<S, R>,
 ) {
   return async (formData: FormData): Promise<R> => {
     const session = await getServerSession(authOptions);

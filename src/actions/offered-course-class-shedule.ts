@@ -4,16 +4,16 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUserJson } from '@/lib/helper/action-helper';
 import { createScheduleSchema } from '@/lib/validation/class-schedule';
 import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import { ActionResult } from '@/types/api-error';
 import { TClassShedule } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export const addNewOfferedCourseClassSchedule = validatedActionWithUserJson(
   createScheduleSchema,
   async (data): Promise<ActionResult<TClassShedule>> => {
     try {
-      const course = await serverFetch<TClassShedule>(
+      const course = await serverActionFetch<TClassShedule>(
         '/offered-course-class-schedule',
         {
           method: 'POST',
@@ -21,7 +21,7 @@ export const addNewOfferedCourseClassSchedule = validatedActionWithUserJson(
         },
       );
 
-      revalidateTag('offered-course-class-schedule');
+      updateTag('offered-course-class-schedule');
 
       return {
         error: false,
@@ -50,14 +50,14 @@ export const DeleteOfferedCourseSchedule = async (
   id: string,
 ): Promise<ActionResult<TClassShedule>> => {
   try {
-    const data = await serverFetch<TClassShedule>(
+    const data = await serverActionFetch<TClassShedule>(
       `/offered-course-class-schedule/${id}`,
       {
         method: 'DELETE',
       },
     );
 
-    revalidateTag('offered-course-section');
+    updateTag('offered-course-section');
     return {
       error: false,
       data,
@@ -84,14 +84,14 @@ export const DeleteOfferedCourseScheduleByDiscipline = async (
   disciplineId: string,
 ): Promise<ActionResult<TClassShedule>> => {
   try {
-    const data = await serverFetch<TClassShedule>(
+    const data = await serverActionFetch<TClassShedule>(
       `/offered-course-class-schedule/section/${sectionId}/discipline/${disciplineId}`,
       {
         method: 'DELETE',
       },
     );
 
-    revalidateTag('offered-course-section');
+    updateTag('offered-course-section');
     return {
       error: false,
       data,

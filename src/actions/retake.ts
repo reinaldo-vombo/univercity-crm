@@ -2,8 +2,8 @@
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ApiResponseError } from '@/services/api-error';
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { validatedActionWithUserJson } from '../lib/helper/action-helper';
 import { ActionResult } from '../types/api-error';
 import { updateBulkRetakeSchema } from '@/lib/validation/retake';
@@ -13,7 +13,7 @@ export const updateBulkRetake = validatedActionWithUserJson(
   updateBulkRetakeSchema,
   async (data): Promise<ActionResult<TRetakeAta>> => {
     try {
-      const exames = await serverFetch<TRetakeAta>(
+      const exames = await serverActionFetch<TRetakeAta>(
         `/retake//bulk-update/section`,
         {
           method: 'PATCH',
@@ -21,7 +21,7 @@ export const updateBulkRetake = validatedActionWithUserJson(
         },
       );
 
-      revalidateTag('retake-exame');
+      updateTag('retake-exame');
 
       return {
         error: false,

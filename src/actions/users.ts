@@ -1,8 +1,8 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TUser } from '../types/global';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import {
@@ -13,18 +13,20 @@ import {
 import { ActionResult, ActionState } from '../types/api-error';
 import { saveFile } from '../lib/helper/uploade';
 import { ApiResponseError } from '@/services/api-error';
-import { serverUser } from '@/lib/helper/auth/user';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
   async (data, _, user): Promise<ActionResult<TUser>> => {
     try {
-      const member = await serverFetch<TUser>(`/users?name=${user.name}`, {
-        method: 'POST',
-        body: data,
-      });
+      const member = await serverActionFetch<TUser>(
+        `/users?name=${user.name}`,
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
 
-      revalidateTag('user');
+      updateTag('users');
 
       return {
         error: false,
@@ -46,7 +48,7 @@ export const addNewUser = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 
 export const updatedUser = validatedActionWithUser(
@@ -59,15 +61,15 @@ export const updatedUser = validatedActionWithUser(
       }
       data = { ...data, avatar: avatarUrl };
 
-      const result = await serverFetch<TUser>(
+      const result = await serverActionFetch<TUser>(
         `/users/${data.id}?name=${user.name}`,
         {
           method: 'PATCH',
           body: data,
-        }
+        },
       );
 
-      revalidateTag('user');
+      updateTag(`user-${user.id}`);
 
       return {
         error: false,
@@ -89,7 +91,7 @@ export const updatedUser = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updatedUserPassword = validatedActionWithUser(
   changePasswordShema,
@@ -103,12 +105,12 @@ export const updatedUserPassword = validatedActionWithUser(
           message: 'As senha não combinam',
         };
       }
-      const result = await serverFetch<TUser>(
+      const result = await serverActionFetch<TUser>(
         `/users/${user.id}/change-password`,
         {
           method: 'PATCH',
           body: data,
-        }
+        },
       );
 
       return {
@@ -131,20 +133,15 @@ export const updatedUserPassword = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const deleteUser = async (id: string): Promise<ActionState<TUser>> => {
-  const user = await serverUser();
-
   try {
-    const dletedUser = await serverFetch<TUser>(
-      `/users/${id}?name=${user?.name}`,
-      {
-        method: 'DELETE',
-      }
-    );
+    const dletedUser = await serverActionFetch<TUser>(`/users/${id}`, {
+      method: 'DELETE',
+    });
 
-    revalidateTag('user');
+    updateTag(`user-${id}`);
     return {
       error: false,
       message: FLASH_MESSAGE.DELETED,

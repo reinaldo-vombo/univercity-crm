@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
   validatedActionWithUser,
@@ -17,17 +17,14 @@ import {
 
 export const addNewDiscipline = validatedActionWithUserJson(
   bulkDisciplineSchema,
-  async (data, _, user): Promise<ActionResult<TDiscipline>> => {
+  async (data): Promise<ActionResult<TDiscipline>> => {
     try {
-      const discipline = await serverFetch<TDiscipline>(
-        `/discipline?name=${user.name}`,
-        {
-          method: 'POST',
-          body: data,
-        }
-      );
+      const discipline = await serverActionFetch<TDiscipline>(`/discipline`, {
+        method: 'POST',
+        body: data,
+      });
 
-      revalidateTag('discipline');
+      updateTag('disciplines');
 
       return {
         error: false,
@@ -49,19 +46,22 @@ export const addNewDiscipline = validatedActionWithUserJson(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updateDiscipline = validatedActionWithUser(
   updateDisciplineSchema,
   async (data): Promise<ActionResult<TDiscipline>> => {
     const { id, ...updateData } = data;
     try {
-      const discipline = await serverFetch<TDiscipline>(`/discipline/${id}`, {
-        method: 'PATCH',
-        body: updateData,
-      });
+      const discipline = await serverActionFetch<TDiscipline>(
+        `/discipline/${id}`,
+        {
+          method: 'PATCH',
+          body: updateData,
+        },
+      );
 
-      revalidateTag('discipline');
+      updateTag('disciplines');
 
       return {
         error: false,
@@ -81,18 +81,18 @@ export const updateDiscipline = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 
 export const deleteDiscipline = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TDiscipline>> => {
   try {
-    const data = await serverFetch<TDiscipline>(`/discipline/${id}`, {
+    const data = await serverActionFetch<TDiscipline>(`/discipline/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('discipline');
+    updateTag('disciplines');
     return {
       error: false,
       data,

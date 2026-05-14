@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ActionResult } from '../types/api-error';
@@ -16,7 +16,7 @@ export const addNewBankAccount = validatedActionWithUser(
   createBankAccountZodSchema,
   async (data): Promise<ActionResult<TUniversityBankAccount>> => {
     try {
-      const account = await serverFetch<TUniversityBankAccount>(
+      const account = await serverActionFetch<TUniversityBankAccount>(
         '/bank-accountes',
         {
           method: 'POST',
@@ -24,7 +24,7 @@ export const addNewBankAccount = validatedActionWithUser(
         },
       );
 
-      revalidateTag('bank-accountes');
+      updateTag('bank-accountes');
 
       return {
         error: false,
@@ -46,7 +46,7 @@ export const updateBankAccount = validatedActionWithUser(
   async (data): Promise<ActionResult<TUniversityBankAccount>> => {
     const { id, ...res } = data;
     try {
-      const curses = await serverFetch<TUniversityBankAccount>(
+      const account = await serverActionFetch<TUniversityBankAccount>(
         `/bank-accountes/${id}`,
         {
           method: 'PATCH',
@@ -54,11 +54,11 @@ export const updateBankAccount = validatedActionWithUser(
         },
       );
 
-      revalidateTag('faculty');
+      updateTag('bank-accountes');
 
       return {
         error: false,
-        data: curses,
+        data: account,
       };
     } catch (err) {
       const message =
@@ -76,14 +76,14 @@ export const deleteFaculty = async (
   id: string,
 ): Promise<ActionResult<TUniversityBankAccount>> => {
   try {
-    const data = await serverFetch<TUniversityBankAccount>(
+    const data = await serverActionFetch<TUniversityBankAccount>(
       `/bank-accountes/${id}`,
       {
         method: 'DELETE',
       },
     );
 
-    revalidateTag('bank-accountes');
+    updateTag('bank-accountes');
     return {
       error: false,
       data,

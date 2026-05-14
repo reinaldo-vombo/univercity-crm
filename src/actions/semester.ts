@@ -1,24 +1,23 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TSemester } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
-import { semesterSchema } from '../lib/validation/semester';
 import { ApiResponseError } from '@/services/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ActionResult } from '../types/api-error';
+import { serverUser } from '@/lib/helper/auth/user';
 
 export const addNewSemester = async (
-  data: any
+  data: any,
 ): Promise<ActionResult<TSemester>> => {
   try {
-    const semester = await serverFetch<TSemester>('/academic-semester', {
+    const semester = await serverActionFetch<TSemester>('/academic-semester', {
       method: 'POST',
       body: data,
     });
 
-    revalidateTag('semester');
+    updateTag('semester');
 
     return {
       error: false,
@@ -42,51 +41,60 @@ export const addNewSemester = async (
   }
 };
 
-export const updatedSemester = validatedActionWithUser(
-  semesterSchema,
-  async (data, _, user): Promise<ActionResult<TSemester>> => {
-    try {
-      const semester = await serverFetch<TSemester>(
-        `/academic-semester/${user.id}`,
-        {
-          method: 'PATCH',
-          body: data,
-        }
-      );
-
-      revalidateTag('semester');
-
-      return {
-        error: false,
-        data: semester,
-      };
-    } catch (err) {
-      if (err instanceof ApiResponseError) {
-        return {
-          error: true,
-          message: err.message,
-          errorMessages: err.errorMessages,
-          meta: err.meta,
-        };
-      }
-
-      return {
-        error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-      };
-    }
-  }
-);
-export const deleteSemester = async (
-  id: string
+export const updatedSemester = async (
+  data: TSemester,
 ): Promise<ActionResult<TSemester>> => {
   try {
-    const data = await serverFetch<TSemester>(`/academic-semester/${id}`, {
-      method: 'DELETE',
-    });
+    const user = await serverUser();
+    if (!user) {
+      return {
+        error: true,
+        message: FLASH_MESSAGE.NOTAUTHORIZED,
+      };
+    }
+    const semester = await serverActionFetch<TSemester>(
+      `/academic-semester/${data.id}`,
+      {
+        method: 'PATCH',
+        body: data,
+      },
+    );
 
-    revalidateTag('semester');
+    updateTag('semester');
+
+    return {
+      error: false,
+      data: semester,
+    };
+  } catch (err) {
+    if (err instanceof ApiResponseError) {
+      return {
+        error: true,
+        message: err.message,
+        errorMessages: err.errorMessages,
+        meta: err.meta,
+      };
+    }
+
+    return {
+      error: true,
+      message:
+        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+    };
+  }
+};
+export const deleteSemester = async (
+  id: string,
+): Promise<ActionResult<TSemester>> => {
+  try {
+    const data = await serverActionFetch<TSemester>(
+      `/academic-semester/${id}`,
+      {
+        method: 'DELETE',
+      },
+    );
+
+    updateTag('semester');
     return {
       error: false,
       data,

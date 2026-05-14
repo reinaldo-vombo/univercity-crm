@@ -19,7 +19,7 @@ export const semesterSchema = z.object({
 });
 export const updateSemesterSchema = z.object({
   id: z.string(),
-  title: z.enum(['1 semestre', '2 semestre'], {
+  title: z.enum(['1º Semestre', '2º Semestre'], {
     message: 'Temorada é obrigatorio',
   }),
   year: z.string({

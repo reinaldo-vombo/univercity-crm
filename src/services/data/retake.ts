@@ -1,4 +1,3 @@
-import { REVALIDATION } from '@/constants/relalidation';
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
 import {
@@ -7,30 +6,34 @@ import {
   TExameStatemant,
   TRetakeAta,
 } from '@/types/global';
+import { cacheLife, cacheTag } from 'next/cache';
+import { getUserToken } from '@/lib/helper/auth/user';
 
 export const getAllExameStateman = async (): Promise<TExameStatemant[]> => {
   try {
-    const statemant = await serverFetch<TExameStatemant[]>(
-      '/retake/statemants',
-      {
-        next: { tags: ['exame-satateman'], revalidate: REVALIDATION.ONE_HOUR },
-      },
-    );
-    return statemant;
+    const token = await getUserToken();
+    const getExameStateman = async () => {
+      'use cache';
+      cacheTag('exame-satateman');
+      cacheLife('hours');
+      return serverFetch<TExameStatemant[]>('/retake/statemants', {}, token);
+    };
+
+    return getExameStateman();
   } catch (error) {
     handleApiError(error);
   }
 };
 export const getAllRetakes = async (): Promise<TExames[]> => {
   try {
-    const statemant = await serverFetch<TExames[]>('/retake/all', {
-      next: {
-        tags: ['retake-exame'],
-        revalidate:
-          process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
-      },
-    });
-    return statemant;
+    const token = await getUserToken();
+    const getRetakes = async () => {
+      'use cache';
+      cacheTag('exame-retake');
+      cacheLife('hours');
+      return serverFetch<TExames[]>('/retake/all', {}, token);
+    };
+    return getRetakes();
   } catch (error) {
     handleApiError(error);
   }
@@ -40,17 +43,19 @@ export const getRetakeAtaData = async (
   academicSemesterId: string,
 ): Promise<TRetakeAta> => {
   try {
-    const statemant = await serverFetch<TRetakeAta>(
-      `/retake/ata/${disciplineId}/${academicSemesterId}`,
-      {
-        next: {
-          tags: ['retake-ata'],
-          revalidate:
-            process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
-        },
-      },
-    );
-    return statemant;
+    const token = await getUserToken();
+    const getRetakes = async () => {
+      'use cache';
+      cacheTag(`retake-ata-${disciplineId}`);
+      cacheLife('hours');
+      return serverFetch<TRetakeAta>(
+        `/retake/ata/${disciplineId}/${academicSemesterId}`,
+        {},
+        token,
+      );
+    };
+
+    return getRetakes();
   } catch (error) {
     handleApiError(error);
   }
@@ -60,17 +65,18 @@ export const getAllAtaDataByCourse = async (
   academicSemesterId: string,
 ): Promise<TAtaDiscipline[]> => {
   try {
-    const statemant = await serverFetch<TAtaDiscipline[]>(
-      `/retake/all/course/${courseId}/${academicSemesterId}`,
-      {
-        next: {
-          tags: ['retake-ata-course'],
-          revalidate:
-            process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
-        },
-      },
-    );
-    return statemant;
+    const token = await getUserToken();
+    const getAtaDataByCourse = async () => {
+      'use cache';
+      cacheTag(`retake-ata-course-${courseId}`);
+      cacheLife('hours');
+      return serverFetch<TAtaDiscipline[]>(
+        `/retake/all/course/${courseId}/${academicSemesterId}`,
+        {},
+        token,
+      );
+    };
+    return getAtaDataByCourse();
   } catch (error) {
     handleApiError(error);
   }
@@ -80,17 +86,18 @@ export const getRetakeSectionsByDiscipline = async (
   academicSemesterId: string,
 ): Promise<TAtaDiscipline[]> => {
   try {
-    const statemant = await serverFetch<TAtaDiscipline[]>(
-      `/retake/ata/${disciplineId}/${academicSemesterId}/sections`,
-      {
-        next: {
-          tags: ['retake-ata-discipline'],
-          revalidate:
-            process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
-        },
-      },
-    );
-    return statemant;
+    const token = await getUserToken();
+    const getRetakeSectionByDiscipline = async () => {
+      'use cache';
+      cacheTag(`retake-ata-discipline-${disciplineId}`);
+      cacheLife('hours');
+      return serverFetch<TAtaDiscipline[]>(
+        `/retake/ata/${disciplineId}/${academicSemesterId}/sections`,
+        {},
+        token,
+      );
+    };
+    return getRetakeSectionByDiscipline();
   } catch (error) {
     handleApiError(error);
   }

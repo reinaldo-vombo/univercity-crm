@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TBuilding } from '@/types/global';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import {
@@ -16,12 +16,12 @@ export const addNewBuilding = validatedActionWithUser(
   buildingSchema,
   async (data): Promise<ActionResult<TBuilding>> => {
     try {
-      const curses = await serverFetch<TBuilding>('/building', {
+      const curses = await serverActionFetch<TBuilding>('/building', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('building');
+      updateTag('buildings');
 
       return {
         error: false,
@@ -43,19 +43,19 @@ export const addNewBuilding = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updateBuilding = validatedActionWithUser(
   updateBuildingSchema,
   async (data): Promise<ActionResult<TBuilding>> => {
     const { id, title } = data;
     try {
-      const building = await serverFetch<TBuilding>(`/building/${id}`, {
+      const building = await serverActionFetch<TBuilding>(`/building/${id}`, {
         method: 'PATCH',
         body: title,
       });
 
-      revalidateTag('building');
+      updateTag('building');
 
       return {
         error: false,
@@ -77,17 +77,17 @@ export const updateBuilding = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const deleteBuilding = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TBuilding>> => {
   try {
-    const data = await serverFetch<TBuilding>(`/building/${id}`, {
+    const data = await serverActionFetch<TBuilding>(`/building/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('building');
+    updateTag('building');
     return {
       error: false,
       data,

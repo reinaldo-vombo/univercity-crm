@@ -31,6 +31,7 @@ export default function Error({ error, reset }: TProps) {
           src="/500.svg"
           width={562}
           height={156}
+          loading='eager'
           alt="erro code 500"
         />
         {/* <img src="src/images/error/500-dark.svg" alt="500" className="hidden dark:block"/> */}

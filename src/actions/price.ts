@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { ApiResponseError } from '@/services/api-error';
@@ -13,16 +13,16 @@ export const addNewPrice = validatedActionWithUser(
   createpriceSchema,
   async (data): Promise<ActionResult<TCoursePrice>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>(`/prices`, {
+      const price = await serverActionFetch<TCoursePrice>(`/prices`, {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('price');
+      updateTag('prices');
 
       return {
         error: false,
-        data: curses,
+        data: price,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -46,12 +46,15 @@ export const updatePrice = validatedActionWithUser(
   UpdatePriceSchema,
   async (data): Promise<ActionResult<TCoursePrice>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>(`/prices/${data.id}`, {
-        method: 'PATCH',
-        body: data,
-      });
+      const curses = await serverActionFetch<TCoursePrice>(
+        `/prices/${data.id}`,
+        {
+          method: 'PATCH',
+          body: data,
+        },
+      );
 
-      revalidateTag('price');
+      updateTag('price');
 
       return {
         error: false,
@@ -78,11 +81,11 @@ export const deletePrice = async (
   id: string,
 ): Promise<ActionResult<TCoursePrice>> => {
   try {
-    const data = await serverFetch<TCoursePrice>(`/prices/${id}`, {
+    const data = await serverActionFetch<TCoursePrice>(`/prices/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('price');
+    updateTag('price');
     return {
       error: false,
       data,

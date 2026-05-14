@@ -16,13 +16,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { User } from "@/lib/helper/auth/user";
 
-type TRoles = {
-   role: "super_admin" | "admin"
-}
-export function AppSidebar({ role }: TRoles) {
+type TRoles = "super_admin" | "admin"
 
+export function AppSidebar() {
+   const user: any = User();
+   const role: TRoles = user && user.role
    const pathname = usePathname();
+   if (!user) {
+      return <p>Loading</p>
+   }
+
+
    const links = LINKS_BY_ROLE[role];
    const groupedLinks = links.reduce((acc, item) => {
       const section = item.section || 'general';
@@ -45,7 +51,7 @@ export function AppSidebar({ role }: TRoles) {
          <SidebarHeader>
             <Image
                className="dark:invert"
-               src="/logo.svg"
+               src="/SIGU.png"
                alt="Enrollix logo"
                width={70}
                height={70}

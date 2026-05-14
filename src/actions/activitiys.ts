@@ -7,16 +7,16 @@ import {
 import { preferenceShema } from '@/lib/validation/user';
 import { ApiResponseError } from '@/services/api-error';
 import { ActionResult, ActionState } from '../types/api-error';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import {
   TAuthLogos,
   TNotification,
   TNotificationPreference,
 } from '@/types/global';
-import { revalidateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import { UAParser } from 'ua-parser-js';
 import { serverUser } from '@/lib/helper/auth/user';
+import { updateTag } from 'next/cache';
 
 export const logUserActivitys = async (
   userId: string,
@@ -43,7 +43,7 @@ export const logUserActivitys = async (
     isActive: true,
   };
   try {
-    await serverFetch<TAuthLogos>('/users-session', {
+    await serverActionFetch<TAuthLogos>('/users-session', {
       method: 'POST',
       body: data,
     });
@@ -66,10 +66,10 @@ export const logUserActivitys = async (
 };
 export const deleteUserActivitys = async (id: string) => {
   try {
-    await serverFetch(`/users-session/${id}`, {
+    await serverActionFetch(`/users-session/${id}`, {
       method: 'DELETE',
     });
-    revalidateTag('logs');
+    updateTag('logs');
   } catch (err) {
     if (err instanceof ApiResponseError) {
       return {
@@ -90,7 +90,7 @@ export const deleteUserActivitys = async (id: string) => {
 export const closeSession = async () => {
   try {
     const user = await serverUser();
-    await serverFetch(`/users-session/logout/${user?.id}`, {
+    await serverActionFetch(`/users-session/logout/${user?.id}`, {
       method: 'PATCH',
       body: user?.refreshToken,
     });
@@ -113,11 +113,11 @@ export const closeSession = async () => {
 };
 export const marknotificationAsRead = async (id: string, userId: string) => {
   try {
-    await serverFetch(`/notifications/${id}/read/${userId}`, {
+    await serverActionFetch(`/notifications/${id}/read/${userId}`, {
       method: 'PATCH',
       body: null,
     });
-    revalidateTag('notification');
+    updateTag('notification');
   } catch (err) {
     if (err instanceof ApiResponseError) {
       return {
@@ -137,11 +137,11 @@ export const marknotificationAsRead = async (id: string, userId: string) => {
 };
 export const markAllNotificationAsRead = async () => {
   try {
-    await serverFetch(`/notifications/read-all`, {
+    await serverActionFetch(`/notifications/read-all`, {
       method: 'PATCH',
       body: null,
     });
-    revalidateTag('notification');
+    updateTag('notification');
   } catch (err) {
     if (err instanceof ApiResponseError) {
       return {
@@ -171,7 +171,7 @@ export const createNotificationPreference = validatedActionWithUser(
     };
 
     try {
-      const settings = await serverFetch<TNotificationPreference>(
+      const settings = await serverActionFetch<TNotificationPreference>(
         '/notifications/preferences',
         {
           method: 'POST',
@@ -179,7 +179,7 @@ export const createNotificationPreference = validatedActionWithUser(
         },
       );
 
-      revalidateTag('preference');
+      updateTag('preference');
 
       return {
         error: false,
@@ -207,12 +207,15 @@ export const createNotificationPreference = validatedActionWithUser(
 export const deleteNotification = actionWithUser(
   async (id, user): Promise<ActionState<TNotification>> => {
     try {
-      const log = await serverFetch<TNotification>(`/notifications/${id}`, {
-        method: 'DELETE',
-        body: { userId: user.id },
-      });
+      const log = await serverActionFetch<TNotification>(
+        `/notifications/${id}`,
+        {
+          method: 'DELETE',
+          body: { userId: user.id },
+        },
+      );
 
-      revalidateTag('notification');
+      updateTag('notification');
       return {
         error: false,
         message: FLASH_MESSAGE.DELETED,
@@ -230,11 +233,11 @@ export const deleteAllNotification = async (): Promise<
   ActionState<TNotification>
 > => {
   try {
-    const log = await serverFetch<TNotification>(`/notifications/`, {
+    const log = await serverActionFetch<TNotification>(`/notifications/`, {
       method: 'DELETE',
     });
 
-    revalidateTag('notification');
+    updateTag('notification');
     return {
       error: false,
       message: FLASH_MESSAGE.DELETED,

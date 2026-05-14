@@ -1,28 +1,22 @@
 "use client";
 
-import CreateUser from "@/components/forms/admin/post/create-user";
 import { UsersColumns } from "./columns";
 import { TUser } from "@/types/global"
 import { DataTable } from "@/components/shared/data-table";
+import dynamic from "next/dynamic";
+import FormLoading from "@/components/skeleton/form";
+const CreateUser = dynamic(() => import("@/components/forms/admin/post/create-user"),
+   { ssr: false, loading: () => <FormLoading /> })
 
 interface Props {
    data: TUser[];
 }
-
-const herader = {
-   id: "id",
-   name: "Nome completo",
-   email: "Email",
-   role: "Role"
-}
-
 export function UsersTable({ data }: Props) {
 
    const columns = UsersColumns();
 
    return <DataTable
       modalTitle="Cria novo útilizador"
-      fileHerderes={herader}
       actionForm={<CreateUser />}
       fileName="users"
       columns={columns}

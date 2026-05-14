@@ -7,24 +7,24 @@ import {
   updateOfferedCourseSectionZodSchema,
 } from '@/lib/validation/offered-course';
 import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import { ActionResult } from '@/types/api-error';
 import { TOfferedCourseSection } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export const addNewOfferedCourseSection = validatedActionWithUser(
   createOfferedCourseSectionZodSchema,
   async (data): Promise<ActionResult<TOfferedCourseSection>> => {
     try {
-      const course = await serverFetch<TOfferedCourseSection>(
+      const course = await serverActionFetch<TOfferedCourseSection>(
         '/offered-course-section',
         {
           method: 'POST',
           body: data,
-        }
+        },
       );
 
-      revalidateTag('offered-course-section');
+      updateTag('offered-course-section');
 
       return {
         error: false,
@@ -46,22 +46,26 @@ export const addNewOfferedCourseSection = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updateOfferedCourseSection = validatedActionWithUser(
   updateOfferedCourseSectionZodSchema,
   async (data): Promise<ActionResult<TOfferedCourseSection>> => {
     const { id, ...rest } = data;
+    const body = {
+      ...rest,
+      classSchedules: [],
+    };
     try {
-      const course = await serverFetch<TOfferedCourseSection>(
+      const course = await serverActionFetch<TOfferedCourseSection>(
         `/offered-course-section/${id}`,
         {
           method: 'PATCH',
-          body: rest,
-        }
+          body,
+        },
       );
 
-      revalidateTag('offered-course-section');
+      updateTag('offered-course-section');
 
       return {
         error: false,
@@ -83,20 +87,20 @@ export const updateOfferedCourseSection = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const DeleteOfferedCourseSection = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TOfferedCourseSection>> => {
   try {
-    const data = await serverFetch<TOfferedCourseSection>(
+    const data = await serverActionFetch<TOfferedCourseSection>(
       `/offered-course-section/${id}`,
       {
         method: 'DELETE',
-      }
+      },
     );
 
-    revalidateTag('offered-course-section');
+    updateTag('offered-course-section');
     return {
       error: false,
       data,

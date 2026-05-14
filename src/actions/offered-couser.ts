@@ -10,16 +10,16 @@ import {
   updateOfferedCourseZodSchema,
 } from '@/lib/validation/offered-course';
 import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import { ActionResult } from '@/types/api-error';
 import { TOfferedCourse } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export const addNewOfferedCourse = validatedActionWithUserJson(
   autoGenerateOfferedSchema,
   async (data): Promise<ActionResult<TOfferedCourse>> => {
     try {
-      const course = await serverFetch<TOfferedCourse>(
+      const course = await serverActionFetch<TOfferedCourse>(
         `/offered-course/auto-generate/${data.semesterRegistrationId}`,
         {
           method: 'POST',
@@ -27,7 +27,7 @@ export const addNewOfferedCourse = validatedActionWithUserJson(
         },
       );
 
-      revalidateTag('offered-course');
+      updateTag('offered-course');
 
       return {
         error: false,
@@ -55,7 +55,7 @@ export const updateOfferedCourse = validatedActionWithUser(
   updateOfferedCourseZodSchema,
   async (data): Promise<ActionResult<TOfferedCourse>> => {
     try {
-      const course = await serverFetch<TOfferedCourse>(
+      const course = await serverActionFetch<TOfferedCourse>(
         `/offered-course/${data.id}`,
         {
           method: 'PATCH',
@@ -63,7 +63,7 @@ export const updateOfferedCourse = validatedActionWithUser(
         },
       );
 
-      revalidateTag('offered-course');
+      updateTag('offered-course');
 
       return {
         error: false,
@@ -93,11 +93,14 @@ export const DeleteOfferedCourse = async (
   console.log(id);
 
   try {
-    const data = await serverFetch<TOfferedCourse>(`/offered-course/${id}`, {
-      method: 'DELETE',
-    });
+    const data = await serverActionFetch<TOfferedCourse>(
+      `/offered-course/${id}`,
+      {
+        method: 'DELETE',
+      },
+    );
 
-    revalidateTag('offered-course');
+    updateTag('offered-course');
     return {
       error: false,
       data,

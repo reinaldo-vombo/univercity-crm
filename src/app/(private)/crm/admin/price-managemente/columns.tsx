@@ -1,7 +1,7 @@
 // lib/columns/studentColumns.ts
 
 import { ColumnDef } from "@tanstack/react-table"
-import { BadgeDollarSign, Currency, Pen, Trash } from "lucide-react"
+import { BadgeDollarSign, BookCheck, Pen, Trash } from "lucide-react"
 import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
@@ -33,13 +33,13 @@ export function PriceColumns(): ColumnDef<TPrice>[] {
          },
       },
       {
-         accessorKey: "currency",
-         header: "Moeda",
+         accessorKey: "description",
+         header: "Titulo",
          cell: ({ row }) => {
-            const currency = row.original.currency;
+            const currency = row.original.description;
             return (
                <Badge className="flex items-center text-white bg-green-800 gap-2">
-                  <Currency className="text-green-500 " />
+                  <BookCheck />
                   <b>{currency}</b>
                </Badge>
             )

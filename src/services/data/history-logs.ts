@@ -1,30 +1,22 @@
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
-import { REVALIDATION } from '@/constants/relalidation';
 import { TActionHistory, TAuthLogos, TNotification } from '@/types/global';
-import { FLASH_MESSAGE } from '@/constants/flash-message';
+import { cacheLife, cacheTag } from 'next/cache';
+import { getUserToken } from '@/lib/helper/auth/user';
 
 export const getUserSeesionLogs = async (
   userId: string,
 ): Promise<TAuthLogos[]> => {
-  if (!userId) {
-    console.error(FLASH_MESSAGE.ID_REQUIRID);
-    return [];
-  }
+  const token = await getUserToken();
   try {
-    const sessionLogs = await serverFetch<TAuthLogos[]>(
-      `/users-session/${userId}`,
-      {
-        next: {
-          tags: ['logs'],
-          revalidate:
-            process.env.NODE_ENV === 'production'
-              ? REVALIDATION.FIVE_MINUTES
-              : 0,
-        },
-      },
-    );
-    return sessionLogs;
+    const getSession = async () => {
+      'use cache';
+      cacheTag(`logs-${userId}`);
+      cacheLife('hours');
+      return serverFetch<TAuthLogos[]>(`/users-session/${userId}`, {}, token);
+    };
+
+    return getSession();
   } catch (error) {
     handleApiError(error);
   }
@@ -32,20 +24,19 @@ export const getUserSeesionLogs = async (
 export const getUserNotifications = async (
   userId: string,
 ): Promise<TNotification> => {
-  try {
-    const notifications = await serverFetch<TNotification>(
+  const token = await getUserToken();
+  const getNotifications = async () => {
+    'use cache';
+    cacheTag(`notification-${userId}`);
+    cacheLife('hours');
+    return serverFetch<TNotification>(
       `/notifications/${userId}/USER`,
-      {
-        next: {
-          tags: ['notification'],
-          revalidate:
-            process.env.NODE_ENV === 'production'
-              ? REVALIDATION.ONE_MINUTES
-              : 0,
-        },
-      },
+      {},
+      token,
     );
-    return notifications;
+  };
+  try {
+    return getNotifications();
   } catch (error) {
     handleApiError(error);
   }
@@ -67,11 +58,15 @@ export const getUserNotifications = async (
 //   }
 // };
 export const getAllUserActionHistory = async (): Promise<TActionHistory[]> => {
+  const token = await getUserToken();
+  const getAllUserActionHistory = async () => {
+    'use cache';
+    cacheTag('actionHistory');
+    cacheLife('hours');
+    return serverFetch<TActionHistory[]>(`/audit`, {}, token);
+  };
   try {
-    const result = await serverFetch<TActionHistory[]>(`/audit`, {
-      next: { tags: ['actionHistory'] },
-    });
-    return result;
+    return getAllUserActionHistory();
   } catch (error) {
     handleApiError(error);
   }

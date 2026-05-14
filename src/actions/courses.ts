@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
   validatedActionWithUser,
@@ -20,12 +20,15 @@ export const addNewCourse = validatedActionWithUserJson(
   courseSchema,
   async (data, _, user): Promise<ActionResult<TCourse>> => {
     try {
-      const curses = await serverFetch<TCourse>(`/course?name=${user.name}`, {
-        method: 'POST',
-        body: data,
-      });
+      const curses = await serverActionFetch<TCourse>(
+        `/course?name=${user.name}`,
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
 
-      revalidateTag('curse');
+      updateTag('curses');
 
       return {
         error: false,
@@ -47,22 +50,22 @@ export const addNewCourse = validatedActionWithUserJson(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const updateCourse = validatedActionWithUser(
   updateCourseSchema,
   async (data, _, user): Promise<ActionResult<TCourse>> => {
     const { id, ...updateData } = data;
     try {
-      const curses = await serverFetch<TCourse>(
+      const curses = await serverActionFetch<TCourse>(
         `/course/${id}?name=${user.name}`,
         {
           method: 'PATCH',
           body: updateData,
-        }
+        },
       );
 
-      revalidateTag('curse');
+      updateTag('curses');
 
       return {
         error: false,
@@ -82,7 +85,7 @@ export const updateCourse = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const assignFaculties = validatedActionWithUser(
   assignRemoveCoursesZodSchema,
@@ -90,15 +93,15 @@ export const assignFaculties = validatedActionWithUser(
     const { courseId } = data;
 
     try {
-      const curses = await serverFetch<TCourse>(
+      const curses = await serverActionFetch<TCourse>(
         `/course/assign-faculties/${courseId}`,
         {
           method: 'POST',
           body: { faculties: data.facultys },
-        }
+        },
       );
 
-      revalidateTag('curse');
+      updateTag('curse-assign');
 
       return {
         error: false,
@@ -118,7 +121,7 @@ export const assignFaculties = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 export const removeAssigndFaculties = validatedActionWithUser(
   assignRemoveCoursesZodSchema,
@@ -126,15 +129,15 @@ export const removeAssigndFaculties = validatedActionWithUser(
     const { courseId } = data;
 
     try {
-      const curses = await serverFetch<TCourse>(
+      const curses = await serverActionFetch<TCourse>(
         `/course/remove-faculties/${courseId}`,
         {
           method: 'DELETE',
           body: { faculties: data.facultys },
-        }
+        },
       );
 
-      revalidateTag('curse');
+      updateTag('curse-assign');
 
       return {
         error: false,
@@ -154,18 +157,18 @@ export const removeAssigndFaculties = validatedActionWithUser(
           err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
       };
     }
-  }
+  },
 );
 
 export const deleteCourse = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TCourse>> => {
   try {
-    const data = await serverFetch<TCourse>(`/course/${id}`, {
+    const data = await serverActionFetch<TCourse>(`/course/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('curse');
+    updateTag('curses');
     return {
       error: false,
       data,

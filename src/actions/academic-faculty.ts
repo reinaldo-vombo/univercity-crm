@@ -1,7 +1,5 @@
 'use server';
-
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ActionResult } from '../types/api-error';
@@ -11,17 +9,21 @@ import {
   academicFacultyacultySchema,
   updateAcademicFacultyacultySchema,
 } from '../lib/validation/academicFaculty';
+import { updateTag } from 'next/cache';
 
 export const addNewAcademicFaculty = validatedActionWithUser(
   academicFacultyacultySchema,
   async (data): Promise<ActionResult<TAcademicFaculty>> => {
     try {
-      const curses = await serverFetch<TAcademicFaculty>('/academic-faculty', {
-        method: 'POST',
-        body: data,
-      });
+      const curses = await serverActionFetch<TAcademicFaculty>(
+        '/academic-faculty',
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
 
-      revalidateTag('faculty');
+      updateTag('faculty');
 
       return {
         error: false,
@@ -36,21 +38,21 @@ export const addNewAcademicFaculty = validatedActionWithUser(
         message,
       };
     }
-  }
+  },
 );
 export const updateAcademicFaculty = validatedActionWithUser(
   updateAcademicFacultyacultySchema,
   async (data): Promise<ActionResult<TAcademicFaculty>> => {
     try {
-      const curses = await serverFetch<TAcademicFaculty>(
+      const curses = await serverActionFetch<TAcademicFaculty>(
         `/academic-faculty/${data.id}`,
         {
           method: 'PATCH',
           body: data,
-        }
+        },
       );
 
-      revalidateTag('faculty');
+      updateTag('faculty');
 
       return {
         error: false,
@@ -65,21 +67,21 @@ export const updateAcademicFaculty = validatedActionWithUser(
         message,
       };
     }
-  }
+  },
 );
 
 export const deleteFaculty = async (
-  id: string
+  id: string,
 ): Promise<ActionResult<TAcademicFaculty>> => {
   try {
-    const data = await serverFetch<TAcademicFaculty>(
+    const data = await serverActionFetch<TAcademicFaculty>(
       `/academic-faculty/${id}`,
       {
         method: 'DELETE',
-      }
+      },
     );
 
-    revalidateTag('faculty');
+    updateTag('faculty');
     return {
       error: false,
       data,

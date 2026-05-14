@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TFaculty, TFacultyDisciplines } from '../types/global';
 import {
   validatedActionWithUser,
@@ -26,12 +26,12 @@ export const addNewFaculty = validatedActionWithUser(
         avatarUrl = await saveFile(data.profileImage, 'facultys');
       }
       data = { ...data, profileImage: avatarUrl };
-      const facultys = await serverFetch<TFaculty>('/faculty', {
+      const facultys = await serverActionFetch<TFaculty>('/faculty', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('faculty');
+      updateTag('facultys');
 
       return {
         error: false,
@@ -60,12 +60,12 @@ export const updatedFaculty = validatedActionWithUserJson(
   async (data): Promise<ActionResult<TFaculty>> => {
     try {
       const { id, ...updateData } = data;
-      const faculty = await serverFetch<TFaculty>(`/faculty/${id}`, {
+      const faculty = await serverActionFetch<TFaculty>(`/faculty/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
 
-      revalidateTag('faculty');
+      updateTag('faculty');
 
       return {
         error: false,
@@ -96,7 +96,7 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
     try {
       const { offeredCourseSectionId, assignments } = data;
 
-      const discipline = await serverFetch<TFacultyDisciplines>(
+      const discipline = await serverActionFetch<TFacultyDisciplines>(
         `/faculty/assign-faculty-to-section/${offeredCourseSectionId}`,
         {
           method: 'POST',
@@ -104,7 +104,7 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
         },
       );
 
-      // revalidateTag('discipline');
+      // updateTag('discipline');
 
       return {
         error: false,
@@ -133,11 +133,11 @@ export const deleteFaculty = async (
   id: string,
 ): Promise<ActionResult<TFaculty>> => {
   try {
-    const data = await serverFetch<TFaculty>(`/faculty/${id}`, {
+    const data = await serverActionFetch<TFaculty>(`/faculty/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('faculty');
+    updateTag('faculty');
     return {
       error: false,
       data,

@@ -3,82 +3,25 @@ import Breadcrumb from "@/components/shared/breadcrumb";
 import Modal from "@/components/shared/Modal";
 import Ping from "@/components/shared/ping";
 import SheetModal from "@/components/shared/sheet-modal";
-import { TabsNav } from "@/components/shared/toggle-tabs";
 import MessageSender from "@/components/container/messages/message-sender";
 import { ROUTES } from "@/constants/routes"
 import { formatCurrency, showYearLevel } from "@/lib/helper";
-import { getSigleMockStudents, getStudentCourseSchedules, getStudentDocuments, getStudentSemesterHistory, studentCoursesService } from "@/constants/data/student";
+import { getSigleMockStudents, studentCoursesService } from "@/constants/data/student";
 import { MessageCircle, Pen } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import DocumentsPreview from "./documents-preview";
-import { Suspense } from "react";
-import MarkSheetWrapper from "../../wrapper/markSheet-wrapper";
-import SchedulePreview from "./shedule-preview";
-import { TSeachParams } from "@/types/global";
-import DataTabelCards from "@/components/skeleton/data-tabel-cards";
-import { StudentProgressTimeline } from "./progress-timeline";
-import { getAllRequests } from "@/constants/data/secretary";
-import { RequestskSheetTable } from "@/app/(private)/crm/admin/general-secretary/client-table";
 
-const PagePreview = async ({ searchParams }: TSeachParams) => {
-   const { year, semester, id, } = await searchParams
-   const [student, info, schedule, history, reuests, documents] = await Promise.all([
+// {
+//    params: Promise<{ id: string }>
+// }
+const PagePreview = async ({ }: {
+   params: Promise<{ id: string }>
+}) => {
+
+   const [student, info,] = await Promise.all([
       getSigleMockStudents(),
       studentCoursesService(),
-      getStudentCourseSchedules(),
-      getStudentSemesterHistory(id as string),
-      getAllRequests(),
-      getStudentDocuments()
    ])
 
-   const currentSemesters: any = semester;
-   const currentYear: any = year;
-   const tabs = [
-      {
-         id: '1',
-         lable: 'Documentos',
-         value: 'documentos',
-         tabContent: <DocumentsPreview data={documents} />,
-         description: 'Documentos do aluno'
-      },
-      {
-         id: '3',
-         lable: 'Hórarios academicos',
-         value: 'Hórarios',
-         tabContent: <SchedulePreview data={schedule} />,
-         description: 'Hórarios Academicos'
-      },
-      {
-         id: '4',
-         lable: 'Notas Academicas',
-         value: 'notas',
-         tabContent: <Suspense fallback={<DataTabelCards />} key={`${currentYear}-${currentSemesters}`}>
-            <MarkSheetWrapper studentId={student.studentId} semester={currentSemesters || '1º Semestre'} year={currentYear} />
-         </Suspense>,
-         description: 'Historico de notas semestrais'
-      },
-      {
-         id: '5',
-         lable: 'Pedidos',
-         value: 'pedidos',
-         tabContent: <RequestskSheetTable data={reuests} />,
-         description: 'Pedidos'
-      },
-      {
-         id: '5d',
-         lable: 'Historico de progressão',
-         value: 'history',
-         tabContent: <StudentProgressTimeline history={history} />,
-         description: 'Historico de progressão do aluno'
-      },
-      {
-         id: '6',
-         lable: 'Permissões',
-         value: 'permition',
-         tabContent: <p>Pedidos</p>,
-         description: 'Gerencie as permissões do aluno'
-      },
-   ]
    const fullName = `${student.firstName} ${student.middleName} ${student.lastName}`
    const course = info.courses[0]
    return (
@@ -159,7 +102,7 @@ const PagePreview = async ({ searchParams }: TSeachParams) => {
                </div>
             </div>
             <div className="col-span-9">
-               <TabsNav defaultValue={tabs[0].value} tabList={tabs} />
+
             </div>
          </div>
       </div>

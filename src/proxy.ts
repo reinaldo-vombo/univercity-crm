@@ -8,7 +8,7 @@ const ROUTE_ROLE_MAP: Record<string, string[]> = {
   '/crm/management': ['manager', 'editor'],
 };
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // 1️⃣ Só entra no middleware se for rota do CRM

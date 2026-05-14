@@ -35,6 +35,7 @@ export function CoursesTable({ couses, departements, falculty, prices }: Props) 
       fileHerderes={herader}
       fileName="Cursos"
       sheetId={uid}
+      className="sm:max-w-md"
       modalTitle="Criar Cursos"
       columns={columns}
       data={couses}

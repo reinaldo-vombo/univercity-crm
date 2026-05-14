@@ -3,29 +3,14 @@ import { ROUTES } from '@/constants/routes'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import RulesWrapper from './rules-wrapper'
-import ServiceWrapper from './service-wrapper'
-import { TabsNav } from '@/components/shared/toggle-tabs'
 import { serverEnv } from '@/config/env/server'
+import { Suspense } from 'react'
+import TuitionDashboardSkeleton from '@/components/skeleton/tuition-dashboard-skeleton'
 
 export const metadata: Metadata = {
    title: 'Regras da Universidade'
 }
-const tabs = [
-   {
-      id: '1',
-      lable: 'Regras da Instituição',
-      value: 'rules',
-      tabContent: <RulesWrapper />,
-      description: 'Gerencia as Regras da Instituição'
-   },
-   {
-      id: '2',
-      lable: 'Serviços Academicos',
-      value: 'service',
-      tabContent: <ServiceWrapper />,
-      description: 'Gerencia os Serviços Academicos'
-   },
-]
+
 export default function UniversityConfigPage() {
    const universityName = serverEnv.UNIVERCITY_NAME
    return (
@@ -52,7 +37,9 @@ export default function UniversityConfigPage() {
                </div>
             </div>
             <div>
-               <TabsNav defaultValue={tabs[0].value} tabList={tabs} />
+               <Suspense fallback={<TuitionDashboardSkeleton />}>
+                  <RulesWrapper />
+               </Suspense>
             </div>
          </div>
       </section>

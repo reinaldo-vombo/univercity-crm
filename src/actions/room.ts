@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TRoom } from '../types/global';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import {
@@ -17,12 +17,12 @@ export const addNewRoom = validatedActionWithUser(
   roomSchema,
   async (data): Promise<ActionResult<TRoom>> => {
     try {
-      const room = await serverFetch<TRoom>('/room', {
+      const room = await serverActionFetch<TRoom>('/room', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('room');
+      updateTag('rooms');
 
       return {
         error: false,
@@ -51,12 +51,12 @@ export const updateRoom = validatedActionWithUser(
   async (data): Promise<ActionResult<TRoom>> => {
     const { id, ...body } = data;
     try {
-      const room = await serverFetch<TRoom>(`/room/${id}`, {
+      const room = await serverActionFetch<TRoom>(`/room/${id}`, {
         method: 'PATCH',
         body: body,
       });
 
-      revalidateTag('room');
+      updateTag('room');
 
       return {
         error: false,
@@ -84,12 +84,12 @@ export const updateManyRoom = validatedActionWithUser(
   blukUpdateRoomShema,
   async (data): Promise<ActionResult<TRoom>> => {
     try {
-      const room = await serverFetch<TRoom>(`/room/update`, {
+      const room = await serverActionFetch<TRoom>(`/room/update`, {
         method: 'PATCH',
         body: data,
       });
 
-      revalidateTag('room');
+      updateTag('room');
 
       return {
         error: false,
@@ -115,11 +115,11 @@ export const updateManyRoom = validatedActionWithUser(
 );
 export const deleteRoom = async (id: number): Promise<ActionResult<TRoom>> => {
   try {
-    const data = await serverFetch<TRoom>(`/room/${id}`, {
+    const data = await serverActionFetch<TRoom>(`/room/${id}`, {
       method: 'DELETE',
     });
 
-    revalidateTag('room');
+    updateTag('room');
     return {
       error: false,
       data,
@@ -136,12 +136,12 @@ export const deleteManyRoom = async (
   ids: string[],
 ): Promise<ActionResult<TRoom>> => {
   try {
-    const data = await serverFetch<TRoom>(`/room/delete`, {
+    const data = await serverActionFetch<TRoom>(`/room/delete`, {
       method: 'DELETE',
       body: ids,
     });
 
-    revalidateTag('room');
+    updateTag('room');
     return {
       error: false,
       data,

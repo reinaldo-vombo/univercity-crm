@@ -43,3 +43,23 @@ export type TTransferGradePolicy =
   | 'LOSE_ALL'
   | 'KEEP_EQUIVALENTS'
   | 'ADMIN_DECIDES';
+export type TRoles =
+  | 'super_admin'
+  | 'admin'
+  | 'student'
+  | 'editor'
+  | 'manager'
+  | 'faculty'
+  | 'accountant'
+  | 'department_head'
+  | 'staff';
+export type TAction =
+  | 'CREATE'
+  | 'UPDATE'
+  | 'DELETE'
+  | 'PROMOTE'
+  | 'LOGIN'
+  | 'LOGOUT'
+  | 'APPROVE'
+  | 'REJECT';
+export type TServicePeriodType = 'RESIT' | ' SPECIAL_EXAM' | 'ADMISSION_EXAM';

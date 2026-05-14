@@ -2,24 +2,24 @@
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import { ActionResult } from '@/types/api-error';
 import { TSemesterRegistration } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export const addNewSemesterRegistartion = async (
-  data: any
+  data: any,
 ): Promise<ActionResult<TSemesterRegistration>> => {
   try {
-    const semester = await serverFetch<TSemesterRegistration>(
+    const semester = await serverActionFetch<TSemesterRegistration>(
       '/semester-registration',
       {
         method: 'POST',
         body: data,
-      }
+      },
     );
 
-    revalidateTag('semester-registration');
+    updateTag('semester-registration');
 
     return {
       error: false,

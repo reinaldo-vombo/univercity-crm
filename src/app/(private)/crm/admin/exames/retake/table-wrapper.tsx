@@ -17,7 +17,7 @@ export async function RetakeExameTableServer() {
          lable: 'Lista dos recursos',
          value: 'rules',
          tabContent: <RetakeExameTable exames={exames} />,
-         description: 'Gerencia as Regras da Instituição'
+         description: 'Listagem dos recursos'
       },
       {
          id: '2',
@@ -29,7 +29,7 @@ export async function RetakeExameTableServer() {
             disciplines={disciplines}
             courseName="Ciencia da Computação"
             academicSemesterId={atasData?.semester?.id || ''} />,
-         description: 'Gerencia os Serviços Academicos'
+         description: ''
       },
    ]
 

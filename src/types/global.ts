@@ -1,13 +1,16 @@
 // lib/types/action-result.ts
 
 import {
+  TAction,
   TCourseTransfer,
   TDocumentType,
   TMarkStatus,
   TPaymentMethod,
   TPaymentStatus,
   TRegistrationStatus,
+  TRoles,
   TSemesterRegistrationStatus,
+  TServicePeriodType,
   TStatus,
   TStudentType,
   TTransferGradePolicy,
@@ -25,6 +28,36 @@ export type TUser = {
     location: string;
   };
   number: number;
+};
+export type TBulkUser = {
+  name: string;
+  id: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+  avatar: string | null;
+  contact: {
+    phone: string;
+    location: string;
+  };
+  failedLoginAttempts: number;
+  lockedUntil: Date | null;
+  lastLoginAt: Date | null;
+  role: TRoles;
+  AuditLog: {
+    id: string;
+    createdAt: Date;
+    userId: string | null;
+    action: TAction;
+    entityType: string;
+    entityId: string;
+    oldData?: any | null;
+    newData: any | null;
+    ipAddress: string | null;
+    userAgent: string | null;
+  }[];
+  createdAt: Date;
+  updatedAt: Date;
 };
 export type IQueryParams = {
   page?: number;
@@ -219,6 +252,10 @@ export type TOfferedCourseSection = {
   offeredCourseId: string;
   maxCapacity: number;
   currentlyEnrolledStudent: number;
+  price: {
+    id: string;
+    amount: number;
+  } | null;
   offeredCourse: {
     OfferedCourseDiscipline: {
       discipline: {
@@ -230,6 +267,10 @@ export type TOfferedCourseSection = {
       academicSemester: {
         title: string;
       };
+    };
+    course: {
+      title: string;
+      id: string;
     };
   };
 };
@@ -436,9 +477,9 @@ export type TBuilding = {
 
 export type TSemester = {
   id: string;
-  title: '1 semestre' | '2 semestre';
-  createdAt: Date;
-  updatedAt: Date;
+  title: '1º Semestre' | '2º Semestre';
+  createdAt?: Date;
+  updatedAt?: Date;
   code: '01' | '02' | '03';
   year: string;
   startMonth: string;
@@ -786,6 +827,16 @@ export type TAcademicService = {
   };
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type TServicePeriod = {
+  id: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  type: TServicePeriodType;
+  startDate: Date;
+  endDate: Date;
 };
 
 export type TStudentCause = {

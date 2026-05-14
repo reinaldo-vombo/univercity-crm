@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/shared/data-table";
-import { TOfferedCourse, TOfferedCourseSection } from "@/types/global";
+import { TOfferedCourse, TOfferedCourseSection, TPrice } from "@/types/global";
 import { OfferedCourseSectionColumns } from "./columns";
 import { createUniqueId } from "@/lib/helper";
 import FormLoading from "@/components/skeleton/form"
@@ -12,6 +12,7 @@ const CreateOfferedCourseSectionForm = dynamic(() => import("@/components/forms/
 interface Props {
    offeredCourse: TOfferedCourse[];
    sections: TOfferedCourseSection[];
+   prices: TPrice[]
 }
 const herader = {
    id: "ID",
@@ -22,9 +23,9 @@ const herader = {
    endMonth: "Mês de encerramento"
 }
 const uid = createUniqueId("create");
-export function OfferedCourseSectinTable({ sections, offeredCourse }: Props) {
+export function OfferedCourseSectinTable({ sections, offeredCourse, prices }: Props) {
 
-   const columns = OfferedCourseSectionColumns({ offeredCourse });
+   const columns = OfferedCourseSectionColumns({ offeredCourse, prices });
 
    return <DataTable
       modalTitle="Turmas"

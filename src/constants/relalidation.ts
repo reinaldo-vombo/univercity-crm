@@ -7,3 +7,12 @@ export const REVALIDATION = {
   THIRTY_MINUTE: 30 * 60,
   ONE_HOUR: 60 * 60,
 };
+export const CACHE_LIFE = {
+  ONE_MINUTE: 'oneMinute',
+  FIVE_MINUTES: 'fiveMinutes',
+  TEN_MINUTES: 'tenMinutes',
+  FIFTEEN_MINUTES: 'fifteenMinutes',
+  TWENTY_MINUTES: 'twentyMinutes',
+  THIRTY_MINUTES: 'thirtyMinutes',
+  ONE_HOUR: 'oneHour',
+} as const;

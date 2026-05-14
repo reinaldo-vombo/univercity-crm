@@ -13,3 +13,8 @@ export const serverUser = cache(async () => {
   const user = session?.user;
   return user;
 });
+export const getUserToken = async () => {
+  const session = await getServerSession(authOptions);
+  const token = session?.user.accessToken;
+  return token;
+};

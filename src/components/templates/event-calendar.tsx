@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Pen, Trash } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 
@@ -21,19 +21,12 @@ import {
    endOfWeek,
 } from "date-fns";
 import { TCalendar } from "@/types/global";
-import SheetModal from "../shared/sheet-modal";
-import CreateEventFrom from "../forms/post/create-calendar-envent";
-import { deleteCalendarEvent } from "@/actions/calendar";
-import { toast } from "sonner";
 import { isSameDay } from "date-fns";
-import { FLASH_MESSAGE } from "@/constants/flash-message";
 import Modal from "../shared/Modal";
 import { Badge } from "../ui/badge";
 import Tooltip from "../shared/tooltip";
 import Avatar from "../shared/avatar";
 import { formatDateTime } from "@/lib/helper";
-import UpdateEventCalendarFrom from "../forms/update/updated-calendar";
-import ExpandableScreenForm from "../shared/expandebal-screen";
 type TProps = {
    subscriptions: TCalendar[]
 }
@@ -80,14 +73,7 @@ function EventCalendar({ subscriptions }: TProps) {
       setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
    }
 
-   const handleRemoveSubscription = async (id: string) => {
-      const result = await deleteCalendarEvent(id)
-      if (result.error) {
-         toast.error(result.message)
-      }
-      toast.success(FLASH_MESSAGE.DELETED)
 
-   };
    return (
       <div className="p-4">
          <div className="flex items-center justify-between mb-4">
@@ -116,7 +102,7 @@ function EventCalendar({ subscriptions }: TProps) {
                </motion.h2>
             </div>
 
-            <ExpandableScreenForm formComponent={<CreateEventFrom />} />
+
          </div>
          <div className="grid grid-cols-7 gap-2 p-1 bg-muted rounded-lg overflow-hidden">
             <AnimatePresence mode="popLayout" >
@@ -162,18 +148,7 @@ function EventCalendar({ subscriptions }: TProps) {
                                  <Badge>{subscription.title}</Badge>
                               }>
                               <div className="space-y-4">
-                                 <div className="flex items-center gap-2">
-                                    <Button type="button" aria-label="Delete event button" className="bg-red-500" onClick={() => handleRemoveSubscription(subscription.id)}>
-                                       <Trash className="text-red-300" />
-                                    </Button>
-                                    <SheetModal
-                                       trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
-                                       side="bottom"
-                                       title="Atualização do evento"
-                                       description='Formulario de atualização do evento'>
-                                       <UpdateEventCalendarFrom values={subscription} />
-                                    </SheetModal>
-                                 </div>
+
                                  <h2 className="text-2xl">{subscription.title}</h2>
                                  <ul className="space-y-4">
                                     <li className="flex">
