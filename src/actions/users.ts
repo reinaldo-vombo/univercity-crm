@@ -11,20 +11,16 @@ import {
   userSchema,
 } from '../lib/validation/user';
 import { ActionResult, ActionState } from '../types/api-error';
-import { saveFile } from '../lib/helper/uploade';
 import { ApiResponseError } from '@/services/api-error';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
-  async (data, _, user): Promise<ActionResult<TUser>> => {
+  async (data): Promise<ActionResult<TUser>> => {
     try {
-      const member = await serverActionFetch<TUser>(
-        `/users?name=${user.name}`,
-        {
-          method: 'POST',
-          body: data,
-        },
-      );
+      const member = await serverActionFetch<TUser>(`/users`, {
+        method: 'POST',
+        body: data,
+      });
 
       updateTag('users');
 
@@ -53,23 +49,21 @@ export const addNewUser = validatedActionWithUser(
 
 export const updatedUser = validatedActionWithUser(
   updateSchema,
-  async (data, _, user): Promise<ActionResult<TUser>> => {
-    try {
-      let avatarUrl: any = data.avatar;
-      if (data.avatar instanceof File) {
-        avatarUrl = await saveFile(data.avatar, 'users');
-      }
-      data = { ...data, avatar: avatarUrl };
+  async (data): Promise<ActionResult<TUser>> => {
+    const { id, ...res } = data;
 
+    try {
       const result = await serverActionFetch<TUser>(
-        `/users/${data.id}?name=${user.name}`,
+        `/users/${id}`,
         {
           method: 'PATCH',
-          body: data,
+          body: res,
         },
+        true,
       );
+      console.log(data);
 
-      updateTag(`user-${user.id}`);
+      updateTag(`user-${data.id}`);
 
       return {
         error: false,

@@ -13,4 +13,5 @@ export const ROUTES = {
   RULES_SETTINGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/university`,
   SETTINGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/settings`,
   BANK_ACCOUNTS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/finance/accounts`,
+  SUPORTE: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/suporte`,
 };

@@ -10,26 +10,22 @@ import {
    SidebarMenuButton,
    SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LINKS_BY_ROLE, SECTION_LABELS } from "@/constants/nav-links";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { User } from "@/lib/helper/auth/user";
+import { ROUTES_BY_ROLE, SECTION_LABELS } from "./constants";
 
-type TRoles = "super_admin" | "admin"
+type TRoles = "SUPER_ADMIN" | "ADMIN"
 
 export function AppSidebar() {
    const user: any = User();
    const role: TRoles = user && user.role
    const pathname = usePathname();
-   if (!user) {
-      return <p>Loading</p>
-   }
 
-
-   const links = LINKS_BY_ROLE[role];
+   const links = ROUTES_BY_ROLE[role || 'ADMIN'];
    const groupedLinks = links.reduce((acc, item) => {
       const section = item.section || 'general';
 
@@ -47,7 +43,7 @@ export function AppSidebar() {
    // );
 
    return (
-      <Sidebar>
+      <Sidebar collapsible="icon">
          <SidebarHeader>
             <Image
                className="dark:invert"

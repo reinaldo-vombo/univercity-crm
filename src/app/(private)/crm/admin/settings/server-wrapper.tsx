@@ -1,5 +1,5 @@
-import AccountTab from '@/components/templates/settings/account-tab'
-import SecurityTab from '@/components/templates/settings/security-tab'
+import AccountTab from '@/app/(private)/crm/admin/settings/account-tab'
+import SecurityTab from '@/app/(private)/crm/admin/settings/security-tab'
 import { TabsNav } from '@/components/shared/toggle-tabs'
 import { serverUser } from '@/lib/helper/auth/user'
 import { getUserSeesionLogs } from '@/services/data/history-logs'

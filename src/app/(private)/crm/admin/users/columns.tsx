@@ -13,6 +13,7 @@ import { createUniqueId, formatDate } from "@/lib/helper"
 import FormLoading from "@/components/skeleton/form"
 import { TBulkUser } from "@/types/global"
 import UserDetailsPage from "@/components/admin/container/user/sigle-user-details"
+import { ENUM_USER_ROLE } from "@/lib/enums/user"
 const UpdatedUserForm = dynamic(() => import("@/components/forms/admin/update/update-user"),
    { ssr: false, loading: () => <FormLoading /> })
 
@@ -99,7 +100,7 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
             const users = row.original
             const uid = createUniqueId("view")
             const isSelf = logUser?.id === users.id
-            const isSuperAdmin = logUser?.role === 'super_admin'
+            const isSuperAdmin = logUser?.role === ENUM_USER_ROLE.SUPER_ADMIN
 
             const handleDelete = async (id: string) => {
                try {
@@ -115,12 +116,9 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
             return (
                <div className="flex items-center gap-1">
                   <SheetModal
-                     trigger={
-                        <button className="p-2 rounded-xl text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" title="Ver detalhes">
-                           <Eye className="size-4" />
-                        </button>
-                     }
-                     side="right" id={uid} className="sm:max-w-md"
+                     trigger={<Eye className="size-4" />}
+                     triggerStyle="p-2 rounded-xl text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                     side="right" id={uid} className="sm:max-w-lg"
                      title={`Detalhes — ${users.name}`}
                      description="Informações do utilizador"
                   >
@@ -129,11 +127,8 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
 
                   {!isSelf && isSuperAdmin && (
                      <SheetModal
-                        trigger={
-                           <button className="p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors" title="Editar">
-                              <Pen className="size-4" />
-                           </button>
-                        }
+                        trigger={<Pen className="size-4" />}
+                        triggerStyle="p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                         side="right" id={`edit-${users.id}`} className="sm:max-w-md"
                         title="Atualizar utilizador"
                         description="Formulário de atualização"

@@ -14,9 +14,9 @@ import { toast } from "sonner";
 import { FLASH_MESSAGE } from "@/constants/flash-message";
 import { deleteAdmitionExameFase } from "@/actions/admition-exame";
 import { CloseBage, CompleteBage } from "@/components/shared/bages";
-import SheetModal from "../shared/sheet-modal";
+import SheetModal from "../sheet-modal";
 import { PenBoxIcon } from "lucide-react";
-import UpdateAdmitionExameFase from "../forms/update/update.admition-exame-fase";
+import UpdateAdmitionExameFase from "../../forms/update/update.admition-exame-fase";
 type TProps = {
    data: TAdmitionExameFase[];
    buildings: TBuilding[]

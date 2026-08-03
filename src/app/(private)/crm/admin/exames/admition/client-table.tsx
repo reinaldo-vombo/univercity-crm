@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TAdmitionExame } from "@/types/global";
 import { AdmitionExameColumns } from "./columns";
 

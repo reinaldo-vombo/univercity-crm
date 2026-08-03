@@ -6,8 +6,9 @@ import { getServerSession } from 'next-auth';
 import { ApiResponseError } from './api-error';
 import { handleApiError } from './error-handler';
 import { authOptions } from '@/config/auth';
+import { serverEnv } from '@/config/env/server';
 
-const baseURL = process.env.API_BASE_URL;
+const baseURL = serverEnv.API_BASE_URL;
 
 type ServerFetchOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -63,6 +64,7 @@ export async function serverFetch<T>(
 export async function serverActionFetch<T>(
   endpoint: string,
   options: ServerFetchOptions = {},
+  fullPaylod: boolean = false,
 ): Promise<T> {
   try {
     const session = await getServerSession(authOptions);
@@ -96,8 +98,11 @@ export async function serverActionFetch<T>(
         json?.stack,
       );
     }
-
-    return json.data as T;
+    if (fullPaylod) {
+      return json as T;
+    } else {
+      return json.data as T;
+    }
   } catch (error) {
     handleApiError(error);
   }

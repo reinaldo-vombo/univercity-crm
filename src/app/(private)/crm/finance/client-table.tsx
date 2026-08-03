@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { StudentDebtColumns } from "./columns";
 import { TuitionSemester } from "@/types/global";
 import { useState } from "react";

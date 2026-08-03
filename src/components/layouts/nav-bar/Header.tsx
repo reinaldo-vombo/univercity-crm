@@ -1,13 +1,13 @@
-import { Input } from "../../ui/input"
-import ThemeToggle from "./toggle-theme"
-import { ThemePopOver } from "./theme-popover"
-import LanguageSwitcher from "../LanguageSwitcher"
-import NotificationWrapper from "./notification-wrapper"
-import { Search } from "lucide-react"
-import DropDownWrapper from "./drop-down-wrapper"
 import { Suspense } from "react"
+import { Input } from "../../ui/input"
+import { ThemePopOver } from "./theme-popover"
+import { Search } from "lucide-react"
+import ThemeToggle from "./toggle-theme"
+import LanguageSwitcher from "../LanguageSwitcher"
 import AvatarSkeleton from "@/components/skeleton/avatar"
 import NotificationSkeleton from "@/components/skeleton/notification"
+import UserDropdownMenu from "./user-toolkit/user-menu"
+import PopoverNotifications from "../notification/notification-tab"
 
 const Header = () => {
    return (
@@ -28,15 +28,15 @@ const Header = () => {
                </div>
             </div>
             <div className="w-full items-center justify-between gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none hidden">
-               <div className="flex items-center gap-2 2xsm:gap-3">
+               <div className="flex items-center gap-4 sm:gap-3">
                   <LanguageSwitcher />
                   <ThemePopOver />
                   <ThemeToggle />
                   <Suspense fallback={<NotificationSkeleton />}>
-                     <NotificationWrapper />
+                     <PopoverNotifications />
                   </Suspense>
                   <Suspense fallback={<AvatarSkeleton />}>
-                     <DropDownWrapper />
+                     <UserDropdownMenu />
                   </Suspense>
                </div>
             </div>

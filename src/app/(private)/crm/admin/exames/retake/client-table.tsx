@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic"
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TExames } from "@/types/global";
 import { RetakeExameColumns } from "./columns";
 import { createSelectCalumn } from "@/components/table-filters/select-column-def";

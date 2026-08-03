@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TCourse, TDepartemant, TFaculty } from "@/types/global";
 import { FacultyColumns } from "./columns";
 import ExportFacultysListFilterForm from "@/lib/helper/export/faculty-export";

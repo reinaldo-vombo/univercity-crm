@@ -1,5 +1,4 @@
-import NoActivitys from '@/components/templates/NoActivitys';
-// import { Avatar } from '@/components/ui/avatar';
+
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -44,7 +43,7 @@ const ActivityLogsPreview = ({ data }: TProps) => {
                            </div>
                            <Separator />
                         </div>
-                     )) : (<NoActivitys />)}
+                     )) : (<p>Sem atividades</p>)}
                   </div>
                </ScrollArea>
             </div>

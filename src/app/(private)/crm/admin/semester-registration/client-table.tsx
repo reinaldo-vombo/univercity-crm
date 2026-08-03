@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TSemester, TSemesterRegistration } from "@/types/global";
 import { AcademicSemesterRegistartionColumns } from "./columns";
 import { createUniqueId } from "@/lib/helper";

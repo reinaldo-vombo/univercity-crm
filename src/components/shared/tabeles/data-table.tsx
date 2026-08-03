@@ -24,9 +24,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChevronDown, Download, Plus } from "lucide-react";
-import SheetModal from "./sheet-modal";
-import Popover from "./popover";
-import { DataTableToolbar } from "../table-filters/toolbar";
+import SheetModal from "../sheet-modal";
+import Popover from "../popover";
+import { DataTableToolbar } from "../../table-filters/toolbar";
 
 type DataTableProps<TData, TValue> = {
    columns: ColumnDef<TData, TValue>[];

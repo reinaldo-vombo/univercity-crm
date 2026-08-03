@@ -3,7 +3,7 @@ import { getAllAdmitionExamesFase, getAllBuilding } from "@/services/data/academ
 import SheetModal from "@/components/shared/sheet-modal";
 import { createUniqueId } from "@/lib/helper";
 import CreateAdmitionExameFaseForm from "@/components/forms/post/create-admition-exame-fase";
-import ExameFaseTable from "@/components/tabeles/exame-fase-table";
+import ExameFaseTable from "@/components/shared/tabeles/exame-fase-table";
 
 const uid = createUniqueId("view");
 export async function AdmitionExameFaseTableServer() {

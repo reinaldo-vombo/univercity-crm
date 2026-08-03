@@ -16,6 +16,7 @@ export default function NotFound() {
             </h1>
             <Image
                src="/404.svg"
+               loading="eager"
                width={562}
                height={156}
                alt="erro code 500" />

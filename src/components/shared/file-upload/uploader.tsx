@@ -26,6 +26,7 @@ const Uploader = ({ field, multiple = false, maxFiles = 4 }: TUploaderProps) => 
       field.onChange(file);
    };
 
+   //max-w-xs
    // const handleRemove = (index: number) => {
    //    const updated = [...files];
    //    updated.splice(index, 1);
@@ -44,7 +45,7 @@ const Uploader = ({ field, multiple = false, maxFiles = 4 }: TUploaderProps) => 
          value={files}
          onValueChange={handleChange}
          dropzoneOptions={dropzone}
-         className="relative max-w-xs space-y-1"
+         className="relative space-y-1"
       >
          <FileInput className="border border-dashed flex justify-center border-gray-500 p-1">
             <Button type="button" variant={"outline"} className="w-full">

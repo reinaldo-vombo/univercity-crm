@@ -63,3 +63,12 @@ export type TAction =
   | 'APPROVE'
   | 'REJECT';
 export type TServicePeriodType = 'RESIT' | ' SPECIAL_EXAM' | 'ADMISSION_EXAM';
+export type TNotificationType =
+  | 'ACADEMIC'
+  | 'PAYMENT'
+  | 'TRANSFER'
+  | 'DOCUMENT'
+  | 'SEMESTER'
+  | 'CONTENT'
+  | 'AUTH'
+  | 'SYSTEM';

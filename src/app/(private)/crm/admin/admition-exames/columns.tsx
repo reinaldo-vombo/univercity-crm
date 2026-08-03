@@ -159,6 +159,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                      trigger={<Pen className="h-4 w-4 text-green-500 cursor-pointer" />}
                      side="right"
                      id={`edit-${exames.id}`}
+                     className="sm:max-w-md"
                      title="Registro De Exame De Acesso"
                      description='Formulario de Atualização do Exame de Acesso'>
                      <UpdateAdmitionExameForm values={exames} />

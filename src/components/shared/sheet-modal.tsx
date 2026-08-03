@@ -39,7 +39,7 @@ const SheetModal = ({ children, trigger, description, url, className, id, side, 
             <SheetTitle className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-fit rounded-lg p-1">
-                  <Image src='/logo.svg' className="dark:invert" width={60} height={60} alt="logo" />
+                  <Image src='/SIGU.png' className="dark:invert" width={60} height={60} alt="SIGU" />
                 </div>
                 {title}
               </div>

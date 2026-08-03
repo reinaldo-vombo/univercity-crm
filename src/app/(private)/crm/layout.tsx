@@ -1,5 +1,6 @@
-import { AppSidebar } from "@/components/layouts/app-sidebar";
+import { AppSidebar } from "@/components/layouts/sidebar/app-sidebar";
 import Header from "@/components/layouts/nav-bar/Header";
+import { SidebarSkeleton } from "@/components/skeleton/side-bar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Suspense } from "react";
 
@@ -12,9 +13,8 @@ export default async function CrmLayout({
    return (
       <div>
          <SidebarProvider>
-            <Suspense fallback={<p>loading</p>}>
+            <Suspense fallback={<SidebarSkeleton />}>
                <AppSidebar />
-
             </Suspense>
             <main className="w-full">
                <div className="flex items-center bg-card">

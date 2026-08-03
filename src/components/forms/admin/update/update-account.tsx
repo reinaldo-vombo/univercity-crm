@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input"
 import { updateSchema } from "@/lib/validation/user"
 import SubmitBtn from "@/components/shared/submit-btn"
 import Selector from "@/components/shared/selector"
-import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updatedUser } from "@/actions/users"
@@ -24,6 +23,7 @@ import Uploader from "@/components/shared/file-upload/uploader"
 import { useSession } from "next-auth/react"
 import { useSheet } from "@/providers/sheet-provider"
 import Avatar from "@/components/shared/avatar"
+import { ROLES } from "@/constants/roles"
 type TProps = {
    defaultValues: any
 }
@@ -63,6 +63,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
       startTransition(async () => {
          try {
             const result = await updatedUser(formData);
+
             if (result.error) {
                toast.error(result.message);
                return;
@@ -89,7 +90,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
             <div className="flex">
-               <Avatar name={name} photo={avatar} className="size-10 m-auto" />
+               <Avatar name={name} photo={avatar} className="size-full m-auto" />
             </div>
             <FormField
                control={form.control}
@@ -159,7 +160,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
                      <FormLabel>Cargo</FormLabel>
                      <FormControl>
                         <Selector
-                           options={DUMMY_DATA.roles}
+                           options={ROLES}
                            className="w-full"
                            formField={field}
                            placeholder="Ex: admin, editor, direitor..."
@@ -177,7 +178,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Avatar</FormLabel>
-                     <FormControl>
+                     <FormControl className="flex">
                         <Uploader field={field} maxFiles={1} />
                      </FormControl>
                      <FormDescription>Sua foto de perfil</FormDescription>

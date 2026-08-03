@@ -1,5 +1,5 @@
 import { ChartPieInteractive } from "@/components/shared/chart/pie-chart";
-import TransationTable from "@/components/tabeles/transation-table";
+import TransationTable from "@/components/shared/tabeles/transation-table";
 import { TBankAccountAnalitycs } from "@/types/global"
 import Link from "next/link";
 

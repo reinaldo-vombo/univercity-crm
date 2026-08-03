@@ -6,19 +6,13 @@ import {
 } from "react-email"
 
 interface ResetPasswordProps {
-   resetLink?: string
-   expIn?: string
-   requesterIp?: string
-   requestDate?: string
+   token?: string
 }
 
-export default function ResetPassword({
-   resetLink = "https://plataforma.universidade.ao/reset/token123",
-   expIn = "30 minutos",
-   requesterIp = "197.155.32.10",
-   requestDate = "1 de Maio de 2025, 14:32",
-}: ResetPasswordProps) {
+
+export default function ResetPassword({ token, }: ResetPasswordProps) {
    const univercityName = serverEnv.UNIVERCITY_NAME
+   const resetLink = `${serverEnv.API_BASE_URL}/auth/reset-password/${token}`
    return (
       <Html lang="pt">
          <Head />
@@ -79,27 +73,7 @@ export default function ResetPassword({
                         </Button>
                      </Section>
 
-                     <Text className="text-[11px] text-[#999] text-center m-0 mb-10">
-                        Este link expira em <strong className="text-[#666]">{expIn}</strong>
-                     </Text>
-
                      <Hr className="border-[#E8E4DC] my-8" />
-
-                     {/* Detalhes da solicitação */}
-                     <Section className="bg-[#F7F5F0] px-6 py-5 mb-8">
-                        <Text className="text-[12px] font-medium text-[#0E1B12] m-0 mb-4 tracking-wide uppercase">
-                           Detalhes do Pedido
-                        </Text>
-                        <Text className="text-[12px] text-[#666] m-0 mb-2 leading-relaxed">
-                           <span className="text-[#999]">Data e hora: &nbsp;</span>
-                           {requestDate}
-                        </Text>
-                        <Text className="text-[12px] text-[#666] m-0 leading-relaxed">
-                           <span className="text-[#999]">Endereço IP: &nbsp;</span>
-                           {requesterIp}
-                        </Text>
-                     </Section>
-
                      {/* Aviso de segurança */}
                      <Section className="border border-[#F0C0C0] bg-[#FFF5F5] px-6 py-5 mb-8">
                         <Text className="text-[13px] text-[#C0392B] m-0 mb-2 font-medium">
@@ -109,7 +83,7 @@ export default function ResetPassword({
                            Se não solicitou a redefinição da sua senha, ignore este email — a sua conta
                            permanece segura. Recomendamos que altere a sua senha brevemente e contacte
                            os serviços de suporte em{" "}
-                           <span className="text-[#0E1B12] font-medium">seguranca@universidade.ao</span>{" "}
+                           <span className="text-[#0E1B12] font-medium">suporte@sigu.ao</span>{" "}
                            caso suspeite de acesso não autorizado.
                         </Text>
                      </Section>

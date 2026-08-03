@@ -5,6 +5,7 @@ import {
   TCourseTransfer,
   TDocumentType,
   TMarkStatus,
+  TNotificationType,
   TPaymentMethod,
   TPaymentStatus,
   TRegistrationStatus,
@@ -684,7 +685,7 @@ export type TAuthLogos = {
 export type TNotification = {
   notifications: {
     id: string;
-    type: string;
+    type: TNotificationType;
     title: string;
     message: string;
     userId: string;
@@ -702,9 +703,9 @@ export type TNotification = {
   }[];
   unreadCount: number;
 };
-export type TNotify = {
+export type TNotifications = {
   id: string;
-  type: string;
+  type: TNotificationType;
   title: string;
   message: string;
   userId: string;

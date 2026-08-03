@@ -17,8 +17,8 @@ import {
   BookMarked,
 } from 'lucide-react';
 
-export const LINKS_BY_ROLE = {
-  super_admin: [
+export const ROUTES_BY_ROLE = {
+  SUPER_ADMIN: [
     {
       href: `/crm/admin`,
       label: 'Admin Dashboard',
@@ -152,7 +152,7 @@ export const LINKS_BY_ROLE = {
       children: [],
     },
   ],
-  admin: [
+  ADMIN: [
     {
       href: `/crm/admin`,
       label: 'Admin Dashboard',

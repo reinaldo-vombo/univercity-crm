@@ -1,41 +1,4 @@
 export const DUMMY_DATA = {
-  roles: [
-    {
-      id: '1',
-      label: 'Super_Admin',
-      value: 'super_admin',
-    },
-    {
-      id: '2',
-      label: 'Admin',
-      value: 'admin',
-    },
-    {
-      id: '3',
-      label: 'Contablista',
-      value: 'accountant',
-    },
-    {
-      id: '4',
-      label: 'Editor',
-      value: 'editor',
-    },
-    {
-      id: '4',
-      label: 'Gerente',
-      value: 'manager',
-    },
-    {
-      id: '5',
-      label: 'Direitor',
-      value: 'department_head',
-    },
-    {
-      id: '6',
-      label: 'Funcionario',
-      value: 'staff',
-    },
-  ],
   sesson: [
     {
       id: '1',

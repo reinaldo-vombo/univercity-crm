@@ -52,11 +52,9 @@ const UserDetailsPage = ({ user }: { user: TBulkUser }) => {
                </div>
             </div>
 
-            {/* Info + Audit lado a lado em telas grandes */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+            <div className="grid grid-cols-1 gap-5">
 
-               {/* Informações pessoais — col 2 */}
-               <div className="lg:col-span-2 rounded-3xl border border-slate-100 bg-white shadow-sm p-6 space-y-4">
+               <div className="lg:col-span-3 rounded-3xl border border-slate-100 bg-white shadow-sm p-6 space-y-4">
                   <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-widest">Informações</h2>
 
                   {[

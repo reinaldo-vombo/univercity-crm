@@ -2,7 +2,7 @@
 
 import { UsersColumns } from "./columns";
 import { TUser } from "@/types/global"
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import dynamic from "next/dynamic";
 import FormLoading from "@/components/skeleton/form";
 const CreateUser = dynamic(() => import("@/components/forms/admin/post/create-user"),

@@ -1,11 +1,12 @@
 import { getToken } from 'next-auth/jwt';
 import { NextResponse, NextRequest } from 'next/server';
+import { ENUM_USER_ROLE } from './lib/enums/user';
 
 // 🔐 Mapeamento de papéis permitidos por rota
 const ROUTE_ROLE_MAP: Record<string, string[]> = {
-  '/crm': ['manager', 'accounte', 'admin', 'super_admin'],
-  '/crm/admin': ['admin', 'super_admin', 'editor'],
-  '/crm/management': ['manager', 'editor'],
+  '/crm': [ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN],
+  '/crm/admin': [ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN],
+  '/crm/management': [ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN],
 };
 
 export async function proxy(req: NextRequest) {

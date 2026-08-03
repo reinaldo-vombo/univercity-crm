@@ -1,34 +1,31 @@
 'use server';
 
-import { serverEnv } from '@/config/env/server';
+import { sendEmail } from '@/config/send-email';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import ResetPassword from '@/lib/email/reset-password';
 import { validatedAction } from '@/lib/helper/action-helper';
 import { resetPasswordSchema } from '@/lib/validation/admin';
 import { ApiResponseError } from '@/services/api-error';
 import { serverActionFetch } from '@/services/server-fetch';
-import { ActionResult, ActionState } from '@/types/api-error';
+import { ActionResult, ActionState, TResponse } from '@/types/api-error';
 import { updateTag } from 'next/cache';
-import { Resend } from 'resend';
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const recoverPassword = async (
   data: string,
 ): Promise<ActionState<null>> => {
   try {
-    await serverActionFetch<null>('/auth/recover-password', {
+    const result = await serverActionFetch<string>('/auth/recover-password', {
       method: 'POST',
       body: { email: data },
     });
 
-    const { error } = await resend.emails.send({
-      from: serverEnv.ONBORDING,
-      to: ['delivered@resend.dev'],
-      subject: 'Pedido de redefinição de senha',
-      react: ResetPassword({}),
-    });
+    const response = await sendEmail(
+      [data],
+      'Pedido de redefinição de senha',
+      ResetPassword({ token: result }),
+    );
 
-    if (error) {
+    if (response.error) {
       return {
         error: true,
         message: 'Ocorreu um erro ao enviar email, por favor tente de novo',
@@ -51,16 +48,19 @@ export const recoverPassword = async (
 
 export const resetPassword = validatedAction(
   resetPasswordSchema,
-  async (data): Promise<ActionResult<null>> => {
+  async (data): Promise<ActionResult<TResponse>> => {
     try {
-      await serverActionFetch<null>('/auth/reset-password', {
-        method: 'POST',
-        body: data,
-      });
+      const response = await serverActionFetch<TResponse>(
+        '/auth/reset-password',
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
 
       return {
         error: false,
-        data: null,
+        data: response,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {

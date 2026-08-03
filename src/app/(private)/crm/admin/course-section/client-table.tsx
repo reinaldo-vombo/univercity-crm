@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TOfferedCourse, TOfferedCourseSection, TPrice } from "@/types/global";
 import { OfferedCourseSectionColumns } from "./columns";
 import { createUniqueId } from "@/lib/helper";

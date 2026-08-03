@@ -1,4 +1,4 @@
-'use client'
+
 import {
    Table,
    TableBody,
@@ -7,7 +7,6 @@ import {
    TableHeader,
    TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { TTrasition } from "@/types/global";
 import { formatCurrency, formatDate } from "@/lib/helper";
 type TProps = {
@@ -23,12 +22,8 @@ const TransationTable = ({ data }: TProps) => {
                <TableRow>
                   <TableHead>Nome</TableHead>
                   <TableHead>Total</TableHead>
-                  <TableHead>Metodo</TableHead>
                   <TableHead>Data do pagamento</TableHead>
-                  <TableHead>Banco</TableHead>
-                  <TableHead>Credito extra</TableHead>
                   <TableHead>Data de Publicação</TableHead>
-                  <TableHead className="text-right">Ação</TableHead>
                </TableRow>
             </TableHeader>
 
@@ -52,27 +47,11 @@ const TransationTable = ({ data }: TProps) => {
                            {formatCurrency(tx.totalAmount)}
                         </TableCell>
                         <TableCell>
-                           {tx.method}
-                        </TableCell>
-                        <TableCell>
                            {formatDate(tx.paidAt ?? '')}
                         </TableCell>
 
-                        <TableCell>{tx.payerBank}</TableCell>
-
-                        <TableCell>{formatCurrency(tx.extraAmount)}</TableCell>
-
                         <TableCell>
                            {formatDate(tx.createdAt)}
-                        </TableCell>
-
-                        <TableCell className="text-right">
-                           <Button
-                              variant="destructive"
-                              size="sm"
-                           >
-                              Excluir
-                           </Button>
                         </TableCell>
                      </TableRow>
                   ))
