@@ -17,14 +17,15 @@ type TUploaderProps = {
    maxFiles?: number;
 }
 const Uploader = ({ field, multiple = false, maxFiles = 4 }: TUploaderProps) => {
-   const [files, setFiles] = useState<File[]>(
-      Array.isArray(field.value) ? field.value : field.value ? [field.value] : []
+   const [files, setFiles] = useState<File[] | null>(
+      Array.isArray(field.value) ? field.value : field.value ? [field.value] : null
    );
    const handleChange = (newFiles: File[] | null) => {
       const file = newFiles?.[0] ?? null;
       setFiles(file ? [file] : []);
       field.onChange(file);
    };
+
 
    //max-w-xs
    // const handleRemove = (index: number) => {

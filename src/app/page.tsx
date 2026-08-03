@@ -1,30 +1,35 @@
+
+import { MotionGrid } from "@/components/ui/motion-grid";
 import { ROUTES } from "@/constants/routes";
-import Image from "next/image";
+import { User } from "lucide-react";
 import Link from "next/link";
+
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-12 items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col space-y-6 gap-8 col-span-12 items-center">
-        <Image
-          className="dark:invert"
-          src="/SIGU.png"
-          alt='SIGU – Sistema Integrado de Gestão Universitária'
-          width={500}
-          height={500}
-          priority
-        />
-        <h1 className="text-3xl">SIGU – Sistema Integrado de Gestão Universitária</h1>
-        <div className="flex items-center justify-center w-full">
+    <div className="h-screen">
+      <MotionGrid
+        speed='3s'
+        opacity={0.15}
+        enableGlow={true}
+        lineColor='20, 184, 166'
+        className='relative h-full w-full flex flex-col items-center justify-center'
+      >
+        <h2 className='bg-clip-text text-transparent text-center bg-linear-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight'>
+          SIGU <br /> Sistema Integrado de Gestão Universitária
+        </h2>
+        <p className='max-w-xl mx-auto text-sm md:text-lg text-neutral-700 dark:text-neutral-400 text-center'>
+          gliding right, setting the path.
+        </p>
+        <div className="flex items-center justify-center w-full mt-7">
           <Link
-            className="rounded-lg bg-primary p-2 hover:bg-primary-foreground ease-in duration-75"
+            className="rounded-lg p-2 ease-in duration-75 flex"
             href={ROUTES.LOGIN}
           >
-            Entrar
+            Entrar <User />
           </Link>
         </div>
-      </main>
-
+      </MotionGrid>
     </div>
   );
 }

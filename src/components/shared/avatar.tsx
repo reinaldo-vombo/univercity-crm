@@ -3,6 +3,7 @@ import { TAvatarProps } from "./types"
 
 
 const Avatar = ({ name, photo = '/avatar-1.jpg', className }: TAvatarProps) => {
+
    const getInitials = (name: string): string => {
       const nameParts = name.split(' ');
       return nameParts

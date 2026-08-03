@@ -21,7 +21,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
    return [
       {
          accessorKey: "firstName",
-         header: 'Nome Completo',
+         header: 'NOME',
          cell: ({ row }) => {
             const firstName = row.original.firstName;
             const middleName = row.original.middleName || '';
@@ -42,7 +42,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
          header: ({ column }) => (
             <UniversalColumnFilter
                column={column}
-               title="Fase Do exame"
+               title="FASE"
                options={[
                   { value: "1", label: "1º fase" },
                   { value: "2", label: "2º fase" },
@@ -64,7 +64,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
       },
       {
          accessorKey: "exameDate",
-         header: "Data do exame",
+         header: "DATA",
          cell: ({ row }) => {
             const date = row.original.exameDate;
             return (
@@ -79,13 +79,14 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
       },
       {
          accessorKey: "exameResults",
-         header: "Resultado",
+         header: "RESULTADO",
       },
       {
          accessorKey: "paymentAmoute",
-         header: "Valor pago",
+         header: "MONTANTE",
          cell: ({ row }) => {
-            const price = row.original.paymentAmoute;
+
+            const price = row.original.ExamePayment[0].totalAmount;
             return (
                <div className="flex items-center gap-2">
                   <BadgeDollarSign className="text-green-500" />
@@ -118,7 +119,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
       },
       {
          accessorKey: "createdAt",
-         header: "Data de  publicação",
+         header: "DATA DE PUBLICAÇÂO",
          cell: ({ row }) => (
             <span className="truncate max-w-[180px]">{formatDate(row.getValue("createdAt"))}</span>
          ),

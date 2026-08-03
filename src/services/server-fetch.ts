@@ -82,7 +82,11 @@ export async function serverActionFetch<T>(
 
     const response = await fetch(`${baseURL}${endpoint}`, {
       method: options.method || 'GET',
-      body: options.body ? JSON.stringify(options.body) : undefined,
+      body: isFormData
+        ? options.body
+        : options.body
+          ? JSON.stringify(options.body)
+          : undefined,
       headers,
       next: options.next,
       cache: options.cache,

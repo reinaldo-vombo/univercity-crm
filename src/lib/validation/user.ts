@@ -30,7 +30,7 @@ export const updateSchema = z.object({
       location: z.string().optional(),
     })
     .optional(),
-  avatar: z.instanceof(File).optional(),
+  avatar: z.union([z.string(), z.instanceof(File)]).optional(),
 });
 
 export const changePasswordShema = z.object({

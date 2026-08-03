@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import Image, { type ImageProps } from "next/image"
 
 import { cn } from "@/lib/utils"
 
@@ -21,14 +22,41 @@ function Avatar({
   )
 }
 
+type AvatarImageProps = Omit<ImageProps, "onLoadingComplete"> & {
+  fallbackToLocal?: boolean // true quando src vem do teu backend local (dev)
+}
+
 function AvatarImage({
   className,
+  src,
+  alt,
+  fallbackToLocal = true,
+  onError,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+}: AvatarImageProps) {
+  const [hasError, setHasError] = React.useState(false)
+
+  // reset o erro sempre que a src mudar (ex: user trocou o avatar)
+  React.useEffect(() => {
+    setHasError(false)
+  }, [src])
+
+  if (!src || hasError) {
+    return null // deixa o AvatarFallback do Radix aparecer por baixo
+  }
+
   return (
-    <AvatarPrimitive.Image
+    <Image
       data-slot="avatar-image"
-      className={cn("aspect-square size-full", className)}
+      src={src}
+      alt={alt}
+      fill
+      className={cn("aspect-square object-cover", className)}
+      unoptimized={fallbackToLocal}
+      onError={(e) => {
+        setHasError(true)
+        onError?.(e)
+      }}
       {...props}
     />
   )

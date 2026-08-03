@@ -13,6 +13,7 @@ export type TResponse = {
 
 export type ActionSuccess<T> = {
   error: false;
+  message?: string;
   data: T;
 };
 

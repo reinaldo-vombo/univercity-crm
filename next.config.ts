@@ -7,13 +7,13 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   images: {
+    dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
         protocol: 'http',
         hostname: 'localhost',
         port: '5000',
         pathname: '/uploads/**',
-        search: '',
       },
     ],
   },

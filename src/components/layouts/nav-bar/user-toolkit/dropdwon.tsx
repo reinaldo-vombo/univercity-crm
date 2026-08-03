@@ -45,7 +45,7 @@ export const Dropdown = ({ trigger, defaultOpen, align = "end", user }: Props) =
                   {/* User Info */}
                   <DropdownMenuLabel className="flex items-center gap-3 px-4 py-3">
                      <div className="relative">
-                        <Avatar name={user.avatar} className="size-10" />
+                        <Avatar name={user.name} photo={user.avatar || ''} className="size-10" />
                         <span className="ring-card absolute right-0 bottom-0 size-2 rounded-full bg-green-600 ring-2" />
                      </div>
 

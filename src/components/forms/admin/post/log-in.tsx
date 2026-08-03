@@ -40,6 +40,7 @@ export default function AdminLogin({ onChange }: TProps) {
    })
    async function onSubmit(values: z.infer<typeof adminSchema>) {
       const { email, password } = values;
+
       try {
          const res = await signIn("credentials", {
             redirect: false,
@@ -47,25 +48,53 @@ export default function AdminLogin({ onChange }: TProps) {
             password,
          });
 
-         if (res?.error) {
-            if (res?.error === 'CredentialsSignin') {
-               toast.warning(FLASH_MESSAGE.WRONGE_CREDENTIALS)
-            }
-         } else if (res?.ok) {
-            toast.success(`${FLASH_MESSAGE.WELLCOME}`);
-            router.push(`${ROUTES.DASHBOARD}/admin`);  // Redirect on successful login
-         } else {
-            toast.error(`${FLASH_MESSAGE.UNESPECTED_ERROR}`);
+         if (!res) {
+            toast.error("Não foi possível conectar ao servidor.");
+            return;
          }
-      } catch (error) {
-         console.error("Form submission error", error);
-         toast.error("Failed to submit the form. Please try again.");
+
+         if (res.error) {
+            switch (res.error) {
+               case "CredentialsSignin":
+                  toast.warning(FLASH_MESSAGE.WRONGE_CREDENTIALS);
+                  break;
+
+               case "NetworkError":
+               case "fetch failed":
+               case "Failed to fetch":
+                  toast.error("Servidor indisponível. Tente novamente mais tarde.");
+                  break;
+
+               default:
+                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            }
+
+            return;
+         }
+
+         if (res.ok) {
+            toast.success(FLASH_MESSAGE.WELLCOME);
+            router.push(`${ROUTES.DASHBOARD}/admin`);
+         }
+
+      } catch (error: any) {
+         console.error("Login error:", error);
+
+         if (
+            error?.message?.includes("fetch") ||
+            error?.message?.includes("ECONNREFUSED") ||
+            error?.message?.includes("network")
+         ) {
+            toast.error("Não foi possível conectar ao servidor.");
+         } else {
+            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+         }
       }
    }
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full py-10">
             <FormField
                control={form.control}
                name="email"

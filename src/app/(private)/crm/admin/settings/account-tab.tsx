@@ -1,11 +1,11 @@
 'use client'
 
-import SheetModal from "../../../../../components/shared/sheet-modal";
+import SheetModal from "@//components/shared/sheet-modal";
 import { Briefcase, Check, Eye, Mail, Pencil, Phone, Plus, Trash, UserCircle } from "lucide-react";
 
-import Avatar from "../../../../../components/shared/avatar";
+import Avatar from "@/components/shared/avatar";
 
-import UpdatedAccountForm from "../../../../../components/forms/admin/update/update-account";
+import UpdatedAccountForm from "@/components/forms/admin/update/update-account";
 import { TUser } from "@/types/global";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
@@ -41,7 +41,6 @@ const AccountTab = ({ user }: TProps) => {
    const [selectedRole, setSelectedRole] = useState(
       roles.find((r) => r.name === user?.role) ?? roles[roles.length - 1]
    );
-
    return (
       <div className="grid grid-cols-12 gap-5">
 
@@ -62,9 +61,9 @@ const AccountTab = ({ user }: TProps) => {
                   <SheetModal
                      side="right"
                      trigger={
-                        <button className="absolute -bottom-1 -right-1 flex items-center justify-center size-8 rounded-full bg-green-500 hover:bg-green-600 transition-colors shadow-lg">
+                        <div className="absolute -bottom-1 -right-1 flex items-center justify-center size-8 rounded-full bg-green-500 hover:bg-green-600 transition-colors shadow-lg">
                            <Pencil className="size-3.5 text-white" />
-                        </button>
+                        </div>
                      }
                      title="Editar Perfil"
                      id={`view-${user?.id}`}

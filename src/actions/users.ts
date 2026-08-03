@@ -4,13 +4,16 @@ import { updateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TUser } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  validatedActionWithUser,
+  validatedActionWithUserJson,
+} from '../lib/helper/action-helper';
 import {
   changePasswordShema,
   updateSchema,
   userSchema,
 } from '../lib/validation/user';
-import { ActionResult, ActionState } from '../types/api-error';
+import { ActionResult, ActionState, TResponse } from '../types/api-error';
 import { ApiResponseError } from '@/services/api-error';
 
 export const addNewUser = validatedActionWithUser(
@@ -22,7 +25,7 @@ export const addNewUser = validatedActionWithUser(
         body: data,
       });
 
-      updateTag('users');
+      updateTag('user');
 
       return {
         error: false,
@@ -47,27 +50,26 @@ export const addNewUser = validatedActionWithUser(
   },
 );
 
-export const updatedUser = validatedActionWithUser(
+export const updatedUser = validatedActionWithUserJson(
   updateSchema,
-  async (data): Promise<ActionResult<TUser>> => {
-    const { id, ...res } = data;
-
+  async (data, formdata): Promise<ActionResult<TUser>> => {
     try {
-      const result = await serverActionFetch<TUser>(
-        `/users/${id}`,
+      const result = await serverActionFetch<TResponse>(
+        `/users/${data.id}`,
         {
           method: 'PATCH',
-          body: res,
+          body: formdata,
         },
         true,
       );
-      console.log(data);
 
       updateTag(`user-${data.id}`);
+      // console.log(result);
 
       return {
         error: false,
-        data: result,
+        message: result.message,
+        data: result.data,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {

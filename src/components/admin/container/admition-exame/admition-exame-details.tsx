@@ -8,6 +8,8 @@ type TAdmitionExameDetailsProps = {
 }
 
 const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
+   console.log(data);
+
    const tabs = [
       {
          id: '1',
@@ -20,7 +22,7 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
          id: '2',
          lable: 'Pagamento',
          value: 'pagamento',
-         tabContent: <AdmitionExamePaymentDetails candidate={data.email} payment={data.ExamePayment[0]} />,
+         tabContent: <AdmitionExamePaymentDetails candidateEmail={data.email} payment={data.ExamePayment[0]} />,
          description: ''
       },
    ]

@@ -8,10 +8,10 @@ import Image from "next/image"
 
 type TProps = {
    payment: TExamePayment
-   candidate: string
+   candidateEmail: string
 }
 
-const AdmitionExamePaymentDetails = ({ payment, candidate }: TProps) => {
+const AdmitionExamePaymentDetails = ({ payment, candidateEmail }: TProps) => {
 
    const uniAccount = payment.universityBankAccount;
 
@@ -91,7 +91,7 @@ const AdmitionExamePaymentDetails = ({ payment, candidate }: TProps) => {
                   <p className="text-xs uppercase tracking-wide text-neutral-500 font-medium">Enviado por</p>
                   <div className="space-y-1.5 text-sm">
                      <p className="font-semibold">{payment.payerName}</p>
-                     <p className="text-neutral-400">{candidate}</p>
+                     <p className="text-neutral-400">{candidateEmail}</p>
                      <p className="text-neutral-400">{payment.payerBank}</p>
                      <p className="text-neutral-400">{payment.payerIban}</p>
                      <p className="text-neutral-400">Multicaixa Express · Transferência Bancária</p>
