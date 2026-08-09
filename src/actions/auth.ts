@@ -5,9 +5,13 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 import ResetPassword from '@/lib/email/reset-password';
 import { validatedAction } from '@/lib/helper/action-helper';
 import { resetPasswordSchema } from '@/lib/validation/admin';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { serverActionFetch } from '@/services/server-fetch';
-import { ActionResult, ActionState, TResponse } from '@/types/api-error';
+import {
+  ActionResult,
+  ActionState,
+  TResponse,
+} from '@/lib/errors/api-error.type';
 import { updateTag } from 'next/cache';
 
 export const recoverPassword = async (
@@ -40,8 +44,7 @@ export const recoverPassword = async (
   } catch (err) {
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -75,7 +78,7 @@ export const resetPassword = validatedAction(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -107,8 +110,7 @@ export const unlockAccount = async (
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

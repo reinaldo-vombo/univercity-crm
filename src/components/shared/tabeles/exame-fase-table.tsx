@@ -35,7 +35,7 @@ const ExameFaseTable = ({ data, buildings }: TProps) => {
          toast.success(FLASH_MESSAGE.DELETED);
          // Optionally refresh UI or mutate local state
       } catch (err) {
-         toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+         toast.error(FLASH_MESSAGE.SERVER_ERROR);
          console.error(err);
       }
    };
@@ -107,9 +107,9 @@ const ExameFaseTable = ({ data, buildings }: TProps) => {
                               trigger={<PenBoxIcon className="h-4 w-4 text-green-500" />}
                               side="right"
                               id={`edit-${fase.id}`}
-                              className="sm:max-w-4xl"
-                              title="Atualizar curso"
-                              description='Formulario para atualizar o curso'>
+                              className="sm:max-w-md"
+                              title="Atualizar fase do exame de acesso"
+                              description='Atualizar fase'>
                               <UpdateAdmitionExameFase building={buildings} defaultValues={fase} />
                            </SheetModal>
                            <Button

@@ -2,7 +2,7 @@ import { Avatar as AvatarContainer, AvatarFallback, AvatarImage } from "@/compon
 import { TAvatarProps } from "./types"
 
 
-const Avatar = ({ name, photo = '/avatar-1.jpg', className }: TAvatarProps) => {
+const Avatar = ({ name, photo, className }: TAvatarProps) => {
 
    const getInitials = (name: string): string => {
       const nameParts = name.split(' ');
@@ -13,7 +13,7 @@ const Avatar = ({ name, photo = '/avatar-1.jpg', className }: TAvatarProps) => {
 
    return (
       <AvatarContainer className={`${className || 'size-11'} `}>
-         <AvatarImage src={photo} alt={getInitials(name || '')} />
+         <AvatarImage src={photo || '/avatar-1.jpg'} alt={getInitials(name || '')} />
          <AvatarFallback>{getInitials(name || '') || 'CN'}</AvatarFallback>
       </AvatarContainer>
 

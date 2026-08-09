@@ -3,9 +3,9 @@
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TSemester } from '../types/global';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { serverUser } from '@/lib/helper/auth/user';
 
 export const addNewSemester = async (
@@ -35,8 +35,7 @@ export const addNewSemester = async (
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -49,7 +48,7 @@ export const updatedSemester = async (
     if (!user) {
       return {
         error: true,
-        message: FLASH_MESSAGE.NOTAUTHORIZED,
+        message: FLASH_MESSAGE.UNAUTHORIZED,
       };
     }
     const semester = await serverActionFetch<TSemester>(
@@ -78,8 +77,7 @@ export const updatedSemester = async (
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -112,7 +110,7 @@ export const deleteSemester = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

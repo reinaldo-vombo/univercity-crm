@@ -8,8 +8,8 @@ import {
   buildingSchema,
   updateBuildingSchema,
 } from '../lib/validation/building';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewBuilding = validatedActionWithUser(
@@ -40,7 +40,7 @@ export const addNewBuilding = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -74,7 +74,7 @@ export const updateBuilding = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -96,7 +96,7 @@ export const deleteBuilding = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

@@ -3,9 +3,9 @@
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUser } from '@/lib/helper/action-helper';
 import { createMenssageSchema } from '@/lib/validation/menssage';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { serverActionFetch } from '@/services/server-fetch';
-import { ActionResult } from '@/types/api-error';
+import { ActionResult } from '@/lib/errors/api-error.type';
 import { TMenssage } from '@/types/global';
 import { updateTag } from 'next/cache';
 
@@ -44,7 +44,7 @@ export const sendeMenssage = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },

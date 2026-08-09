@@ -7,8 +7,8 @@ import {
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { TDiscipline } from '../types/global';
 import {
   bulkDisciplineSchema,
@@ -43,7 +43,7 @@ export const addNewDiscipline = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -78,7 +78,7 @@ export const updateDiscipline = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -110,7 +110,7 @@ export const deleteDiscipline = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

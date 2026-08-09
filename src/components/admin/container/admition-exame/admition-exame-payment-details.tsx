@@ -1,3 +1,4 @@
+import Modal from "@/components/shared/Modal"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatCurrency, formatDate } from "@/lib/helper"
@@ -46,6 +47,11 @@ const AdmitionExamePaymentDetails = ({ payment, candidateEmail }: TProps) => {
                <li className="flex items-center justify-between sm:justify-start sm:gap-3">
                   <span className="text-neutral-500 text-sm">Moeda</span>
                   <b>{payment.currency}</b>
+               </li>
+               <li className="flex items-center justify-between sm:justify-start sm:gap-3">
+                  <Modal title="Recibo de pagamento" trigger='Recibo de pagamento'>
+                     hello
+                  </Modal>
                </li>
             </ul>
 

@@ -38,6 +38,10 @@ export function MotionGrid({
          className={cn('relative overflow-hidden', className)}
          style={{ backgroundColor }}
       >
+         <div className="flex items-center justify-between absolute top-0 w-full z-10 p-4">
+            <p className='text-sm md:text-lg text-neutral-700 dark:text-neutral-400'>Desenvolvido por <a href="#" className='font-bold'>Reinaldo Vombo</a></p>
+            <p className='text-sm md:text-lg text-neutral-700 dark:text-neutral-400 font-bold'>SIGU</p>
+         </div>
          <style jsx>{`
         @keyframes diagonalGridMove-${id} {
           0% {

@@ -85,7 +85,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
          accessorKey: "paymentAmoute",
          header: "Valor pago",
          cell: ({ row }) => {
-            const price = row.original.paymentAmoute;
+            const price = row.original.ExamePayment[0].totalAmount;
             return (
                <div className="flex items-center gap-2">
                   <BadgeDollarSign className="text-green-500" />
@@ -139,7 +139,7 @@ export function AdmitionExameColumns(): ColumnDef<TAdmitionExame>[] {
                   toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+                  toast.error(FLASH_MESSAGE.SERVER_ERROR);
                   console.error(err);
                }
             };

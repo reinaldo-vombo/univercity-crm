@@ -11,8 +11,8 @@ import {
   requestCourseTransferZodSchema,
   updateAcademicServiceZodShema,
 } from '../lib/validation/secretary';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { TAcademicService } from '@/types/global';
 
@@ -48,7 +48,7 @@ export const handleCourseTransferReuest = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -81,7 +81,7 @@ export const CreateServicePeriod = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -176,7 +176,7 @@ export const deleteAcademicService = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

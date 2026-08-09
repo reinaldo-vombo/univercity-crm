@@ -4,9 +4,9 @@ import { revalidateTag } from 'next/cache';
 import { serverFetch } from '@/services/server-fetch';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { TAcademicService } from '../types/global';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import {
   academicServiceZodShema,
   updateAcademicServiceZodShema,

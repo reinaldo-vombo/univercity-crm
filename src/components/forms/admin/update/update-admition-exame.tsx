@@ -1,4 +1,4 @@
-import * as z from "zod"
+import z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,7 +11,6 @@ import {
    FormLabel,
    FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import SubmitBtn from "@/components/shared/submit-btn"
 import { useEffect, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
@@ -22,24 +21,23 @@ import { Switch } from "@/components/ui/switch"
 import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useSheet } from "@/providers/sheet-provider"
+import { handleApiError } from "@/services/error-handler"
 
 type TPros = {
    values: TAdmitionExame
 }
 const UpdateAdmitionExameForm = ({ values }: TPros) => {
+   const { faseId } = values;
    const { close } = useSheet()
 
    const form = useForm<z.infer<typeof admitionExameSchema>>({
       resolver: zodResolver(admitionExameSchema),
       defaultValues: {
          id: values.id,
-         firstName: values.firstName,
-         middleName: values.middleName,
-         lastName: values.lastName,
          exameResults: values.exameResults,
          passed: values.passed,
-         paymentAmoute: 45000,
-         exameDate: values.exameDate
+         exameDate: values.exameDate,
+         faseId
       }
    })
 
@@ -69,8 +67,8 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
             form.reset();
             close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
-            console.error(error);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
+            handleApiError(error);
          }
       });
 
@@ -82,41 +80,6 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-6 py-7">
-            <div className="flex items-center gap-2">
-               <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Primero Nome</FormLabel>
-                        <FormControl>
-                           <Input
-                              placeholder="EX: Paulo"
-                              {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-               <FormField
-                  control={form.control}
-                  name="middleName"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Nome do Meio</FormLabel>
-                        <FormControl>
-                           <Input
-                              placeholder="EX: Manuel Dos Santos"
-                              {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-            </div>
-
             <FormField
                control={form.control}
                name="exameResults"

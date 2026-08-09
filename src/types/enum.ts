@@ -72,3 +72,12 @@ export type TNotificationType =
   | 'CONTENT'
   | 'AUTH'
   | 'SYSTEM';
+export type TMessageDirection = 'OUTBOUND' | 'INBOUND';
+export type TMessageChannel = 'WHATSAPP' | 'SMS' | 'EMAIL';
+export type TRecipientType = 'STUDENT' | 'FACULTY' | 'CANDIDATE';
+export type TMessageStatus =
+  | 'PENDING'
+  | 'SENT'
+  | 'DELIVERED'
+  | 'READ'
+  | 'FAILED';

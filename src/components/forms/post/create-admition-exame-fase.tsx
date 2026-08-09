@@ -17,11 +17,11 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { admitionExameFaseSchema } from "@/lib/validation/adnition-exame"
-import { Calendar } from "@/components/ui/calendar"
 import { createAdmitionExameFase } from "@/actions/admition-exame"
 import { useSheet } from "@/providers/sheet-provider"
 import { TBuilding } from "@/types/global"
 import Selector from "@/components/shared/selector"
+import DatePicker from "@/components/shared/calendar"
 
 type TProps = {
    building: TBuilding[]
@@ -59,7 +59,7 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
             form.reset();
             close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(error);
          }
       });
@@ -166,10 +166,8 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
                      <FormItem>
                         <FormLabel>Ínicio das matriculas</FormLabel>
                         <FormControl>
-                           <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange} />
+                           <DatePicker
+                              asPopover={true} formField={field} />
                         </FormControl>
                         <FormDescription></FormDescription>
                         <FormMessage />
@@ -183,10 +181,8 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
                      <FormItem>
                         <FormLabel>Fim das matriculas</FormLabel>
                         <FormControl>
-                           <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange} />
+                           <DatePicker
+                              asPopover={true} formField={field} />
                         </FormControl>
                         <FormDescription></FormDescription>
                         <FormMessage />
@@ -200,10 +196,8 @@ const CreateAdmitionExameFaseForm = ({ building }: TProps) => {
                      <FormItem>
                         <FormLabel>Data do exame</FormLabel>
                         <FormControl>
-                           <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange} />
+                           <DatePicker
+                              asPopover={true} formField={field} />
                         </FormControl>
                         <FormDescription></FormDescription>
                         <FormMessage />

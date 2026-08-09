@@ -2,9 +2,9 @@
 import { serverActionFetch } from '@/services/server-fetch';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { TAcademicFaculty } from '../types/global';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import {
   academicFacultyacultySchema,
   updateAcademicFacultyacultySchema,
@@ -99,7 +99,7 @@ export const deleteFaculty = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

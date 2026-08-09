@@ -8,7 +8,6 @@ type TAdmitionExameDetailsProps = {
 }
 
 const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
-   console.log(data);
 
    const tabs = [
       {
@@ -16,14 +15,14 @@ const AdmitionExameDetails = ({ data }: TAdmitionExameDetailsProps) => {
          lable: 'Informção',
          value: 'informcao',
          tabContent: <AdmitionExameInfo data={data} />,
-         description: ''
+         description: 'Visualize os dados pessoais, informações académicas e detalhes da candidatura ao exame de admissão.'
       },
       {
          id: '2',
          lable: 'Pagamento',
          value: 'pagamento',
          tabContent: <AdmitionExamePaymentDetails candidateEmail={data.email} payment={data.ExamePayment[0]} />,
-         description: ''
+         description: 'Consulte o estado do pagamento, comprovativo, referência e outras informações relacionadas com a inscrição.'
       },
    ]
 

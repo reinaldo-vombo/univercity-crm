@@ -57,7 +57,7 @@ const ExpandebalForm = ({ title }: TPopoverForm) => {
             }, 3300)
             form.reset();
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(error);
          }
       });

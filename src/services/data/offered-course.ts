@@ -1,5 +1,4 @@
 import { getUserToken } from '@/lib/helper/auth/user';
-import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
 import {
   TClassShedule,
@@ -7,6 +6,7 @@ import {
   TOfferedCourseSection,
 } from '@/types/global';
 import { cacheLife, cacheTag } from 'next/cache';
+import { handleApiError } from '../error-handler';
 
 export const getAllSections = async (): Promise<TOfferedCourseSection[]> => {
   try {

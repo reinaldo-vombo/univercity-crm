@@ -58,7 +58,7 @@ const CreatAcademicServices = ({ prices }: { prices: TPrice[] }) => {
             form.reset();
             close()
          } catch (err) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             handleApiError(err);
          }
 

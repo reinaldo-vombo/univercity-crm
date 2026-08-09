@@ -7,28 +7,21 @@ import {
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
-import { ActionResult } from '../types/api-error';
-import { ApiResponseError } from '@/services/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
   assignFacultyToSectionDisciplinesSchema,
   facultySchema,
   updateFacultySchema,
 } from '../lib/validation/faculty';
-import { saveFile } from '../lib/helper/uploade';
-
 export const addNewFaculty = validatedActionWithUser(
   facultySchema,
-  async (data): Promise<ActionResult<TFaculty>> => {
+  async (data, formData): Promise<ActionResult<TFaculty>> => {
     try {
-      let avatarUrl: any = data.profileImage;
-      if (data.profileImage instanceof File) {
-        avatarUrl = await saveFile(data.profileImage, 'facultys');
-      }
-      data = { ...data, profileImage: avatarUrl };
       const facultys = await serverActionFetch<TFaculty>('/faculty', {
         method: 'POST',
-        body: data,
+        body: formData,
       });
 
       updateTag('facultys');
@@ -50,7 +43,7 @@ export const addNewFaculty = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -84,7 +77,7 @@ export const updatedFaculty = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -123,7 +116,7 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -155,7 +148,7 @@ export const deleteFaculty = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

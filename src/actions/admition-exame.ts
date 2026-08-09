@@ -1,17 +1,21 @@
 'use server';
 
-import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TAdmitionExame } from '../types/global';
 import { validatedActionWithUser } from '../lib/helper/action-helper';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import {
   admitionExameFaseSchema,
   admitionExameSchema,
   updateAdmitionExameFaseSchema,
 } from '../lib/validation/adnition-exame';
+import { sendEmail } from '@/config/send-email';
+import { render as Render } from '@react-email/render';
+import { ExameAcessoAprovado } from '@/lib/email/exame-acesso-aprovado';
+import { sendErrorToClient } from '@/lib/errors/send-error-to-client';
+import { error } from 'console';
 
 export const updateAdmitionExame = validatedActionWithUser(
   admitionExameSchema,
@@ -20,12 +24,20 @@ export const updateAdmitionExame = validatedActionWithUser(
       const exames = await serverActionFetch<TAdmitionExame>(
         `/admission-exame/${data.id}`,
         {
-          method: 'PUT',
+          method: 'PATCH',
           body: data,
         },
       );
+      const html = await Render(
+        ExameAcessoAprovado({
+          applicantName: exames.firstName,
+          examId: exames.exameId,
+        }),
+      );
 
       updateTag('admitionExame');
+
+      await sendEmail([exames.email], 'Resultado do exame de admissão', html);
 
       return {
         error: false,
@@ -35,7 +47,7 @@ export const updateAdmitionExame = validatedActionWithUser(
       if (err instanceof ApiResponseError) {
         return {
           error: true,
-          message: err.message,
+          message: sendErrorToClient(error),
           errorMessages: err.errorMessages,
           meta: err.meta,
         };
@@ -43,8 +55,7 @@ export const updateAdmitionExame = validatedActionWithUser(
 
       return {
         error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        message: sendErrorToClient(error),
       };
     }
   },
@@ -68,8 +79,7 @@ export const deleteAdmitionExame = async (
   } catch (error) {
     return {
       error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: sendErrorToClient(error),
     };
   }
 };
@@ -96,7 +106,7 @@ export const createAdmitionExameFase = validatedActionWithUser(
       if (err instanceof ApiResponseError) {
         return {
           error: true,
-          message: err.message,
+          message: sendErrorToClient(error),
           errorMessages: err.errorMessages,
           meta: err.meta,
         };
@@ -104,8 +114,7 @@ export const createAdmitionExameFase = validatedActionWithUser(
 
       return {
         error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        message: sendErrorToClient(error),
       };
     }
   },
@@ -133,7 +142,7 @@ export const updateAdmitionExameFase = validatedActionWithUser(
       if (err instanceof ApiResponseError) {
         return {
           error: true,
-          message: err.message,
+          message: sendErrorToClient(error),
           errorMessages: err.errorMessages,
           meta: err.meta,
         };
@@ -141,8 +150,7 @@ export const updateAdmitionExameFase = validatedActionWithUser(
 
       return {
         error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        message: sendErrorToClient(error),
       };
     }
   },
@@ -166,8 +174,7 @@ export const deleteAdmitionExameFase = async (
   } catch (error) {
     return {
       error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: sendErrorToClient(error),
     };
   }
 };

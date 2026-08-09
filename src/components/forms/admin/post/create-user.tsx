@@ -51,7 +51,7 @@ const CreateUser = () => {
             form.reset();
             close()
          } catch (err) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(err);
          }
       });

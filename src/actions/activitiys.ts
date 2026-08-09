@@ -5,8 +5,8 @@ import {
   validatedActionWithUser,
 } from '@/lib/helper/action-helper';
 import { preferenceShema } from '@/lib/validation/user';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult, ActionState } from '../types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult, ActionState } from '../lib/errors/api-error.type';
 import { serverActionFetch } from '@/services/server-fetch';
 import {
   TAuthLogos,
@@ -59,8 +59,7 @@ export const logUserActivitys = async (
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -82,8 +81,7 @@ export const deleteUserActivitys = async (id: string) => {
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -106,8 +104,7 @@ export const closeSession = async () => {
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -130,8 +127,7 @@ export const marknotificationAsRead = async (id: string, userId: string) => {
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -154,8 +150,7 @@ export const markAllNotificationAsRead = async () => {
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -198,7 +193,7 @@ export const createNotificationPreference = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },

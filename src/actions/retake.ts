@@ -1,11 +1,11 @@
 'use server';
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { validatedActionWithUserJson } from '../lib/helper/action-helper';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { updateBulkRetakeSchema } from '@/lib/validation/retake';
 import { TRetakeAta } from '@/types/global';
 
@@ -40,7 +40,7 @@ export const updateBulkRetake = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },

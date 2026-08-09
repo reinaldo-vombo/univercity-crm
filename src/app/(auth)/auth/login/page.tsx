@@ -22,14 +22,13 @@ export default function LoginPage() {
                         height={70}
                         alt="SIGU logo" priority />
                   </div>
-                  SIGU Inc.
                </a>
             </div>
-            <div>
-               <h2>Bem-vindo de volta</h2>
-               <p>Faça login para continuar</p>
-            </div>
-            <div className="flex flex-1 items-center justify-center overflow-hidden">
+            <div className="flex flex-col flex-1 items-center justify-center overflow-hidden">
+               <div className='w-full pl-16'>
+                  <h2 className='text-2xl font-semibold'>Bem-vindo de volta</h2>
+                  <p>Faça login para continuar</p>
+               </div>
                <div className="relative w-full max-w-md min-h-[520px]">
                   <AnimatePresence mode="wait">
                      {isLogin ? (

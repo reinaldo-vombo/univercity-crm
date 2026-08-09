@@ -45,7 +45,7 @@ export default function AdminForgotPassWord({ onChange }: TProps) {
             toast.success('Verifique Sua Caixa de Correio');
             form.reset();
          } catch (err) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(err);
          }
       });

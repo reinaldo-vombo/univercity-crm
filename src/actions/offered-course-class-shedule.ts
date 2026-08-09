@@ -3,9 +3,9 @@
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { validatedActionWithUserJson } from '@/lib/helper/action-helper';
 import { createScheduleSchema } from '@/lib/validation/class-schedule';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { serverActionFetch } from '@/services/server-fetch';
-import { ActionResult } from '@/types/api-error';
+import { ActionResult } from '@/lib/errors/api-error.type';
 import { TClassShedule } from '@/types/global';
 import { updateTag } from 'next/cache';
 
@@ -40,7 +40,7 @@ export const addNewOfferedCourseClassSchedule = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -75,7 +75,7 @@ export const DeleteOfferedCourseSchedule = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
@@ -109,7 +109,7 @@ export const DeleteOfferedCourseScheduleByDiscipline = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

@@ -1,9 +1,9 @@
 'use server';
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { serverActionFetch } from '@/services/server-fetch';
-import { ActionResult } from '@/types/api-error';
+import { ActionResult } from '@/lib/errors/api-error.type';
 import { TSemesterRegistration } from '@/types/global';
 import { updateTag } from 'next/cache';
 
@@ -37,8 +37,7 @@ export const addNewSemesterRegistartion = async (
 
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

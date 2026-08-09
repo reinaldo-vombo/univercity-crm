@@ -1,23 +1,32 @@
 export const FLASH_MESSAGE = {
   SUCCESS: 'success',
   ERROR: 'error',
-  UNESPECTED_ERROR: 'Ocorreu um erro inesperado, por-favor tente mais tarde',
-  SERVER_ERROR_500: 'Ocorreu um erro no servidor, por-favor tente mais tarde',
-  NOTAUTHORIZED: 'Não tem autorização para realizar essa operação',
-  NO_TOKEN: 'Nenhum token encontrado, por-favor tente novamente',
-  WARNING: 'warning',
+  WARNING: 'alerta',
   INFO: 'info',
-  WRONGE: 'Ocorreu um erro, por-favor tente novamente',
-  WELLCOME: 'Bem vindo',
-  WRONGE_CREDENTIALS: 'Credenciais incorretas, por-favor tente novamente',
-  CREATED: 'Entidade cadastrada',
-  NOT_CREATED: 'Ocorreu um ao cadastra',
-  UPDATED: 'Informação atualizada',
-  NOT_UPDATED: 'Ocorreu um erro ao atualizar',
-  DELETED: 'Endidate eliminada',
-  NOT_DELETED: 'Ocorreu um erro ao excluir',
-  ID_REQUIRID: 'id é obrigatório para essa requisição',
-  ASSIGN_FACULTIES: 'Atribuir professores ao curso com sucesso',
-  ASSIGN_FACULTIES_ERROR: 'Ocorreu um erro ao atribuir professores ao curso',
-  USER_NOT_DELETED: 'Útilizador não eliminado',
+
+  INTERNAL_ERROR:
+    'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.',
+  SERVER_ERROR:
+    'Ocorreu um erro no servidor. Por favor, tente novamente mais tarde.',
+  UNAUTHORIZED: 'Não tem autorização para realizar esta operação.',
+  NO_TOKEN: 'Nenhum token encontrado. Por favor, autentique-se novamente.',
+
+  INVALID_CREDENTIALS:
+    'Credenciais incorretas. Verifique os dados e tente novamente.',
+
+  CREATED: 'Registo criado com sucesso.',
+  CREATE_ERROR: 'Ocorreu um erro ao criar o registo.',
+
+  UPDATED: 'Informação atualizada com sucesso.',
+  UPDATE_ERROR: 'Ocorreu um erro ao atualizar a informação.',
+
+  DELETED: 'Registo eliminado com sucesso.',
+  DELETE_ERROR: 'Ocorreu um erro ao eliminar o registo.',
+
+  // Validação
+  REQUIRED_ID: 'O identificador é obrigatório para esta operação.',
+
+  // Domínio
+  ASSIGN_TEACHERS_SUCCESS: 'Professores atribuídos ao curso com sucesso.',
+  ASSIGN_TEACHERS_ERROR: 'Ocorreu um erro ao atribuir professores ao curso.',
 };

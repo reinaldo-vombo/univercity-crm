@@ -19,14 +19,14 @@ export default async function ServerWrapper() {
          lable: 'Conta',
          value: 'conta',
          tabContent: <AccountTab user={userProfile} />,
-         description: 'Gerencia as informações pessoais da tua conta'
+         description: 'Gerencie as informações pessoais e os dados da sua conta.'
       },
       {
          id: '2',
          lable: 'Segurança',
          value: 'segurança',
          tabContent: <SecurityTab sessionHistory={currentUserLogs} />,
-         description: 'Gerencia a segurança da tua conta com essas configurações'
+         description: 'Gerencie as configurações de segurança e acompanhe o histórico de sessões da sua conta.'
       },
    ]
    return (

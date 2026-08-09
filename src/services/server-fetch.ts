@@ -3,7 +3,7 @@
 // import { getServerSession } from 'next-auth';
 // import { authOptions } from '@/config/auth';
 import { getServerSession } from 'next-auth';
-import { ApiResponseError } from './api-error';
+import { ApiResponseError } from '../lib/errors/api-error';
 import { handleApiError } from './error-handler';
 import { authOptions } from '@/config/auth';
 import { serverEnv } from '@/config/env/server';
@@ -51,7 +51,6 @@ export async function serverFetch<T>(
         response.status,
         json?.message || 'Request failed',
         json?.errorMessages,
-        json?.meta,
         json?.stack,
       );
     }

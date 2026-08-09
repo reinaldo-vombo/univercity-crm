@@ -13,8 +13,12 @@ import {
   updateSchema,
   userSchema,
 } from '../lib/validation/user';
-import { ActionResult, ActionState, TResponse } from '../types/api-error';
-import { ApiResponseError } from '@/services/api-error';
+import {
+  ActionResult,
+  ActionState,
+  TResponse,
+} from '../lib/errors/api-error.type';
+import { ApiResponseError } from '@/lib/errors/api-error';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
@@ -44,7 +48,7 @@ export const addNewUser = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -84,7 +88,7 @@ export const updatedUser = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -126,7 +130,7 @@ export const updatedUserPassword = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },

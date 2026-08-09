@@ -56,7 +56,7 @@ export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
     if (!user) {
       return {
         error: true,
-        message: FLASH_MESSAGE.NOTAUTHORIZED,
+        message: FLASH_MESSAGE.UNAUTHORIZED,
       } as R;
     }
     return actionnFn(id || '', currentUser);
@@ -73,7 +73,7 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
     if (!user) {
       return {
         error: true,
-        message: FLASH_MESSAGE.NOTAUTHORIZED,
+        message: FLASH_MESSAGE.UNAUTHORIZED,
       } as R;
     }
 

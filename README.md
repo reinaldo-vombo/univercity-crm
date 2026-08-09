@@ -103,9 +103,6 @@ NODE_ENV=development
 API_BASE_URL=http://localhost:3001
 NEXTAUTH_SECRET=supersecret
 NEXTAUTH_URL=http://localhost:3000
-CLOUDINARY_CLOUD_NAME=xxx
-CLOUDINARY_API_KEY=xxx
-CLOUDINARY_API_SECRET=xxx
 
 # Cliente
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
@@ -187,15 +184,13 @@ NEXT_PUBLIC_ASSETS_URL=http://localhost:3000/assets
 ### ✉️ Email & Notificações
 
 - [x] Receber, ler e eliminar notificações
-- [ ] Setup Resend / Nodemailer
+- [x] Setup Resend / Nodemailer
 - [ ] Envio de email por actualização de nota ou propina em atraso
-- [ ] Templates de email reutilizáveis
+- [x] Templates de email
 
 ### 📁 Uploads
 
 - [x] Upload de ficheiros (Dropzone)
-- [x] Cloudinary configurado
-- [x] Armazenamento seguro de ficheiros
 - [ ] Associar documentos ao perfil do aluno
 
 ### 🧪 Testes

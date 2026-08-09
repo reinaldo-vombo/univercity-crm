@@ -5,9 +5,12 @@ import {
   TCourseTransfer,
   TDocumentType,
   TMarkStatus,
+  TMessageDirection,
+  TMessageStatus,
   TNotificationType,
   TPaymentMethod,
   TPaymentStatus,
+  TRecipientType,
   TRegistrationStatus,
   TRoles,
   TSemesterRegistrationStatus,
@@ -30,6 +33,12 @@ export type TUser = {
   };
   number: number;
 };
+
+export type TSubmitState = {
+  submitState: 'idle' | 'loading' | 'success' | 'error';
+  isPending: boolean;
+};
+export type SubmitState = 'idle' | 'loading' | 'success' | 'error';
 export type TBulkUser = {
   name: string;
   id: string;
@@ -190,7 +199,7 @@ export type TDiscipline = {
     id: string;
     firstName: string;
     lastName: string;
-    profileImage: null;
+    profileImage: string | undefined;
     section: string;
   } | null;
   courses: [
@@ -354,19 +363,24 @@ export type TAdmitionExame = {
   lastName: string;
   exameId: string;
   status: TRegistrationStatus;
-  paymentRecipt: string;
+  attemptNumber: number;
+  biNumber: string;
+  gradeDeclarationUrl: string;
+  startTime: string;
+  endTime: string;
   exameDate: Date;
-  document: string;
+  faseId: number;
   building: string | null;
   room: string | null;
   phoneNumber: string;
   academicFalcultyId: string;
   email: string;
-  paymentAmoute: number;
   exameResults: number;
   passed: boolean;
   fase: {
     name: string;
+    startTime: string;
+    endTime: string;
   };
   ExamePayment: TExamePayment[];
 };
@@ -1218,4 +1232,21 @@ export type TMenssage = {
   phoneNumber?: string | undefined;
   email?: string | undefined;
   senderName: string;
+};
+export type TMenssages = {
+  id: string;
+  createdAt: Date;
+  channel: MessageChannel;
+  direction: TMessageDirection;
+  status: TMessageStatus;
+  recipientType: TRecipientType;
+  recipientId: string;
+  recipientName: string;
+  recipientContact: string;
+  subject: string | null;
+  content: string;
+  providerId: string | null;
+  errorMessage: string | null;
+  sentAt: Date | null;
+  updatedAt: Date;
 };

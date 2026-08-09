@@ -8,8 +8,8 @@ import {
   departmentSchema,
   updateDepartmentSchema,
 } from '../lib/validation/departement';
-import { ActionResult } from '../types/api-error';
-import { ApiResponseError } from '@/services/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewDepartemant = validatedActionWithUser(
@@ -43,7 +43,7 @@ export const addNewDepartemant = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -80,7 +80,7 @@ export const updatedDepartemant = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
@@ -115,7 +115,7 @@ export const deleteDepartment = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

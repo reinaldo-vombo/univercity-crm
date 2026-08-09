@@ -2,12 +2,9 @@ import { z } from 'zod';
 
 export const admitionExameSchema = z.object({
   id: z.string(),
-  firstName: z.string().min(1, 'Primero nome é obrigatorio'),
-  middleName: z.string().min(1, 'Nome do Meio é obrigatorio'),
-  lastName: z.string().min(1, 'Ultimo nome é obrigatorio'),
-  paymentAmoute: z.coerce.number({ required_error: 'Pagamento é obrigatorio' }),
   passed: z.coerce.boolean(),
   exameResults: z.coerce.number(),
+  faseId: z.coerce.number(),
   exameDate: z.coerce.date({ required_error: 'Data do exame é obrigatorio' }),
 });
 export const admitionExameFaseSchema = z.object({
@@ -33,6 +30,9 @@ export const updateAdmitionExameFaseSchema = z.object({
     .min(1, { message: 'Numeração é obrigatorio' }),
   buildingId: z.coerce.number().optional(),
   roomId: z.coerce.number().optional(),
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
+  time: z.string().optional(),
   startDate: z.coerce.date({ message: 'Data inicail do exame é obrigatorio' }),
   endDate: z.coerce.date({ message: 'Data final do exame é obrigatorio' }),
   duoDate: z.coerce.date({ message: 'Data do exame é obrigatorio' }),

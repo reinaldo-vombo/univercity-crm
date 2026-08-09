@@ -108,7 +108,7 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
                   if (res.error) { toast.error(res.message); return }
                   toast.success(FLASH_MESSAGE.DELETED)
                } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR)
+                  toast.error(FLASH_MESSAGE.SERVER_ERROR)
                   console.error(err)
                }
             }
