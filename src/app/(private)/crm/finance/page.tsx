@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/shared/breadcrumb'
 import { Metadata } from 'next'
 import React, { Suspense } from 'react'
 import { ROUTES } from '@/constants/routes'
-import { TuitionDashboard } from '@/components/admin/wrapper/tuition-dashboard-wrapper'
+import { TuitionDashboard } from '@/app/(private)/crm/finance/tuition-dashboard-wrapper'
 import TuitionDashboardSkeleton from '@/components/skeleton/tuition-dashboard-skeleton'
 
 export const metadata: Metadata = {

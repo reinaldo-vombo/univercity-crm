@@ -3,26 +3,36 @@
 import { DataTable } from "@/components/shared/tabeles/data-table";
 import { StudentDebtColumns } from "./columns";
 import { TuitionSemester } from "@/types/global";
-import { useState } from "react";
-import { getTuitionSemester } from "@/lib/helper/tuition-mappers";
+import { useMemo } from "react";
 import Card from "@/components/shared/card";
 import { TuitionFilterSelect } from "@/components/table-filters/tuition-filter-select";
+import { parseAsInteger, parseAsStringLiteral, useQueryState } from "nuqs";
 
 
 const herader = {
    title: "Nome do curso",
 }
+const currentYear = new Date().getFullYear()
+const semesters = ['1º Semestre', '2º Semestre'] as const
 export function PaymentTable({ data }: { data: TuitionSemester[] }) {
-   const [year, setYear] = useState(new Date().getFullYear())
-   const [semester, setSemester] = useState<"1º Semestre" | "2º Semestre">("1º Semestre")
-   const filterData = getTuitionSemester(data, year, semester)
-   const students = (filterData?.studentBreakdown ?? [])
-      .filter((s) => s.totalPending > 0)
-      .sort((a, b) => b.totalPending - a.totalPending)
+   const [year, setYear] = useQueryState('year', parseAsInteger.withDefault(currentYear))
+   const [semester, setSemester] = useQueryState(
+      'semester',
+      parseAsStringLiteral(semesters).withDefault('1º Semestre')
+   )
+
+   const students = useMemo(() => {
+      const filterData = data.find(
+         (d) => d.semester.year === String(year) && d.semester.title === semester
+      )
+      return (filterData?.studentBreakdown ?? [])
+         .filter((s) => s?.totalPending > 0) // confere se é s.totalPending ou s.summary.totalPending no teu shape real de studentBreakdown
+         .sort((a, b) => b.totalPending - a.totalPending)
+   }, [data, year, semester])
    const columns = StudentDebtColumns();
 
    return (
-      <Card lable="Alunos com pagamentos pendentes" description={`${students.length} aluno(s) em dívida`} showTitle={true}>
+      <Card lable="Todos os pagamentos" description={`${students.length} aluno(s) em dívida`} showTitle={true}>
          <TuitionFilterSelect
             year={year} semester={semester}
             onYearChange={setYear} onSemesterChange={setSemester}

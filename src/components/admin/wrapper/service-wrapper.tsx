@@ -43,7 +43,7 @@ export async function ServiceWrapper() {
    return (
       <>
          <div className="flex">
-            <SheetModal side="right" id={uid} title="Criar serviço Academico" triggerStyle="ml-auto" trigger={<Edit className="text-slate-300" />}>
+            <SheetModal side="right" id={uid} title="Criar serviço Academico" trigger={<Edit className="text-slate-300" />}>
                <CreatAcademicServices prices={prices} />
             </SheetModal>
          </div>

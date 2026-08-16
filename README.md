@@ -1,6 +1,10 @@
 <div align="center">
 
-<img src="/logo.svg" alt="SIUG" width="80" />
+<img src="./src/assets/images/SIGU.png" alt="SIUG" width="80" />
+
+<br />
+
+<img src="./src/assets/images/cover.jpg" alt="SIGU — Sistema Integrado de Gestão Universitária" width="100%" />
 
 # SIGU
 

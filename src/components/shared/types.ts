@@ -6,6 +6,13 @@ export type TSheetProps = {
   trigger: ReactNode;
   side: 'top' | 'right' | 'bottom' | 'left';
   className?: string;
+  variant?:
+    | 'link'
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost';
   triggerStyle?: string;
   title: string;
   description?: string;

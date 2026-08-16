@@ -22,21 +22,14 @@ const NotificationContent = ({ notifications, unreadCount, unreadItems }: TProps
       await markAllNotificationAsRead()
    }
    return <Popover>
-      <PopoverTrigger>
-         <Button
-            variant='outline'
-            size='icon'
-            className='relative cursor-pointer'
-         >
-            <BellIcon className='h-4 w-4' />
-            {unreadCount > 0 && (
-               <Badge className='absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px]'>
-                  {unreadCount}
-               </Badge>
-            )}
-            <span className='sr-only'>Notifications</span>
-
-         </Button>
+      <PopoverTrigger className='relative'>
+         <BellIcon className='h-4 w-4' />
+         {unreadCount > 0 && (
+            <Badge className='absolute bg-red-500 -top-1.5 -right-1.5 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px]'>
+               {unreadCount}
+            </Badge>
+         )}
+         <span className='sr-only'>Notifications</span>
       </PopoverTrigger>
       <PopoverContent className='w-80 p-0' align='end'>
          <div className='flex items-center justify-between px-4 py-3 border-b'>

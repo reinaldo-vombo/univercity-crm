@@ -5,26 +5,14 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { themes } from "./coler-pallete";
 
-type Theme = {
-   name: string;
-   value: string;
-   swatch: [string, string, string]; // 3 cores representativas do tema
-};
-
-const themes: Theme[] = [
-   { name: "Padrão", value: "dafault", swatch: ["#18181B", "#71717A", "#F4F4F5"] },
-   { name: "Amethyst", value: "amethyst", swatch: ["#4C1D95", "#8B5CF6", "#DDD6FE"] },
-   { name: "Solar Dust", value: "solar-dust", swatch: ["#92400E", "#F59E0B", "#FDE68A"] },
-   { name: "Vintage", value: "vitage", swatch: ["#5B4636", "#A8895D", "#E9DCC3"] },
-   { name: "Natureza", value: "nature", swatch: ["#14532D", "#4ADE80", "#DCFCE7"] },
-];
 
 const THEME_KEY = "color-theme";
 
 export function ColorThemeSelector() {
    const [mounted, setMounted] = useState(false);
-   const [colorTheme, setColorTheme] = useState("dafault");
+   const [colorTheme, setColorTheme] = useState("");
 
    const applyColorTheme = (baseTheme: string) => {
       const root = document.documentElement;
@@ -34,7 +22,7 @@ export function ColorThemeSelector() {
 
    useEffect(() => {
       setMounted(true);
-      const saved = localStorage.getItem(THEME_KEY) ?? "dafault";
+      const saved = localStorage.getItem(THEME_KEY) ?? "";
       setColorTheme(saved);
    }, []);
 

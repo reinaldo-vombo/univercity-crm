@@ -168,15 +168,7 @@ export const DUMMY_DATA = {
     { id: '19', label: '19', value: '19' },
     { id: '20', label: '20', value: '20' },
   ],
-  themes: [
-    'light',
-    'dark',
-    'dafault',
-    'solar-dust',
-    'nature',
-    'dark-nature',
-    'vitage',
-  ],
+  themes: ['solar-dust', 'nature', 'dark-nature', 'vitage'],
   StudentType: [
     {
       id: '1',

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { STATE_CONFIG } from './constants';
+import { STATE_CONFIG, STATE_STYLES } from './constants';
 import { SubmitState, TSubmitState } from '@/types/global';
 
 
@@ -15,11 +15,10 @@ const ActionButton = ({ submitState, isPending }: TSubmitState) => {
       }}
       transition={{ duration: 0.15 }}
       className={`relative cursor-pointer w-full bg-black flex items-center justify-center gap-3
-              py-4 rounded-xl font-medium text-sm tracking-wide
+              py-4 rounded-2xl font-medium text-sm tracking-wide
               transition-colors duration-500 overflow-hidden
               disabled:cursor-not-allowed
-              ${STATE_CONFIG[effectiveState].bg}
-              ${STATE_CONFIG[effectiveState].text}`}
+              ${STATE_STYLES[effectiveState]}`}
     >
       <AnimatePresence mode="wait">
         <motion.div

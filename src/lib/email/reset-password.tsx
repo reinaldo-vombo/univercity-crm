@@ -3,6 +3,9 @@ import { serverEnv } from "@/config/env/server"
 import {
    Body, Button, Container, Head, Heading, Hr, Html,
    Preview, Section, Text, Tailwind,
+   Column,
+   Img,
+   Row,
 } from "react-email"
 
 interface ResetPasswordProps {
@@ -12,7 +15,7 @@ interface ResetPasswordProps {
 
 export default function ResetPassword({ token, }: ResetPasswordProps) {
    const univercityName = serverEnv.UNIVERCITY_NAME
-   const resetLink = `${serverEnv.API_BASE_URL}/auth/reset-password/${token}`
+   const resetLink = `${serverEnv.APP_BASE_URL}/auth/reset-password/${token}`
    return (
       <Html lang="pt">
          <Head />
@@ -23,12 +26,25 @@ export default function ResetPassword({ token, }: ResetPasswordProps) {
             <Body className="bg-[#F7F5F0] font-sans m-0 p-0">
                <Section className="bg-[#0E1B12]">
                   <Container className="max-w-[600px] mx-auto px-8 py-10">
-                     <Text className="text-[#C9A84C] text-[11px] tracking-[0.3em] uppercase m-0 mb-1">
-                        {univercityName}
-                     </Text>
-                     <Text className="text-white/40 text-[11px] tracking-widest m-0">
-                        Segurança da Conta
-                     </Text>
+                     <Row>
+                        <Column align="right" valign="middle">
+                           <Img
+                              src={`${process.env.NEXT_PUBLIC_APP_URL}/mx-black.png`}
+                              alt={univercityName}
+                              width="90"
+                              className="block"
+                           />
+                        </Column>
+                        <Column align="left" valign="middle">
+                           <Text className="text-[#C9A84C] text-[11px] tracking-[0.3em] uppercase m-0 mb-1">
+                              {univercityName}
+                           </Text>
+
+                           <Text className="text-white/40 text-[11px] tracking-widest m-0">
+                              Segurança da Conta
+                           </Text>
+                        </Column>
+                     </Row>
                   </Container>
                </Section>
 

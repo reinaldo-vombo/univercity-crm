@@ -17,13 +17,13 @@ export async function AdmitionExameFaseTableServer() {
       <div className="mt-8 space-y-6">
          <div className="flex items-center">
             <SheetModal
-               trigger={<div className="p-2 rounded-md border hover:bg-primary-foreground">
-                  Criar Nova Fase
-               </div>}
+               trigger={<p className="">
+                  Nova Fase
+               </p>}
                side="right"
                id={uid}
                title="Criar Fase Para Exame De Acesso"
-               className="sm:max-w-4xl"
+               className="sm:max-w-2xl"
                description='Formulario de criação de Fase Para Exame de Acesso'>
                <CreateAdmitionExameFaseForm building={buildings} />
             </SheetModal>

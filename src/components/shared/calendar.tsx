@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import { CalendarIcon, Clock2Icon } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
@@ -27,17 +25,20 @@ type TTimeRange = {
 
 type TProps = {
    formField?: {
-      value?: Date | string
-      onChange?: (value: Date | undefined) => void
+      value?: { date: Date; time: TTimeRange } | Date
+      onChange?: (value: { date: Date | undefined; time: TTimeRange } | Date | undefined) => void
    }
-   /** Mostra os campos de horário início/fim abaixo do calendário */
    withTime?: boolean
-   /** Renderiza dentro de um Popover (bom pra economizar espaço) em vez de inline */
    asPopover?: boolean
-   /** Callback opcional pra quem precisar do horário selecionado */
    onTimeChange?: (range: TTimeRange) => void
    placeholder?: string
    className?: string
+}
+const extractDate = (
+   value?: { date: Date; time: TTimeRange } | Date
+): Date | undefined => {
+   if (!value) return undefined
+   return value instanceof Date ? value : value.date
 }
 
 const DatePicker = ({
@@ -49,23 +50,30 @@ const DatePicker = ({
    className,
 }: TProps) => {
    const [date, setDate] = useState<Date | undefined>(
-      formField?.value ? new Date(formField.value) : undefined
+      extractDate(formField?.value)
    )
    const [open, setOpen] = useState(false)
-   const [time, setTime] = useState<TTimeRange>({
-      start: "10:30:00",
-      end: "12:30:00",
+   const [time, setTime] = useState<TTimeRange>(() => {
+      if (formField?.value && !(formField.value instanceof Date)) {
+         return formField.value.time
+      }
+      return { start: "10:30:00", end: "12:30:00" }
    })
 
    useEffect(() => {
       if (formField?.value) {
-         setDate(new Date(formField.value))
+         setDate(extractDate(formField.value))
+         if (!(formField.value instanceof Date)) {
+            setTime(formField.value.time)
+         }
       }
    }, [formField?.value])
 
    const handleDateChange = (selectedDate: Date | undefined) => {
       setDate(selectedDate)
-      formField?.onChange?.(selectedDate)
+      formField?.onChange?.(
+         withTime ? { date: selectedDate, time } : selectedDate
+      )
       if (asPopover && !withTime) setOpen(false)
    }
 
@@ -73,6 +81,9 @@ const DatePicker = ({
       const next = { ...time, [key]: value }
       setTime(next)
       onTimeChange?.(next)
+      if (withTime) {
+         formField?.onChange?.({ date, time: next })
+      }
    }
 
    const content = (
@@ -86,7 +97,7 @@ const DatePicker = ({
             />
          </CardContent>
          {withTime && (
-            <CardFooter className="border-t bg-card">
+            <CardFooter className="border-t bg-card z-20">
                <FieldGroup>
                   <Field>
                      <FieldLabel htmlFor="time-from">Horário inicial</FieldLabel>
@@ -97,10 +108,10 @@ const DatePicker = ({
                            step="1"
                            value={time.start}
                            onChange={(e) => handleTimeChange("start", e.target.value)}
-                           className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                           className="appearance-none [&::-webkit-calendar-picker-indicator] [&::-webkit-calendar-picker-indicator]:appearance-none"
                         />
-                        <InputGroupAddon>
-                           <Clock2Icon className="text-muted-foreground" />
+                        <InputGroupAddon className="pointer-events-none">
+                           <Clock2Icon className="text-muted-foreground pointer-events-none" />
                         </InputGroupAddon>
                      </InputGroup>
                   </Field>
@@ -113,7 +124,7 @@ const DatePicker = ({
                            step="1"
                            value={time.end}
                            onChange={(e) => handleTimeChange("end", e.target.value)}
-                           className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                           className="appearance-none [&::-webkit-calendar-picker-indicator] [&::-webkit-calendar-picker-indicator]:appearance-none"
                         />
                         <InputGroupAddon>
                            <Clock2Icon className="text-muted-foreground" />
@@ -135,10 +146,9 @@ const DatePicker = ({
       : placeholder
 
    return (
-      <Popover open={open} onOpenChange={setOpen}>
-         <PopoverTrigger asChild>
-            <Button
-               variant="outline"
+      <Popover open={open} onOpenChange={setOpen} modal={true}>
+         <PopoverTrigger asChild variant={'outline'}>
+            <div
                className={cn(
                   "w-fit justify-start gap-2 font-normal cursor-pointer",
                   !date && "text-muted-foreground"
@@ -146,7 +156,7 @@ const DatePicker = ({
             >
                <CalendarIcon className="size-4" />
                {label}
-            </Button>
+            </div>
          </PopoverTrigger>
          <PopoverContent className="w-auto p-0" align="start">
             {content}

@@ -11,10 +11,9 @@ import {
    FormLabel,
    FormMessage,
 } from "@/components/ui/form"
-import SubmitBtn from "@/components/shared/submit-btn"
-import { useEffect, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TAdmitionExame } from "@/types/global"
+import { SubmitState, TAdmitionExame } from "@/types/global"
 import { admitionExameSchema } from "@/lib/validation/adnition-exame"
 import { updateAdmitionExame } from "@/actions/admition-exame"
 import { Switch } from "@/components/ui/switch"
@@ -22,11 +21,13 @@ import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { useSheet } from "@/providers/sheet-provider"
 import { handleApiError } from "@/services/error-handler"
+import ActionButton from "@/components/layouts/button/action-button"
 
 type TPros = {
    values: TAdmitionExame
 }
 const UpdateAdmitionExameForm = ({ values }: TPros) => {
+   const [submitState, setSubmitState] = useState<SubmitState>('idle');
    const { faseId } = values;
    const { close } = useSheet()
 
@@ -57,16 +58,20 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
          formData.append(key, value);
       });
       startTransition(async () => {
+         setSubmitState('loading')
          try {
             const response = await updateAdmitionExame(formData);
             if (response.error) {
+               setSubmitState('error')
                toast.error(response.message);
                return;
             }
+            setSubmitState('success')
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
             close()
          } catch (error) {
+            setSubmitState('error')
             toast.error(FLASH_MESSAGE.SERVER_ERROR);
             handleApiError(error);
          }
@@ -118,9 +123,7 @@ const UpdateAdmitionExameForm = ({ values }: TPros) => {
                )}
             />
 
-            <SubmitBtn
-               label="Atualisar"
-               loading={isPending} />
+            <ActionButton submitState={submitState} isPending={isPending} />
          </form>
       </Form>
    )

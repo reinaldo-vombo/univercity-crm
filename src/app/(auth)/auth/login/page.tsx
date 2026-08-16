@@ -7,26 +7,26 @@ import Image from 'next/image'
 import LoginForm from '@/components/forms/admin/post/log-in'
 import ForgotPassWordForm from '@/components/forms/admin/post/forgot-password'
 import { MotionGrid } from '@/components/ui/motion-grid'
+import Link from 'next/link'
 export default function LoginPage() {
    const [isLogin, setIslogin] = useState(true)
    return (
       <div className='grid min-h-svh lg:grid-cols-2 col-span-12'>
          <div className='flex flex-col gap-4 p-6 md:p-10'>
-            <div className='flex justify-center gap-2 md:justify-start'>
-               <a href='#' className='flex items-center gap-2 font-medium'>
-                  <div className='flex  items-center justify-center rounded-md'>
-                     <Image
-                        src='/SIGU.png'
-                        className="dark:invert"
-                        width={70}
-                        height={70}
-                        alt="SIGU logo" priority />
-                  </div>
-               </a>
-            </div>
+            <Link href='#' className='items-center block'>
+               <div className='flex  items-center justify-center rounded-md'>
+                  <Image
+                     src='/SIGU.png'
+                     className="dark:invert"
+                     width={70}
+                     height={70}
+                     alt="SIGU logo" priority />
+               </div>
+            </Link>
+
             <div className="flex flex-col flex-1 items-center justify-center overflow-hidden">
-               <div className='w-full pl-16'>
-                  <h2 className='text-2xl font-semibold'>Bem-vindo de volta</h2>
+               <div className='w-full text-center'>
+                  <h2 className='text-3xl font-semibold'>Bem-vindo de volta</h2>
                   <p>Faça login para continuar</p>
                </div>
                <div className="relative w-full max-w-md min-h-[520px]">

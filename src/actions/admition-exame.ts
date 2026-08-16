@@ -4,7 +4,10 @@ import { ApiResponseError } from '@/lib/errors/api-error';
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TAdmitionExame } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  validatedActionWithUser,
+  validatedActionWithUserJson,
+} from '../lib/helper/action-helper';
 import { ActionResult } from '../lib/errors/api-error.type';
 import {
   admitionExameFaseSchema,
@@ -84,15 +87,22 @@ export const deleteAdmitionExame = async (
   }
 };
 
-export const createAdmitionExameFase = validatedActionWithUser(
+export const createAdmitionExameFase = validatedActionWithUserJson(
   admitionExameFaseSchema,
   async (data): Promise<ActionResult<TAdmitionExame>> => {
+    const { startDate, ...res } = data;
+
     try {
       const fases = await serverActionFetch<TAdmitionExame>(
         `/admission-exame/fases`,
         {
           method: 'POST',
-          body: data,
+          body: {
+            ...res,
+            startDate: startDate.date,
+            startTime: startDate.time.start,
+            endTime: startDate.time.end,
+          },
         },
       );
 
@@ -106,7 +116,7 @@ export const createAdmitionExameFase = validatedActionWithUser(
       if (err instanceof ApiResponseError) {
         return {
           error: true,
-          message: sendErrorToClient(error),
+          message: sendErrorToClient(err),
           errorMessages: err.errorMessages,
           meta: err.meta,
         };
@@ -114,7 +124,7 @@ export const createAdmitionExameFase = validatedActionWithUser(
 
       return {
         error: true,
-        message: sendErrorToClient(error),
+        message: sendErrorToClient(err),
       };
     }
   },

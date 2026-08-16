@@ -1,3 +1,5 @@
+import { PaymentInvoice } from "@/components/export/pdfs/blocks/invoice-classic/invoice-classic"
+import { DownloadPDF } from "@/components/layouts/button/dwonload-pdf"
 import Modal from "@/components/shared/Modal"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -30,7 +32,7 @@ const AdmitionExamePaymentDetails = ({ payment, candidateEmail }: TProps) => {
 
    return (
       <div className="space-y-8">
-
+         <DownloadPDF document={<PaymentInvoice payment={payment} />} fileName="recibo.pdf" label="Baixar recibo" />
          {/* Resumo do pagamento */}
          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <ul className="space-y-4">

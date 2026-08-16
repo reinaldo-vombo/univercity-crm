@@ -19,7 +19,7 @@ export default function Home() {
           SIGU <br /> Sistema Integrado de Gestão Universitária
         </h2>
         <p className='max-w-xl mx-auto text-sm md:text-lg text-neutral-700 dark:text-neutral-400 text-center'>
-          gliding right, setting the path.
+          Centralize a gestão académica, administrativa e financeira da sua instituição numa única plataforma.
         </p>
         <div className="flex items-center justify-center w-full mt-7">
           <Link

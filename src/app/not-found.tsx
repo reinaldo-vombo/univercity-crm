@@ -105,7 +105,7 @@ export default function NotFound() {
                <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => router.back()}
+                  onClick={() => router.push('/')}
                   className='inline-flex items-center gap-2 rounded-none border border-zinc-900 bg-zinc-900 px-6 py-2.5 text-sm font-mono font-semibold text-zinc-50 transition-colors hover:bg-zinc-800 dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200'
                >
                   <svg
@@ -129,6 +129,7 @@ export default function NotFound() {
                <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
+                  onClick={() => router.back()}
                   className='inline-flex items-center gap-2 rounded-none border border-zinc-300 bg-transparent px-6 py-2.5 text-sm font-mono font-semibold text-zinc-700 transition-colors hover:border-zinc-500 hover:text-zinc-900 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-400 dark:hover:text-zinc-100'
                >
                   <svg

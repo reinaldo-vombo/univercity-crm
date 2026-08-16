@@ -17,7 +17,6 @@ const TimePickerWithIcon = ({ field }: any) => {
                type='time'
                id='time-picker'
                step='1'
-               defaultValue='08:30:00'
                className='peer bg-background appearance-none pl-9 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                {...field}
             />

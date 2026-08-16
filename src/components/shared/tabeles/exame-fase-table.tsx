@@ -7,7 +7,6 @@ import {
    TableHeader,
    TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { TAdmitionExameFase, TBuilding } from "@/types/global";
 import { formatDate } from "@/lib/helper";
 import { toast } from "sonner";
@@ -15,8 +14,9 @@ import { FLASH_MESSAGE } from "@/constants/flash-message";
 import { deleteAdmitionExameFase } from "@/actions/admition-exame";
 import { CloseBage, CompleteBage } from "@/components/shared/bages";
 import SheetModal from "../sheet-modal";
-import { PenBoxIcon } from "lucide-react";
+import { PenBoxIcon, Trash } from "lucide-react";
 import UpdateAdmitionExameFase from "../../forms/update/update.admition-exame-fase";
+import AlertModal from "../alert-modal";
 type TProps = {
    data: TAdmitionExameFase[];
    buildings: TBuilding[]
@@ -93,7 +93,7 @@ const ExameFaseTable = ({ data, buildings }: TProps) => {
 
                         <TableCell>Mãnha</TableCell>
 
-                        <TableCell>09:00</TableCell>
+                        <TableCell>{fase.startTime} - {fase.endTime}</TableCell>
 
                         <TableCell>
                            {fase?.building?.title} - Sala {fase.room?.roomNumber}
@@ -102,23 +102,20 @@ const ExameFaseTable = ({ data, buildings }: TProps) => {
                            {faseStatus(fase.endDate)}
                         </TableCell>
 
-                        <TableCell className="text-right">
+                        <TableCell className="text-right flex items-center gap-4">
                            <SheetModal
                               trigger={<PenBoxIcon className="h-4 w-4 text-green-500" />}
                               side="right"
                               id={`edit-${fase.id}`}
-                              className="sm:max-w-md"
+                              className="sm:max-w-2xl"
                               title="Atualizar fase do exame de acesso"
                               description='Atualizar fase'>
                               <UpdateAdmitionExameFase building={buildings} defaultValues={fase} />
                            </SheetModal>
-                           <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDelete(fase.id)}
-                           >
-                              Excluir
-                           </Button>
+                           <AlertModal
+                              trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}
+                              action={() => handleDelete(fase.id)} />
+
                         </TableCell>
                      </TableRow>
                   ))

@@ -15,16 +15,18 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { forgotPasswordSchema } from "@/lib/validation/admin"
-import SubmitBtn from "@/components/shared/submit-btn"
-import { Dispatch, SetStateAction, useTransition } from "react"
+import { Dispatch, SetStateAction, useState, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { recoverPassword } from "@/actions/auth"
+import ActionButton from "@/components/layouts/button/action-button"
+import { SubmitState } from "@/types/global"
 
 type TProps = {
    onChange: Dispatch<SetStateAction<boolean>>
 }
 
 export default function AdminForgotPassWord({ onChange }: TProps) {
+   const [submitState, setSubmitState] = useState<SubmitState>('idle');
    const [isPending, startTransition] = useTransition();
    const form = useForm<z.infer<typeof forgotPasswordSchema>>({
       resolver: zodResolver(forgotPasswordSchema),
@@ -36,15 +38,22 @@ export default function AdminForgotPassWord({ onChange }: TProps) {
       const { email } = values;
 
       startTransition(async () => {
+         setSubmitState('loading')
          try {
             const result = await recoverPassword(email);
             if (result.error) {
+               setSubmitState('error')
+               setTimeout(() => setSubmitState('idle'), 3000)
                toast.error(result.message);
                return;
             }
+            setSubmitState('success')
+            setTimeout(() => setSubmitState('idle'), 3000)
             toast.success('Verifique Sua Caixa de Correio');
             form.reset();
          } catch (err) {
+            setSubmitState('error')
+            setTimeout(() => setSubmitState('idle'), 3000)
             toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(err);
          }
@@ -72,9 +81,9 @@ export default function AdminForgotPassWord({ onChange }: TProps) {
                )}
             />
 
-            <SubmitBtn label="Enviar" loading={isPending} />
+            <ActionButton submitState={submitState} isPending={isPending} />
             <div className="flex justify-center">
-               <button type="button" aria-label="login" onClick={() => onChange(true)}>Entrar</button>
+               <button type="button" className="cursor-pointer" aria-label="login" onClick={() => onChange(true)}>Entrar</button>
             </div>
          </form>
       </Form>

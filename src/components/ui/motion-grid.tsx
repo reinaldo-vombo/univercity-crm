@@ -25,7 +25,7 @@ export function MotionGrid({
    lineColor = '0, 255, 128',
    lineWidth = '1px',
    gridSpacing = '20px',
-   backgroundColor = '#0f0f0f',
+   // backgroundColor = '#0f0f0f',
    enableGlow = true,
    className,
    children,
@@ -36,12 +36,10 @@ export function MotionGrid({
    return (
       <div
          className={cn('relative overflow-hidden', className)}
-         style={{ backgroundColor }}
+         style={{
+            backgroundColor: 'var(--motion-grid-bg)',
+         }}
       >
-         <div className="flex items-center justify-between absolute top-0 w-full z-10 p-4">
-            <p className='text-sm md:text-lg text-neutral-700 dark:text-neutral-400'>Desenvolvido por <a href="#" className='font-bold'>Reinaldo Vombo</a></p>
-            <p className='text-sm md:text-lg text-neutral-700 dark:text-neutral-400 font-bold'>SIGU</p>
-         </div>
          <style jsx>{`
         @keyframes diagonalGridMove-${id} {
           0% {
@@ -55,11 +53,16 @@ export function MotionGrid({
 
          {enableGlow && (
             <div
-               className={cn(
-                  'absolute inset-0 z-0',
-                  'bg-[radial-gradient(125%_125%_at_50%_10%,#ffffff_40%,#14b8a6_100%)]',
-                  'dark:bg-[radial-gradient(125%_125%_at_50%_10%,#000000_40%,#14b8a6_100%)]',
-               )}
+               className="absolute inset-0 z-0"
+               style={{
+                  background: `
+         radial-gradient(
+            125% 125% at 50% 10%,
+            var(--motion-grid-start) 40%,
+            var(--motion-grid-end) 100%
+         )
+      `,
+               }}
             />
          )}
 

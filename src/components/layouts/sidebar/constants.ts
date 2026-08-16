@@ -42,8 +42,8 @@ export const ROUTES_BY_ROLE = {
     },
     {
       href: `#`,
-      label: 'Exames',
-      icon: React.createElement(Book),
+      label: 'Exames Acadêmicos',
+      icon: React.createElement(Book, { className: 'w-4 h-4' }),
       section: 'exame',
       children: [
         {

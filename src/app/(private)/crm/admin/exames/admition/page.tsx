@@ -20,12 +20,26 @@ export default function AdmitionExamePage() {
             pageUrl={`${ROUTES.DASHBOARD}/admin/admition-exames`}
             root={`${ROUTES.DASHBOARD}/admin`} />
          <div className="mt-12">
+
+            <div className="my-8">
+               <h2 className="text-3xl font-semibold">
+                  Gestão dos Exames de Acesso
+               </h2>
+
+               <p className="mt-2 text-muted-foreground">
+                  Crie, configure e acompanhe os exames de acesso disponíveis,
+                  gerindo todas as informações necessárias para o processo de admissão.
+               </p>
+            </div>
+
             <Suspense fallback={<DataTableSkeleton />}>
                <AdmitionExameTableServer />
             </Suspense>
 
-            <h2 className="text-3xl font-semibold">Fases dos Exames de Acesso</h2>
-            <p>Gerencie as Fases dos Exames de Acesso Para dar Inicio as Incrições para os Exames.</p>
+            <div className="mt-8">
+               <h2 className="text-3xl font-semibold">Fases dos Exames de Acesso</h2>
+               <p>Gerencie as Fases dos Exames de Acesso Para dar Inicio as Incrições para os Exames.</p>
+            </div>
 
             <Suspense fallback={<DataTableSkeleton />}>
                <AdmitionExameFaseTableServer />

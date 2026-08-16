@@ -140,7 +140,6 @@ export function DataTable<TValue>({
                </DropdownMenu>
                {actionForm && (
                   <SheetModal
-                     triggerStyle="border h-[37px] rounded-md cursor-pointer hover:bg-primary"
                      side="right"
                      id={`create-${sheetId}`}
                      className={className}

@@ -6,6 +6,7 @@ import { z } from 'zod';
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']),
   API_BASE_URL: z.string(),
+  APP_BASE_URL: z.string(),
   MX_PORTAL_BASE_URL: z.string(),
   NEXTAUTH_SECRET: z.string(),
   NEXTAUTH_URL: z.string().url(),

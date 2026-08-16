@@ -117,7 +117,6 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
                <div className="flex items-center gap-1">
                   <SheetModal
                      trigger={<Eye className="size-4" />}
-                     triggerStyle="p-2 rounded-xl text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
                      side="right" id={uid} className="sm:max-w-lg"
                      title={`Detalhes — ${users.name}`}
                      description="Informações do utilizador"
@@ -128,7 +127,6 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
                   {!isSelf && isSuperAdmin && (
                      <SheetModal
                         trigger={<Pen className="size-4" />}
-                        triggerStyle="p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                         side="right" id={`edit-${users.id}`} className="sm:max-w-md"
                         title="Atualizar utilizador"
                         description="Formulário de atualização"
@@ -140,9 +138,9 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
                   {!isSelf && isSuperAdmin && (
                      <AlertModal
                         trigger={
-                           <button className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Eliminar">
+                           <div className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Eliminar">
                               <Trash className="size-4" />
-                           </button>
+                           </div>
                         }
                         action={() => handleDelete(users.id)}
                      />

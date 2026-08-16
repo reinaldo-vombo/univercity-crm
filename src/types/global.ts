@@ -434,6 +434,8 @@ export type TAdmitionExameFase = {
   startDate: Date;
   endDate: Date;
   ordem: number;
+  startTime: string;
+  endTime: string;
   duoDate: Date | undefined;
   roomId: number | undefined;
   building: {

@@ -2,13 +2,12 @@
 import { serverUser } from "@/lib/helper/auth/user";
 import Avatar from "../../../shared/avatar";
 import { Dropdown } from "./dropdwon";
-import { redirect } from "next/navigation"
-import { ROUTES } from "@/constants/routes";
 
 const UserDropdownMenu = async () => {
    const user = await serverUser();
 
-   if (!user) return redirect(ROUTES.LOGIN)
+   if (!user) return
+
 
    return (
       <Dropdown

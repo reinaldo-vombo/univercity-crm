@@ -30,6 +30,7 @@ export const recoverPassword = async (
     );
 
     if (response.error) {
+      console.error(response.error);
       return {
         error: true,
         message: 'Ocorreu um erro ao enviar email, por favor tente de novo',
@@ -52,12 +53,20 @@ export const recoverPassword = async (
 export const resetPassword = validatedAction(
   resetPasswordSchema,
   async (data): Promise<ActionResult<TResponse>> => {
+    const { token, confirm_Password, new_Password } = data;
+    if (new_Password !== confirm_Password) {
+      return {
+        error: true,
+        message: 'As senhas não combinam',
+      };
+    }
+
     try {
       const response = await serverActionFetch<TResponse>(
         '/auth/reset-password',
         {
           method: 'POST',
-          body: data,
+          body: { token, password: new_Password },
         },
       );
 

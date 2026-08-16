@@ -16,7 +16,10 @@ export const admitionExameFaseSchema = z.object({
     .min(1, { message: 'Numeração é obrigatorio' }),
   buildingId: z.coerce.number().optional(),
   roomId: z.coerce.number().optional(),
-  startDate: z.coerce.date({ message: 'Data do exame é obrigatorio' }),
+  startDate: z.object({
+    date: z.coerce.date(),
+    time: z.object({ start: z.string(), end: z.string() }),
+  }),
   endDate: z.coerce.date({ message: 'Data do exame é obrigatorio' }),
   duoDate: z.coerce.date({ message: 'Data do exame é obrigatorio' }),
 });

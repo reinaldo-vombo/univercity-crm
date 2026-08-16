@@ -14,7 +14,7 @@ const typeConfig: Record<
    TNotificationType,
    { icon: React.ReactNode; color: string }
 > = {
-   AUTH: {
+   LOG_IN: {
       icon: <User className="h-2.5 w-2.5" />,
       color: "bg-sky-500",
    },
@@ -62,7 +62,7 @@ export const NotificationItem = ({ notification }: TProps) => {
             <span
                className={cn(
                   'absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full flex items-center justify-center text-white',
-                  config.color,
+                  config.color || '#000',
                )}
             >
                {config.icon}

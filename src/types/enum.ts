@@ -70,7 +70,7 @@ export type TNotificationType =
   | 'DOCUMENT'
   | 'SEMESTER'
   | 'CONTENT'
-  | 'AUTH'
+  | 'LOG_IN'
   | 'SYSTEM';
 export type TMessageDirection = 'OUTBOUND' | 'INBOUND';
 export type TMessageChannel = 'WHATSAPP' | 'SMS' | 'EMAIL';

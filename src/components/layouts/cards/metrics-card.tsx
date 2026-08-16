@@ -5,12 +5,13 @@ type TProps = {
       id: string,
       title: string,
       total: number
-      icon?: LucideIcon
+      icon?: LucideIcon;
+      className?: string
    }[]
    className?: string
 }
 
-const MetricsCard = ({ data, className }: TProps) => {
+const MetricsCard = ({ data }: TProps) => {
    return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
          {data && data.map((item) => {
@@ -19,7 +20,7 @@ const MetricsCard = ({ data, className }: TProps) => {
                   <div className="flex items-center justify-between">
                      <p className="text-sm text-neutral-500">{item.title}</p>
                      {item.icon ? (
-                        <item.icon className={className} />
+                        <item.icon className={item.className} />
                      ) : <Inbox className="size-4 text-neutral-500" />}
 
                   </div>

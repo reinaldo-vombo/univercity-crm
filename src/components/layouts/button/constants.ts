@@ -4,26 +4,24 @@ import { CheckIcon, Spinner, XIcon } from './animated-icons';
 export const STATE_CONFIG = {
   idle: {
     label: 'processar',
-    bg: 'bg-white',
-    text: 'text-[#0D0D0D]',
     icon: null,
   },
   loading: {
     label: 'A processar...',
-    bg: 'bg-orange-500',
-    text: 'text-white',
     icon: React.createElement(Spinner),
   },
   success: {
     label: 'Operação concluído',
-    bg: 'bg-emerald-500',
-    text: 'text-white',
     icon: React.createElement(CheckIcon),
   },
   error: {
     label: 'Erro ao enviar',
-    bg: 'bg-red-500',
-    text: 'text-white',
     icon: React.createElement(XIcon),
   },
 };
+export const STATE_STYLES = {
+  idle: 'bg-button text-button-text',
+  loading: 'bg-button-loading text-white',
+  success: 'bg-button-success text-white',
+  error: 'bg-button-error text-white',
+} as const;
