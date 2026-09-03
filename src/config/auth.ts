@@ -58,10 +58,9 @@ export const authOptions: NextAuthOptions = {
           return {
             ...data.user,
             accessToken: data.accessToken,
-            refreshToken: data.refreshToken, // ✅ guardar refresh token
+            refreshToken: data.refreshToken,
           };
         } catch (err: any) {
-          // ✅ Lançar erro com mensagem — next-auth passa para o cliente
           throw new Error(err.message ?? 'Erro ao autenticar');
         }
       },
@@ -72,17 +71,14 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user }) {
       try {
         if (user?.id) {
-          // 👇 pass req.headers into your logging function
           await logUserActivitys(user.id, user.refreshToken);
         }
       } catch (err) {
         console.error('❌ Failed to register user activity log:', err);
-        // Don’t block login if logging fails
       }
       return true;
     },
     async jwt({ token, user, trigger, session }: any) {
-      // ── Actualização manual da sessão (trigger: update) ──────
       if (trigger === 'update' && session?.user) {
         return {
           ...token,
@@ -92,9 +88,7 @@ export const authOptions: NextAuthOptions = {
         };
       }
 
-      // ── Primeiro login — guardar dados do user ───────────────
       if (user) {
-        // const decoded = decodeJwt(user.accessToken);
         return {
           ...token,
           id: user.id,
@@ -104,7 +98,7 @@ export const authOptions: NextAuthOptions = {
           avatar: user.avatar,
           contact: user.contact,
           accessToken: user.accessToken,
-          refreshToken: user.refreshToken, // ✅
+          refreshToken: user.refreshToken, //
           // Expirar 1 minuto antes para renovar a tempo
           // accessTokenExpiry: (decoded.exp ?? 0) * 1000,
           accessTokenExpiry: (decodeJwt(user.accessToken).exp ?? 0) * 1000,
@@ -112,12 +106,10 @@ export const authOptions: NextAuthOptions = {
         };
       }
 
-      // ── Token ainda válido — deixar passar ───────────────────
       if (Date.now() < token.accessTokenExpiry) {
         return token;
       }
 
-      // ── Token expirou — renovar com refreshToken ─────────────
       try {
         const res = await fetch(`${process.env.API_BASE_URL}/auth/refresh`, {
           method: 'POST',

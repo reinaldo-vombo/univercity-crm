@@ -1,6 +1,8 @@
 // lib/types/action-result.ts
 
 import {
+  ExamContext,
+  ExamType,
   TAction,
   TCourseTransfer,
   TDocumentType,
@@ -10,6 +12,7 @@ import {
   TNotificationType,
   TPaymentMethod,
   TPaymentStatus,
+  TQuestionType,
   TRecipientType,
   TRegistrationStatus,
   TRoles,
@@ -1140,20 +1143,7 @@ export type TExames = {
   time: string;
   payment: TPaymentStatus;
 };
-export type TExameStatemant = {
-  id: string;
-  academicSemester: string;
-  course: string;
-  discipline: string;
-  faculty: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    profileImage: string | null;
-  };
-  documentUrl: string;
-  type: 'RETAKE' | 'ESPECIAL_EXAME';
-};
+
 export type TRetakeAta = {
   discipline: {
     name: string;
@@ -1250,5 +1240,93 @@ export type TMenssages = {
   providerId: string | null;
   errorMessage: string | null;
   sentAt: Date | null;
+  updatedAt: Date;
+};
+export type ExamResult = {
+  id: string;
+  context: ExamContext;
+  type: ExamType;
+  statementUrl: string;
+  disciplineId: string | null;
+  offeredCourseSectionId: string | null;
+  courseId: string | null;
+  academicSemesterId: string | null;
+  specialExamId: string | null;
+  createdById: string;
+  academicSemester: { title: string } | null;
+  discipline: { name: string } | null;
+  course: { title: string } | null;
+  offeredCourseSection: { title: string } | null;
+  faculty: { firstName: string; lastName: string } | null;
+  createdBy: { name: string };
+  _count: {
+    questions: number;
+    answerSheets: number;
+  };
+};
+export type TQuestion = {
+  id: string;
+  createdById: string;
+  type: 'BOOLEAN' | 'WRITTEN';
+  disciplineId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  value: number;
+  discipline: {
+    id: string;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date;
+    suspendGrade: number;
+  } | null;
+  _count: {
+    question: number;
+    booleanAnswers: number;
+  };
+  assertions: {
+    id: string;
+    order: number;
+    questionId: string;
+    label: string;
+    text: string | null;
+
+    correctValue: boolean;
+  }[];
+};
+export type TExameStatemant = {
+  id: string;
+  context: string;
+  type: ExamType;
+  statementUrl: string;
+  department: string | null;
+  course: string | null;
+  discipline: string | null;
+  faculty: string | null;
+  offeredCourseSection: string | null;
+
+  createdBy: string;
+  totalQuestions: number;
+  totalAnswerSheets: number;
+  questions: {
+    id: string;
+    order: number;
+    value: number;
+    title: string;
+    type: TQuestionType;
+    assertions: {
+      id: string;
+      order: number;
+      questionId: string;
+      label: string;
+      text: string | null;
+      correctValue: boolean;
+    }[];
+  }[];
+  disciplineId: string | null;
+  academicDepartmentId: string | null;
+  courseId: string | null;
+  offeredCourseSectionId: string | null;
+  createdAt: Date;
   updatedAt: Date;
 };

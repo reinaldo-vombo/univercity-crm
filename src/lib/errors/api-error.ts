@@ -5,7 +5,17 @@ export class ApiResponseError extends Error {
     public message: string,
     public errorMessages?: { path: string; message: string }[],
     public meta?: Record<string, any>,
-    public stackTrace?: string
+    public stackTrace?: string,
+  ) {
+    super(message);
+    this.name = 'ApiResponseError';
+  }
+}
+export class ResponseError extends Error {
+  constructor(
+    public statusCode: number,
+    public message: string,
+    public details: string,
   ) {
     super(message);
     this.name = 'ApiResponseError';

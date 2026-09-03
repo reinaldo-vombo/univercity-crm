@@ -81,3 +81,6 @@ export type TMessageStatus =
   | 'DELIVERED'
   | 'READ'
   | 'FAILED';
+export type ExamType = 'FREQUENCI' | 'RETAKE' | 'SPECIAL';
+export type ExamContext = 'COURSE' | 'DISCIPLINE';
+export type TQuestionType = 'BOOLEAN' | 'WRITTEN';

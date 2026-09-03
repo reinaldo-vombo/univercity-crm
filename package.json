@@ -1,13 +1,24 @@
 {
-  "name": "SIGU – Sistema Integrado de Gestão Universitária",
+  "name": "sigu – sistema sntegrado de gestão universitária",
   "author": "Reinaldo Vombo",
-  "version": "2.9.9",
-  "description": "",
+  "version": "3.9.9",
+  "description": "SIGU — Sistema Integrado de Gestão Universitária. Plataforma completa para gestão académica, administrativa, financeira e institucional de universidades e instituições de ensino.",
   "keyword": [
+    "SIGU",
+    "Sistema de Gestão Universitária",
+    "Gestão Académica",
+    "Gestão Universitária",
+    "Universidade",
+    "Educação",
+    "Ensino Superior",
+    "Academic Management",
+    "University Management",
     "Dashboard",
-    "Education",
+    "Admin Panel",
     "CRM",
-    "Admin Panel"
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS"
   ],
   "private": true,
   "scripts": {

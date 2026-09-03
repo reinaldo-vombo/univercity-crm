@@ -14,7 +14,7 @@ type TProps = {
    trigger: React.ReactNode
    description?: string
    title: string
-   size?: "sm" | "md" | "lg"
+   size?: "sm" | "md" | "lg" | "xlg"
 }
 const Modal = ({ children, trigger, description, title, size = "md" }: TProps) => {
    return (
@@ -22,7 +22,7 @@ const Modal = ({ children, trigger, description, title, size = "md" }: TProps) =
          <DialogTrigger className="cursor-pointer" aria-label="Abrir modal">
             {trigger}
          </DialogTrigger>
-         <DialogContent size={size} className="gap-0 p-0 overflow-hidden sm:max-w-md">
+         <DialogContent size={size} className="gap-0 p-0 overflow-hidden">
             <DialogHeader className="p-6 pb-4">
                <DialogTitle className="flex items-center gap-3 text-base">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted shrink-0">

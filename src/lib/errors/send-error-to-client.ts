@@ -1,11 +1,13 @@
 import { serverEnv } from '@/config/env/server';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from './api-error';
+import { ResponseError } from './api-error';
 
 export const sendErrorToClient = (error: any) => {
   const isDevelopment = serverEnv.NODE_ENV === 'development';
-  if (error instanceof ApiResponseError) {
-    return error.message;
+  if (error instanceof ResponseError) {
+    console.log('hello');
+
+    return FLASH_MESSAGE.SERVER_ERROR;
   }
 
   const message =

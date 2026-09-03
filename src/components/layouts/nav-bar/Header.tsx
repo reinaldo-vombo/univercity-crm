@@ -12,7 +12,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 
 const Header = () => {
    return (
-      <header className="sticky w-full top-0 z-50 px-4 before:absolute before:inset-0 before:rounded-t-xl before:mask-[linear-gradient(var(--card),var(--card)_18%,transparent_100%)] before:backdrop-blur-md sm:px-6">
+      <header className="sticky w-full top-0 z-50 bg-card px-4 before:absolute before:inset-0 before:rounded-t-xl before:mask-[linear-gradient(var(--card),var(--card)_18%,transparent_100%)] before:backdrop-blur-md sm:px-6">
          <nav className="bg-card relative z-51  mt-3 flex w-full items-center justify-between rounded-xl border px-6 py-2 mx-auto max-w-(--breakpoint-2xl)">
             <div className="flex w-full items-center justify-between gap-2 border-b border-gray-200 px-3 py-3 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
                <div className="flex items-center">

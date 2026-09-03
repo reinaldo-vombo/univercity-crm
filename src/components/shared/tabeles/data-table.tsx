@@ -33,6 +33,7 @@ type DataTableProps<TData, TValue> = {
    data: object[];
    className?: string
    sheetClass?: string
+   side?: "top" | "right" | "bottom" | "left"
 
    //toolbar
    filterColumn?: keyof TData; // e.g., "email"
@@ -53,6 +54,7 @@ type DataTableProps<TData, TValue> = {
 export function DataTable<TValue>({
    columns,
    data,
+   side = 'right',
    canDelete,
    canUpdate,
    onDeleteMany,
@@ -140,7 +142,7 @@ export function DataTable<TValue>({
                </DropdownMenu>
                {actionForm && (
                   <SheetModal
-                     side="right"
+                     side={side}
                      id={`create-${sheetId}`}
                      className={className}
                      trigger={<Plus />}

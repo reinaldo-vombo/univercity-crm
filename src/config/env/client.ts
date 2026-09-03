@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const schema = z.object({
   NEXT_PUBLIC_BASE_URL: z.string().url(),
-  NEXT_PUBLIC_ASSETS_URL: z.string().url(),
+  API_BASE_URL: z.string().url(),
   NEXT_PUBLIC_SITE_NAME: z.string().min(1),
   NEXT_PUBLIC_AUTHOR_NAME: z.string().min(1),
   NEXT_PUBLIC_AUTHOR_SITE: z.string().url(),
@@ -17,7 +17,7 @@ const schema = z.object({
 
 const parsed = schema.safeParse({
   NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
-  NEXT_PUBLIC_ASSETS_URL: process.env.NEXT_PUBLIC_ASSETS_URL,
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   NEXT_PUBLIC_SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME,
   NEXT_PUBLIC_AUTHOR_NAME: process.env.NEXT_PUBLIC_AUTHOR_NAME,
   NEXT_PUBLIC_AUTHOR_SITE: process.env.NEXT_PUBLIC_AUTHOR_SITE,

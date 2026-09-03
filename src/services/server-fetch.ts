@@ -60,36 +60,93 @@ export async function serverFetch<T>(
     handleApiError(error);
   }
 }
+// export async function serverActionFetch<T>(
+//   endpoint: string,
+//   options: ServerFetchOptions = {},
+//   fullPaylod: boolean = false,
+// ): Promise<T> {
+//   try {
+//     const session = await getServerSession(authOptions);
+//     const isFormData = options.body instanceof FormData;
+//     const headers: Record<string, string> = {
+//       ...(options.headers ?? {}),
+//     };
+//     if (!isFormData) {
+//       headers['Content-Type'] = 'application/json';
+//     }
+
+//     if (session?.user?.accessToken) {
+//       headers['Authorization'] = `Bearer ${session?.user?.accessToken}`;
+//     }
+
+//     const response = await fetch(`${baseURL}${endpoint}`, {
+//       method: options.method || 'GET',
+//       body: isFormData
+//         ? options.body
+//         : options.body
+//           ? JSON.stringify(options.body)
+//           : undefined,
+//       headers,
+//       next: options.next,
+//       cache: options.cache,
+//     });
+//     const json = await response.json();
+
+//     if (!response.ok || json?.success === false) {
+//       throw new ApiResponseError(
+//         response.status,
+//         json?.message || 'Request failed',
+//         json?.errorMessages,
+//         json?.meta,
+//         json?.stack,
+//       );
+//     }
+//     if (fullPaylod) {
+//       return json as T;
+//     } else {
+//       return json.data as T;
+//     }
+//   } catch (error) {
+//     handleApiError(error);
+//   }
+// }
 export async function serverActionFetch<T>(
   endpoint: string,
   options: ServerFetchOptions = {},
-  fullPaylod: boolean = false,
+  fullPayload: boolean = false,
 ): Promise<T> {
   try {
     const session = await getServerSession(authOptions);
+
     const isFormData = options.body instanceof FormData;
+    const hasBody = options.body !== undefined && options.body !== null;
+
     const headers: Record<string, string> = {
       ...(options.headers ?? {}),
     };
-    if (!isFormData) {
+
+    if (!isFormData && hasBody) {
       headers['Content-Type'] = 'application/json';
     }
 
     if (session?.user?.accessToken) {
-      headers['Authorization'] = `Bearer ${session?.user?.accessToken}`;
+      headers['Authorization'] = `Bearer ${session.user.accessToken}`;
     }
 
     const response = await fetch(`${baseURL}${endpoint}`, {
       method: options.method || 'GET',
+
       body: isFormData
         ? options.body
-        : options.body
+        : hasBody
           ? JSON.stringify(options.body)
           : undefined,
+
       headers,
       next: options.next,
       cache: options.cache,
     });
+
     const json = await response.json();
 
     if (!response.ok || json?.success === false) {
@@ -101,11 +158,12 @@ export async function serverActionFetch<T>(
         json?.stack,
       );
     }
-    if (fullPaylod) {
+
+    if (fullPayload) {
       return json as T;
-    } else {
-      return json.data as T;
     }
+
+    return json.data as T;
   } catch (error) {
     handleApiError(error);
   }

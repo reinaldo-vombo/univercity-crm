@@ -1,29 +1,9 @@
 import { handleApiError } from '../error-handler';
 import { serverFetch } from '../server-fetch';
-import {
-  TAtaDiscipline,
-  TExames,
-  TExameStatemant,
-  TRetakeAta,
-} from '@/types/global';
+import { TAtaDiscipline, TExames, TRetakeAta } from '@/types/global';
 import { cacheLife, cacheTag } from 'next/cache';
 import { getUserToken } from '@/lib/helper/auth/user';
 
-export const getAllExameStateman = async (): Promise<TExameStatemant[]> => {
-  try {
-    const token = await getUserToken();
-    const getExameStateman = async () => {
-      'use cache';
-      cacheTag('exame-satateman');
-      cacheLife('hours');
-      return serverFetch<TExameStatemant[]>('/retake/statemants', {}, token);
-    };
-
-    return getExameStateman();
-  } catch (error) {
-    handleApiError(error);
-  }
-};
 export const getAllRetakes = async (): Promise<TExames[]> => {
   try {
     const token = await getUserToken();

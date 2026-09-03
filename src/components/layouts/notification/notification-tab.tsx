@@ -10,7 +10,8 @@ const PopoverNotifications = async () => {
 
    if (!user) return 'Utilizador não encontrado'
 
-   const response = await getUserNotifications(user.id)
+   const response = await getUserNotifications(user.id);
+
 
    const unreadCount = response.unreadCount
 

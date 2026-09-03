@@ -23,7 +23,10 @@ export function ColorThemeSelector() {
    useEffect(() => {
       setMounted(true);
       const saved = localStorage.getItem(THEME_KEY) ?? "";
-      setColorTheme(saved);
+      if (saved) {
+         setColorTheme(saved);
+         applyColorTheme(saved);
+      }
    }, []);
 
    if (!mounted) return null;
