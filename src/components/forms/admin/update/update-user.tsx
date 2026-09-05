@@ -1,5 +1,5 @@
 'use client'
-import * as z from "zod"
+import z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,12 +16,12 @@ import { Input } from "@/components/ui/input"
 import { updateSchema } from "@/lib/validation/user"
 import SubmitBtn from "@/components/shared/submit-btn"
 import Selector from "@/components/shared/selector"
-import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updatedUser } from "@/actions/users"
 import Uploader from "@/components/shared/file-upload/uploader"
 import { useSheet } from "@/providers/sheet-provider"
+import { ROLES } from "@/constants/roles"
 
 const UpdatedUserForm = ({ userInf }: any) => {
    const { id, name, email, role, contact, avatar } = userInf;
@@ -64,7 +64,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
             toast.success(FLASH_MESSAGE.UPDATED);
             close()
          } catch (err) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(err);
          }
       });
@@ -145,7 +145,7 @@ const UpdatedUserForm = ({ userInf }: any) => {
                      <FormLabel>Cargo</FormLabel>
                      <FormControl>
                         <Selector
-                           options={DUMMY_DATA.roles}
+                           options={ROLES}
                            className="w-full"
                            formField={field}
                            placeholder="Ex: admin, editor, direitor..."

@@ -3,6 +3,7 @@ import { TAvatarProps } from "./types"
 
 
 const Avatar = ({ name, photo, className }: TAvatarProps) => {
+
    const getInitials = (name: string): string => {
       const nameParts = name.split(' ');
       return nameParts
@@ -12,8 +13,8 @@ const Avatar = ({ name, photo, className }: TAvatarProps) => {
 
    return (
       <AvatarContainer className={`${className || 'size-11'} `}>
-         <AvatarImage src={photo || '/avatar-1.jpg'} alt={getInitials(name)} />
-         <AvatarFallback>{getInitials(name) || 'CN'}</AvatarFallback>
+         <AvatarImage src={photo || '/avatar-1.jpg'} alt={getInitials(name || '')} />
+         <AvatarFallback>{getInitials(name || '') || 'CN'}</AvatarFallback>
       </AvatarContainer>
 
    )

@@ -1,7 +1,7 @@
 // lib/error/handle-api-error.ts
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from './api-error';
+import { ApiResponseError } from '../lib/errors/api-error';
 
 export function handleApiError(error: unknown): never {
   if (error instanceof ApiResponseError) {
@@ -9,9 +9,8 @@ export function handleApiError(error: unknown): never {
       statusCode: error.statusCode,
       message: error.message,
       details: error.errorMessages,
-      meta: error.meta,
     });
-    throw new Error(error.message || FLASH_MESSAGE.UNESPECTED_ERROR);
+    throw new Error(error.message || FLASH_MESSAGE.SERVER_ERROR);
   }
 
   if (error instanceof Error) {
@@ -23,11 +22,11 @@ export function handleApiError(error: unknown): never {
       message.includes('Failed to fetch')
     ) {
       console.error('External API down detected');
-      throw new Error(`${FLASH_MESSAGE.UNESPECTED_ERROR}: ${message}`);
+      throw new Error(`${FLASH_MESSAGE.SERVER_ERROR}: ${message}`);
     }
 
-    throw new Error(`${FLASH_MESSAGE.UNESPECTED_ERROR}: ${message}`);
+    throw new Error(`${FLASH_MESSAGE.SERVER_ERROR}: ${message}`);
   }
 
-  throw new Error(FLASH_MESSAGE.UNESPECTED_ERROR);
+  throw new Error(FLASH_MESSAGE.SERVER_ERROR);
 }

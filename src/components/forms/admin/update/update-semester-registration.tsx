@@ -39,10 +39,13 @@ const UpdateSemesterRegistrationForm = ({ semesters, defaultValues }: TProps) =>
    })
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof upadateSemesterRegisterSchema>) {
-
+      const formData: any = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append(key, value);
+      });
       startTransition(async () => {
          try {
-            const response = await addNewSemesterRegistartion(values);
+            const response = await addNewSemesterRegistartion(formData);
             if (response.error) {
                toast.error(response.message);
                return;
@@ -51,7 +54,7 @@ const UpdateSemesterRegistrationForm = ({ semesters, defaultValues }: TProps) =>
             form.reset();
             close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(error);
          }
       });

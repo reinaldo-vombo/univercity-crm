@@ -83,7 +83,7 @@ export function StudentDebtColumns(): ColumnDef<StudentBreakdown>[] {
          header: "Meses em dívida",
          cell: ({ row }) => {
             const pending = row.original.monthlyPayments.filter(
-               (m) => m.status === "PENDING" || m.status === "OVERDUE"
+               (m) => m.status === "PENDING"
             )
             if (pending.length === 0)
                return <span className="text-muted-foreground text-sm">Nenhum</span>

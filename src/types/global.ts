@@ -1,13 +1,23 @@
 // lib/types/action-result.ts
 
 import {
+  ExamContext,
+  ExamType,
+  TAction,
   TCourseTransfer,
   TDocumentType,
   TMarkStatus,
+  TMessageDirection,
+  TMessageStatus,
+  TNotificationType,
   TPaymentMethod,
   TPaymentStatus,
+  TQuestionType,
+  TRecipientType,
   TRegistrationStatus,
+  TRoles,
   TSemesterRegistrationStatus,
+  TServicePeriodType,
   TStatus,
   TStudentType,
   TTransferGradePolicy,
@@ -18,13 +28,49 @@ export type TUser = {
   id: string;
   name: string;
   email: string;
-  avatar: string;
+  avatar?: string | undefined;
   role: string;
   contact: {
     phone: number;
     location: string;
   };
   number: number;
+};
+
+export type TSubmitState = {
+  submitState: 'idle' | 'loading' | 'success' | 'error';
+  isPending: boolean;
+};
+export type SubmitState = 'idle' | 'loading' | 'success' | 'error';
+export type TBulkUser = {
+  name: string;
+  id: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+  avatar: string | null;
+  contact: {
+    phone: string;
+    location: string;
+  };
+  failedLoginAttempts: number;
+  lockedUntil: Date | null;
+  lastLoginAt: Date | null;
+  role: TRoles;
+  AuditLog: {
+    id: string;
+    createdAt: Date;
+    userId: string | null;
+    action: TAction;
+    entityType: string;
+    entityId: string;
+    oldData?: any | null;
+    newData: any | null;
+    ipAddress: string | null;
+    userAgent: string | null;
+  }[];
+  createdAt: Date;
+  updatedAt: Date;
 };
 export type IQueryParams = {
   page?: number;
@@ -156,7 +202,7 @@ export type TDiscipline = {
     id: string;
     firstName: string;
     lastName: string;
-    profileImage: null;
+    profileImage: string | undefined;
     section: string;
   } | null;
   courses: [
@@ -219,6 +265,10 @@ export type TOfferedCourseSection = {
   offeredCourseId: string;
   maxCapacity: number;
   currentlyEnrolledStudent: number;
+  price: {
+    id: string;
+    amount: number;
+  } | null;
   offeredCourse: {
     OfferedCourseDiscipline: {
       discipline: {
@@ -230,6 +280,10 @@ export type TOfferedCourseSection = {
       academicSemester: {
         title: string;
       };
+    };
+    course: {
+      title: string;
+      id: string;
     };
   };
 };
@@ -312,19 +366,24 @@ export type TAdmitionExame = {
   lastName: string;
   exameId: string;
   status: TRegistrationStatus;
-  paymentRecipt: string;
+  attemptNumber: number;
+  biNumber: string;
+  gradeDeclarationUrl: string;
+  startTime: string;
+  endTime: string;
   exameDate: Date;
-  document: string;
+  faseId: number;
   building: string | null;
   room: string | null;
   phoneNumber: string;
   academicFalcultyId: string;
   email: string;
-  paymentAmoute: number;
   exameResults: number;
   passed: boolean;
   fase: {
     name: string;
+    startTime: string;
+    endTime: string;
   };
   ExamePayment: TExamePayment[];
 };
@@ -378,6 +437,8 @@ export type TAdmitionExameFase = {
   startDate: Date;
   endDate: Date;
   ordem: number;
+  startTime: string;
+  endTime: string;
   duoDate: Date | undefined;
   roomId: number | undefined;
   building: {
@@ -436,9 +497,9 @@ export type TBuilding = {
 
 export type TSemester = {
   id: string;
-  title: '1 semestre' | '2 semestre';
-  createdAt: Date;
-  updatedAt: Date;
+  title: '1º Semestre' | '2º Semestre';
+  createdAt?: Date;
+  updatedAt?: Date;
   code: '01' | '02' | '03';
   year: string;
   startMonth: string;
@@ -641,8 +702,30 @@ export type TAuthLogos = {
   isActive: boolean;
 };
 export type TNotification = {
+  notifications: {
+    id: string;
+    type: TNotificationType;
+    title: string;
+    message: string;
+    userId: string;
+    metadata: {
+      message: string;
+      authorId: string;
+      description: string;
+      url: string;
+    };
+    read: boolean;
+    recipientType: 'USER';
+    facultyId: null;
+    studentId: null;
+    createdAt: Date;
+  }[];
+  unreadCount: number;
+};
+export type TNotifications = {
   id: string;
-  type: string;
+  type: TNotificationType;
+  title: string;
   message: string;
   userId: string;
   metadata: {
@@ -652,6 +735,9 @@ export type TNotification = {
     url: string;
   };
   read: boolean;
+  recipientType: 'USER';
+  facultyId: null;
+  studentId: null;
   createdAt: Date;
 };
 
@@ -755,11 +841,22 @@ export type TAcademicService = {
   id: string;
   title: string;
   priceId: string;
+  type: string;
   price: {
     amount: number;
   };
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type TServicePeriod = {
+  id: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  type: TServicePeriodType;
+  startDate: Date;
+  endDate: Date;
 };
 
 export type TStudentCause = {
@@ -931,6 +1028,21 @@ export type TRequest = {
     to: string;
   };
 };
+export type TUactiveStudents = {
+  id: string;
+  academicSemester: {
+    id: string;
+    title: string;
+  };
+  academicDepartment: {
+    id: string;
+    title: string;
+  };
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  profileImage: string | null;
+};
 export type TSemesterHistory = {
   id: string;
   studentId: string;
@@ -986,6 +1098,124 @@ export type TStudentDocuments = {
   reviewedAt: Date | null;
   reviewedBy: string | null;
 };
+export type TLockedAccount = {
+  name: string;
+  id: string;
+  email: string;
+  failedLoginAttempts: number;
+  lockedUntil: Date | null;
+  lastLoginAt: Date | null;
+  role: string;
+};
+export type TExames = {
+  id: string;
+  status: TPaymentStatus;
+  student: {
+    id: string;
+    studentId: string;
+    name: string;
+    profileImage: string | null;
+  };
+  discipline: {
+    name: string;
+    id: string;
+  };
+  course: {
+    id: string;
+    title: string;
+  };
+  semester: {
+    id: string;
+    title: string;
+    year: string;
+  };
+  section: {
+    id: string;
+    title: string;
+    shift: string;
+  };
+  location: {
+    building: string;
+    room: string;
+    floor: string;
+  };
+  date: Date;
+  time: string;
+  payment: TPaymentStatus;
+};
+
+export type TRetakeAta = {
+  discipline: {
+    name: string;
+    id: string;
+  };
+  semester: {
+    id: string;
+    title: string;
+    year: number;
+  };
+  retakes: {
+    number: number;
+    studentId: string;
+    name: string;
+    section: string;
+    shift: string;
+    date: Date;
+    time: string;
+    location: {
+      building: string;
+      room: string;
+      floor: string | null;
+    };
+  }[];
+};
+export type Semester = {
+  id: string;
+  title: string;
+  year: number;
+};
+export type Location = {
+  building: string;
+  room: string;
+  floor: number | null;
+};
+export type AtaStudent = {
+  number: number;
+  studentId: string;
+  name: string;
+  date: string;
+  time: string;
+  location: Location;
+};
+export type AtaSection = {
+  section: {
+    id: string;
+    title: string;
+    shift: string;
+  };
+  course: {
+    title: string;
+  };
+  department: {
+    id: string;
+    title: string;
+  };
+  students: AtaStudent[];
+};
+export type TAtaDiscipline = {
+  name: string;
+  id: string;
+};
+export type RetakeSectionItem = {
+  id: string;
+  title: string;
+  shift: string;
+};
+export type RetakeAtaResponse = {
+  discipline: TAtaDiscipline;
+  semester: Semester | null;
+  sections: AtaSection[];
+};
 export type TMenssage = {
   id: string;
   type: string;
@@ -994,4 +1224,109 @@ export type TMenssage = {
   phoneNumber?: string | undefined;
   email?: string | undefined;
   senderName: string;
+};
+export type TMenssages = {
+  id: string;
+  createdAt: Date;
+  channel: MessageChannel;
+  direction: TMessageDirection;
+  status: TMessageStatus;
+  recipientType: TRecipientType;
+  recipientId: string;
+  recipientName: string;
+  recipientContact: string;
+  subject: string | null;
+  content: string;
+  providerId: string | null;
+  errorMessage: string | null;
+  sentAt: Date | null;
+  updatedAt: Date;
+};
+export type ExamResult = {
+  id: string;
+  context: ExamContext;
+  type: ExamType;
+  statementUrl: string;
+  disciplineId: string | null;
+  offeredCourseSectionId: string | null;
+  courseId: string | null;
+  academicSemesterId: string | null;
+  specialExamId: string | null;
+  createdById: string;
+  academicSemester: { title: string } | null;
+  discipline: { name: string } | null;
+  course: { title: string } | null;
+  offeredCourseSection: { title: string } | null;
+  faculty: { firstName: string; lastName: string } | null;
+  createdBy: { name: string };
+  _count: {
+    questions: number;
+    answerSheets: number;
+  };
+};
+export type TQuestion = {
+  id: string;
+  createdById: string;
+  type: 'BOOLEAN' | 'WRITTEN';
+  disciplineId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  value: number;
+  discipline: {
+    id: string;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date;
+    suspendGrade: number;
+  } | null;
+  _count: {
+    question: number;
+    booleanAnswers: number;
+  };
+  assertions: {
+    id: string;
+    order: number;
+    questionId: string;
+    label: string;
+    text: string | null;
+
+    correctValue: boolean;
+  }[];
+};
+export type TExameStatemant = {
+  id: string;
+  context: string;
+  type: ExamType;
+  statementUrl: string;
+  department: string | null;
+  course: string | null;
+  discipline: string | null;
+  faculty: string | null;
+  offeredCourseSection: string | null;
+
+  createdBy: string;
+  totalQuestions: number;
+  totalAnswerSheets: number;
+  questions: {
+    id: string;
+    order: number;
+    value: number;
+    title: string;
+    type: TQuestionType;
+    assertions: {
+      id: string;
+      order: number;
+      questionId: string;
+      label: string;
+      text: string | null;
+      correctValue: boolean;
+    }[];
+  }[];
+  disciplineId: string | null;
+  academicDepartmentId: string | null;
+  courseId: string | null;
+  offeredCourseSectionId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 };

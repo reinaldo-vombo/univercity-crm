@@ -1,18 +1,18 @@
 // components/mark-sheet/mark-sheet-filters.tsx
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Options } from 'nuqs'
 import {
    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select"
 
-type Semester = "1º Semestre" | "2º Semestre"
-
 interface Props {
-   year: number
-   semester: Semester
+   year: number | null
+   semester: string | null
    studentName: string
    studentId: string
-   onYearChange: (y: number) => void
-   onSemesterChange: (s: Semester) => void
+   onYearChange: (value: number | ((old: number | null) => number | null) | null, options?: Options) => Promise<URLSearchParams>
+   onSemesterChange: (value: string | ((old: string | null) => string | null) | null, options?: Options) => Promise<URLSearchParams>
+
 }
 
 const AVAILABLE_YEARS = [2025, 2024]
@@ -28,7 +28,7 @@ export function MarkSheetFilters({
             <p className="text-xs text-muted-foreground">{studentId}</p>
          </div>
          <div className="flex items-center gap-2">
-            <Tabs value={semester} onValueChange={(v) => onSemesterChange(v as Semester)}>
+            <Tabs value={semester || ''} onValueChange={(v) => onSemesterChange(v)}>
                <TabsList className="h-8">
                   <TabsTrigger value="1º Semestre" className="px-2 text-xs cursor-pointer">1º Sem</TabsTrigger>
                   <TabsTrigger value="2º Semestre" className="px-2 text-xs cursor-pointer">2º Sem</TabsTrigger>

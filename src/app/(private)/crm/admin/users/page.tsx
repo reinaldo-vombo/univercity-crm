@@ -19,6 +19,12 @@ export default function UsersPages() {
             pageName="Útilizadores"
             pageUrl={`${ROUTES.DASHBOARD}/admin/users`}
             root={`${ROUTES.DASHBOARD}/admin`} />
+
+         <div className="mt-9 space-y-2">
+            <h1 className="text-3xl font-bold">Gerenciador de Útilizadores</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis ut quidem at odio saepe deserunt corrupti magni inventore aspernatur eveniet? Iusto architecto incidunt dignissimos inventore, suscipit corrupti eaque quis rem.</p>
+         </div>
+
          <div className="mt-12">
             <Suspense fallback={<DataTableSkeleton />}>
                <UsersTableServer />

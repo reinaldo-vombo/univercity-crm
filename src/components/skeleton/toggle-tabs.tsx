@@ -1,15 +1,18 @@
 import React from 'react'
+import { Skeleton } from '../ui/skeleton'
 
-const ToggleTabs = () => {
+const ToggleTabsSkeleton = () => {
    return (
       <div className='grid gap-3'>
          <div className='flex gap-3'>
-            <div className="h-7 bg-muted rounded-md animate-pulse"></div>
-            <div className="h-7 bg-muted rounded-md animate-pulse"></div>
+            <Skeleton className='h-7 w-8' />
+            <Skeleton className='h-7 w-8' />
+            <Skeleton className='h-7 w-8' />
+            <Skeleton className='h-7 w-8' />
          </div>
-         <div className="h-40 bg-muted rounded-md animate-pulse"></div>
+         <Skeleton className='h-40' />
       </div>
    )
 }
 
-export default ToggleTabs
+export default ToggleTabsSkeleton;

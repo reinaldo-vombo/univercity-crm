@@ -60,7 +60,7 @@ const ReviewCourseTransferForm = () => {
         form.reset();
         close()
       } catch (error) {
-        toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+        toast.error(FLASH_MESSAGE.SERVER_ERROR);
         console.error(error);
       }
     });

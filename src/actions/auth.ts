@@ -1,20 +1,41 @@
 'use server';
 
+import { sendEmail } from '@/config/send-email';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedAction } from '@/lib/helper/action-helper';
+import ResetPassword from '@/lib/email/reset-password';
+import { actionWithUser, validatedAction } from '@/lib/helper/action-helper';
 import { resetPasswordSchema } from '@/lib/validation/admin';
-import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
-import { ActionResult, ActionState } from '@/types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { serverActionFetch } from '@/services/server-fetch';
+import {
+  ActionResult,
+  ActionState,
+  TResponse,
+} from '@/lib/errors/api-error.type';
+import { updateTag } from 'next/cache';
 
 export const recoverPassword = async (
-  data: string
+  data: string,
 ): Promise<ActionState<null>> => {
   try {
-    await serverFetch<null>('/auth/recover-password', {
+    const result = await serverActionFetch<string>('/auth/recover-password', {
       method: 'POST',
       body: { email: data },
     });
+
+    const response = await sendEmail(
+      [data],
+      'Pedido de redefinição de senha',
+      ResetPassword({ token: result }),
+    );
+
+    if (response.error) {
+      console.error(response.error);
+      return {
+        error: true,
+        message: 'Ocorreu um erro ao enviar email, por favor tente de novo',
+      };
+    }
 
     return {
       error: false,
@@ -24,22 +45,62 @@ export const recoverPassword = async (
   } catch (err) {
     return {
       error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };
 
 export const resetPassword = validatedAction(
   resetPasswordSchema,
-  async (data): Promise<ActionResult<null>> => {
-    console.log(data);
+  async (data): Promise<ActionResult<TResponse>> => {
+    const { token, confirm_Password, new_Password } = data;
+    if (new_Password !== confirm_Password) {
+      return {
+        error: true,
+        message: 'As senhas não combinam',
+      };
+    }
 
     try {
-      await serverFetch<null>('/auth/reset-password', {
+      const response = await serverActionFetch<TResponse>(
+        '/auth/reset-password',
+        {
+          method: 'POST',
+          body: { token, password: new_Password },
+        },
+      );
+
+      return {
+        error: false,
+        data: response,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
+      }
+
+      return {
+        error: true,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
+      };
+    }
+  },
+);
+export const unlockAccount = actionWithUser(
+  async (userId: string): Promise<ActionResult<null>> => {
+    try {
+      await serverActionFetch<null>(`/auth/unlock/${userId}`, {
         method: 'POST',
-        body: data,
+        body: null,
       });
+
+      updateTag('locked-accounts');
 
       return {
         error: false,
@@ -58,8 +119,9 @@ export const resetPassword = validatedAction(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'update', subject: 'Auth' },
 );

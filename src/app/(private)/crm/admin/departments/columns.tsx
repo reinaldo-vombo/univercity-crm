@@ -7,8 +7,7 @@ import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TDepartemant, TUser } from "@/types/global"
-import { AcademicFaculty } from "../academic-faculty/columns"
+import { TAcademicFaculty, TDepartemant, TUser } from "@/types/global"
 import Avatar from "@/components/shared/avatar"
 import { deleteDepartment } from "@/actions/departement"
 import DepartmenteDetails from "@/components/admin/container/departmente-details"
@@ -19,7 +18,7 @@ const UpdatedDepartmentForm = dynamic(() => import("@/components/forms/admin/upd
    { ssr: false, loading: () => <FormLoading /> })
 
 
-export function DepartementColumns(users: TUser[], academicFaculty: AcademicFaculty[]): ColumnDef<TDepartemant>[] {
+export function DepartementColumns(users: TUser[], academicFaculty: TAcademicFaculty[]): ColumnDef<TDepartemant>[] {
 
    return [
       {
@@ -92,7 +91,7 @@ export function DepartementColumns(users: TUser[], academicFaculty: AcademicFacu
                   toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+                  toast.error(FLASH_MESSAGE.SERVER_ERROR);
                   console.error(err);
                }
             };

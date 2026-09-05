@@ -1,19 +1,22 @@
 'use server';
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUserJson } from '@/lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUserJson,
+} from '@/lib/helper/action-helper';
 import { createScheduleSchema } from '@/lib/validation/class-schedule';
-import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
-import { ActionResult } from '@/types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { serverActionFetch } from '@/services/server-fetch';
+import { ActionResult } from '@/lib/errors/api-error.type';
 import { TClassShedule } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export const addNewOfferedCourseClassSchedule = validatedActionWithUserJson(
   createScheduleSchema,
   async (data): Promise<ActionResult<TClassShedule>> => {
     try {
-      const course = await serverFetch<TClassShedule>(
+      const course = await serverActionFetch<TClassShedule>(
         '/offered-course-class-schedule',
         {
           method: 'POST',
@@ -21,7 +24,7 @@ export const addNewOfferedCourseClassSchedule = validatedActionWithUserJson(
         },
       );
 
-      revalidateTag('offered-course-class-schedule');
+      updateTag('offered-course-class-schedule');
 
       return {
         error: false,
@@ -40,58 +43,60 @@ export const addNewOfferedCourseClassSchedule = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'create', subject: 'OfferedCourseClassScheudule' },
 );
 
-export const DeleteOfferedCourseSchedule = async (
-  id: string,
-): Promise<ActionResult<TClassShedule>> => {
-  try {
-    const data = await serverFetch<TClassShedule>(
-      `/offered-course-class-schedule/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const DeleteOfferedCourseSchedule = actionWithUser(
+  async (id: string): Promise<ActionResult<TClassShedule>> => {
+    try {
+      const data = await serverActionFetch<TClassShedule>(
+        `/offered-course-class-schedule/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    revalidateTag('offered-course-section');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('offered-course-section');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'create', subject: 'OfferedCourseClassScheudule' },
+);
 export const DeleteOfferedCourseScheduleByDiscipline = async (
   sectionId: string,
   disciplineId: string,
 ): Promise<ActionResult<TClassShedule>> => {
   try {
-    const data = await serverFetch<TClassShedule>(
+    const data = await serverActionFetch<TClassShedule>(
       `/offered-course-class-schedule/section/${sectionId}/discipline/${disciplineId}`,
       {
         method: 'DELETE',
       },
     );
 
-    revalidateTag('offered-course-section');
+    updateTag('offered-course-section');
     return {
       error: false,
       data,
@@ -109,7 +114,7 @@ export const DeleteOfferedCourseScheduleByDiscipline = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

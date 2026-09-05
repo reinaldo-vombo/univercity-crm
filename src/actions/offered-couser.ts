@@ -2,6 +2,7 @@
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '@/lib/helper/action-helper';
@@ -9,17 +10,17 @@ import {
   autoGenerateOfferedSchema,
   updateOfferedCourseZodSchema,
 } from '@/lib/validation/offered-course';
-import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
-import { ActionResult } from '@/types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { serverActionFetch } from '@/services/server-fetch';
+import { ActionResult } from '@/lib/errors/api-error.type';
 import { TOfferedCourse } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export const addNewOfferedCourse = validatedActionWithUserJson(
   autoGenerateOfferedSchema,
   async (data): Promise<ActionResult<TOfferedCourse>> => {
     try {
-      const course = await serverFetch<TOfferedCourse>(
+      const course = await serverActionFetch<TOfferedCourse>(
         `/offered-course/auto-generate/${data.semesterRegistrationId}`,
         {
           method: 'POST',
@@ -27,7 +28,7 @@ export const addNewOfferedCourse = validatedActionWithUserJson(
         },
       );
 
-      revalidateTag('offered-course');
+      updateTag('offered-course');
 
       return {
         error: false,
@@ -46,16 +47,18 @@ export const addNewOfferedCourse = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'create', subject: 'OfferedCourse' },
 );
+
 export const updateOfferedCourse = validatedActionWithUser(
   updateOfferedCourseZodSchema,
   async (data): Promise<ActionResult<TOfferedCourse>> => {
     try {
-      const course = await serverFetch<TOfferedCourse>(
+      const course = await serverActionFetch<TOfferedCourse>(
         `/offered-course/${data.id}`,
         {
           method: 'PATCH',
@@ -63,7 +66,7 @@ export const updateOfferedCourse = validatedActionWithUser(
         },
       );
 
-      revalidateTag('offered-course');
+      updateTag('offered-course');
 
       return {
         error: false,
@@ -82,40 +85,44 @@ export const updateOfferedCourse = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'update', subject: 'OfferedCourse' },
 );
-export const DeleteOfferedCourse = async (
-  id: string,
-): Promise<ActionResult<TOfferedCourse>> => {
-  console.log(id);
 
-  try {
-    const data = await serverFetch<TOfferedCourse>(`/offered-course/${id}`, {
-      method: 'DELETE',
-    });
+export const DeleteOfferedCourse = actionWithUser(
+  async (id: string): Promise<ActionResult<TOfferedCourse>> => {
+    try {
+      const data = await serverActionFetch<TOfferedCourse>(
+        `/offered-course/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    revalidateTag('offered-course');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('offered-course');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'OfferedCourse' },
+);

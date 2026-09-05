@@ -1,5 +1,6 @@
 'use client'
-import * as z from "zod"
+
+import z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,7 +17,6 @@ import { Input } from "@/components/ui/input"
 import { updateSchema } from "@/lib/validation/user"
 import SubmitBtn from "@/components/shared/submit-btn"
 import Selector from "@/components/shared/selector"
-import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updatedUser } from "@/actions/users"
@@ -24,6 +24,8 @@ import Uploader from "@/components/shared/file-upload/uploader"
 import { useSession } from "next-auth/react"
 import { useSheet } from "@/providers/sheet-provider"
 import Avatar from "@/components/shared/avatar"
+import { ROLES } from "@/constants/roles"
+
 type TProps = {
    defaultValues: any
 }
@@ -46,7 +48,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
             location: contact?.location || '',
             phone: contact?.phone || 0
          },
-         avatar: avatar || null,
+         avatar: undefined,
       }
    })
    const [isPending, startTransition] = useTransition();
@@ -54,15 +56,26 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
    async function onSubmit(values: z.infer<typeof updateSchema>) {
       const formData = new FormData();
       Object.entries(values).forEach(([key, value]) => {
-         if (key === "avatar" && value instanceof File) {
-            formData.append("avatar", value); // ✅ Single file only
-         } else if (typeof value === "string") {
-            formData.append(key, value);
+         if (key === "avatar") {
+            if (value instanceof File) {
+               formData.append("avatar", value);
+            }
+            return;
+         }
+
+         if (key === "contact" && typeof value === "object" && value !== null) {
+            formData.append("contact", JSON.stringify(value));
+            return;
+         }
+
+         if (typeof value === "string" || typeof value === "number") {
+            formData.append(key, String(value));
          }
       });
       startTransition(async () => {
          try {
             const result = await updatedUser(formData);
+
             if (result.error) {
                toast.error(result.message);
                return;
@@ -79,7 +92,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
             toast.success(FLASH_MESSAGE.UPDATED);
             close()
          } catch (err) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(err);
          }
       });
@@ -88,8 +101,8 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
    return (
       <Form {...form}>
          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
-            <div className="flex">
-               <Avatar name={name} photo={avatar} className="size-10 m-auto" />
+            <div className="flex h-52">
+               <Avatar name={name} photo={avatar} className="size-40 m-auto" />
             </div>
             <FormField
                control={form.control}
@@ -159,7 +172,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
                      <FormLabel>Cargo</FormLabel>
                      <FormControl>
                         <Selector
-                           options={DUMMY_DATA.roles}
+                           options={ROLES}
                            className="w-full"
                            formField={field}
                            placeholder="Ex: admin, editor, direitor..."
@@ -177,7 +190,7 @@ const UpdatedAccountForm = ({ defaultValues }: TProps) => {
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Avatar</FormLabel>
-                     <FormControl>
+                     <FormControl className="flex">
                         <Uploader field={field} maxFiles={1} />
                      </FormControl>
                      <FormDescription>Sua foto de perfil</FormDescription>

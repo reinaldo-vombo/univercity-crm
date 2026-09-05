@@ -70,7 +70,7 @@ const UpdateFacultyFrom = ({ defaultValues, departemants, courses }: TPros) => {
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(error);
          }
       });

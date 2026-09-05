@@ -15,20 +15,23 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { resetPasswordSchema } from "@/lib/validation/admin"
-import SubmitBtn from "@/components/shared/submit-btn"
-import { useTransition } from "react"
+import { use, useState, useTransition } from "react"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { resetPassword } from "@/actions/auth"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import ActionButton from "@/components/layouts/button/action-button"
+import { SubmitState } from "@/types/global"
+import Link from "next/link"
+import { Eye, EyeClosed } from "lucide-react"
 const prev = {
    error: '',
    data: ''
 }
-export default function AdminResetPassword() {
-   const searchParams = useSearchParams();
-   const encodedToken = searchParams.get('token');
-   const token = encodedToken ? decodeURIComponent(encodedToken) : null;
+export default function AdminResetPassword({ promise }: { promise: Promise<any> }) {
+   const [submitState, setSubmitState] = useState<SubmitState>('idle');
+   const [showPassword, setShowPassWord] = useState('password')
+   const { token } = use(promise)
 
    const router = useRouter()
    const [isPending, startTransition] = useTransition();
@@ -47,16 +50,21 @@ export default function AdminResetPassword() {
          formData.append(key, value);
       });
       startTransition(async () => {
+         setSubmitState('loading')
          try {
             const result = await resetPassword(prev, formData);
             if (result.error) {
                toast.error(result.message);
+               setSubmitState('error')
+               setTimeout(() => setSubmitState('idle'), 3000)
                return;
             }
             toast.success('Senha Atualizada!');
             router.push('/auth/apanel/login')
          } catch (err) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            setSubmitState('error')
+            setTimeout(() => setSubmitState('idle'), 3000)
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(err);
          }
       });
@@ -74,10 +82,17 @@ export default function AdminResetPassword() {
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Nova senha</FormLabel>
-                     <FormControl>
+                     <FormControl className="relative">
                         <Input
                            placeholder="xxx-xx-xxx"
+                           type="password"
                            {...field} />
+                        {showPassword === 'password' ?
+                           <EyeClosed className="absolute cursor-pointer right-3 top-2" onClick={() => setShowPassWord('text')} />
+                           :
+                           <Eye className="absolute cursor-pointer right-3 top-2" onClick={() => setShowPassWord('password')} />
+                        }
+
                      </FormControl>
                      <FormDescription>Creie uma nova senha</FormDescription>
                      <FormMessage />
@@ -93,6 +108,7 @@ export default function AdminResetPassword() {
                      <FormControl>
                         <Input
                            placeholder="xxx-xx-xxx"
+                           type="password"
                            {...field} />
                      </FormControl>
                      <FormDescription>Confirma a senha</FormDescription>
@@ -100,7 +116,10 @@ export default function AdminResetPassword() {
                   </FormItem>
                )}
             />
-            <SubmitBtn label="Atualisar" loading={isPending} />
+            <ActionButton submitState={submitState} isPending={isPending} />
+            <div className="flex justify-center mt-4">
+               <Link href='/auth/login'>Entrar</Link>
+            </div>
          </form>
       </Form>
    )

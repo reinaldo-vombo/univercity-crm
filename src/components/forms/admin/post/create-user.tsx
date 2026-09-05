@@ -1,12 +1,12 @@
 'use client'
-import * as z from "zod"
+
+import z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
    Form,
    FormControl,
-   FormDescription,
    FormField,
    FormItem,
    FormLabel,
@@ -16,11 +16,12 @@ import { Input } from "@/components/ui/input"
 import { userSchema } from "@/lib/validation/user"
 import SubmitBtn from "@/components/shared/submit-btn"
 import Selector from "@/components/shared/selector"
-import { DUMMY_DATA } from "@/constants/mock-data"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { addNewUser } from "@/actions/users"
 import { useSheet } from "@/providers/sheet-provider"
+import { ENUM_USER_ROLE } from "@/lib/enums/user"
+import { ROLES } from "@/constants/roles"
 
 const CreateUser = () => {
    const { close } = useSheet()
@@ -29,7 +30,7 @@ const CreateUser = () => {
       resolver: zodResolver(userSchema),
       defaultValues: {
          name: undefined,
-         role: "admin",
+         role: ENUM_USER_ROLE.ADMIN,
          email: undefined,
       }
    })
@@ -50,7 +51,7 @@ const CreateUser = () => {
             form.reset();
             close()
          } catch (err) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(err);
          }
       });
@@ -64,13 +65,12 @@ const CreateUser = () => {
                name="name"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Nome do útilizador</FormLabel>
+                     <FormLabel>Nome</FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Nome"
+                           placeholder="Ex Mario Dos Santos"
                            {...field} />
                      </FormControl>
-                     <FormDescription></FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -82,9 +82,8 @@ const CreateUser = () => {
                   <FormItem>
                      <FormLabel>Email</FormLabel>
                      <FormControl>
-                        <Input placeholder="Email" {...field} />
+                        <Input placeholder="Ex exemplo@gmail.com" {...field} />
                      </FormControl>
-                     <FormDescription>O email do útilizador</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}
@@ -97,12 +96,11 @@ const CreateUser = () => {
                      <FormLabel>Cargo</FormLabel>
                      <FormControl>
                         <Selector
-                           options={DUMMY_DATA.roles}
+                           options={ROLES}
                            className="w-full"
                            formField={field}
-                           placeholder="Cargos" />
+                           placeholder="Ex SUPER_ADMIN ADMIN STAFF..." />
                      </FormControl>
-                     <FormDescription>Ex: admin, editor...</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

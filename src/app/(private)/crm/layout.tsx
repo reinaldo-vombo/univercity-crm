@@ -1,7 +1,8 @@
-import { AppSidebar } from "@/components/layouts/app-sidebar";
+import { AppSidebar } from "@/components/layouts/sidebar/app-sidebar";
 import Header from "@/components/layouts/nav-bar/Header";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { serverUser } from "@/lib/helper/auth/user";
+import { SidebarSkeleton } from "@/components/skeleton/side-bar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { Suspense } from "react";
 
 export default async function CrmLayout({
    children,
@@ -9,20 +10,18 @@ export default async function CrmLayout({
    children: React.ReactNode;
 }>) {
 
-   const currentUser = await serverUser();
-   const role = currentUser?.role as any
-
    return (
       <div>
          <SidebarProvider>
-            <AppSidebar role={role} />
+            <Suspense fallback={<SidebarSkeleton />}>
+               <AppSidebar />
+            </Suspense>
             <main className="w-full">
-               <div className="flex items-center bg-card">
-                  <SidebarTrigger className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11 " />
+               <div className="flex items-center">
                   <Header />
                </div>
-               <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-                  <div className="grid grid-cols-12 gap-4 md:gap-6">
+               <div className="mx-auto max-w-(--breakpoint-2xl) mt-6">
+                  <div className="grid grid-cols-12 gap-4 md:gap-6 mx-6">
                      {children}
                   </div>
                </div>

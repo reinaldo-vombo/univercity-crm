@@ -38,12 +38,11 @@ export const createOfferedCourseSectionZodSchema = z.object({
 
 export const updateOfferedCourseSectionZodSchema = z.object({
   id: z.string(),
-  title: z.string({}).optional(),
-  maxCapacity: z.number({}).optional(),
-  currentlyEnrolledStudent: z.coerce.number().optional(),
-  offeredCourseId: z.string({}).optional(),
-  shiftId: z.coerce.number(),
-  yearLevel: z.enum(['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH']).optional(),
+  title: z.string().optional(),
+  priceId: z.string().min(1, 'Deve adicionar a mensalidade do curso'),
+  maxCapacity: z.coerce.number().optional(),
+  offeredCourseId: z.string().optional(),
+  shiftId: z.coerce.number().optional(),
 });
 const defaultPricePerShiftSchema = z
   .record(z.coerce.number().min(0))

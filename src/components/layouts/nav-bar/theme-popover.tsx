@@ -6,11 +6,13 @@ import { Label } from "@/components/ui/label";
 
 export function ThemePopOver() {
    return (
-      <Popover trigger={<Palette className="h-6 w-6" />}>
-         <div className="space-y-2">
-            <Label>Theme</Label>
-            <ColorThemeSelector />
-         </div>
-      </Popover>
+      <div>
+         <Popover className="w-48" trigger={<Palette />}>
+            <div className="space-y-2">
+               <Label>Theme</Label>
+               <ColorThemeSelector />
+            </div>
+         </Popover>
+      </div>
    );
 }

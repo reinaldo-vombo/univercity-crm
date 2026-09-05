@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TBuilding, TRoom } from "@/types/global";
 import { RoomColumns } from "./columns";
 import { createUniqueId } from "@/lib/helper";

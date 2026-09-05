@@ -1,7 +1,9 @@
 
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
 import { showYearLevel } from '@/lib/helper'
 import { TDiscipline } from '@/types/global'
-import { BookDown, BookX, Hash } from 'lucide-react'
+import { BookDown, BookX, GraduationCap, Hash, Users } from 'lucide-react'
 import Image from 'next/image'
 
 type TProps = {
@@ -11,60 +13,107 @@ type TProps = {
 const DisciplineDetails = ({ data }: TProps) => {
    const { name, suspendGrade, courses, faculty } = data;
 
+   const hasSection = Boolean(faculty?.section)
+
    return (
-      <div>
-         <div className="border rounded-lg p-4 mb-6 flex items-center justify-between">
-            <div>
-               {faculty ? (
-                  <>
-                     <Image
-                        src={faculty.profileImage || '/figure-1.png'}
-                        className="rounded-full"
-                        width={200}
-                        height={200}
-                        alt={`${faculty.firstName} ${faculty.lastName}`} />
-                     <p className='mt-4 text-center text-2xl'>{`${faculty.firstName} ${faculty.lastName}`}</p>
-                  </>
-               ) : <Image
-                  src='/figure-1.png'
-                  className="rounded-full"
-                  width={200}
-                  height={200}
-                  alt={name} />}
-            </div>
-            <div className="space-y-2">
-               <h2 className="text-2xl font-semibold">{name}</h2>
-               <ul className="space-y-2">
-                  <li>Turma:
-                     {faculty?.section && faculty?.section ? (
-                        <div className='rounded-md border p-2 flex gap-2 items-center'>
-                           <Hash className='text-orange-500 size-4' /><b>{faculty?.section}</b>
-                        </div>
-                     ) : (
+      <div className="space-y-6">
+         {/* Cabeçalho: docente / disciplina */}
+         <Card>
+            <CardContent className="flex flex-col items-center gap-6 p-6 sm:flex-row sm:items-start">
+               <div className="flex shrink-0 flex-col items-center gap-3">
+                  <Image
+                     src="/figure-1.png"
+                     className="size-24 rounded-full border object-cover"
+                     width={96}
+                     height={96}
+                     alt='Book inlustration'
+                  />
+                  {faculty && (
+                     <p className="text-center text-sm font-medium leading-tight">
+                        {faculty.firstName} {faculty.lastName}
+                     </p>
+                  )}
+               </div>
 
-                        <div className='rounded-md border p-2 text-red-500 flex gap-2 items-center'>
-                           <BookX className='size-4' /><b>Disciplina ainda não foi atribuida a nenhuma turma</b>
-                        </div>
-                     )}
-                  </li>
-                  <li>Nota de dispenção:
-                     <div className='rounded-md border p-2 flex gap-2 items-center'>
-                        <BookDown className='text-fuchsia-500 size-4' /><b>{suspendGrade || 'Não atriudo'}</b>
+               <div className="w-full space-y-4">
+                  <h2 className="text-2xl font-semibold">{name}</h2>
+
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                     <div>
+                        <p className="mb-1 text-xs text-muted-foreground">
+                           Turma
+                        </p>
+                        {hasSection ? (
+                           <div className="flex items-center gap-2 rounded-md border p-2">
+                              <Hash className="size-4 text-orange-500" />
+                              <b className="text-sm">{faculty?.section}</b>
+                           </div>
+                        ) : (
+                           <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-red-600 dark:border-red-900 dark:bg-red-950/30">
+                              <BookX className="size-4 shrink-0" />
+                              <b className="text-sm">
+                                 Disciplina ainda não foi atribuída a nenhuma turma
+                              </b>
+                           </div>
+                        )}
                      </div>
-                  </li>
-               </ul>
-            </div>
-         </div>
-         <div className='space-y-4'>
-            <h2 className='text-2xl'>Cursos Pertecentes</h2>
-            {courses.length > 0 ? courses.map((course) => (
-               <ul key={course.id} className='space-y-3'>
-                  <li>Nome: <b>{course.courseTitle}</b></li>
-                  {/* <li>Semestre: <b>{course.semester} - {course.year}</b></li> */}
 
-                  <li>Ano Curricular: <b>{showYearLevel(course.yearLevel)}</b></li>
-               </ul>
-            )) : (<p>Essa Disciplina ainda não foi atribuida a nenhum curso</p>)}
+                     <div>
+                        <p className="mb-1 text-xs text-muted-foreground">
+                           Nota de dispensa
+                        </p>
+                        <div className="flex items-center gap-2 rounded-md border p-2">
+                           <BookDown className="size-4 text-fuchsia-500" />
+                           <b className="text-sm">
+                              {suspendGrade || "Não atribuída"}
+                           </b>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </CardContent>
+         </Card>
+
+         {/* Cursos */}
+         <div className="space-y-3">
+            <h2 className="flex items-center gap-2 text-lg font-semibold">
+               <GraduationCap className="size-5 text-muted-foreground" />
+               Cursos pertencentes
+               {courses.length > 0 && (
+                  <Badge variant="secondary" className="ml-1">
+                     {courses.length}
+                  </Badge>
+               )}
+            </h2>
+
+            {courses.length > 0 ? (
+               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {courses.map((course) => (
+                     <Card key={course.id} className="shadow-none">
+                        <CardContent className="flex items-start gap-3 p-4">
+                           <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-muted">
+                              <Users className="size-4 text-muted-foreground" />
+                           </div>
+                           <div className="min-w-0">
+                              <p className="truncate font-medium">
+                                 {course.courseTitle}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                 {showYearLevel(course.yearLevel)}
+                              </p>
+                              {/* <p className="text-sm text-muted-foreground">
+                                 {course.semester} - {course.year}
+                              </p> */}
+                           </div>
+                        </CardContent>
+                     </Card>
+                  ))}
+               </div>
+            ) : (
+               <p className="text-sm text-muted-foreground">
+                  Essa disciplina ainda não foi atribuída a nenhum curso.
+               </p>
+            )}
          </div>
       </div>
    )

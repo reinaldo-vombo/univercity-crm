@@ -1,5 +1,5 @@
 
-import { Button } from "@/components/ui/button"
+
 import {
    Card,
    CardContent,
@@ -41,7 +41,7 @@ export function TabsNav({ defaultValue, tabList }: TTabsNav) {
                         {content.tabContent}
                      </CardContent>
                      <CardFooter>
-                        <Button>Save changes</Button>
+
                      </CardFooter>
                   </Card>
                </TabsContent>

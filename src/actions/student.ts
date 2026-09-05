@@ -1,11 +1,14 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TStudent, TStudentDocuments } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
-import { ActionResult } from '../types/api-error';
-import { ApiResponseError } from '@/services/api-error';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
+import { ActionResult } from '../lib/errors/api-error.type';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
   reviewDocumentZodSchema,
@@ -17,12 +20,12 @@ export const addNewStudent = validatedActionWithUser(
   studentSchema,
   async (data): Promise<ActionResult<TStudent>> => {
     try {
-      const Students = await serverFetch<TStudent>(`/student`, {
+      const Students = await serverActionFetch<TStudent>(`/student`, {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('student');
+      updateTag('student');
 
       return {
         error: false,
@@ -41,22 +44,24 @@ export const addNewStudent = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'create', subject: 'Student' },
 );
+
 export const updatedStudent = validatedActionWithUser(
   updateStudentSchema,
   async (data): Promise<ActionResult<TStudent>> => {
     try {
       const { id, ...updateData } = data;
-      const departements = await serverFetch<TStudent>(`/student/${id}`, {
+      const departements = await serverActionFetch<TStudent>(`/student/${id}`, {
         method: 'PATCH',
         body: updateData,
       });
 
-      revalidateTag('student');
+      updateTag('student');
 
       return {
         error: false,
@@ -75,17 +80,18 @@ export const updatedStudent = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'update', subject: 'Student' },
 );
 export const updatedStudentDocuments = validatedActionWithUser(
   reviewDocumentZodSchema,
   async (data): Promise<ActionResult<TStudentDocuments>> => {
     try {
       const { documentId, ...updateData } = data;
-      const departements = await serverFetch<TStudentDocuments>(
+      const departements = await serverActionFetch<TStudentDocuments>(
         `/student/documents/${documentId}`,
         {
           method: 'PATCH',
@@ -93,7 +99,7 @@ export const updatedStudentDocuments = validatedActionWithUser(
         },
       );
 
-      revalidateTag('student-docs');
+      updateTag('student-docs');
 
       return {
         error: false,
@@ -112,39 +118,41 @@ export const updatedStudentDocuments = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'update', subject: 'Student' },
 );
 
-export const deleteStudent = async (
-  id: string,
-): Promise<ActionResult<TStudent>> => {
-  try {
-    const data = await serverFetch<TStudent>(`/student/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteStudent = actionWithUser(
+  async (id: string): Promise<ActionResult<TStudent>> => {
+    try {
+      const data = await serverActionFetch<TStudent>(`/student/${id}`, {
+        method: 'DELETE',
+      });
 
-    revalidateTag('student');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('student');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'Student' },
+);

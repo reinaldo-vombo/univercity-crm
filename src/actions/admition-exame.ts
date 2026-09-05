@@ -1,31 +1,47 @@
 'use server';
 
-import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from '@/services/api-error';
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TAdmitionExame } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
-import { ActionResult } from '../types/api-error';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+  validatedActionWithUserJson,
+} from '../lib/helper/action-helper';
+import { ActionResult } from '../lib/errors/api-error.type';
 import {
   admitionExameFaseSchema,
   admitionExameSchema,
   updateAdmitionExameFaseSchema,
 } from '../lib/validation/adnition-exame';
+import { sendEmail } from '@/config/send-email';
+import { render as Render } from '@react-email/render';
+import { ExameAcessoAprovado } from '@/lib/email/exame-acesso-aprovado';
+import { sendErrorToClient } from '@/lib/errors/send-error-to-client';
+import { error } from 'console';
 
 export const updateAdmitionExame = validatedActionWithUser(
   admitionExameSchema,
   async (data): Promise<ActionResult<TAdmitionExame>> => {
     try {
-      const exames = await serverFetch<TAdmitionExame>(
+      const exames = await serverActionFetch<TAdmitionExame>(
         `/admission-exame/${data.id}`,
         {
-          method: 'PUT',
+          method: 'PATCH',
           body: data,
-        }
+        },
+      );
+      const html = await Render(
+        ExameAcessoAprovado({
+          applicantName: exames.firstName,
+          examId: exames.exameId,
+        }),
       );
 
-      revalidateTag('admitionExame');
+      updateTag('admitionExame');
+
+      await sendEmail([exames.email], 'Resultado do exame de admissão', html);
 
       return {
         error: false,
@@ -35,7 +51,7 @@ export const updateAdmitionExame = validatedActionWithUser(
       if (err instanceof ApiResponseError) {
         return {
           error: true,
-          message: err.message,
+          message: sendErrorToClient(error),
           errorMessages: err.errorMessages,
           meta: err.meta,
         };
@@ -43,47 +59,57 @@ export const updateAdmitionExame = validatedActionWithUser(
 
       return {
         error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        message: sendErrorToClient(error),
       };
     }
-  }
+  },
+  { action: 'update', subject: 'AdmitionExame' },
 );
-export const deleteAdmitionExame = async (
-  id: string
-): Promise<ActionResult<TAdmitionExame>> => {
-  try {
-    const data = await serverFetch<TAdmitionExame>(`/admission-exame/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteAdmitionExame = actionWithUser(
+  async (id: string): Promise<ActionResult<TAdmitionExame>> => {
+    try {
+      const data = await serverActionFetch<TAdmitionExame>(
+        `/admission-exame/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    revalidateTag('admitionExame');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+      updateTag('admitionExame');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: sendErrorToClient(error),
+      };
+    }
+  },
+  { action: 'delete', subject: 'AdmitionExame' },
+);
 
-export const createAdmitionExameFase = validatedActionWithUser(
+export const createAdmitionExameFase = validatedActionWithUserJson(
   admitionExameFaseSchema,
   async (data): Promise<ActionResult<TAdmitionExame>> => {
+    const { startDate, ...res } = data;
+
     try {
-      const fases = await serverFetch<TAdmitionExame>(
+      const fases = await serverActionFetch<TAdmitionExame>(
         `/admission-exame/fases`,
         {
           method: 'POST',
-          body: data,
-        }
+          body: {
+            ...res,
+            startDate: startDate.date,
+            startTime: startDate.time.start,
+            endTime: startDate.time.end,
+          },
+        },
       );
 
-      revalidateTag('admitionExameFase');
+      updateTag('admitionExameFase');
 
       return {
         error: false,
@@ -93,7 +119,7 @@ export const createAdmitionExameFase = validatedActionWithUser(
       if (err instanceof ApiResponseError) {
         return {
           error: true,
-          message: err.message,
+          message: sendErrorToClient(err),
           errorMessages: err.errorMessages,
           meta: err.meta,
         };
@@ -101,26 +127,26 @@ export const createAdmitionExameFase = validatedActionWithUser(
 
       return {
         error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        message: sendErrorToClient(err),
       };
     }
-  }
+  },
+  { action: 'create', subject: 'AdmitionExame' },
 );
 export const updateAdmitionExameFase = validatedActionWithUser(
   updateAdmitionExameFaseSchema,
   async (data): Promise<ActionResult<TAdmitionExame>> => {
     const { id, ...res } = data;
     try {
-      const fases = await serverFetch<TAdmitionExame>(
+      const fases = await serverActionFetch<TAdmitionExame>(
         `/admission-exame/fases/${id}`,
         {
           method: 'PATCH',
           body: res,
-        }
+        },
       );
 
-      revalidateTag('admitionExameFase');
+      updateTag('admitionExameFase');
 
       return {
         error: false,
@@ -130,7 +156,7 @@ export const updateAdmitionExameFase = validatedActionWithUser(
       if (err instanceof ApiResponseError) {
         return {
           error: true,
-          message: err.message,
+          message: sendErrorToClient(error),
           errorMessages: err.errorMessages,
           meta: err.meta,
         };
@@ -138,33 +164,34 @@ export const updateAdmitionExameFase = validatedActionWithUser(
 
       return {
         error: true,
-        message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        message: sendErrorToClient(error),
       };
     }
-  }
+  },
+  { action: 'update', subject: 'AdmitionExame' },
 );
-export const deleteAdmitionExameFase = async (
-  id: number
-): Promise<ActionResult<TAdmitionExame>> => {
-  try {
-    const data = await serverFetch<TAdmitionExame>(
-      `/admission-exame/fases/${id}`,
-      {
-        method: 'DELETE',
-      }
-    );
+export const deleteAdmitionExameFase = actionWithUser(
+  async (id: string): Promise<ActionResult<TAdmitionExame>> => {
+    const parsedId = Number(id);
+    try {
+      const data = await serverActionFetch<TAdmitionExame>(
+        `/admission-exame/fases/${parsedId}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    revalidateTag('admitionExameFase');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+      updateTag('admitionExameFase');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: sendErrorToClient(error),
+      };
+    }
+  },
+  { action: 'delete', subject: 'AdmitionExame' },
+);

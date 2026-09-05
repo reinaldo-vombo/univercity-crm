@@ -1,31 +1,31 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../types/api-error';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { TCoursePrice } from '../types/global';
 import { createpriceSchema, UpdatePriceSchema } from '../lib/validation/price';
 
 export const addNewPrice = validatedActionWithUser(
   createpriceSchema,
-  async (data, _, user): Promise<ActionResult<TCoursePrice>> => {
+  async (data): Promise<ActionResult<TCoursePrice>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>(
-        `/prices?name=${user.name}`,
-        {
-          method: 'POST',
-          body: data,
-        }
-      );
+      const price = await serverActionFetch<TCoursePrice>(`/prices`, {
+        method: 'POST',
+        body: data,
+      });
 
-      revalidateTag('price');
+      updateTag('prices');
 
       return {
         error: false,
-        data: curses,
+        data: price,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -40,21 +40,25 @@ export const addNewPrice = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'CoursePricing' },
 );
 export const updatePrice = validatedActionWithUser(
   UpdatePriceSchema,
   async (data): Promise<ActionResult<TCoursePrice>> => {
     try {
-      const curses = await serverFetch<TCoursePrice>(`/prices/${data.id}`, {
-        method: 'PATCH',
-        body: data,
-      });
+      const curses = await serverActionFetch<TCoursePrice>(
+        `/prices/${data.id}`,
+        {
+          method: 'PATCH',
+          body: data,
+        },
+      );
 
-      revalidateTag('price');
+      updateTag('price');
 
       return {
         error: false,
@@ -71,39 +75,41 @@ export const updatePrice = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'update', subject: 'CoursePricing' },
 );
 
-export const deletePrice = async (
-  id: string
-): Promise<ActionResult<TCoursePrice>> => {
-  try {
-    const data = await serverFetch<TCoursePrice>(`/prices/${id}`, {
-      method: 'DELETE',
-    });
+export const deletePrice = actionWithUser(
+  async (id: string): Promise<ActionResult<TCoursePrice>> => {
+    try {
+      const data = await serverActionFetch<TCoursePrice>(`/prices/${id}`, {
+        method: 'DELETE',
+      });
 
-    revalidateTag('price');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('price');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'CoursePricing' },
+);

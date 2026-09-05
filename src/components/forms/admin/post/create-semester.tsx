@@ -12,8 +12,7 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/shared/submit-btn"
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { semesterSchema } from "@/lib/validation/semester"
 import { addNewSemester } from "@/actions/semester"
@@ -21,6 +20,9 @@ import Selector from "@/components/shared/selector"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import { Switch } from "@/components/ui/switch"
 import { useSheet } from "@/providers/sheet-provider"
+import { SubmitState } from "@/types/global"
+import ActionButton from "@/components/layouts/button/action-button"
+import { handleApiError } from "@/services/error-handler"
 
 const startYear = 2000;
 const currentYear = new Date().getFullYear();
@@ -34,8 +36,9 @@ for (let year = startYear; year <= currentYear; year++) {
       label: year.toString()    // label as the year (can be customized further)
    });
 }
-const CreateDisciplineForm = () => {
+const CreateSemesterForm = () => {
    const { close } = useSheet()
+   const [submitState, setSubmitState] = useState<SubmitState>('idle');
    const form = useForm<z.infer<typeof semesterSchema>>({
       resolver: zodResolver(semesterSchema),
       defaultValues: {
@@ -49,20 +52,30 @@ const CreateDisciplineForm = () => {
    })
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof semesterSchema>) {
-
+      setSubmitState('loading')
+      const formData: any = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append(key, value);
+      });
       startTransition(async () => {
          try {
-            const response = await addNewSemester(values);
+            const response = await addNewSemester(formData);
             if (response.error) {
+               setSubmitState('error')
                toast.error(response.message);
+               setTimeout(() => setSubmitState('idle'), 3000)
                return;
             }
+            setSubmitState('success')
+            setTimeout(() => setSubmitState('idle'), 3000)
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
             close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
-            console.error(error);
+            setSubmitState('error')
+            setTimeout(() => setSubmitState('idle'), 3000)
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
+            handleApiError(error);
          }
       });
 
@@ -178,12 +191,10 @@ const CreateDisciplineForm = () => {
                )}
             />
 
-            <SubmitBtn
-               label="Criar"
-               loading={isPending} />
+            <ActionButton submitState={submitState} isPending={isPending} />
          </form>
       </Form>
    )
 }
 
-export default CreateDisciplineForm;
+export default CreateSemesterForm;

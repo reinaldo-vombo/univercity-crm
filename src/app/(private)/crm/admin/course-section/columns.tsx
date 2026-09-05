@@ -6,7 +6,7 @@ import SheetModal from "@/components/shared/sheet-modal"
 import AlertModal from "@/components/shared/alert-modal"
 import { toast } from "sonner"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import { TOfferedCourse, TOfferedCourseSection } from "@/types/global"
+import { TOfferedCourse, TOfferedCourseSection, TPrice } from "@/types/global"
 import { createUniqueId, formatDate } from "@/lib/helper"
 import FormLoading from "@/components/skeleton/form"
 import dynamic from "next/dynamic"
@@ -17,10 +17,11 @@ const UpdateOfferedCourseSectionForm = dynamic(() => import("@/components/forms/
 
 type TProps = {
    offeredCourse: TOfferedCourse[];
+   prices: TPrice[]
 }
 
 
-export function OfferedCourseSectionColumns({ offeredCourse }: TProps): ColumnDef<TOfferedCourseSection>[] {
+export function OfferedCourseSectionColumns({ offeredCourse, prices }: TProps): ColumnDef<TOfferedCourseSection>[] {
 
    return [
       {
@@ -88,7 +89,7 @@ export function OfferedCourseSectionColumns({ offeredCourse }: TProps): ColumnDe
                   toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+                  toast.error(FLASH_MESSAGE.SERVER_ERROR);
                   console.error(err);
                }
             };
@@ -112,7 +113,7 @@ export function OfferedCourseSectionColumns({ offeredCourse }: TProps): ColumnDe
                      className="sm:max-w-2xl"
                      title="Atualizar desciplinas semestra"
                      description='Formulário de atualização da desciplinas semestral'>
-                     <UpdateOfferedCourseSectionForm offeredCourses={offeredCourse} defautValues={offeredCouse} />
+                     <UpdateOfferedCourseSectionForm offeredCourses={offeredCourse} defautValues={offeredCouse} prices={prices} />
                   </SheetModal>
                   <AlertModal
                      trigger={<Trash className="h-4 w-4 text-red-500 cursor-pointer" />}

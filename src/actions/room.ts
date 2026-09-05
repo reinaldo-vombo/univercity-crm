@@ -1,28 +1,31 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TRoom } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import {
   blukUpdateRoomShema,
   roomSchema,
   updateRoomSchema,
 } from '../lib/validation/building';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewRoom = validatedActionWithUser(
   roomSchema,
   async (data): Promise<ActionResult<TRoom>> => {
     try {
-      const room = await serverFetch<TRoom>('/room', {
+      const room = await serverActionFetch<TRoom>('/room', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('room');
+      updateTag('rooms');
 
       return {
         error: false,
@@ -41,22 +44,23 @@ export const addNewRoom = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'create', subject: 'Room' },
 );
 export const updateRoom = validatedActionWithUser(
   updateRoomSchema,
   async (data): Promise<ActionResult<TRoom>> => {
     const { id, ...body } = data;
     try {
-      const room = await serverFetch<TRoom>(`/room/${id}`, {
+      const room = await serverActionFetch<TRoom>(`/room/${id}`, {
         method: 'PATCH',
         body: body,
       });
 
-      revalidateTag('room');
+      updateTag('room');
 
       return {
         error: false,
@@ -75,21 +79,22 @@ export const updateRoom = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'update', subject: 'Room' },
 );
 export const updateManyRoom = validatedActionWithUser(
   blukUpdateRoomShema,
   async (data): Promise<ActionResult<TRoom>> => {
     try {
-      const room = await serverFetch<TRoom>(`/room/update`, {
+      const room = await serverActionFetch<TRoom>(`/room/update`, {
         method: 'PATCH',
         body: data,
       });
 
-      revalidateTag('room');
+      updateTag('room');
 
       return {
         error: false,
@@ -108,40 +113,45 @@ export const updateManyRoom = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'update', subject: 'Room' },
 );
-export const deleteRoom = async (id: number): Promise<ActionResult<TRoom>> => {
-  try {
-    const data = await serverFetch<TRoom>(`/room/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteRoom = actionWithUser(
+  async (id: string): Promise<ActionResult<TRoom>> => {
+    const parsedId = Number(id);
+    try {
+      const data = await serverActionFetch<TRoom>(`/room/${parsedId}`, {
+        method: 'DELETE',
+      });
 
-    revalidateTag('room');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+      updateTag('room');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
+      };
+    }
+  },
+  { action: 'delete', subject: 'Room' },
+);
 export const deleteManyRoom = async (
   ids: string[],
 ): Promise<ActionResult<TRoom>> => {
   try {
-    const data = await serverFetch<TRoom>(`/room/delete`, {
+    const data = await serverActionFetch<TRoom>(`/room/delete`, {
       method: 'DELETE',
       body: ids,
     });
 
-    revalidateTag('room');
+    updateTag('room');
     return {
       error: false,
       data,
@@ -150,7 +160,7 @@ export const deleteManyRoom = async (
     return {
       error: true,
       message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
     };
   }
 };

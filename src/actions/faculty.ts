@@ -1,37 +1,32 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TFaculty, TFacultyDisciplines } from '../types/global';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
-import { ActionResult } from '../types/api-error';
-import { ApiResponseError } from '@/services/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
   assignFacultyToSectionDisciplinesSchema,
   facultySchema,
   updateFacultySchema,
 } from '../lib/validation/faculty';
-import { saveFile } from '../lib/helper/uploade';
 
 export const addNewFaculty = validatedActionWithUser(
   facultySchema,
-  async (data): Promise<ActionResult<TFaculty>> => {
+  async (data, formData): Promise<ActionResult<TFaculty>> => {
     try {
-      let avatarUrl: any = data.profileImage;
-      if (data.profileImage instanceof File) {
-        avatarUrl = await saveFile(data.profileImage, 'facultys');
-      }
-      data = { ...data, profileImage: avatarUrl };
-      const facultys = await serverFetch<TFaculty>('/faculty', {
+      const facultys = await serverActionFetch<TFaculty>('/faculty', {
         method: 'POST',
-        body: data,
+        body: formData,
       });
 
-      revalidateTag('faculty');
+      updateTag('facultys');
 
       return {
         error: false,
@@ -50,22 +45,22 @@ export const addNewFaculty = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'create', subject: 'Faculty' },
 );
 export const updatedFaculty = validatedActionWithUserJson(
   updateFacultySchema,
-  async (data): Promise<ActionResult<TFaculty>> => {
+  async (data, formData): Promise<ActionResult<TFaculty>> => {
     try {
-      const { id, ...updateData } = data;
-      const faculty = await serverFetch<TFaculty>(`/faculty/${id}`, {
+      const faculty = await serverActionFetch<TFaculty>(`/faculty/${data.id}`, {
         method: 'PATCH',
-        body: updateData,
+        body: formData,
       });
 
-      revalidateTag('faculty');
+      updateTag('faculty');
 
       return {
         error: false,
@@ -84,10 +79,11 @@ export const updatedFaculty = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'update', subject: 'Faculty' },
 );
 
 export const assingFacultyToDiscipline = validatedActionWithUserJson(
@@ -96,7 +92,7 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
     try {
       const { offeredCourseSectionId, assignments } = data;
 
-      const discipline = await serverFetch<TFacultyDisciplines>(
+      const discipline = await serverActionFetch<TFacultyDisciplines>(
         `/faculty/assign-faculty-to-section/${offeredCourseSectionId}`,
         {
           method: 'POST',
@@ -104,7 +100,7 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
         },
       );
 
-      // revalidateTag('discipline');
+      // updateTag('discipline');
 
       return {
         error: false,
@@ -123,39 +119,41 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
   },
+  { action: 'create', subject: 'Faculty' },
 );
 
-export const deleteFaculty = async (
-  id: string,
-): Promise<ActionResult<TFaculty>> => {
-  try {
-    const data = await serverFetch<TFaculty>(`/faculty/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteFaculty = actionWithUser(
+  async (id: string): Promise<ActionResult<TFaculty>> => {
+    try {
+      const data = await serverActionFetch<TFaculty>(`/faculty/${id}`, {
+        method: 'DELETE',
+      });
 
-    revalidateTag('faculty');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('faculty');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'Faculty' },
+);

@@ -1,14 +1,15 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import {
   assignRemoveCoursesZodSchema,
   courseSchema,
@@ -18,14 +19,14 @@ import { TCourse } from '../types/global';
 
 export const addNewCourse = validatedActionWithUserJson(
   courseSchema,
-  async (data, _, user): Promise<ActionResult<TCourse>> => {
+  async (data): Promise<ActionResult<TCourse>> => {
     try {
-      const curses = await serverFetch<TCourse>(`/course?name=${user.name}`, {
+      const curses = await serverActionFetch<TCourse>(`/course`, {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('curse');
+      updateTag('curses');
 
       return {
         error: false,
@@ -44,25 +45,26 @@ export const addNewCourse = validatedActionWithUserJson(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'AcademicCourse' },
 );
 export const updateCourse = validatedActionWithUser(
   updateCourseSchema,
   async (data, _, user): Promise<ActionResult<TCourse>> => {
     const { id, ...updateData } = data;
     try {
-      const curses = await serverFetch<TCourse>(
+      const curses = await serverActionFetch<TCourse>(
         `/course/${id}?name=${user.name}`,
         {
           method: 'PATCH',
           body: updateData,
-        }
+        },
       );
 
-      revalidateTag('curse');
+      updateTag('curses');
 
       return {
         error: false,
@@ -79,10 +81,11 @@ export const updateCourse = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'update', subject: 'AcademicCourse' },
 );
 export const assignFaculties = validatedActionWithUser(
   assignRemoveCoursesZodSchema,
@@ -90,15 +93,15 @@ export const assignFaculties = validatedActionWithUser(
     const { courseId } = data;
 
     try {
-      const curses = await serverFetch<TCourse>(
+      const curses = await serverActionFetch<TCourse>(
         `/course/assign-faculties/${courseId}`,
         {
           method: 'POST',
           body: { faculties: data.facultys },
-        }
+        },
       );
 
-      revalidateTag('curse');
+      updateTag('curse-assign');
 
       return {
         error: false,
@@ -115,10 +118,11 @@ export const assignFaculties = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'AcademicCourse' },
 );
 export const removeAssigndFaculties = validatedActionWithUser(
   assignRemoveCoursesZodSchema,
@@ -126,15 +130,15 @@ export const removeAssigndFaculties = validatedActionWithUser(
     const { courseId } = data;
 
     try {
-      const curses = await serverFetch<TCourse>(
+      const curses = await serverActionFetch<TCourse>(
         `/course/remove-faculties/${courseId}`,
         {
           method: 'DELETE',
           body: { faculties: data.facultys },
-        }
+        },
       );
 
-      revalidateTag('curse');
+      updateTag('curse-assign');
 
       return {
         error: false,
@@ -151,39 +155,41 @@ export const removeAssigndFaculties = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'delete', subject: 'AcademicCourse' },
 );
 
-export const deleteCourse = async (
-  id: string
-): Promise<ActionResult<TCourse>> => {
-  try {
-    const data = await serverFetch<TCourse>(`/course/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteCourse = actionWithUser(
+  async (id: string): Promise<ActionResult<TCourse>> => {
+    try {
+      const data = await serverActionFetch<TCourse>(`/course/${id}`, {
+        method: 'DELETE',
+      });
 
-    revalidateTag('curse');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('curses');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'AcademicCourse' },
+);

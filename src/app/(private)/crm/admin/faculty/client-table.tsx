@@ -1,9 +1,8 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TCourse, TDepartemant, TFaculty } from "@/types/global";
 import { FacultyColumns } from "./columns";
-import ExportFacultysListFilterForm from "@/lib/helper/export/faculty-export";
 import { createUniqueId } from "@/lib/helper";
 import FormLoading from "@/components/skeleton/form"
 import dynamic from "next/dynamic"
@@ -36,7 +35,6 @@ export function FalcultyTable({ falcultys, departements, courses }: Props) {
       columns={columns}
       sheetId={uid}
       className="sm:max-w-lg"
-      fileExport={<ExportFacultysListFilterForm />}
       fileHerderes={herader}
       modalTitle="Cadastrar professor"
       fileName="professores"

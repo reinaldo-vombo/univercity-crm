@@ -1,18 +1,16 @@
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from 'next-auth';
-import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { logUserActivitys } from '@/actions/activitiys';
+import { decodeJwt } from 'jose';
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
     maxAge: 7 * 24 * 60 * 60,
   },
-  jwt: {
-    maxAge: 7 * 24 * 60 * 60, // ✅ Add this to match token expiry
-  },
   secret: process.env.NEXTAUTH_SECRET,
+
   providers: [
     CredentialsProvider({
       name: 'Sign in',
@@ -21,27 +19,22 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials || !credentials.email || !credentials.password) {
-          return null;
-        }
-
-        const baseUrl = process.env.API_BASE_URL;
-        const body = {
-          email: credentials.email,
-          password: credentials.password,
-        };
+        if (!credentials?.email || !credentials?.password) return null;
 
         try {
-          const res = await fetch(`${baseUrl}/auth/login`, {
+          const res = await fetch(`${process.env.API_BASE_URL}/auth/login`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
           });
 
+          const json = await res.json();
+
+          // ✅ Passar mensagem de erro do backend para o utilizador
           if (!res.ok) {
-            // Parse error response if available
             let errorResponse = null;
             try {
               errorResponse = await res.json();
@@ -54,57 +47,44 @@ export const authOptions: NextAuthOptions = {
               errorResponse,
             });
             return null;
+            // throw new Error(json?.message ?? 'Credenciais inválidas');
           }
 
-          const json = await res.json();
           const data = json?.data;
-
           if (!data?.user || !data?.accessToken) {
-            console.error('❌ Missing user or accessToken in response', data);
-            return null;
+            throw new Error('Resposta inválida do servidor');
           }
 
           return {
             ...data.user,
             accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
           };
-        } catch (err) {
-          console.error(`❌ ${FLASH_MESSAGE.SERVER_ERROR_500}`, err);
-          return null;
+        } catch (err: any) {
+          throw new Error(err.message ?? 'Erro ao autenticar');
         }
       },
     }),
   ],
+
   callbacks: {
     async signIn({ user }) {
       try {
         if (user?.id) {
-          // 👇 pass req.headers into your logging function
-          await logUserActivitys(user.id);
+          await logUserActivitys(user.id, user.refreshToken);
         }
       } catch (err) {
         console.error('❌ Failed to register user activity log:', err);
-        // Don’t block login if logging fails
       }
       return true;
     },
     async jwt({ token, user, trigger, session }: any) {
-      if (token.expiresAt && token.expiresAt < Math.floor(Date.now() / 1000)) {
-        return {};
-      }
-      // if (token.id) {
-      //   const dbUser = await getSigleUser(token.id);
-
-      //   if (!dbUser) {
-      //     return {};
-      //   }
-      // }
       if (trigger === 'update' && session?.user) {
         return {
           ...token,
-          name: session.user.name || token.name,
-          email: session.user.email || token.email,
-          avatar: session.user.avatar || token.avatar,
+          name: session.user.name ?? token.name,
+          email: session.user.email ?? token.email,
+          avatar: session.user.avatar ?? token.avatar,
         };
       }
 
@@ -114,45 +94,92 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           role: user.role,
           name: user.name,
+          roleId: user.roleId,
           email: user.email,
           avatar: user.avatar,
           contact: user.contact,
           accessToken: user.accessToken,
-          expiresAt: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60,
+          permissions: user.permissions ?? [],
+          refreshToken: user.refreshToken, //
+          // Expirar 1 minuto antes para renovar a tempo
+          // accessTokenExpiry: (decoded.exp ?? 0) * 1000,
+          accessTokenExpiry: (decodeJwt(user.accessToken).exp ?? 0) * 1000,
+          error: undefined,
         };
       }
 
-      return token;
-    },
-    session: ({ session, token }) => {
-      if (!token.id) {
-        return {
-          ...session,
-          user: undefined,
-        };
+      if (Date.now() < token.accessTokenExpiry) {
+        return token;
       }
+
+      try {
+        const res = await fetch(`${process.env.API_BASE_URL}/auth/refresh`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify({ refreshToken: token.refreshToken }),
+        });
+
+        const data = await res.json();
+        // console.log('[JWT] Refresh response:', {
+        //   ok: res.ok,
+        //   hasNewAccess: !!data?.data?.accessToken,
+        //   hasNewRefresh: !!data?.data?.refreshToken,
+
+        //   oldRefresh: token.refreshToken?.substring(0, 20) + '...',
+        //   newRefresh: data?.data?.refreshToken?.substring(0, 20) + '...',
+        // });
+        // console.log('rotation', data);
+
+        if (!res.ok) throw new Error('Refresh falhou');
+
+        return {
+          ...token,
+          accessToken: data.data.accessToken,
+          refreshToken: data.data.refreshToken,
+          accessTokenExpiry: (decodeJwt(data.data.accessToken).exp ?? 0) * 1000,
+          error: undefined,
+        };
+      } catch {
+        return { ...token, error: 'RefreshTokenError' };
+      }
+    },
+
+    session({ session, token }: any) {
+      // ✅ Sessão inválida se não tem id ou tem erro de refresh
+      if (!token.id) {
+        return { ...session, user: undefined };
+      }
+
       return {
         ...session,
         user: {
-          ...session.user,
           id: token.id,
           role: token.role,
           name: token.name,
+          roleId: token.roleId,
           email: token.email,
           avatar: token.avatar,
           contact: token.contact,
+          permissions: token.permissions ?? [],
           accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
         },
-        expiresAt: token.expiresAt,
+        error: token.error, // ✅ expor erro para o cliente
       };
     },
+
     async redirect({ url, baseUrl }: any) {
       return url.startsWith(baseUrl) ? url : baseUrl;
     },
   },
+
   pages: {
-    signIn: '/auth',
+    signIn: '/auth/login',
     signOut: '/',
+    error: '/auth/login', // ✅ redireciona erros para a página de login
   },
 };
 

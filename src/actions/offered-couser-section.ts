@@ -1,30 +1,33 @@
 'use server';
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUser } from '@/lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '@/lib/helper/action-helper';
 import {
   createOfferedCourseSectionZodSchema,
   updateOfferedCourseSectionZodSchema,
 } from '@/lib/validation/offered-course';
-import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
-import { ActionResult } from '@/types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { serverActionFetch } from '@/services/server-fetch';
+import { ActionResult } from '@/lib/errors/api-error.type';
 import { TOfferedCourseSection } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export const addNewOfferedCourseSection = validatedActionWithUser(
   createOfferedCourseSectionZodSchema,
   async (data): Promise<ActionResult<TOfferedCourseSection>> => {
     try {
-      const course = await serverFetch<TOfferedCourseSection>(
+      const course = await serverActionFetch<TOfferedCourseSection>(
         '/offered-course-section',
         {
           method: 'POST',
           body: data,
-        }
+        },
       );
 
-      revalidateTag('offered-course-section');
+      updateTag('offered-course-section');
 
       return {
         error: false,
@@ -43,25 +46,30 @@ export const addNewOfferedCourseSection = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'OfferedCourseSection' },
 );
 export const updateOfferedCourseSection = validatedActionWithUser(
   updateOfferedCourseSectionZodSchema,
   async (data): Promise<ActionResult<TOfferedCourseSection>> => {
     const { id, ...rest } = data;
+    const body = {
+      ...rest,
+      classSchedules: [],
+    };
     try {
-      const course = await serverFetch<TOfferedCourseSection>(
+      const course = await serverActionFetch<TOfferedCourseSection>(
         `/offered-course-section/${id}`,
         {
           method: 'PATCH',
-          body: rest,
-        }
+          body,
+        },
       );
 
-      revalidateTag('offered-course-section');
+      updateTag('offered-course-section');
 
       return {
         error: false,
@@ -80,41 +88,44 @@ export const updateOfferedCourseSection = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'update', subject: 'OfferedCourseSection' },
 );
-export const DeleteOfferedCourseSection = async (
-  id: string
-): Promise<ActionResult<TOfferedCourseSection>> => {
-  try {
-    const data = await serverFetch<TOfferedCourseSection>(
-      `/offered-course-section/${id}`,
-      {
-        method: 'DELETE',
-      }
-    );
 
-    revalidateTag('offered-course-section');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+export const DeleteOfferedCourseSection = actionWithUser(
+  async (id: string): Promise<ActionResult<TOfferedCourseSection>> => {
+    try {
+      const data = await serverActionFetch<TOfferedCourseSection>(
+        `/offered-course-section/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
+
+      updateTag('offered-course-section');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'OfferedCourseSection' },
+);

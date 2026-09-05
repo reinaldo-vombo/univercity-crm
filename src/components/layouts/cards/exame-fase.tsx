@@ -25,8 +25,9 @@ const faseStatus = (faseDate: Date) => {
 }
 const ExameFaseCard = ({ fases, building }: TProps) => {
    const handleDelete = async (id: number) => {
+      const st = String(id)
       try {
-         const res = await deleteAdmitionExameFase(id);
+         const res = await deleteAdmitionExameFase(st);
          if (res.error) {
             toast.error(res.message);
             return;
@@ -34,7 +35,7 @@ const ExameFaseCard = ({ fases, building }: TProps) => {
          toast.success(FLASH_MESSAGE.DELETED);
          // Optionally refresh UI or mutate local state
       } catch (err) {
-         toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+         toast.error(FLASH_MESSAGE.SERVER_ERROR);
          console.error(err);
       }
    };

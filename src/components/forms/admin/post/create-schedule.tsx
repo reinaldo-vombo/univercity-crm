@@ -1,4 +1,4 @@
-import * as z from "zod"
+import z from "zod"
 import { toast } from "sonner"
 import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -88,7 +88,7 @@ const CreateSheduleForm = ({ offereSections, semesterRegistration, rooms, discip
             form.reset();
             close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(error);
          }
       });

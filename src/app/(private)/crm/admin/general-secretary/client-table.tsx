@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { RequestsColumns } from "./columns";
 import { TRequest } from "@/types/global";
 

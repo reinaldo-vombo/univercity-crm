@@ -43,3 +43,44 @@ export type TTransferGradePolicy =
   | 'LOSE_ALL'
   | 'KEEP_EQUIVALENTS'
   | 'ADMIN_DECIDES';
+export type TRoles =
+  | 'super_admin'
+  | 'admin'
+  | 'student'
+  | 'editor'
+  | 'manager'
+  | 'faculty'
+  | 'accountant'
+  | 'department_head'
+  | 'staff';
+export type TAction =
+  | 'CREATE'
+  | 'UPDATE'
+  | 'DELETE'
+  | 'PROMOTE'
+  | 'LOGIN'
+  | 'LOGOUT'
+  | 'APPROVE'
+  | 'REJECT';
+export type TServicePeriodType = 'RESIT' | ' SPECIAL_EXAM' | 'ADMISSION_EXAM';
+export type TNotificationType =
+  | 'ACADEMIC'
+  | 'PAYMENT'
+  | 'TRANSFER'
+  | 'DOCUMENT'
+  | 'SEMESTER'
+  | 'CONTENT'
+  | 'LOG_IN'
+  | 'SYSTEM';
+export type TMessageDirection = 'OUTBOUND' | 'INBOUND';
+export type TMessageChannel = 'WHATSAPP' | 'SMS' | 'EMAIL';
+export type TRecipientType = 'STUDENT' | 'FACULTY' | 'CANDIDATE';
+export type TMessageStatus =
+  | 'PENDING'
+  | 'SENT'
+  | 'DELIVERED'
+  | 'READ'
+  | 'FAILED';
+export type ExamType = 'FREQUENCI' | 'RETAKE' | 'SPECIAL';
+export type ExamContext = 'COURSE' | 'DISCIPLINE';
+export type TQuestionType = 'BOOLEAN' | 'WRITTEN';

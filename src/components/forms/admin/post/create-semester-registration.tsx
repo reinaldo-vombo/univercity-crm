@@ -36,10 +36,13 @@ const CreateSemesterRegistrationForm = ({ semesters }: TProps) => {
    })
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof semesterRegisterSchema>) {
-
+      const formData: any = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append(key, value);
+      });
       startTransition(async () => {
          try {
-            const response = await addNewSemesterRegistartion(values);
+            const response = await addNewSemesterRegistartion(formData);
             if (response.error) {
                toast.error(response.message);
                return;
@@ -48,7 +51,7 @@ const CreateSemesterRegistrationForm = ({ semesters }: TProps) => {
             form.reset();
             close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(error);
          }
       });
@@ -61,7 +64,7 @@ const CreateSemesterRegistrationForm = ({ semesters }: TProps) => {
    }));
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-10">
+         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
             <FormField
                control={form.control}
                name="academicSemesterId"

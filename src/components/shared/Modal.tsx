@@ -12,27 +12,38 @@ import { Separator } from "../ui/separator"
 type TProps = {
    children: React.ReactNode
    trigger: React.ReactNode
-   description: string
+   description?: string
    title: string
+   size?: "sm" | "md" | "lg" | "xlg"
 }
-const Modal = ({ children, trigger, description, title }: TProps) => {
+const Modal = ({ children, trigger, description, title, size = "md" }: TProps) => {
    return (
       <Dialog>
-         <DialogTrigger>{trigger}</DialogTrigger>
-         <DialogContent>
-            <DialogHeader>
-               <DialogTitle className="flex gap-2 items-center cursor-pointer">
-                  <div className="w-fit rounded-lg p-1">
-                     <Image src='/logo.svg' className="dark:invert" width={60} height={60} alt="logo" />
+         <DialogTrigger className="cursor-pointer" aria-label="Abrir modal">
+            {trigger}
+         </DialogTrigger>
+         <DialogContent size={size} className="gap-0 p-0 overflow-hidden">
+            <DialogHeader className="p-6 pb-4">
+               <DialogTitle className="flex items-center gap-3 text-base">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted shrink-0">
+                     <Image
+                        src="/SIGU.png"
+                        className="dark:invert"
+                        width={24}
+                        height={24}
+                        alt="logo"
+                     />
                   </div>
-                  {title}
+                  <span className="truncate">{title}</span>
                </DialogTitle>
-               <Separator className="my-2" />
-               <DialogDescription className="sr-only">
-                  {description}
-               </DialogDescription>
-               {children}
+               {description && (
+                  <DialogDescription>{description}</DialogDescription>
+               )}
             </DialogHeader>
+
+            <Separator />
+
+            <div className="p-6 pt-4">{children}</div>
          </DialogContent>
       </Dialog>
    )

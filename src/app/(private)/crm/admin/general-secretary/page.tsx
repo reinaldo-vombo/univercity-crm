@@ -2,8 +2,10 @@ import GeneralSecretaryWrapper from '@/components/admin/wrapper/general-secretar
 import Breadcrumb from '@/components/shared/breadcrumb'
 import DataTabelCards from '@/components/skeleton/data-tabel-cards'
 import { ROUTES } from '@/constants/routes'
+import { ArrowRight } from 'lucide-react'
 import { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Suspense } from 'react'
 
 
@@ -41,6 +43,9 @@ export default function GeneralSecretary() {
                e ferramentas disponíveis para facilitar a análise e o processamento de
                cada solicitação.
             </p>
+            <div className="flex items-center mt-5">
+               <Link href='/crm/admin/general-secretary/services' className='flex'>Serviços Academicos <ArrowRight /></Link>
+            </div>
          </div>
 
          <Suspense fallback={<DataTabelCards />}>

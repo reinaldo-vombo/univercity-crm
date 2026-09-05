@@ -1,6 +1,6 @@
 "use client"
 
-import * as z from "zod"
+import z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,17 +18,21 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { adminSchema } from "@/lib/validation/admin"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
-import SubmitBtn from "@/components/shared/submit-btn"
-import { Dispatch, SetStateAction, useState } from "react"
+// import SubmitBtn from "@/components/shared/submit-btn"
+import { Dispatch, SetStateAction, useState, useTransition } from "react"
 import { ROUTES } from "@/constants/routes"
 import { Eye, EyeClosed } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import ActionButton from "@/components/layouts/button/action-button"
+import { SubmitState } from "@/types/global"
 
 type TProps = {
    onChange: Dispatch<SetStateAction<boolean>>
 }
 
 export default function AdminLogin({ onChange }: TProps) {
+   const [isPending, startTransition] = useTransition();
+   const [submitState, setSubmitState] = useState<SubmitState>('idle');
    const router = useRouter();
    const [showPassword, setShowPassWord] = useState('password')
    const form = useForm<z.infer<typeof adminSchema>>({
@@ -39,33 +43,76 @@ export default function AdminLogin({ onChange }: TProps) {
       }
    })
    async function onSubmit(values: z.infer<typeof adminSchema>) {
+      setSubmitState('loading')
       const { email, password } = values;
-      try {
-         const res = await signIn("credentials", {
-            redirect: false,
-            email,
-            password,
-         });
+      startTransition(async () => {
+         try {
+            const res = await signIn("credentials", {
+               redirect: false,
+               email,
+               password,
+            });
 
-         if (res?.error) {
-            if (res?.error === 'CredentialsSignin') {
-               toast.warning(FLASH_MESSAGE.WRONGE_CREDENTIALS)
+            if (!res) {
+               setSubmitState('error')
+               toast.error("Não foi possível conectar ao servidor.");
+               setTimeout(() => setSubmitState('idle'), 3000)
+               return;
             }
-         } else if (res?.ok) {
-            toast.success(`${FLASH_MESSAGE.WELLCOME}`);
-            router.push(`${ROUTES.DASHBOARD}/admin`);  // Redirect on successful login
-         } else {
-            toast.error(`${FLASH_MESSAGE.UNESPECTED_ERROR}`);
+
+            if (res.error) {
+               switch (res.error) {
+                  case "CredentialsSignin":
+                     setSubmitState('error')
+                     toast.warning(FLASH_MESSAGE.INVALID_CREDENTIALS);
+                     setTimeout(() => setSubmitState('idle'), 3000)
+                     break;
+
+                  case "NetworkError":
+                  case "fetch failed":
+                  case "Failed to fetch":
+                     setSubmitState('error')
+                     toast.error("Servidor indisponível. Tente novamente mais tarde.");
+                     setTimeout(() => setSubmitState('idle'), 3000)
+                     break;
+
+                  default:
+                     toast.error(FLASH_MESSAGE.INTERNAL_ERROR);
+               }
+
+               return;
+            }
+
+            if (res.ok) {
+               setSubmitState('success')
+               toast.success(FLASH_MESSAGE.SUCCESS);
+               setTimeout(() => router.push(`${ROUTES.DASHBOARD}/admin`), 2000)
+
+            }
+
+         } catch (error: any) {
+            console.error("Login error:", error);
+            setSubmitState('error')
+            setTimeout(() => setSubmitState('idle'), 3000)
+            if (
+               error?.message?.includes("fetch") ||
+               error?.message?.includes("ECONNREFUSED") ||
+               error?.message?.includes("network")
+            ) {
+               toast.error("Não foi possível conectar ao servidor.");
+            } else {
+               setSubmitState('error')
+               toast.error(FLASH_MESSAGE.SERVER_ERROR);
+               setTimeout(() => setSubmitState('idle'), 3000)
+            }
          }
-      } catch (error) {
-         console.error("Form submission error", error);
-         toast.error("Failed to submit the form. Please try again.");
-      }
+
+      })
    }
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full py-10">
             <FormField
                control={form.control}
                name="email"
@@ -105,12 +152,13 @@ export default function AdminLogin({ onChange }: TProps) {
                   </FormItem>
                )}
             />
-            <SubmitBtn label="Entrar" loading={form.formState.isSubmitting} />
+            <ActionButton submitState={submitState} isPending={isPending} />
+            {/* <SubmitBtn label="Entrar" loading={form.formState.isSubmitting} /> */}
             <Button
                variant={'ghost'}
                className="cursor-pointer text-center underline"
                type="button"
-               aria-label="forgo password"
+               aria-label="Botão de esqueceu a palavra-passe"
                onClick={() => onChange(false)}>Esqueceu a palavra-passe?</Button>
          </form>
       </Form>

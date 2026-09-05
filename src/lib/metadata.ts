@@ -15,10 +15,10 @@ const baseUrl = NEXT_PUBLIC_BASE_URL
 
 export const commonMetadata: Metadata = {
   title: {
-    default: NEXT_APP_SITE_NAME || 'Enrollix',
-    template: `%s | ${NEXT_APP_SITE_NAME || 'Enrollix'}`,
+    default: 'SIGU',
+    template: '%s | SIGU',
   },
-  icons: [{ rel: 'icon', url: CONTENT.metadata.favicon }],
+  // icons: [{ rel: 'icon', url: CONTENT.metadata.favicon }],
   description: CONTENT.metadata.description,
   keywords: CONTENT.metadata.keyWords,
   referrer: 'origin-when-cross-origin',

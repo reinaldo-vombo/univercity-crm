@@ -1,18 +1,20 @@
 import { TCourse } from '@/types/global';
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
-import { REVALIDATION } from '@/constants/relalidation';
+import { cacheLife, cacheTag } from 'next/cache';
+import { getUserToken } from '@/lib/helper/auth/user';
 
 export const getAllCurses = async (): Promise<TCourse[]> => {
   try {
-    const curses = await serverFetch<TCourse[]>('/course', {
-      next: {
-        tags: ['curse'],
-        revalidate:
-          process.env.NODE_ENV === 'production' ? REVALIDATION.FIVE_MINUTES : 0,
-      }, // 🚀 tags for smart revalidation
-    });
-    return curses;
+    const token = await getUserToken();
+    const getCourses = async () => {
+      'use cache';
+      cacheTag('curses');
+      cacheLife('hours');
+      return serverFetch<TCourse[]>('/course', {}, token);
+    };
+
+    return getCourses();
   } catch (error) {
     handleApiError(error);
   }

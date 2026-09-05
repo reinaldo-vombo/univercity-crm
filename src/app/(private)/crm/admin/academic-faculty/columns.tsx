@@ -15,15 +15,6 @@ import dynamic from "next/dynamic"
 const UpadateAcademicFaculty = dynamic(() => import("@/components/forms/admin/update/update-academic-faculty"),
    { ssr: false, loading: () => <FormLoading /> })
 
-export type AcademicFaculty = {
-   id: string;
-   title: string;
-   createdAt: string;
-   departments: string;
-   facultys: string;
-   students: number;
-}
-
 export function AcademicFacultyColumns(prices: TPrice[]): ColumnDef<TAcademicFaculty>[] {
    return [
       {
@@ -52,7 +43,7 @@ export function AcademicFacultyColumns(prices: TPrice[]): ColumnDef<TAcademicFac
                   toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (error) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+                  toast.error(FLASH_MESSAGE.SERVER_ERROR);
                   handleApiError(error);
                }
             };

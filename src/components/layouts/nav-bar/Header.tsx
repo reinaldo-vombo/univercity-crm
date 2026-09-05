@@ -1,32 +1,22 @@
-
-import { BellIcon, Search } from "lucide-react"
+import { Suspense } from "react"
 import { Input } from "../../ui/input"
-import ThemeToggle from "./toggle-theme"
-import { DropdownMenu } from "../../shared/dropdwon"
-import Avatar from "../../shared/avatar"
-import UserSetting from "./user-setting"
-import { serverUser } from "@/lib/helper/auth/user"
 import { ThemePopOver } from "./theme-popover"
-import { getUserNotifications } from "@/services/data/history-logs"
-import NotificationTab from "@/components/container/notification-tab"
-import Popover from "@/components/shared/popover"
+import { Search } from "lucide-react"
+import ThemeToggle from "./toggle-theme"
 import LanguageSwitcher from "../LanguageSwitcher"
-//cmeyvtiab0000ukys0s3kak3u
-// type TSeachParams = {
-//    searchParams: Promise<{
-//       [key: string]: string | string[] | undefined
-//    }>
-// }
-const Header = async () => {
-   const user = await serverUser();
-   const notifications = await getUserNotifications(user?.id || '')
-   const unreadMessageCount = notifications.filter((notification) => !notification.read).length
+import AvatarSkeleton from "@/components/skeleton/avatar"
+import NotificationSkeleton from "@/components/skeleton/notification"
+import UserDropdownMenu from "./user-toolkit/user-menu"
+import PopoverNotifications from "../notification/notification-tab"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
+const Header = () => {
    return (
-      <header className="sticky top-0 flex w-full bg-card">
-         <nav className="flex grow flex-col items-center justify-between lg:flex-row lg:px-6">
+      <header className="sticky w-full top-0 z-50 bg-card px-4 before:absolute before:inset-0 before:rounded-t-xl before:mask-[linear-gradient(var(--card),var(--card)_18%,transparent_100%)] before:backdrop-blur-md sm:px-6">
+         <nav className="bg-card relative z-51  mt-3 flex w-full items-center justify-between rounded-xl border px-6 py-2 mx-auto max-w-(--breakpoint-2xl)">
             <div className="flex w-full items-center justify-between gap-2 border-b border-gray-200 px-3 py-3 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
-               <div className="hidden lg:block">
+               <div className="flex items-center">
+                  <SidebarTrigger className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11 " />
                   <div className="relative">
                      <span className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400 dark:text-gray-600">
                         <Search />
@@ -34,44 +24,22 @@ const Header = async () => {
                      <Input
                         type="text"
                         placeholder="Search"
-                        className="dark:bg-dark-900 h-11 w-full rounded-lg border border-border bg-transparent py-2.5 pl-12 pr-14 text-sm text-primary shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
+                        className="h-11 w-full rounded-lg border border-border bg-transparent py-2.5 pl-12 pr-14 text-sm text-primary shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
                      />
                   </div>
                </div>
             </div>
             <div className="w-full items-center justify-between gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none hidden">
-               <div className="flex items-center gap-2 2xsm:gap-3">
+               <div className="flex items-center gap-4 sm:gap-3">
                   <LanguageSwitcher />
                   <ThemePopOver />
                   <ThemeToggle />
-                  <div className="relative">
-                     <Popover
-                        className="w-[37rem]"
-                        trigger={
-                           <div>
-                              <BellIcon />
-                              {unreadMessageCount > 0 && (<span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' />)}
-
-                              <span className='sr-only'>Notifications</span>
-                           </div>}>
-                        <NotificationTab data={notifications} userId={user?.id} />
-                     </Popover>
-
-                  </div>
-                  <DropdownMenu
-                     className="border-none shadow-none"
-                     showLogOut={true}
-                     lable={user?.name || 'John Doe'}
-                     trigger={
-                        <div className="flex items-center gap-2">
-                           {/* <span className='absolute -top-0.5 -right-0.5 size-2 animate-bounce rounded-full bg-sky-600 dark:bg-sky-400' /> */}
-                           <Avatar name={user?.name || 'John Doe'} photo={user?.avatar || "https://github.com/shadcn.png"} />
-                           <span>{user?.name}</span>
-                        </div>
-                     }
-                  >
-                     <UserSetting />
-                  </DropdownMenu>
+                  <Suspense fallback={<NotificationSkeleton />}>
+                     <PopoverNotifications />
+                  </Suspense>
+                  <Suspense fallback={<AvatarSkeleton />}>
+                     <UserDropdownMenu />
+                  </Suspense>
                </div>
             </div>
          </nav>

@@ -1,5 +1,5 @@
 import { months } from '@/constants/schedule';
-import * as z from 'zod';
+import z from 'zod';
 
 export const semesterSchema = z.object({
   title: z.enum(['1º Semestre', '2º Semestre'], {
@@ -8,7 +8,7 @@ export const semesterSchema = z.object({
   year: z.string({
     message: 'Ano corrente é obrigatorio',
   }),
-  isCurrent: z.boolean(),
+  isCurrent: z.coerce.boolean(),
   code: z.enum(['01', '02', '03']),
   startMonth: z.enum(months, {
     message: 'Mês inicial é obrigatorio',
@@ -19,7 +19,7 @@ export const semesterSchema = z.object({
 });
 export const updateSemesterSchema = z.object({
   id: z.string(),
-  title: z.enum(['1 semestre', '2 semestre'], {
+  title: z.enum(['1º Semestre', '2º Semestre'], {
     message: 'Temorada é obrigatorio',
   }),
   year: z.string({

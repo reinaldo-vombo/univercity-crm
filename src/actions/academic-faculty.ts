@@ -1,27 +1,32 @@
 'use server';
-
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { serverActionFetch } from '@/services/server-fetch';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { TAcademicFaculty } from '../types/global';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import {
   academicFacultyacultySchema,
   updateAcademicFacultyacultySchema,
 } from '../lib/validation/academicFaculty';
+import { updateTag } from 'next/cache';
 
 export const addNewAcademicFaculty = validatedActionWithUser(
   academicFacultyacultySchema,
   async (data): Promise<ActionResult<TAcademicFaculty>> => {
     try {
-      const curses = await serverFetch<TAcademicFaculty>('/academic-faculty', {
-        method: 'POST',
-        body: data,
-      });
+      const curses = await serverActionFetch<TAcademicFaculty>(
+        '/academic-faculty',
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
 
-      revalidateTag('faculty');
+      updateTag('faculty');
 
       return {
         error: false,
@@ -36,21 +41,23 @@ export const addNewAcademicFaculty = validatedActionWithUser(
         message,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'AcademicFaculty' },
 );
+
 export const updateAcademicFaculty = validatedActionWithUser(
   updateAcademicFacultyacultySchema,
   async (data): Promise<ActionResult<TAcademicFaculty>> => {
     try {
-      const curses = await serverFetch<TAcademicFaculty>(
+      const curses = await serverActionFetch<TAcademicFaculty>(
         `/academic-faculty/${data.id}`,
         {
           method: 'PATCH',
           body: data,
-        }
+        },
       );
 
-      revalidateTag('faculty');
+      updateTag('faculty');
 
       return {
         error: false,
@@ -65,39 +72,41 @@ export const updateAcademicFaculty = validatedActionWithUser(
         message,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'AcademicFaculty' },
 );
 
-export const deleteFaculty = async (
-  id: string
-): Promise<ActionResult<TAcademicFaculty>> => {
-  try {
-    const data = await serverFetch<TAcademicFaculty>(
-      `/academic-faculty/${id}`,
-      {
-        method: 'DELETE',
-      }
-    );
+export const deleteFaculty = actionWithUser(
+  async (id: string): Promise<ActionResult<TAcademicFaculty>> => {
+    try {
+      const data = await serverActionFetch<TAcademicFaculty>(
+        `/academic-faculty/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    revalidateTag('faculty');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('faculty');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'AcademicFaculty' },
+);

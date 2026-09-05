@@ -60,7 +60,7 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
       },
       {
          accessorKey: "startMonth",
-         header: "Mês inicial",
+         header: "Incío",
          cell: ({ row }) => {
             const startMonth = row.original.startMonth;
             return (
@@ -73,7 +73,7 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
       },
       {
          accessorKey: "endMonth",
-         header: "Mês final",
+         header: "Encerramento",
          cell: ({ row }) => {
             const endMonth = row.original.endMonth;
             return (
@@ -119,7 +119,7 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
                   toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+                  toast.error(FLASH_MESSAGE.SERVER_ERROR);
                   console.error(err);
                }
             };

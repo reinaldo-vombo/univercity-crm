@@ -56,15 +56,16 @@ export function RoomColumns(buldings: TBuilding[]): ColumnDef<TRoom>[] {
             const room = row.original
 
             const handleDelete = async (id: number) => {
+               const st = String(id)
                try {
-                  const res = await deleteRoom(id);
+                  const res = await deleteRoom(st);
                   if (res.error) {
                      toast.warning(res.message)
                   }
                   toast.success(FLASH_MESSAGE.DELETED);
                   // Optionally refresh UI or mutate local state
                } catch (err) {
-                  toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+                  toast.error(FLASH_MESSAGE.SERVER_ERROR);
                   console.error(err);
                }
             };

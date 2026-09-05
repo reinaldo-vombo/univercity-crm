@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { TClassShedule, TDiscipline, TOfferedCourseSection, TRoom, TSemesterRegistration } from "@/types/global";
 import { OfferedCourseSectionColumns } from "./columns";
 import { createUniqueId } from "@/lib/helper";
@@ -17,14 +17,6 @@ interface Props {
    rooms: TRoom[]
    semesterRegistrations: TSemesterRegistration[]
 }
-const herader = {
-   id: "ID",
-   title: "Full Name",
-   code: "Codigo",
-   year: "Ano Corrente",
-   startMonth: "Mês inicial",
-   endMonth: "Mês de encerramento"
-}
 const uid = createUniqueId("create");
 export function OfferedCourseSectinTable({ schedules, disciplines, rooms, sections, semesterRegistrations }: Props) {
 
@@ -34,7 +26,6 @@ export function OfferedCourseSectinTable({ schedules, disciplines, rooms, sectio
       modalTitle="Turmas"
       fileName="Turmas"
       sheetId={uid}
-      fileHerderes={herader}
       columns={columns}
       className="sm:max-w-2xl"
       data={schedules}

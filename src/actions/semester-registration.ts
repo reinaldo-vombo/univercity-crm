@@ -1,44 +1,48 @@
 'use server';
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ApiResponseError } from '@/services/api-error';
-import { serverFetch } from '@/services/server-fetch';
-import { ActionResult } from '@/types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { serverActionFetch } from '@/services/server-fetch';
+import { ActionResult } from '@/lib/errors/api-error.type';
 import { TSemesterRegistration } from '@/types/global';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
+import { validatedActionWithUser } from '@/lib/helper/action-helper';
+import { semesterRegisterSchema } from '@/lib/validation/semester-registration';
 
-export const addNewSemesterRegistartion = async (
-  data: any
-): Promise<ActionResult<TSemesterRegistration>> => {
-  try {
-    const semester = await serverFetch<TSemesterRegistration>(
-      '/semester-registration',
-      {
-        method: 'POST',
-        body: data,
+export const addNewSemesterRegistartion = validatedActionWithUser(
+  semesterRegisterSchema,
+  async (data): Promise<ActionResult<TSemesterRegistration>> => {
+    try {
+      const semester = await serverActionFetch<TSemesterRegistration>(
+        '/semester-registration',
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
+
+      updateTag('semester-registration');
+
+      return {
+        error: false,
+        data: semester,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
       }
-    );
 
-    revalidateTag('semester-registration');
-
-    return {
-      error: false,
-      data: semester,
-    };
-  } catch (err) {
-    if (err instanceof ApiResponseError) {
       return {
         error: true,
-        message: err.message,
-        errorMessages: err.errorMessages,
-        meta: err.meta,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'create', subject: 'SemesterRegistration' },
+);

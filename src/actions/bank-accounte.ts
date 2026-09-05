@@ -1,12 +1,15 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { ActionResult } from '../types/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { TUniversityBankAccount } from '../types/global';
-import { ApiResponseError } from '@/services/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
 import {
   createBankAccountZodSchema,
   updateBankAccountZodSchema,
@@ -16,7 +19,7 @@ export const addNewBankAccount = validatedActionWithUser(
   createBankAccountZodSchema,
   async (data): Promise<ActionResult<TUniversityBankAccount>> => {
     try {
-      const account = await serverFetch<TUniversityBankAccount>(
+      const account = await serverActionFetch<TUniversityBankAccount>(
         '/bank-accountes',
         {
           method: 'POST',
@@ -24,7 +27,7 @@ export const addNewBankAccount = validatedActionWithUser(
         },
       );
 
-      revalidateTag('bank-accountes');
+      updateTag('bank-accountes');
 
       return {
         error: false,
@@ -40,13 +43,14 @@ export const addNewBankAccount = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'BankAccounte' },
 );
 export const updateBankAccount = validatedActionWithUser(
   updateBankAccountZodSchema,
   async (data): Promise<ActionResult<TUniversityBankAccount>> => {
     const { id, ...res } = data;
     try {
-      const curses = await serverFetch<TUniversityBankAccount>(
+      const account = await serverActionFetch<TUniversityBankAccount>(
         `/bank-accountes/${id}`,
         {
           method: 'PATCH',
@@ -54,11 +58,11 @@ export const updateBankAccount = validatedActionWithUser(
         },
       );
 
-      revalidateTag('faculty');
+      updateTag('bank-accountes');
 
       return {
         error: false,
-        data: curses,
+        data: account,
       };
     } catch (err) {
       const message =
@@ -70,38 +74,40 @@ export const updateBankAccount = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AcademicFaculty' },
 );
 
-export const deleteFaculty = async (
-  id: string,
-): Promise<ActionResult<TUniversityBankAccount>> => {
-  try {
-    const data = await serverFetch<TUniversityBankAccount>(
-      `/bank-accountes/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const deleteFaculty = actionWithUser(
+  async (id: string): Promise<ActionResult<TUniversityBankAccount>> => {
+    try {
+      const data = await serverActionFetch<TUniversityBankAccount>(
+        `/bank-accountes/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    revalidateTag('bank-accountes');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('bank-accountes');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'BankAccounte' },
+);

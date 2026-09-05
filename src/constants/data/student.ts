@@ -21,7 +21,7 @@ export const getMockStudents = async (): Promise<TStudent[]> => {
       email: 'joao.silva@escola.ao',
       gender: 'M',
       isActive: true,
-      status: 'ENROLLED',
+      status: 'ACTIVE',
       address: 'Rua da Missão, 12, Luanda',
       isWorker: false,
       studentId: 'EST001',

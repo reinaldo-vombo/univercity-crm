@@ -1,35 +1,20 @@
-import { REVALIDATION } from '@/constants/relalidation';
 import { serverFetch } from '../server-fetch';
-import { TAcademicService, TUniversityConfig } from '@/types/global';
+import { TUniversityConfig } from '@/types/global';
 import { handleApiError } from '../error-handler';
+import { cacheLife, cacheTag } from 'next/cache';
+import { getUserToken } from '@/lib/helper/auth/user';
 
 export const getUniversityRules = async (): Promise<TUniversityConfig> => {
   try {
-    const accounts = await serverFetch<TUniversityConfig>('/university', {
-      next: {
-        tags: ['university'],
-        revalidate:
-          process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
-      },
-    });
-    return accounts;
-  } catch (error) {
-    handleApiError(error);
-  }
-};
-export const getAcademicServices = async (): Promise<TAcademicService[]> => {
-  try {
-    const accounts = await serverFetch<TAcademicService[]>(
-      '/academic-service',
-      {
-        next: {
-          tags: ['academic-service'],
-          revalidate:
-            process.env.NODE_ENV === 'production' ? REVALIDATION.ONE_HOUR : 0,
-        },
-      },
-    );
-    return accounts;
+    const token = await getUserToken();
+    const getUniversityRule = async () => {
+      'use cache';
+      cacheTag('university');
+      cacheLife('hours');
+      return serverFetch<TUniversityConfig>('/university', {}, token);
+    };
+
+    return getUniversityRule();
   } catch (error) {
     handleApiError(error);
   }

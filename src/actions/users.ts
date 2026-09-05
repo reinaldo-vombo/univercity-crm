@@ -1,30 +1,36 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { serverFetch } from '@/services/server-fetch';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TUser } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+  validatedActionWithUserJson,
+} from '../lib/helper/action-helper';
 import {
   changePasswordShema,
   updateSchema,
   userSchema,
 } from '../lib/validation/user';
-import { ActionResult, ActionState } from '../types/api-error';
-import { saveFile } from '../lib/helper/uploade';
-import { ApiResponseError } from '@/services/api-error';
-import { serverUser } from '@/lib/helper/auth/user';
+import {
+  ActionResult,
+  ActionState,
+  TResponse,
+} from '../lib/errors/api-error.type';
+import { ApiResponseError } from '@/lib/errors/api-error';
 
 export const addNewUser = validatedActionWithUser(
   userSchema,
-  async (data, _, user): Promise<ActionResult<TUser>> => {
+  async (data): Promise<ActionResult<TUser>> => {
     try {
-      const member = await serverFetch<TUser>(`/users?name=${user.name}`, {
+      const member = await serverActionFetch<TUser>(`/users`, {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('user');
+      updateTag('user');
 
       return {
         error: false,
@@ -43,35 +49,33 @@ export const addNewUser = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'User' },
 );
 
-export const updatedUser = validatedActionWithUser(
+export const updatedUser = validatedActionWithUserJson(
   updateSchema,
-  async (data, _, user): Promise<ActionResult<TUser>> => {
+  async (data, formdata): Promise<ActionResult<TUser>> => {
     try {
-      let avatarUrl: any = data.avatar;
-      if (data.avatar instanceof File) {
-        avatarUrl = await saveFile(data.avatar, 'users');
-      }
-      data = { ...data, avatar: avatarUrl };
-
-      const result = await serverFetch<TUser>(
-        `/users/${data.id}?name=${user.name}`,
+      const result = await serverActionFetch<TResponse>(
+        `/users/${data.id}`,
         {
           method: 'PATCH',
-          body: data,
-        }
+          body: formdata,
+        },
+        true,
       );
 
-      revalidateTag('user');
+      updateTag(`user-${data.id}`);
+      // console.log(result);
 
       return {
         error: false,
-        data: result,
+        message: result.message,
+        data: result.data,
       };
     } catch (err) {
       if (err instanceof ApiResponseError) {
@@ -86,11 +90,13 @@ export const updatedUser = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'update', subject: 'User' },
 );
+
 export const updatedUserPassword = validatedActionWithUser(
   changePasswordShema,
   async (data, _, user): Promise<ActionResult<TUser>> => {
@@ -103,12 +109,12 @@ export const updatedUserPassword = validatedActionWithUser(
           message: 'As senha não combinam',
         };
       }
-      const result = await serverFetch<TUser>(
+      const result = await serverActionFetch<TUser>(
         `/users/${user.id}/change-password`,
         {
           method: 'PATCH',
           body: data,
-        }
+        },
       );
 
       return {
@@ -128,32 +134,31 @@ export const updatedUserPassword = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'update', subject: 'User' },
 );
-export const deleteUser = async (id: string): Promise<ActionState<TUser>> => {
-  const user = await serverUser();
-
-  try {
-    const dletedUser = await serverFetch<TUser>(
-      `/users/${id}?name=${user?.name}`,
-      {
+export const deleteUser = actionWithUser(
+  async (id: string): Promise<ActionState<TUser>> => {
+    try {
+      const dletedUser = await serverActionFetch<TUser>(`/users/${id}`, {
         method: 'DELETE',
-      }
-    );
+      });
 
-    revalidateTag('user');
-    return {
-      error: false,
-      message: FLASH_MESSAGE.DELETED,
-      data: dletedUser,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message: error as string,
-    };
-  }
-};
+      updateTag(`user-${id}`);
+      return {
+        error: false,
+        message: FLASH_MESSAGE.DELETED,
+        data: dletedUser,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: error as string,
+      };
+    }
+  },
+  { action: 'delete', subject: 'User' },
+);

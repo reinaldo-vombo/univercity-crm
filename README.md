@@ -1,12 +1,16 @@
 <div align="center">
 
-<img src="/logo.svg" alt="Enrollix" width="80" />
+<img src="./src/assets/images/SIGU.png" alt="SIUG" width="80" />
 
-# Enrollix
+<br />
+
+<img src="./src/assets/images/cover.jpg" alt="SIGU — Sistema Integrado de Gestão Universitária" width="100%" />
+
+# SIGU
 
 ### Sistema de Gestão Académica · Painel Administrativo
 
-Construído com **Next.js 14**, **shadcn/ui**, **NextAuth**, **Prisma**, **React Email** e **Tailwind CSS** — tudo o que uma instituição de ensino precisa numa única plataforma.
+Construído com **Next.js 16**, **shadcn/ui**, **NextAuth**, **Resend**, **React Email**, **Typescript** e **Tailwind CSS** — tudo o que uma instituição de ensino precisa numa única plataforma.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://typescriptlang.org)
@@ -20,7 +24,7 @@ Construído com **Next.js 14**, **shadcn/ui**, **NextAuth**, **Prisma**, **React
 
 ## 👀 Demo
 
-<img src="/screenshot/screenshot-1773503516499.png" alt="Dashboard Enrollix" width="100%" style="border-radius: 8px;" />
+<img src="/screenshot/screenshot-1773503516499.png" alt="Dashboard SIGU" width="100%" style="border-radius: 8px;" />
 
 <br />
 
@@ -28,17 +32,17 @@ Construído com **Next.js 14**, **shadcn/ui**, **NextAuth**, **Prisma**, **React
 
 ---
 
-## 🚀 O que é o Enrollix?
+## 🚀 O que é o SIGU?
 
-O **Enrollix** é uma plataforma de gestão académica completa pensada para instituições de ensino superior. Gere alunos, docentes, cursos, propinas, pautas e muito mais — tudo num painel limpo e moderno.
+O **SIGU** é uma plataforma de gestão académica completa pensada para instituições de ensino superior. Gere alunos, docentes, cursos, propinas, pautas e muito mais — tudo num painel limpo e moderno.
 
 Tem três painéis distintos:
 
-| Painel                  | Descrição                                        |
-| ----------------------- | ------------------------------------------------ |
-| 🛠️ **Enrollix Admin**   | Secretaria, gestão institucional e configurações |
-| 🎓 **Enrollix Campus**  | Portal do estudante                              |
-| 👨‍🏫 **Enrollix Faculty** | Portal do docente                                |
+| Painel              | Descrição                                        |
+| ------------------- | ------------------------------------------------ |
+| 🛠️ **SIGU Admin**   | Secretaria, gestão institucional e configurações |
+| 🎓 **SIGU Campus**  | Portal do estudante                              |
+| 👨‍🏫 **SIGU Faculty** | Portal do docente                                |
 
 ---
 
@@ -79,8 +83,8 @@ Tem três painéis distintos:
 
 ```bash
 # 1. Clona o repositório
-git clone https://github.com/teu-user/enrollix.git
-cd enrollix
+git clone https://github.com/teu-user/SIGU.git
+cd SIGU
 
 # 2. Instala as dependências
 npm install
@@ -103,13 +107,10 @@ NODE_ENV=development
 API_BASE_URL=http://localhost:3001
 NEXTAUTH_SECRET=supersecret
 NEXTAUTH_URL=http://localhost:3000
-CLOUDINARY_CLOUD_NAME=xxx
-CLOUDINARY_API_KEY=xxx
-CLOUDINARY_API_SECRET=xxx
 
 # Cliente
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_NAME="Enrollix · Sistema de Gestão Académica"
+NEXT_PUBLIC_SITE_NAME="SIGU · Sistema de Gestão Académica"
 NEXT_PUBLIC_ASSETS_URL=http://localhost:3000/assets
 ```
 
@@ -123,7 +124,7 @@ NEXT_PUBLIC_ASSETS_URL=http://localhost:3000/assets
 - [x] Tailwind CSS
 - [x] shadcn/ui
 - [x] `.env` com validação Zod (server + client separados)
-- [ ] Setup Resend
+- [x] Setup Resend
 
 ### 🔐 Autenticação
 
@@ -187,15 +188,13 @@ NEXT_PUBLIC_ASSETS_URL=http://localhost:3000/assets
 ### ✉️ Email & Notificações
 
 - [x] Receber, ler e eliminar notificações
-- [ ] Setup Resend / Nodemailer
+- [x] Setup Resend / Nodemailer
 - [ ] Envio de email por actualização de nota ou propina em atraso
-- [ ] Templates de email reutilizáveis
+- [x] Templates de email
 
 ### 📁 Uploads
 
 - [x] Upload de ficheiros (Dropzone)
-- [x] Cloudinary configurado
-- [x] Armazenamento seguro de ficheiros
 - [ ] Associar documentos ao perfil do aluno
 
 ### 🧪 Testes
@@ -231,4 +230,4 @@ NEXT_PUBLIC_ASSETS_URL=http://localhost:3000/assets
 
 ## 📄 Licença
 
-MIT © Enrollix — feito com ☕ e muito `console.log`
+MIT © SIGU — feito com ☕ e muito `console.log`

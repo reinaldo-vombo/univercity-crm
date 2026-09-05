@@ -1,27 +1,30 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { serverFetch } from '@/services/server-fetch';
+import { updateTag } from 'next/cache';
+import { serverActionFetch } from '@/services/server-fetch';
 import { TBuilding } from '@/types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import {
   buildingSchema,
   updateBuildingSchema,
 } from '../lib/validation/building';
-import { ApiResponseError } from '@/services/api-error';
-import { ActionResult } from '../types/api-error';
+import { ApiResponseError } from '@/lib/errors/api-error';
+import { ActionResult } from '../lib/errors/api-error.type';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewBuilding = validatedActionWithUser(
   buildingSchema,
   async (data): Promise<ActionResult<TBuilding>> => {
     try {
-      const curses = await serverFetch<TBuilding>('/building', {
+      const curses = await serverActionFetch<TBuilding>('/building', {
         method: 'POST',
         body: data,
       });
 
-      revalidateTag('building');
+      updateTag('buildings');
 
       return {
         error: false,
@@ -40,22 +43,23 @@ export const addNewBuilding = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'create', subject: 'building' },
 );
 export const updateBuilding = validatedActionWithUser(
   updateBuildingSchema,
   async (data): Promise<ActionResult<TBuilding>> => {
     const { id, title } = data;
     try {
-      const building = await serverFetch<TBuilding>(`/building/${id}`, {
+      const building = await serverActionFetch<TBuilding>(`/building/${id}`, {
         method: 'PATCH',
         body: title,
       });
 
-      revalidateTag('building');
+      updateTag('building');
 
       return {
         error: false,
@@ -74,29 +78,31 @@ export const updateBuilding = validatedActionWithUser(
       return {
         error: true,
         message:
-          err instanceof Error ? err.message : FLASH_MESSAGE.UNESPECTED_ERROR,
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-  }
+  },
+  { action: 'update', subject: 'AcademicFaculty' },
 );
-export const deleteBuilding = async (
-  id: string
-): Promise<ActionResult<TBuilding>> => {
-  try {
-    const data = await serverFetch<TBuilding>(`/building/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteBuilding = actionWithUser(
+  async (id: string): Promise<ActionResult<TBuilding>> => {
+    try {
+      const data = await serverActionFetch<TBuilding>(`/building/${id}`, {
+        method: 'DELETE',
+      });
 
-    revalidateTag('building');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.UNESPECTED_ERROR,
-    };
-  }
-};
+      updateTag('building');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
+      };
+    }
+  },
+  { action: 'delete', subject: 'building' },
+);

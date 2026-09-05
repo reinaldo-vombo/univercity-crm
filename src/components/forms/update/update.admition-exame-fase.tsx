@@ -1,5 +1,5 @@
 'use client'
-import * as z from "zod"
+import z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,23 +13,25 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/shared/submit-btn"
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateAdmitionExameFaseSchema } from "@/lib/validation/adnition-exame"
-import { Calendar } from "@/components/ui/calendar"
-import { TAdmitionExameFase, TBuilding } from "@/types/global"
+import { SubmitState, TAdmitionExameFase, TBuilding } from "@/types/global"
 import { useSheet } from "@/providers/sheet-provider"
 import { updateAdmitionExameFase } from "@/actions/admition-exame"
 import Selector from "@/components/shared/selector"
+import DatePicker from "@/components/shared/calendar"
+import ActionButton from "@/components/layouts/button/action-button"
+import TimePickerWithIcon from "@/components/shared/time-picker"
 
 type TProps = {
    defaultValues: TAdmitionExameFase;
    building: TBuilding[]
 }
 const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
+   const [submitState, setSubmitState] = useState<SubmitState>('idle');
    const { close } = useSheet();
-   const { name, ordem, endDate, startDate, buildingId, duoDate, roomId, id } = defaultValues;
+   const { name, ordem, endDate, startDate, buildingId, duoDate, startTime, endTime, roomId, id } = defaultValues;
 
    const form = useForm<z.infer<typeof updateAdmitionExameFaseSchema>>({
       resolver: zodResolver(updateAdmitionExameFaseSchema),
@@ -40,6 +42,8 @@ const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
          duoDate,
          roomId,
          ordem,
+         startTime: startTime || '',
+         endTime: endTime || '',
          endDate,
          startDate
       }
@@ -52,18 +56,26 @@ const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
          formData.append(key, value);
       });
       startTransition(async () => {
+         setSubmitState('loading')
+
          try {
             const response = await updateAdmitionExameFase(formData);
             if (response.error) {
+               setSubmitState('error')
                toast.error(response.message);
+               setTimeout(() => setSubmitState('idle'), 2000)
                return;
             }
-            close()
+            setSubmitState('success')
+            setTimeout(() => setSubmitState('idle'), 2000)
             toast.success(FLASH_MESSAGE.CREATED);
             form.reset();
+            close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
+            setSubmitState('error')
             console.error(error);
+            setTimeout(() => setSubmitState('idle'), 2000)
          }
       });
 
@@ -97,10 +109,10 @@ const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
                         <FormLabel>Titulo</FormLabel>
                         <FormControl>
                            <Input
+                              className="w-full"
                               placeholder="Ex: Fase 1, primera fase etc..."
                               {...field} />
                         </FormControl>
-                        <FormDescription>Nome da fase </FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
@@ -116,71 +128,17 @@ const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
                               placeholder="Ex: 1, 01, 001"
                               {...field} />
                         </FormControl>
-                        <FormDescription>ordem do da fase, use formato como 1, ou 001, 01</FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
                />
             </div>
-            <div className="flex flex-col md:flex-row items-center gap-3 mt-6">
-               <FormField
-                  control={form.control}
-                  name="startDate"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Ínicio das matriculas</FormLabel>
-                        <FormControl>
-                           <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-               <FormField
-                  control={form.control}
-                  name="endDate"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Fim das matriculas</FormLabel>
-                        <FormControl>
-                           <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-               <FormField
-                  control={form.control}
-                  name="duoDate"
-                  render={({ field }) => (
-                     <FormItem>
-                        <FormLabel>Data da realização do exame</FormLabel>
-                        <FormControl>
-                           <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                     </FormItem>
-                  )}
-               />
-            </div>
-            <div className="flex flex-col md:flex-row items-center gap-3 mt-6">
+            <div className="flex w-full items-center gap-3 mt-6">
                <FormField
                   control={form.control}
                   name="buildingId"
                   render={({ field }) => (
-                     <FormItem className="w-full md:w-1/2">
+                     <FormItem className="w-full">
                         <FormLabel>Predio</FormLabel>
                         <FormControl>
                            <Selector
@@ -199,7 +157,7 @@ const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
                   control={form.control}
                   name="roomId"
                   render={({ field }) => (
-                     <FormItem className="w-full md:w-1/2">
+                     <FormItem className="w-full">
                         <FormLabel>Salas</FormLabel>
                         <FormControl>
                            <Selector
@@ -216,10 +174,84 @@ const UpdateAdmitionExameFase = ({ defaultValues, building }: TProps) => {
                />
 
             </div>
-
-            <SubmitBtn
-               label="Atualisar"
-               loading={isPending} />
+            <div className="flex items-center gap-3 mt-6">
+               <FormField
+                  control={form.control}
+                  name="startDate"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Ínicio das matriculas</FormLabel>
+                        <FormControl>
+                           <DatePicker
+                              asPopover={true} formField={field} />
+                        </FormControl>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="endDate"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Fim das matriculas</FormLabel>
+                        <FormControl>
+                           <DatePicker
+                              asPopover={true} formField={field} />
+                        </FormControl>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="duoDate"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Realização do exame</FormLabel>
+                        <FormControl>
+                           <DatePicker
+                              asPopover={true} formField={field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <div className="flex items-center gap-3 mt-6">
+               <FormField
+                  control={form.control}
+                  name="startTime"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Começo</FormLabel>
+                        <FormControl>
+                           <TimePickerWithIcon
+                              field={field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="endTime"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Termino</FormLabel>
+                        <FormControl>
+                           <TimePickerWithIcon
+                              field={field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+            </div>
+            <ActionButton submitState={submitState} isPending={isPending} />
          </form>
       </Form >
    )

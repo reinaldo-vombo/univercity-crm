@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/components/shared/data-table";
+import { DataTable } from "@/components/shared/tabeles/data-table";
 import { MarkSheetColumns } from "./columns";
 import { TMarkSheetRow } from "@/types/global";
 

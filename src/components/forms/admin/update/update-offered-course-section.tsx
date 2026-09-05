@@ -15,32 +15,38 @@ import SubmitBtn from "@/components/shared/submit-btn"
 import { useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { updateOfferedCourseSectionZodSchema, } from "@/lib/validation/offered-course"
-import { TOfferedCourse, TOfferedCourseSection } from "@/types/global"
+import { TOfferedCourse, TOfferedCourseSection, TPrice } from "@/types/global"
 import Selector from "@/components/shared/selector"
 import { useSheet } from "@/providers/sheet-provider"
-import { DUMMY_DATA } from "@/constants/mock-data"
-import { addNewOfferedCourseSection } from "@/actions/offered-couser-section"
+import { updateOfferedCourseSection } from "@/actions/offered-couser-section"
 import { Input } from "@/components/ui/input"
 
 type TProps = {
    offeredCourses: TOfferedCourse[];
    defautValues: TOfferedCourseSection
+   prices: TPrice[]
 }
-const UpdateCreateOfferedCourseSectionForm = ({ offeredCourses, defautValues }: TProps) => {
-   const { maxCapacity, currentlyEnrolledStudent, offeredCourseId, title, shiftId } = defautValues;
+const UpdateCreateOfferedCourseSectionForm = ({ offeredCourses, defautValues, prices }: TProps) => {
+   const { maxCapacity, offeredCourseId, title, id, shiftId } = defautValues;
    const { close } = useSheet()
    const offeredCourse = offeredCourses.map(offeredCourse => ({
       id: offeredCourse.id,
       label: offeredCourse.course.title,
       value: offeredCourse.id,
    }));
+   const tutian = prices.filter((f) => f.description !== null).map(price => ({
+      id: price.id,
+      label: `${price.amount} - ${price.description}`,
+      value: price.id,
+   }));
    const form = useForm<z.infer<typeof updateOfferedCourseSectionZodSchema>>({
       resolver: zodResolver(updateOfferedCourseSectionZodSchema),
       defaultValues: {
-         currentlyEnrolledStudent,
+         id,
          maxCapacity,
          offeredCourseId,
          shiftId,
+         priceId: '',
          title
       }
    })
@@ -55,7 +61,7 @@ const UpdateCreateOfferedCourseSectionForm = ({ offeredCourses, defautValues }: 
 
       startTransition(async () => {
          try {
-            const response = await addNewOfferedCourseSection(formData);
+            const response = await updateOfferedCourseSection(formData);
 
             if (response.error) {
                toast.warning(response.message);
@@ -66,7 +72,7 @@ const UpdateCreateOfferedCourseSectionForm = ({ offeredCourses, defautValues }: 
             form.reset();
             close()
          } catch (error) {
-            toast.error(FLASH_MESSAGE.UNESPECTED_ERROR);
+            toast.error(FLASH_MESSAGE.SERVER_ERROR);
             console.error(error);
          }
       });
@@ -111,15 +117,15 @@ const UpdateCreateOfferedCourseSectionForm = ({ offeredCourses, defautValues }: 
                   />
                   <FormField
                      control={form.control}
-                     name='shiftId'
+                     name='priceId'
                      render={({ field }) => (
                         <FormItem className="w-full">
-                           <FormLabel>Turno</FormLabel>
+                           <FormLabel>Mensalidade</FormLabel>
                            <Selector
                               formField={field}
                               className="w-full"
-                              options={DUMMY_DATA.shifts}
-                              placeholder="Turno" />
+                              options={tutian}
+                              placeholder="Selecione a mensalidade" />
                            <FormMessage />
                         </FormItem>
                      )}
