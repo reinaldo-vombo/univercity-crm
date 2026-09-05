@@ -3,13 +3,14 @@ import { TUser } from '@/types/global';
 import { getServerSession } from 'next-auth';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { authOptions } from '@/config/auth';
+import { Action, hasPermission, Subject } from './auth/permissions';
 
 export type ActionState = {
   error?: string;
   success?: string;
   [key: string]: any;
 };
-
+type RequiredPermission = { action: Action; subject: Subject };
 // Generic type for actions with schema validation (no auth)
 type ValidatedActionFn<S extends z.ZodTypeAny, R> = (
   data: z.infer<S>,
@@ -47,7 +48,10 @@ export function validatedAction<S extends z.ZodTypeAny, R>(
  * Wraps an action function with schema validation and session-based auth
  */
 
-export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
+export function actionWithUser<R>(
+  actionnFn: TUserIdAction<R>,
+  requiredPermission?: RequiredPermission,
+) {
   return async (id?: string): Promise<R> => {
     const session = await getServerSession(authOptions);
     const user = session?.user;
@@ -56,15 +60,38 @@ export function actionWithUser<R>(actionnFn: TUserIdAction<R>) {
     if (!user) {
       return {
         error: true,
-        message: FLASH_MESSAGE.UNAUTHORIZED,
+        message: FLASH_MESSAGE.PERMISSION_NOT_FOUND,
       } as R;
     }
+
+    if (!requiredPermission) {
+      return {
+        error: true,
+        message: FLASH_MESSAGE.NO_PERMISSION,
+      } as R;
+    }
+    if (requiredPermission) {
+      const allowed = hasPermission(
+        user.permissions ?? [],
+        requiredPermission.action,
+        requiredPermission.subject,
+      );
+
+      if (!allowed) {
+        return {
+          error: true,
+          message: FLASH_MESSAGE.NO_PERMISSION,
+        } as R;
+      }
+    }
+
     return actionnFn(id || '', currentUser);
   };
 }
 export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
   schema: S,
   actionFn: ValidatedUserActionFn<S, R>,
+  requiredPermission?: RequiredPermission,
 ) {
   return async (formData: FormData): Promise<R> => {
     const session = await getServerSession(authOptions);
@@ -77,6 +104,26 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
       } as R;
     }
 
+    if (!requiredPermission) {
+      return {
+        error: true,
+        message: FLASH_MESSAGE.PERMISSION_NOT_FOUND,
+      } as R;
+    }
+    if (requiredPermission) {
+      const allowed = hasPermission(
+        user.permissions ?? [],
+        requiredPermission.action,
+        requiredPermission.subject,
+      );
+
+      if (!allowed) {
+        return {
+          error: true,
+          message: FLASH_MESSAGE.NO_PERMISSION,
+        } as R;
+      }
+    }
     const formObject: Record<
       string,
       FormDataEntryValue | FormDataEntryValue[]
@@ -103,64 +150,10 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
   };
 }
 
-// export function validatedActionWithUserJson<S extends z.ZodTypeAny, R>(
-//   schema: S,
-//   actionFn: ValidatedUserActionFn<S, R>
-// ) {
-//   return async (formData: FormData): Promise<R> => {
-//     const session = await getServerSession(authOptions);
-//     const user = session?.user;
-
-//     if (!user) {
-//       return {
-//         error: true,
-//         message: 'NOT AUTHORIZED',
-//       } as R;
-//     }
-
-//     const formObject: Record<string, any> = {};
-
-//     for (const key of formData.keys()) {
-//       const values = formData.getAll(key);
-//       const value = values.length > 1 ? values : values[0];
-
-//       // 👇 tenta converter JSON automaticamente
-//       if (typeof value === 'string') {
-//         const trimmed = value.trim();
-
-//         if (
-//           (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
-//           (trimmed.startsWith('[') && trimmed.endsWith(']'))
-//         ) {
-//           try {
-//             formObject[key] = JSON.parse(trimmed);
-//             continue;
-//           } catch {
-//             // se não for JSON válido, continua como string
-//           }
-//         }
-//       }
-
-//       formObject[key] = value;
-//     }
-
-//     const parsed = schema.safeParse(formObject);
-//     console.log('parsed path', parsed.error?.errors[0].path);
-//     console.log('parsed message', parsed.error?.errors[0].message);
-
-//     if (!parsed.success) {
-//       return {
-//         error: true,
-//         message: parsed.error.errors[0].message,
-//       } as R;
-//     }
-
-//     return actionFn(parsed.data, formData, user);
-//   };
-// }
 export function validatedActionWithUserJson<S extends z.ZodTypeAny, R>(
   schema: S,
   actionFn: ValidatedUserActionFn<S, R>,
+  requiredPermission?: RequiredPermission,
 ) {
   return async (formData: FormData): Promise<R> => {
     const session = await getServerSession(authOptions);
@@ -169,8 +162,28 @@ export function validatedActionWithUserJson<S extends z.ZodTypeAny, R>(
     if (!user) {
       return {
         error: true,
-        message: 'NOT AUTHORIZED',
+        message: FLASH_MESSAGE.UNAUTHORIZED,
       } as R;
+    }
+    if (!requiredPermission) {
+      return {
+        error: true,
+        message: FLASH_MESSAGE.PERMISSION_NOT_FOUND,
+      } as R;
+    }
+    if (requiredPermission) {
+      const allowed = hasPermission(
+        user.permissions ?? [],
+        requiredPermission.action,
+        requiredPermission.subject,
+      );
+
+      if (!allowed) {
+        return {
+          error: true,
+          message: FLASH_MESSAGE.NO_PERMISSION,
+        } as R;
+      }
     }
 
     const formObject: Record<string, any> = {};

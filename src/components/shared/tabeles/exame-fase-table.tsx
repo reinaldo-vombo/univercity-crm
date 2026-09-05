@@ -25,9 +25,9 @@ const now = new Date()
 const ExameFaseTable = ({ data, buildings }: TProps) => {
 
    const handleDelete = async (id: number) => {
-
+      const stId = String(id)
       try {
-         const res = await deleteAdmitionExameFase(id);
+         const res = await deleteAdmitionExameFase(stId);
          if (res.error) {
             toast.error(res.message);
             return;

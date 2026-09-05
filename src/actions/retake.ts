@@ -44,4 +44,5 @@ export const updateBulkRetake = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'update', subject: 'Retake' },
 );

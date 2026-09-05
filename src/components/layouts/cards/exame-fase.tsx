@@ -25,8 +25,9 @@ const faseStatus = (faseDate: Date) => {
 }
 const ExameFaseCard = ({ fases, building }: TProps) => {
    const handleDelete = async (id: number) => {
+      const st = String(id)
       try {
-         const res = await deleteAdmitionExameFase(id);
+         const res = await deleteAdmitionExameFase(st);
          if (res.error) {
             toast.error(res.message);
             return;

@@ -20,6 +20,8 @@ declare module 'next-auth' {
       name: string;
       email: string;
       role: string;
+      roleId: string | null;
+      permissions: string[];
       contact: {
         phone: number;
         location: string;
@@ -40,6 +42,8 @@ declare module 'next-auth/jwt' {
     role: string;
     avatar?: string;
     accessToken: string;
+    roleId: string | null;
+    permissions: string[];
     refreshToken: string;
     accessTokenExpiry: number;
     error?: string;

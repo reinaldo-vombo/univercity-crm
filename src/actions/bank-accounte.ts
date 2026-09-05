@@ -2,7 +2,10 @@
 
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { ActionResult } from '../lib/errors/api-error.type';
 import { TUniversityBankAccount } from '../types/global';
@@ -40,6 +43,7 @@ export const addNewBankAccount = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'BankAccounte' },
 );
 export const updateBankAccount = validatedActionWithUser(
   updateBankAccountZodSchema,
@@ -70,38 +74,40 @@ export const updateBankAccount = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AcademicFaculty' },
 );
 
-export const deleteFaculty = async (
-  id: string,
-): Promise<ActionResult<TUniversityBankAccount>> => {
-  try {
-    const data = await serverActionFetch<TUniversityBankAccount>(
-      `/bank-accountes/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const deleteFaculty = actionWithUser(
+  async (id: string): Promise<ActionResult<TUniversityBankAccount>> => {
+    try {
+      const data = await serverActionFetch<TUniversityBankAccount>(
+        `/bank-accountes/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    updateTag('bank-accountes');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('bank-accountes');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'BankAccounte' },
+);

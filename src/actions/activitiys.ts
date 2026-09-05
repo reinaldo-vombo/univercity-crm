@@ -88,6 +88,7 @@ export const deleteUserActivitys = async (id: string) => {
 export const closeSession = async () => {
   try {
     const user = await serverUser();
+
     await serverActionFetch(`/users-session/logout/${user?.id}`, {
       method: 'PATCH',
       body: user?.refreshToken,

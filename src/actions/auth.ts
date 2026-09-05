@@ -3,7 +3,7 @@
 import { sendEmail } from '@/config/send-email';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import ResetPassword from '@/lib/email/reset-password';
-import { validatedAction } from '@/lib/helper/action-helper';
+import { actionWithUser, validatedAction } from '@/lib/helper/action-helper';
 import { resetPasswordSchema } from '@/lib/validation/admin';
 import { ApiResponseError } from '@/lib/errors/api-error';
 import { serverActionFetch } from '@/services/server-fetch';
@@ -92,34 +92,36 @@ export const resetPassword = validatedAction(
     }
   },
 );
-export const unlockAccount = async (
-  userId: string,
-): Promise<ActionResult<null>> => {
-  try {
-    await serverActionFetch<null>(`/auth/unlock/${userId}`, {
-      method: 'POST',
-      body: null,
-    });
+export const unlockAccount = actionWithUser(
+  async (userId: string): Promise<ActionResult<null>> => {
+    try {
+      await serverActionFetch<null>(`/auth/unlock/${userId}`, {
+        method: 'POST',
+        body: null,
+      });
 
-    updateTag('locked-accounts');
+      updateTag('locked-accounts');
 
-    return {
-      error: false,
-      data: null,
-    };
-  } catch (err) {
-    if (err instanceof ApiResponseError) {
+      return {
+        error: false,
+        data: null,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
+      }
+
       return {
         error: true,
-        message: err.message,
-        errorMessages: err.errorMessages,
-        meta: err.meta,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'update', subject: 'Auth' },
+);

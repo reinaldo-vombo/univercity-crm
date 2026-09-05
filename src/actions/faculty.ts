@@ -4,6 +4,7 @@ import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TFaculty, TFacultyDisciplines } from '../types/global';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
@@ -15,6 +16,7 @@ import {
   facultySchema,
   updateFacultySchema,
 } from '../lib/validation/faculty';
+
 export const addNewFaculty = validatedActionWithUser(
   facultySchema,
   async (data, formData): Promise<ActionResult<TFaculty>> => {
@@ -47,15 +49,15 @@ export const addNewFaculty = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'Faculty' },
 );
 export const updatedFaculty = validatedActionWithUserJson(
   updateFacultySchema,
-  async (data): Promise<ActionResult<TFaculty>> => {
+  async (data, formData): Promise<ActionResult<TFaculty>> => {
     try {
-      const { id, ...updateData } = data;
-      const faculty = await serverActionFetch<TFaculty>(`/faculty/${id}`, {
+      const faculty = await serverActionFetch<TFaculty>(`/faculty/${data.id}`, {
         method: 'PATCH',
-        body: updateData,
+        body: formData,
       });
 
       updateTag('faculty');
@@ -81,6 +83,7 @@ export const updatedFaculty = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'update', subject: 'Faculty' },
 );
 
 export const assingFacultyToDiscipline = validatedActionWithUserJson(
@@ -120,35 +123,37 @@ export const assingFacultyToDiscipline = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'Faculty' },
 );
 
-export const deleteFaculty = async (
-  id: string,
-): Promise<ActionResult<TFaculty>> => {
-  try {
-    const data = await serverActionFetch<TFaculty>(`/faculty/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteFaculty = actionWithUser(
+  async (id: string): Promise<ActionResult<TFaculty>> => {
+    try {
+      const data = await serverActionFetch<TFaculty>(`/faculty/${id}`, {
+        method: 'DELETE',
+      });
 
-    updateTag('faculty');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('faculty');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'Faculty' },
+);

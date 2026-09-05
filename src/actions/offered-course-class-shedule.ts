@@ -1,7 +1,10 @@
 'use server';
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
-import { validatedActionWithUserJson } from '@/lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUserJson,
+} from '@/lib/helper/action-helper';
 import { createScheduleSchema } from '@/lib/validation/class-schedule';
 import { ApiResponseError } from '@/lib/errors/api-error';
 import { serverActionFetch } from '@/services/server-fetch';
@@ -44,41 +47,43 @@ export const addNewOfferedCourseClassSchedule = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'OfferedCourseClassScheudule' },
 );
 
-export const DeleteOfferedCourseSchedule = async (
-  id: string,
-): Promise<ActionResult<TClassShedule>> => {
-  try {
-    const data = await serverActionFetch<TClassShedule>(
-      `/offered-course-class-schedule/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const DeleteOfferedCourseSchedule = actionWithUser(
+  async (id: string): Promise<ActionResult<TClassShedule>> => {
+    try {
+      const data = await serverActionFetch<TClassShedule>(
+        `/offered-course-class-schedule/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    updateTag('offered-course-section');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('offered-course-section');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'create', subject: 'OfferedCourseClassScheudule' },
+);
 export const DeleteOfferedCourseScheduleByDiscipline = async (
   sectionId: string,
   disciplineId: string,

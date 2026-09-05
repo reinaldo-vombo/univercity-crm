@@ -1,65 +1,48 @@
 import { getToken } from 'next-auth/jwt';
 import { NextResponse, NextRequest } from 'next/server';
-import { ENUM_USER_ROLE } from './lib/enums/user';
+import { Action, hasPermission, Subject } from './lib/helper/auth/permissions';
 
 // 🔐 Mapeamento de papéis permitidos por rota
-const ROUTE_ROLE_MAP: Record<string, string[]> = {
-  '/crm': [ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN],
-  '/crm/admin': [ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN],
-  '/crm/management': [ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN],
+type RoutePermission = { action: Action; subject: Subject };
+
+const ROUTE_PERMISSION_MAP: Record<string, RoutePermission> = {
+  '/crm/admin': { action: 'manage', subject: 'User' },
+  '/crm/management': { action: 'read', subject: 'AcademicDepartment' },
+  '/crm': { action: 'read', subject: 'AcademicSemester' }, // fallback mais genérico
 };
 
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  // 1️⃣ Só entra no middleware se for rota do CRM
   if (!pathname.startsWith('/crm')) {
-    return NextResponse.next(); // público
+    return NextResponse.next();
   }
 
-  // 2️⃣ Descobre qual prefixo aplica à rota
-  const matchedPrefix = Object.keys(ROUTE_ROLE_MAP)
-    .sort((a, b) => b.length - a.length) // mais específico primeiro
+  const matchedPrefix = Object.keys(ROUTE_PERMISSION_MAP)
+    .sort((a, b) => b.length - a.length)
     .find((prefix) => pathname.startsWith(prefix));
 
-  // segurança: se rota do CRM mas não definida → tratar como pública
   if (!matchedPrefix) {
     return NextResponse.next();
   }
 
-  const allowedRoles = ROUTE_ROLE_MAP[matchedPrefix];
+  const required = ROUTE_PERMISSION_MAP[matchedPrefix];
 
-  // 3️⃣ Verifica autenticação
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (!token) {
     return NextResponse.redirect(new URL('/auth/login', req.url));
   }
 
-  const role = token.role || token.role;
+  const permissions = token.permissions ?? [];
 
-  if (!role) {
+  if (!hasPermission(permissions, required.action, required.subject)) {
     return NextResponse.redirect(new URL('/unauthorized', req.url));
   }
 
-  // 4️⃣ Verifica permissão da role
-  if (!allowedRoles.includes(role)) {
-    return NextResponse.redirect(
-      new URL(
-        `${role === 'editor' ? '/crm/management' : '/unauthorized'}`,
-        req.url,
-      ),
-    );
-  }
-
-  // 5️⃣ Autorizado
   return NextResponse.next();
 }
 
-// ⚙️ Aplica middleware apenas nas rotas /crm/*
 export const config = {
   matcher: ['/crm/:path*'],
 };

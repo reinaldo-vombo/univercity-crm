@@ -5,6 +5,7 @@ import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TAdmitionExame } from '../types/global';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
@@ -62,30 +63,32 @@ export const updateAdmitionExame = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AdmitionExame' },
 );
-export const deleteAdmitionExame = async (
-  id: string,
-): Promise<ActionResult<TAdmitionExame>> => {
-  try {
-    const data = await serverActionFetch<TAdmitionExame>(
-      `/admission-exame/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const deleteAdmitionExame = actionWithUser(
+  async (id: string): Promise<ActionResult<TAdmitionExame>> => {
+    try {
+      const data = await serverActionFetch<TAdmitionExame>(
+        `/admission-exame/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    updateTag('admitionExame');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message: sendErrorToClient(error),
-    };
-  }
-};
+      updateTag('admitionExame');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: sendErrorToClient(error),
+      };
+    }
+  },
+  { action: 'delete', subject: 'AdmitionExame' },
+);
 
 export const createAdmitionExameFase = validatedActionWithUserJson(
   admitionExameFaseSchema,
@@ -128,6 +131,7 @@ export const createAdmitionExameFase = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'AdmitionExame' },
 );
 export const updateAdmitionExameFase = validatedActionWithUser(
   updateAdmitionExameFaseSchema,
@@ -164,27 +168,30 @@ export const updateAdmitionExameFase = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AdmitionExame' },
 );
-export const deleteAdmitionExameFase = async (
-  id: number,
-): Promise<ActionResult<TAdmitionExame>> => {
-  try {
-    const data = await serverActionFetch<TAdmitionExame>(
-      `/admission-exame/fases/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const deleteAdmitionExameFase = actionWithUser(
+  async (id: string): Promise<ActionResult<TAdmitionExame>> => {
+    const parsedId = Number(id);
+    try {
+      const data = await serverActionFetch<TAdmitionExame>(
+        `/admission-exame/fases/${parsedId}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    updateTag('admitionExameFase');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message: sendErrorToClient(error),
-    };
-  }
-};
+      updateTag('admitionExameFase');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: sendErrorToClient(error),
+      };
+    }
+  },
+  { action: 'delete', subject: 'AdmitionExame' },
+);

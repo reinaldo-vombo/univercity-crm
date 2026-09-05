@@ -56,8 +56,9 @@ export function RoomColumns(buldings: TBuilding[]): ColumnDef<TRoom>[] {
             const room = row.original
 
             const handleDelete = async (id: number) => {
+               const st = String(id)
                try {
-                  const res = await deleteRoom(id);
+                  const res = await deleteRoom(st);
                   if (res.error) {
                      toast.warning(res.message)
                   }

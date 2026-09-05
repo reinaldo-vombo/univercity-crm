@@ -36,10 +36,13 @@ const CreateSemesterRegistrationForm = ({ semesters }: TProps) => {
    })
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof semesterRegisterSchema>) {
-
+      const formData: any = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append(key, value);
+      });
       startTransition(async () => {
          try {
-            const response = await addNewSemesterRegistartion(values);
+            const response = await addNewSemesterRegistartion(formData);
             if (response.error) {
                toast.error(response.message);
                return;

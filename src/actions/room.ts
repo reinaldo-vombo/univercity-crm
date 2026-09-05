@@ -3,7 +3,10 @@
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TRoom } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import {
   blukUpdateRoomShema,
   roomSchema,
@@ -45,6 +48,7 @@ export const addNewRoom = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'Room' },
 );
 export const updateRoom = validatedActionWithUser(
   updateRoomSchema,
@@ -79,6 +83,7 @@ export const updateRoom = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'Room' },
 );
 export const updateManyRoom = validatedActionWithUser(
   blukUpdateRoomShema,
@@ -112,26 +117,31 @@ export const updateManyRoom = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'Room' },
 );
-export const deleteRoom = async (id: number): Promise<ActionResult<TRoom>> => {
-  try {
-    const data = await serverActionFetch<TRoom>(`/room/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteRoom = actionWithUser(
+  async (id: string): Promise<ActionResult<TRoom>> => {
+    const parsedId = Number(id);
+    try {
+      const data = await serverActionFetch<TRoom>(`/room/${parsedId}`, {
+        method: 'DELETE',
+      });
 
-    updateTag('room');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+      updateTag('room');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
+      };
+    }
+  },
+  { action: 'delete', subject: 'Room' },
+);
 export const deleteManyRoom = async (
   ids: string[],
 ): Promise<ActionResult<TRoom>> => {

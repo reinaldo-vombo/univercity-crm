@@ -2,7 +2,10 @@
 import { ApiResponseError } from '@/lib/errors/api-error';
 import { ActionResult } from '@/lib/errors/api-error.type';
 import { sendErrorToClient } from '@/lib/errors/send-error-to-client';
-import { validatedActionWithUserJson } from '@/lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUserJson,
+} from '@/lib/helper/action-helper';
 import { examStatementSchema } from '@/lib/validation/exame-statemant';
 import { serverActionFetch } from '@/services/server-fetch';
 import { ExamResult } from '@/types/global';
@@ -43,7 +46,9 @@ export const createExamStatement = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'ExamStatement' },
 );
+
 export const updateExamStatement = validatedActionWithUserJson(
   examStatementSchema,
   async (data): Promise<ActionResult<ExamResult>> => {
@@ -81,36 +86,38 @@ export const updateExamStatement = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'update', subject: 'ExamStatement' },
 );
 
-export const deleteExamStatement = async (
-  id: string,
-): Promise<ActionResult<null>> => {
-  try {
-    const result = await serverActionFetch<any>(`/exame-statements/${id}`, {
-      method: 'DELETE',
-      body: null,
-    });
+export const deleteExamStatement = actionWithUser(
+  async (id: string): Promise<ActionResult<null>> => {
+    try {
+      const result = await serverActionFetch<any>(`/exame-statements/${id}`, {
+        method: 'DELETE',
+        body: null,
+      });
 
-    updateTag('exame-statements');
+      updateTag('exame-statements');
 
-    return {
-      error: false,
-      data: result,
-    };
-  } catch (err) {
-    if (err instanceof ApiResponseError) {
+      return {
+        error: false,
+        data: result,
+      };
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: sendErrorToClient(err),
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
+      }
+
       return {
         error: true,
         message: sendErrorToClient(err),
-        errorMessages: err.errorMessages,
-        meta: err.meta,
       };
     }
-
-    return {
-      error: true,
-      message: sendErrorToClient(err),
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'ExamStatement' },
+);

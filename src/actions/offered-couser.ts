@@ -2,6 +2,7 @@
 
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '@/lib/helper/action-helper';
@@ -50,7 +51,9 @@ export const addNewOfferedCourse = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'OfferedCourse' },
 );
+
 export const updateOfferedCourse = validatedActionWithUser(
   updateOfferedCourseZodSchema,
   async (data): Promise<ActionResult<TOfferedCourse>> => {
@@ -86,39 +89,40 @@ export const updateOfferedCourse = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'OfferedCourse' },
 );
-export const DeleteOfferedCourse = async (
-  id: string,
-): Promise<ActionResult<TOfferedCourse>> => {
-  console.log(id);
 
-  try {
-    const data = await serverActionFetch<TOfferedCourse>(
-      `/offered-course/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const DeleteOfferedCourse = actionWithUser(
+  async (id: string): Promise<ActionResult<TOfferedCourse>> => {
+    try {
+      const data = await serverActionFetch<TOfferedCourse>(
+        `/offered-course/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    updateTag('offered-course');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('offered-course');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'OfferedCourse' },
+);

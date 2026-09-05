@@ -9,6 +9,8 @@ export const FLASH_MESSAGE = {
   SERVER_ERROR:
     'Ocorreu um erro no servidor. Por favor, tente novamente mais tarde.',
   UNAUTHORIZED: 'Não tem autorização para realizar esta operação.',
+  NO_PERMISSION: 'Não tem permissão para realizar esta ação.',
+  PERMISSION_NOT_FOUND: 'Permissão não encontradas.',
   NO_TOKEN: 'Nenhum token encontrado. Por favor, autentique-se novamente.',
 
   INVALID_CREDENTIALS:

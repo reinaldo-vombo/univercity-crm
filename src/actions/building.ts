@@ -3,7 +3,10 @@
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TBuilding } from '@/types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import {
   buildingSchema,
   updateBuildingSchema,
@@ -44,6 +47,7 @@ export const addNewBuilding = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'building' },
 );
 export const updateBuilding = validatedActionWithUser(
   updateBuildingSchema,
@@ -78,25 +82,27 @@ export const updateBuilding = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AcademicFaculty' },
 );
-export const deleteBuilding = async (
-  id: string,
-): Promise<ActionResult<TBuilding>> => {
-  try {
-    const data = await serverActionFetch<TBuilding>(`/building/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteBuilding = actionWithUser(
+  async (id: string): Promise<ActionResult<TBuilding>> => {
+    try {
+      const data = await serverActionFetch<TBuilding>(`/building/${id}`, {
+        method: 'DELETE',
+      });
 
-    updateTag('building');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+      updateTag('building');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
+      };
+    }
+  },
+  { action: 'delete', subject: 'building' },
+);

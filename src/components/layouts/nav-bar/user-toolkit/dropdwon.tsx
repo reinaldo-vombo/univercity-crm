@@ -25,7 +25,7 @@ type Props = {
 };
 
 const endSession = async () => {
-   signOut({ callbackUrl: '/auth/apanel/login' })
+   signOut({ callbackUrl: '/auth/login' })
    await closeSession()
 }
 

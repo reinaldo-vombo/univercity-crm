@@ -60,7 +60,7 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
       },
       {
          accessorKey: "startMonth",
-         header: "Mês inicial",
+         header: "Incío",
          cell: ({ row }) => {
             const startMonth = row.original.startMonth;
             return (
@@ -73,7 +73,7 @@ export function AcademicSemesterColumns(): ColumnDef<TSemester>[] {
       },
       {
          accessorKey: "endMonth",
-         header: "Mês final",
+         header: "Encerramento",
          cell: ({ row }) => {
             const endMonth = row.original.endMonth;
             return (

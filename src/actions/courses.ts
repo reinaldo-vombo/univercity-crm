@@ -4,6 +4,7 @@ import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
@@ -18,15 +19,12 @@ import { TCourse } from '../types/global';
 
 export const addNewCourse = validatedActionWithUserJson(
   courseSchema,
-  async (data, _, user): Promise<ActionResult<TCourse>> => {
+  async (data): Promise<ActionResult<TCourse>> => {
     try {
-      const curses = await serverActionFetch<TCourse>(
-        `/course?name=${user.name}`,
-        {
-          method: 'POST',
-          body: data,
-        },
-      );
+      const curses = await serverActionFetch<TCourse>(`/course`, {
+        method: 'POST',
+        body: data,
+      });
 
       updateTag('curses');
 
@@ -51,6 +49,7 @@ export const addNewCourse = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'AcademicCourse' },
 );
 export const updateCourse = validatedActionWithUser(
   updateCourseSchema,
@@ -86,6 +85,7 @@ export const updateCourse = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AcademicCourse' },
 );
 export const assignFaculties = validatedActionWithUser(
   assignRemoveCoursesZodSchema,
@@ -122,6 +122,7 @@ export const assignFaculties = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'AcademicCourse' },
 );
 export const removeAssigndFaculties = validatedActionWithUser(
   assignRemoveCoursesZodSchema,
@@ -158,35 +159,37 @@ export const removeAssigndFaculties = validatedActionWithUser(
       };
     }
   },
+  { action: 'delete', subject: 'AcademicCourse' },
 );
 
-export const deleteCourse = async (
-  id: string,
-): Promise<ActionResult<TCourse>> => {
-  try {
-    const data = await serverActionFetch<TCourse>(`/course/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteCourse = actionWithUser(
+  async (id: string): Promise<ActionResult<TCourse>> => {
+    try {
+      const data = await serverActionFetch<TCourse>(`/course/${id}`, {
+        method: 'DELETE',
+      });
 
-    updateTag('curses');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('curses');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'AcademicCourse' },
+);

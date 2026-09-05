@@ -3,7 +3,10 @@
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TDepartemant } from '../types/global';
-import { validatedActionWithUser } from '../lib/helper/action-helper';
+import {
+  actionWithUser,
+  validatedActionWithUser,
+} from '../lib/helper/action-helper';
 import {
   departmentSchema,
   updateDepartmentSchema,
@@ -14,10 +17,10 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 
 export const addNewDepartemant = validatedActionWithUser(
   departmentSchema,
-  async (data, _, user): Promise<ActionResult<TDepartemant>> => {
+  async (data): Promise<ActionResult<TDepartemant>> => {
     try {
       const departements = await serverActionFetch<TDepartemant>(
-        `/academic-department?name=${user.name}`,
+        `/academic-department`,
         {
           method: 'POST',
           body: data,
@@ -47,6 +50,7 @@ export const addNewDepartemant = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'AcademicDepartment' },
 );
 export const updatedDepartemant = validatedActionWithUser(
   updateDepartmentSchema,
@@ -84,38 +88,40 @@ export const updatedDepartemant = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AcademicDepartment' },
 );
 
-export const deleteDepartment = async (
-  id: string,
-): Promise<ActionResult<TDepartemant>> => {
-  try {
-    const data = await serverActionFetch<TDepartemant>(
-      `/academic-department/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const deleteDepartment = actionWithUser(
+  async (id: string): Promise<ActionResult<TDepartemant>> => {
+    try {
+      const data = await serverActionFetch<TDepartemant>(
+        `/academic-department/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    updateTag('departements');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('departements');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'AcademicDepartment' },
+);

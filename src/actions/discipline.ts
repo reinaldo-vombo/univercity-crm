@@ -4,6 +4,7 @@ import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import { FLASH_MESSAGE } from '@/constants/flash-message';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
@@ -47,6 +48,7 @@ export const addNewDiscipline = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'AcademicDiscipline' },
 );
 export const updateDiscipline = validatedActionWithUser(
   updateDisciplineSchema,
@@ -82,35 +84,37 @@ export const updateDiscipline = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'AcademicDiscipline' },
 );
 
-export const deleteDiscipline = async (
-  id: string,
-): Promise<ActionResult<TDiscipline>> => {
-  try {
-    const data = await serverActionFetch<TDiscipline>(`/discipline/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteDiscipline = actionWithUser(
+  async (id: string): Promise<ActionResult<TDiscipline>> => {
+    try {
+      const data = await serverActionFetch<TDiscipline>(`/discipline/${id}`, {
+        method: 'DELETE',
+      });
 
-    updateTag('disciplines');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('disciplines');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'AcademicDiscipline' },
+);

@@ -22,6 +22,7 @@ import { Switch } from "@/components/ui/switch"
 import { useSheet } from "@/providers/sheet-provider"
 import { SubmitState } from "@/types/global"
 import ActionButton from "@/components/layouts/button/action-button"
+import { handleApiError } from "@/services/error-handler"
 
 const startYear = 2000;
 const currentYear = new Date().getFullYear();
@@ -35,7 +36,7 @@ for (let year = startYear; year <= currentYear; year++) {
       label: year.toString()    // label as the year (can be customized further)
    });
 }
-const CreateDisciplineForm = () => {
+const CreateSemesterForm = () => {
    const { close } = useSheet()
    const [submitState, setSubmitState] = useState<SubmitState>('idle');
    const form = useForm<z.infer<typeof semesterSchema>>({
@@ -52,9 +53,13 @@ const CreateDisciplineForm = () => {
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof semesterSchema>) {
       setSubmitState('loading')
+      const formData: any = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append(key, value);
+      });
       startTransition(async () => {
          try {
-            const response = await addNewSemester(values);
+            const response = await addNewSemester(formData);
             if (response.error) {
                setSubmitState('error')
                toast.error(response.message);
@@ -70,7 +75,7 @@ const CreateDisciplineForm = () => {
             setSubmitState('error')
             setTimeout(() => setSubmitState('idle'), 3000)
             toast.error(FLASH_MESSAGE.SERVER_ERROR);
-            console.error(error);
+            handleApiError(error);
          }
       });
 
@@ -192,4 +197,4 @@ const CreateDisciplineForm = () => {
    )
 }
 
-export default CreateDisciplineForm;
+export default CreateSemesterForm;

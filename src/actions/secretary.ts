@@ -2,6 +2,7 @@
 import { updateTag } from 'next/cache';
 import { serverActionFetch } from '@/services/server-fetch';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
@@ -52,6 +53,7 @@ export const handleCourseTransferReuest = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'Secretary' },
 );
 export const CreateServicePeriod = validatedActionWithUserJson(
   createPeriodSchema,
@@ -85,6 +87,7 @@ export const CreateServicePeriod = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'create', subject: 'Secretary' },
 );
 
 export const addAcademicService = validatedActionWithUser(
@@ -115,6 +118,7 @@ export const addAcademicService = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'Secretary' },
 );
 export const updateAcademicService = validatedActionWithUser(
   updateAcademicServiceZodShema,
@@ -145,38 +149,40 @@ export const updateAcademicService = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'Secretary' },
 );
 
-export const deleteAcademicService = async (
-  id: string,
-): Promise<ActionResult<TAcademicService>> => {
-  try {
-    const data = await serverActionFetch<TAcademicService>(
-      `/academic-service/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
+export const deleteAcademicService = actionWithUser(
+  async (id: string): Promise<ActionResult<TAcademicService>> => {
+    try {
+      const data = await serverActionFetch<TAcademicService>(
+        `/academic-service/${id}`,
+        {
+          method: 'DELETE',
+        },
+      );
 
-    updateTag('academic-service');
-    return {
-      error: false,
-      data,
-    };
-  } catch (error) {
-    if (error instanceof ApiResponseError) {
+      updateTag('academic-service');
+      return {
+        error: false,
+        data,
+      };
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: error.message,
+          errorMessages: error.errorMessages,
+          meta: error.meta,
+        };
+      }
+
       return {
         error: true,
-        message: error.message,
-        errorMessages: error.errorMessages,
-        meta: error.meta,
+        message:
+          error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message:
-        error instanceof Error ? error.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'Secretary' },
+);

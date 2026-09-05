@@ -1,5 +1,6 @@
 'use client'
-import * as z from "zod"
+
+import z from "zod"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,17 +14,17 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import SubmitBtn from "@/components/shared/submit-btn"
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { handleApiError } from "@/services/error-handler"
-import { TSemester } from "@/types/global"
+import { SubmitState, TSemester } from "@/types/global"
 import { updateSemesterSchema } from "@/lib/validation/semester"
 import { updatedSemester } from "@/actions/semester"
 import { useSheet } from "@/providers/sheet-provider"
 import { DUMMY_DATA } from "@/constants/mock-data"
 import Selector from "@/components/shared/selector"
 import { Switch } from "@/components/ui/switch"
+import ActionButton from "@/components/layouts/button/action-button"
 type Props = {
    values: TSemester
 }
@@ -42,6 +43,7 @@ for (let year = startYear; year <= currentYear; year++) {
 
 const UpdateSemesterForm = ({ values }: Props) => {
    const { close } = useSheet()
+   const [submitState, setSubmitState] = useState<SubmitState>('idle');
    const { id, title, code, year, startMonth, endMonth, isCurrent } = values
 
    const form = useForm<z.infer<typeof updateSemesterSchema>>({
@@ -60,20 +62,30 @@ const UpdateSemesterForm = ({ values }: Props) => {
 
    const [isPending, startTransition] = useTransition();
    async function onSubmit(values: z.infer<typeof updateSemesterSchema>) {
-
+      setSubmitState('loading')
+      const formData: any = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+         formData.append(key, value);
+      });
       startTransition(async () => {
          try {
-
-            const response = await updatedSemester(values);
+            const response = await updatedSemester(formData);
 
             if (response.error) {
-               toast.warning(response.message);
+               setSubmitState('error')
+               toast.error(response.message);
+               setTimeout(() => setSubmitState('idle'), 3000)
                return;
             }
+
+            setSubmitState('success')
+            setTimeout(() => setSubmitState('idle'), 3000)
             toast.success(FLASH_MESSAGE.UPDATED);
             form.reset();
             close()
          } catch (error) {
+            setSubmitState('error')
+            setTimeout(() => setSubmitState('idle'), 3000)
             toast.error(FLASH_MESSAGE.SERVER_ERROR);
             handleApiError(error);
          }
@@ -189,11 +201,7 @@ const UpdateSemesterForm = ({ values }: Props) => {
                   </FormItem>
                )}
             />
-
-
-            <SubmitBtn
-               label="Criar"
-               loading={isPending} />
+            <ActionButton submitState={submitState} isPending={isPending} />
          </form>
       </Form>
    )

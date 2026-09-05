@@ -5,6 +5,7 @@ import { FLASH_MESSAGE } from '@/constants/flash-message';
 import { serverActionFetch } from '@/services/server-fetch';
 import { TUser } from '../types/global';
 import {
+  actionWithUser,
   validatedActionWithUser,
   validatedActionWithUserJson,
 } from '../lib/helper/action-helper';
@@ -52,6 +53,7 @@ export const addNewUser = validatedActionWithUser(
       };
     }
   },
+  { action: 'create', subject: 'User' },
 );
 
 export const updatedUser = validatedActionWithUserJson(
@@ -92,7 +94,9 @@ export const updatedUser = validatedActionWithUserJson(
       };
     }
   },
+  { action: 'update', subject: 'User' },
 );
+
 export const updatedUserPassword = validatedActionWithUser(
   changePasswordShema,
   async (data, _, user): Promise<ActionResult<TUser>> => {
@@ -134,23 +138,27 @@ export const updatedUserPassword = validatedActionWithUser(
       };
     }
   },
+  { action: 'update', subject: 'User' },
 );
-export const deleteUser = async (id: string): Promise<ActionState<TUser>> => {
-  try {
-    const dletedUser = await serverActionFetch<TUser>(`/users/${id}`, {
-      method: 'DELETE',
-    });
+export const deleteUser = actionWithUser(
+  async (id: string): Promise<ActionState<TUser>> => {
+    try {
+      const dletedUser = await serverActionFetch<TUser>(`/users/${id}`, {
+        method: 'DELETE',
+      });
 
-    updateTag(`user-${id}`);
-    return {
-      error: false,
-      message: FLASH_MESSAGE.DELETED,
-      data: dletedUser,
-    };
-  } catch (error) {
-    return {
-      error: true,
-      message: error as string,
-    };
-  }
-};
+      updateTag(`user-${id}`);
+      return {
+        error: false,
+        message: FLASH_MESSAGE.DELETED,
+        data: dletedUser,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: error as string,
+      };
+    }
+  },
+  { action: 'delete', subject: 'User' },
+);
