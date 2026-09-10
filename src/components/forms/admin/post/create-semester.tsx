@@ -11,7 +11,6 @@ import {
    FormLabel,
    FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { useState, useTransition } from "react"
 import { FLASH_MESSAGE } from "@/constants/flash-message"
 import { semesterSchema } from "@/lib/validation/semester"
@@ -39,11 +38,13 @@ for (let year = startYear; year <= currentYear; year++) {
 const CreateSemesterForm = () => {
    const { close } = useSheet()
    const [submitState, setSubmitState] = useState<SubmitState>('idle');
-   const form = useForm<z.infer<typeof semesterSchema>>({
+   const form = useForm<z.input<typeof semesterSchema>,
+      any,
+      z.output<typeof semesterSchema>
+   >({
       resolver: zodResolver(semesterSchema),
       defaultValues: {
          title: '1º Semestre',
-         code: '01',
          isCurrent: false,
          year: currentYear.toString(),
          startMonth: 'Abril',
@@ -51,12 +52,24 @@ const CreateSemesterForm = () => {
       }
    })
    const [isPending, startTransition] = useTransition();
-   async function onSubmit(values: z.infer<typeof semesterSchema>) {
+   async function onSubmit(values: z.output<typeof semesterSchema>) {
       setSubmitState('loading')
       const formData: any = new FormData();
+
       Object.entries(values).forEach(([key, value]) => {
          formData.append(key, value);
       });
+
+      const formObject: Record<string, any> = {};
+      for (const key of formData.keys()) {
+         const values = formData.getAll(key);
+         let value: any = values.length > 1 ? values : values[0];
+
+         if (value === 'true') value = true;
+         if (value === 'false') value = false;
+
+         formObject[key] = value;
+      }
       startTransition(async () => {
          try {
             const response = await addNewSemester(formData);
@@ -116,22 +129,6 @@ const CreateSemesterForm = () => {
                         />
                      </FormControl>
                      <FormDescription>Ex: Activo ou Inativo, não pode haver 2 semestre activo</FormDescription>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
-            <FormField
-               control={form.control}
-               name="code"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Codigo</FormLabel>
-                     <FormControl>
-                        <Input
-                           placeholder="Ex: 01"
-                           {...field} />
-                     </FormControl>
-                     <FormDescription>Ex: 01</FormDescription>
                      <FormMessage />
                   </FormItem>
                )}

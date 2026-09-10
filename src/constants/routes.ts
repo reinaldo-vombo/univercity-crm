@@ -12,6 +12,7 @@ export const ROUTES = {
   AUDI_LOGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/activitys`,
   RULES_SETTINGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/university`,
   SETTINGS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/settings`,
+  PROFILE: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/profile`,
   BANK_ACCOUNTS: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/finance/accounts`,
   SUPORTE: `${process.env.NEXT_PUBLIC_BASE_URL}/crm/admin/suporte`,
 };

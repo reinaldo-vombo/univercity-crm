@@ -63,28 +63,33 @@ export const logUserActivitys = async (
     };
   }
 };
-export const deleteUserActivitys = async (id: string) => {
-  try {
-    await serverActionFetch(`/users-session/${id}`, {
-      method: 'DELETE',
-    });
-    updateTag('logs');
-  } catch (err) {
-    if (err instanceof ApiResponseError) {
+export const deleteUserActivitys = actionWithUser(
+  async (id: string, user) => {
+    try {
+      await serverActionFetch(`/users-session/${id}`, {
+        method: 'DELETE',
+      });
+
+      updateTag(`logs-${user.id}`);
+    } catch (err) {
+      if (err instanceof ApiResponseError) {
+        return {
+          error: true,
+          message: err.message,
+          errorMessages: err.errorMessages,
+          meta: err.meta,
+        };
+      }
+
       return {
         error: true,
-        message: err.message,
-        errorMessages: err.errorMessages,
-        meta: err.meta,
+        message:
+          err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
       };
     }
-
-    return {
-      error: true,
-      message: err instanceof Error ? err.message : FLASH_MESSAGE.SERVER_ERROR,
-    };
-  }
-};
+  },
+  { action: 'delete', subject: 'Session' },
+);
 export const closeSession = async () => {
   try {
     const user = await serverUser();
@@ -115,7 +120,7 @@ export const marknotificationAsRead = async (id: string, userId: string) => {
       method: 'PATCH',
       body: null,
     });
-    updateTag('notification');
+    updateTag(`notification-${userId}`);
   } catch (err) {
     if (err instanceof ApiResponseError) {
       return {
@@ -132,13 +137,13 @@ export const marknotificationAsRead = async (id: string, userId: string) => {
     };
   }
 };
-export const markAllNotificationAsRead = async () => {
+export const markAllNotificationAsRead = async (userId: string) => {
   try {
     await serverActionFetch(`/notifications/read-all`, {
       method: 'PATCH',
       body: null,
     });
-    updateTag('notification');
+    updateTag(`notification-${userId}`);
   } catch (err) {
     if (err instanceof ApiResponseError) {
       return {

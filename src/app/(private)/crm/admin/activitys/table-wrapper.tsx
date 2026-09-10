@@ -9,6 +9,7 @@ export async function AuditTableServer() {
       getAllUserActionHistory(),
       getAllUsers(),
    ])
+
    return <AuditTable
       actionsHistory={commits}
       users={members}

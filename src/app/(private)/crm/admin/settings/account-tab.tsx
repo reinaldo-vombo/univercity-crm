@@ -56,6 +56,7 @@ const AccountTab = ({ user }: TProps) => {
                   <Avatar
                      name={user?.name || ''}
                      photo={user?.avatar || ''}
+                     loading="eager"
                      className="size-28 rounded-full border-4 border-neutral-900"
                   />
                   <SheetModal

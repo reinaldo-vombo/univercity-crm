@@ -2,7 +2,7 @@ import { TUser } from '@/types/global';
 import { serverFetch } from '../server-fetch';
 import { handleApiError } from '../error-handler';
 import { cacheLife, cacheTag } from 'next/cache';
-import { getUserToken, serverUser } from '@/lib/helper/auth/user';
+import { getUserToken } from '@/lib/helper/auth/user';
 
 export const getAllUsers = async (): Promise<TUser[]> => {
   const token = await getUserToken();
@@ -19,14 +19,14 @@ export const getAllUsers = async (): Promise<TUser[]> => {
   }
 };
 
-export const getUserById = async (): Promise<TUser> => {
-  const user = await serverUser();
+export const getUserById = async (userId: string): Promise<TUser> => {
+  const accessToken = await getUserToken();
   try {
     const getUser = async () => {
       'use cache';
-      cacheTag(`user-${user?.id}`);
+      cacheTag(`user-${userId}`);
       cacheLife('hours');
-      return serverFetch<TUser>(`/users/${user?.id}`, {}, user?.accessToken);
+      return serverFetch<TUser>(`/users/${userId}`, {}, accessToken);
     };
 
     return getUser();

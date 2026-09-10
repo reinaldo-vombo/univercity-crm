@@ -55,6 +55,10 @@ export const ROUTES_BY_ROLE = {
           label: 'Euciados dos Exames',
         },
         {
+          href: '/crm/admin/exames/answer-sheet',
+          label: 'Exames Realizados',
+        },
+        {
           href: '/crm/admin/exames/retake',
           label: 'Exame de Recurso',
         },

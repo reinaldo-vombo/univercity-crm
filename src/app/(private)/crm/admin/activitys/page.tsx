@@ -14,9 +14,10 @@ export default async function AuditLogsPage() {
       <section className="col-span-12">
          <Breadcrumb
             name="Registro de Actividadess"
-            pageName="Registro de Actividades"
+            pageName="Admin"
             pageUrl={`${ROUTES.DASHBOARD}/admin/activitys`}
             root={`${ROUTES.DASHBOARD}/admin`} />
+
          <div className="mt-12">
             <Suspense fallback={<DataTableSkeleton />}>
                <AuditTableServer />

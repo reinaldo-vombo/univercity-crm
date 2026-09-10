@@ -82,5 +82,6 @@ export type TMessageStatus =
   | 'READ'
   | 'FAILED';
 export type ExamType = 'FREQUENCI' | 'RETAKE' | 'SPECIAL';
+export type TSheetStatus = 'PENDING' | 'PROCESSED' | 'NEEDS_REVIEW' | 'ERROR';
 export type ExamContext = 'COURSE' | 'DISCIPLINE';
 export type TQuestionType = 'BOOLEAN' | 'WRITTEN';

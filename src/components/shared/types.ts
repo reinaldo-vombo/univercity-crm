@@ -30,6 +30,7 @@ export type TAvatarProps = {
   name: string | undefined;
   photo?: string;
   className?: string;
+  loading?: 'lazy' | 'eager';
 };
 export type TSelectPros = {
   placeholder: string;

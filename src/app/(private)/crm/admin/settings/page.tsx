@@ -11,18 +11,14 @@ export const metadata: Metadata = {
 }
 
 export default function SettingsPages() {
-   // const [preferenceSettings, sessionLogs] = await Promise.all([
-   //    getUserNotificationsPreference(currentUser?.id || ''),
-   //    getUserSeesionLogs(currentUser?.id || '')
-   // ])
-
    return (
       <section className='col-span-12'>
          <Breadcrumb
             name="Configurações"
-            pageName="Configurações"
+            pageName="Admin"
             pageUrl={`${ROUTES.SETTINGS}`}
             root={`${ROUTES.SETTINGS}`} />
+
          <div className="mt-12">
             <Suspense fallback={<ToggleTabsSkeleton />}>
                <ServerWrapper />

@@ -18,7 +18,7 @@ export default function AdminDashboard() {
             <DashbordWrapper />
          </Suspense>
          <div className="rounded-md bg-card p-4 mt-6">
-            <div className="rounded-lg bg-background p-4">
+            <div className="rounded-lg p-4">
                <div className="space-x-3 items-center flex mb-5 font-bold text-2xl">
                   <User /> <span>Todos membros</span></div>
                <Suspense fallback={<DataTableSkeleton />}>

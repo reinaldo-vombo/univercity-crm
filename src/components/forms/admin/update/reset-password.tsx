@@ -60,7 +60,7 @@ export default function AdminResetPassword({ promise }: { promise: Promise<any> 
                return;
             }
             toast.success('Senha Atualizada!');
-            router.push('/auth/apanel/login')
+            router.push('/auth/login')
          } catch (err) {
             setSubmitState('error')
             setTimeout(() => setSubmitState('idle'), 3000)

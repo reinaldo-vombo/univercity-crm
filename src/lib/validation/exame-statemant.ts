@@ -108,6 +108,20 @@ export const deleteExamStatementSchema = z.object({
   id: z.string().uuid('ID inválido'),
 });
 
+export const answerSheetSchema = z
+  .object({
+    imageFile: z.instanceof(File).optional(),
+    examStatementId: z.string().optional(),
+    imageFileName: z.string(),
+    imageMimeType: z.string(),
+    candidateId: z.string().optional(),
+    studentId: z.string().optional(),
+  })
+  .refine((data) => data.imageFile instanceof File, {
+    message: 'A imagem é obrigatória',
+    path: ['imageFile'],
+  });
+
 export type DeleteExamStatementFormValues = z.infer<
   typeof deleteExamStatementSchema
 >;

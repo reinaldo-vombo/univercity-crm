@@ -10,18 +10,18 @@ import {
    DropdownMenuSeparator,
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { TUser } from "@/types/global";
 import { ReactElement } from "react";
 import { itemClass, LOGOUT_ITEM, PROFILE_ITEMS, SETTINGS_ITEMS } from "./constants";
 import { signOut } from "next-auth/react";
 import { closeSession } from "@/actions/activitiys";
 import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 
 type Props = {
    trigger: ReactElement;
    defaultOpen?: boolean;
    align?: "start" | "center" | "end";
-   user: TUser
+   user: any
 };
 
 const endSession = async () => {
@@ -65,7 +65,7 @@ export const Dropdown = ({ trigger, defaultOpen, align = "end", user }: Props) =
                   {PROFILE_ITEMS.map(({ label, icon: Icon, route }) => (
                      <DropdownMenuItem key={label} className={itemClass}>
                         <Icon size={20} />
-                        <Link href={route}>{label}</Link>
+                        <Link href={route === ROUTES.PROFILE ? `${ROUTES.PROFILE}/${user.id}` : route}>{label}</Link>
                      </DropdownMenuItem>
                   ))}
 

@@ -14,12 +14,13 @@ type TProps = {
    unreadCount: number;
    unreadItems: TNotifications[];
    notifications: TNotifications[];
+   userId: string;
 }
 
-const NotificationContent = ({ notifications, unreadCount, unreadItems }: TProps) => {
+const NotificationContent = ({ notifications, unreadCount, unreadItems, userId }: TProps) => {
 
    const markAllRead = async () => {
-      await markAllNotificationAsRead()
+      await markAllNotificationAsRead(userId)
    }
    return <Popover>
       <PopoverTrigger className='relative'>

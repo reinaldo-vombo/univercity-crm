@@ -18,6 +18,7 @@ import {
   TRoles,
   TSemesterRegistrationStatus,
   TServicePeriodType,
+  TSheetStatus,
   TStatus,
   TStudentType,
   TTransferGradePolicy,
@@ -29,12 +30,29 @@ export type TUser = {
   name: string;
   email: string;
   avatar?: string | undefined;
+  AuditLog: TActionHistory[];
+  userPermissions: string[];
+  permissions: string[];
   role: string;
   contact: {
     phone: number;
     location: string;
   };
+  roleRef: {
+    id: string;
+    name: string;
+    description: string | null;
+    isSystem: true;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  failedLoginAttempts: number;
+  lockedUntil: Date | null;
+  lastLoginAt: Date | null;
   number: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TSubmitState = {
@@ -1329,4 +1347,38 @@ export type TExameStatemant = {
   offeredCourseSectionId: string | null;
   createdAt: Date;
   updatedAt: Date;
+};
+export type AnswerSheetPerson = {
+  id: string;
+  type: TStudentType | null;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  profileImage: string | null;
+  passed: boolean | null;
+  exameResults: number | null;
+};
+
+export type AnswerSheetListItem = {
+  id: string;
+  course: {
+    id: string | undefined;
+    title: string | undefined;
+  };
+  semester: {
+    id: string | undefined;
+    title: string;
+  };
+  status: TSheetStatus;
+  person: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profileImage: string | null;
+  } | null;
+  totalScore: number | null;
+  submittedAt: Date;
+  imageUrl: string;
+  annotatedImageUrl: string | null;
+  statementUrl: string;
 };

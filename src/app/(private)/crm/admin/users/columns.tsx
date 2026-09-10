@@ -34,6 +34,7 @@ export function UsersColumns(): ColumnDef<TBulkUser>[] {
          cell: ({ row }) => {
             const name = row.original.name
             const avatar = row.original.avatar
+
             const isActive = row.original.isActive
             return (
                <div className="flex items-center gap-3">

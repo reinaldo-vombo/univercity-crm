@@ -19,7 +19,8 @@ type MenuItem = {
 };
 
 export const PROFILE_ITEMS: MenuItem[] = [
-  { label: 'Configurações', icon: CircleUserRound, route: ROUTES.SETTINGS },
+  { label: 'Perfil', icon: CircleUserRound, route: ROUTES.PROFILE },
+  { label: 'Configurações', icon: Settings, route: ROUTES.SETTINGS },
   { label: 'Contas Bancarias', icon: CreditCard, route: ROUTES.BANK_ACCOUNTS },
   { label: 'Actividade', icon: ReceiptText, route: ROUTES.AUDI_LOGS },
   { label: 'Útilizadores', icon: Users, route: ROUTES.USERS },

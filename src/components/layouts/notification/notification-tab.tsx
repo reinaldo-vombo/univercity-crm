@@ -25,6 +25,7 @@ const PopoverNotifications = async () => {
       notifications={response.notifications}
       unreadCount={unreadCount}
       unreadItems={unreadItems}
+      userId={user.id}
    />
 }
 

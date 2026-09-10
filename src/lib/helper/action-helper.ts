@@ -94,8 +94,8 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, R>(
   requiredPermission?: RequiredPermission,
 ) {
   return async (formData: FormData): Promise<R> => {
-    const session = await getServerSession(authOptions);
-    const user = session?.user;
+    const session: any = await getServerSession(authOptions);
+    const user: TUser = session?.user;
 
     if (!user) {
       return {
@@ -156,8 +156,8 @@ export function validatedActionWithUserJson<S extends z.ZodTypeAny, R>(
   requiredPermission?: RequiredPermission,
 ) {
   return async (formData: FormData): Promise<R> => {
-    const session = await getServerSession(authOptions);
-    const user = session?.user;
+    const session: any = await getServerSession(authOptions);
+    const user: TUser = session?.user;
 
     if (!user) {
       return {

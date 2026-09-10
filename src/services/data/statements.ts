@@ -1,7 +1,12 @@
 import { getUserToken } from '@/lib/helper/auth/user';
 import { cacheLife, cacheTag } from 'next/cache';
 import { serverFetch } from '../server-fetch';
-import { ExamResult, TExameStatemant, TQuestion } from '@/types/global';
+import {
+  AnswerSheetListItem,
+  ExamResult,
+  TExameStatemant,
+  TQuestion,
+} from '@/types/global';
 import { handleApiError } from '../error-handler';
 
 export const getAllQuestion = async (): Promise<ExamResult[]> => {
@@ -55,6 +60,26 @@ export const getAllExameStatements = async (): Promise<TExameStatemant[]> => {
     };
 
     return getExameStatements();
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+export const getAllExameStatementsSheet = async (): Promise<
+  AnswerSheetListItem[]
+> => {
+  try {
+    const token = await getUserToken();
+    const getExameStatementsSheet = async () => {
+      'use cache';
+      cacheTag('answer-sheet');
+      cacheLife('hours');
+      return serverFetch<AnswerSheetListItem[]>(
+        '/exame-statements/answer-sheets',
+        {},
+        token,
+      );
+    };
+    return getExameStatementsSheet();
   } catch (error) {
     handleApiError(error);
   }

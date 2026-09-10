@@ -8,8 +8,7 @@ export const semesterSchema = z.object({
   year: z.string({
     message: 'Ano corrente é obrigatorio',
   }),
-  isCurrent: z.coerce.boolean(),
-  code: z.enum(['01', '02', '03']),
+  isCurrent: z.preprocess((val) => val === 'true' || val === true, z.boolean()),
   startMonth: z.enum(months, {
     message: 'Mês inicial é obrigatorio',
   }),

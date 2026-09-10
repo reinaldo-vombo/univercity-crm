@@ -4,12 +4,17 @@ import { TabsNav } from '@/components/shared/toggle-tabs'
 import { serverUser } from '@/lib/helper/auth/user'
 import { getUserSeesionLogs } from '@/services/data/history-logs'
 import { getUserById } from '@/services/data/user'
+import { redirect } from 'next/navigation'
 
 export default async function ServerWrapper() {
    const currentUser = await serverUser()
+
+   if (!currentUser) {
+      redirect('/auth/login')
+   }
    const [userProfile, currentUserLogs] = await Promise.all([
-      getUserById(),        // 👈 dados frescos do backend
-      getUserSeesionLogs(currentUser?.id || ''),
+      getUserById(currentUser?.id),
+      getUserSeesionLogs(currentUser?.id),
    ]);
    // console.log(currentUser);
 
